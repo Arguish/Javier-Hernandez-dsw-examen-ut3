@@ -1,0 +1,3420 @@
+<div id="book.rnp" class="book"><hr>
+ 
+ <h1 class="title">Rnp</h1>
+ 
+
+ <div id="intro.rnp" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   </p><div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta extensión es <em>EXPERIMENTAL</em>. El comportamiento de esta extensión, los nombres de sus funciones,
+ y toda la documentación alrededor de esta extensión puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta extensión debe ser utilizada bajo su propio riesgo.
+</p></div>
+   Este módulo permite utilizar la biblioteca <a href="https://www.rnpgp.org/" class="link external">» RNP</a>.
+   RNP es una biblioteca OpenPGP C++ de alto rendimiento utilizada por Mozilla Thunderbird.
+  
+ </div>
+<hr>
+
+
+ 
+
+
+<div id="rnp.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#rnp.requirements">Requerimientos</a></li><li><a href="#rnp.installation">Instalación</a></li></ul>
+
+
+ <div id="rnp.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Para utilizar las funciones de la biblioteca RNP, es necesario instalar la
+   <a href="https://www.rnpgp.org/" class="link external">» biblioteca RNP</a>. La versión de la
+   biblioteca RNP debe ser &gt;= 0.16.2.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+<div id="rnp.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+
+ <p class="para">
+  Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/rnp" class="link external">» https://pecl.php.net/package/rnp</a>
+ </p>
+
+</div>
+<hr>
+
+
+
+
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="rnp.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <p class="para">
+  </p><dl>
+   
+    <dt id="constant.rnp-keystore-gpg">
+     <strong><code><a href="#constant.rnp-keystore-gpg">RNP_KEYSTORE_GPG</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Formato del almacén de claves "GPG".
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-keystore-kbx">
+     <strong><code><a href="#constant.rnp-keystore-kbx">RNP_KEYSTORE_KBX</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Formato del almacén de claves "KBX". Solo para claves públicas.
+      Una caja de claves (keybox) es un formato de fichero utilizado para almacenar claves públicas con metadatos e índices.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-keystore-g10">
+     <strong><code><a href="#constant.rnp-keystore-g10">RNP_KEYSTORE_G10</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Formato del almacén de claves "G10". Para claves privadas.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-load-save-public-keys">
+     <strong><code><a href="#constant.rnp-load-save-public-keys">RNP_LOAD_SAVE_PUBLIC_KEYS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Carga o guarda solo las claves públicas. Puede ser combinado con <strong><code><a href="#constant.rnp-load-save-secret-keys">RNP_LOAD_SAVE_SECRET_KEYS</a></code></strong>
+      para cargar tanto las claves públicas como privadas en el contexto FFI o guardarlas del contexto.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-load-save-secret-keys">
+     <strong><code><a href="#constant.rnp-load-save-secret-keys">RNP_LOAD_SAVE_SECRET_KEYS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Carga o guarda solo las claves secretas. Puede ser combinado con <strong><code><a href="#constant.rnp-load-save-public-keys">RNP_LOAD_SAVE_PUBLIC_KEYS</a></code></strong>
+      para cargar tanto las claves públicas como privadas en el contexto FFI o guardarlas del contexto.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-load-save-permissive">
+     <strong><code><a href="#constant.rnp-load-save-permissive">RNP_LOAD_SAVE_PERMISSIVE</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Permite ignorar los paquetes de firma/clave/subclave incorrectos durante la importación de claves.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-load-save-single">
+     <strong><code><a href="#constant.rnp-load-save-single">RNP_LOAD_SAVE_SINGLE</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Si se define, solo la primera clave será cargada.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-load-save-base64">
+     <strong><code><a href="#constant.rnp-load-save-base64">RNP_LOAD_SAVE_BASE64</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Permite la importación de claves codificadas en base64 (claves autocrypt).
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-feature-symm-alg">
+     <strong><code><a href="#constant.rnp-feature-symm-alg">RNP_FEATURE_SYMM_ALG</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Lista los algoritmos de cifrado simétrico disponibles.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-feature-aead-alg">
+     <strong><code><a href="#constant.rnp-feature-aead-alg">RNP_FEATURE_AEAD_ALG</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Lista los algoritmos AEAD disponibles.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-feature-prot-mode">
+     <strong><code><a href="#constant.rnp-feature-prot-mode">RNP_FEATURE_PROT_MODE</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Lista los modos de protección disponibles.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-feature-pk-alg">
+     <strong><code><a href="#constant.rnp-feature-pk-alg">RNP_FEATURE_PK_ALG</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Lista los algoritmos de clave pública disponibles.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-feature-hash-alg">
+     <strong><code><a href="#constant.rnp-feature-hash-alg">RNP_FEATURE_HASH_ALG</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Lista los algoritmos de hash disponibles.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-feature-comp-alg">
+     <strong><code><a href="#constant.rnp-feature-comp-alg">RNP_FEATURE_COMP_ALG</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Lista los algoritmos de compresión disponibles.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-feature-curve">
+     <strong><code><a href="#constant.rnp-feature-curve">RNP_FEATURE_CURVE</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Lista las curvas elípticas disponibles.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-dump-mpi">
+     <strong><code><a href="#constant.rnp-dump-mpi">RNP_DUMP_MPI</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra los valores MPI (enteros multi-precisión).
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-dump-raw">
+     <strong><code><a href="#constant.rnp-dump-raw">RNP_DUMP_RAW</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra también el contenido sin tratar del paquete.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-dump-grip">
+     <strong><code><a href="#constant.rnp-dump-grip">RNP_DUMP_GRIP</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra las huellas y los identificadores de clave.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-json-dump-mpi">
+     <strong><code><a href="#constant.rnp-json-dump-mpi">RNP_JSON_DUMP_MPI</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra los valores MPI (enteros multi-precisión).
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-json-dump-raw">
+     <strong><code><a href="#constant.rnp-json-dump-raw">RNP_JSON_DUMP_RAW</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra también el contenido sin tratar del paquete.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-json-dump-grip">
+     <strong><code><a href="#constant.rnp-json-dump-grip">RNP_JSON_DUMP_GRIP</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra las huellas y los identificadores de clave.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-encrypt-nowrap">
+     <strong><code><a href="#constant.rnp-encrypt-nowrap">RNP_ENCRYPT_NOWRAP</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Permite el cifrado del mensaje firmado. El mensaje no está envuelto
+      en un paquete de datos literales.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-key-export-armored">
+     <strong><code><a href="#constant.rnp-key-export-armored">RNP_KEY_EXPORT_ARMORED</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Activa la armadura ASCII de los datos exportados.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-key-export-public">
+     <strong><code><a href="#constant.rnp-key-export-public">RNP_KEY_EXPORT_PUBLIC</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Exporta la clave pública.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-key-export-secret">
+     <strong><code><a href="#constant.rnp-key-export-secret">RNP_KEY_EXPORT_SECRET</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Exporta la clave secreta.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-key-export-subkeys">
+     <strong><code><a href="#constant.rnp-key-export-subkeys">RNP_KEY_EXPORT_SUBKEYS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Si la clave principal es exportada, todas las subclaves lo serán también.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-key-export-base64">
+     <strong><code><a href="#constant.rnp-key-export-base64">RNP_KEY_EXPORT_BASE64</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Exporta la clave autocrypt codificada en base64 en lugar de binaria.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-key-remove-public">
+     <strong><code><a href="#constant.rnp-key-remove-public">RNP_KEY_REMOVE_PUBLIC</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Elimina la clave pública.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-key-remove-secret">
+     <strong><code><a href="#constant.rnp-key-remove-secret">RNP_KEY_REMOVE_SECRET</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Elimina la clave secreta.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.rnp-key-remove-subkeys">
+     <strong><code><a href="#constant.rnp-key-remove-subkeys">RNP_KEY_REMOVE_SUBKEYS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type integer">integer</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Si la clave principal es eliminada, todas las subclaves lo serán también.
+     </span>
+    </dd>
+   
+  </dl>
+ 
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="rnp.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#rnp.examples-clearsign">Texto firmado en claro</a></li></ul>
+
+ <div id="rnp.examples-clearsign" class="section"><hr>
+  <h2 class="title">Texto firmado en claro</h2>
+  <p class="para">
+   Este ejemplo va a firmar en claro un texto dado.
+  </p>
+  <div class="example" id="example-1068">
+   <p><strong>Ejemplo #1 Ejemplo de firma RNP en claro</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// inicializa el objeto FFI<br></span><span style="color: #0000BB">$ffi </span><span style="color: #007700">= </span><span style="color: #0000BB">rnp_ffi_create</span><span style="color: #007700">(</span><span style="color: #DD0000">'GPG'</span><span style="color: #007700">, </span><span style="color: #DD0000">'GPG'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// genera una clave RSA<br></span><span style="color: #0000BB">$key </span><span style="color: #007700">= </span><span style="color: #0000BB">rnp_op_generate_key</span><span style="color: #007700">(</span><span style="color: #0000BB">$ffi</span><span style="color: #007700">, </span><span style="color: #DD0000">'test@example.com'</span><span style="color: #007700">, </span><span style="color: #DD0000">'RSA'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// firma<br></span><span style="color: #0000BB">$data </span><span style="color: #007700">= </span><span style="color: #DD0000">"Example text to sign"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$signature </span><span style="color: #007700">= </span><span style="color: #0000BB">rnp_op_sign_cleartext</span><span style="color: #007700">(</span><span style="color: #0000BB">$ffi</span><span style="color: #007700">, </span><span style="color: #0000BB">$data</span><span style="color: #007700">, array(</span><span style="color: #0000BB">$key</span><span style="color: #007700">));<br><br>echo </span><span style="color: #0000BB">$signature</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">// destruye el objeto FFI<br></span><span style="color: #0000BB">rnp_ffi_destroy</span><span style="color: #007700">(</span><span style="color: #0000BB">$ffi</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+<hr>
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="ref.rnp" class="reference"><hr>
+ <h1 class="title">Funciones de Rnp</h1>
+
+ 
+
+
+<div id="function.rnp-backend-string" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_backend_string</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_backend_string</span> — <span class="dc-title">Devuelve el nombre de la biblioteca back-end de criptografía</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-backend-string-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_backend_string</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-backend-string-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-backend-string-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El nombre de la biblioteca back-end de criptografía. Las bibliotecas de criptografía
+   soportadas son "Botan" y "OpenSSL".
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-backend-version" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_backend_version</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_backend_version</span> — <span class="dc-title">Devuelve la versión de la biblioteca back-end de criptografía</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-backend-version-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>rnp_backend_version</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-backend-version-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-backend-version-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   La versión en forma de string.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-decrypt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_decrypt</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_decrypt</span> — <span class="dc-title">Desencripta un mensaje PGP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-decrypt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>rnp_decrypt</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$input</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Las claves privadas utilizadas para el desencriptado deben ser cargadas en el objeto FFI antes de llamar a esta función.
+   Si se ha utilizado el cifrado por contraseña, el proveedor de contraseña debe ser definido llamando a
+   <span class="function"><a href="#function.rnp-ffi-set-pass-provider" class="function">rnp_ffi_set_pass_provider()</a></span>.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-decrypt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">input</code></dt>
+    <dd>
+     <p class="para">
+      El mensaje cifrado.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-decrypt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El mensaje desencriptado en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-dump-packets" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_dump_packets</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_dump_packets</span> — <span class="dc-title">Muestra la información del flujo de paquetes OpenPGP en un formato legible por el ser humano</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-dump-packets-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_dump_packets</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$input</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-dump-packets-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">input</code></dt>
+    <dd>
+     <p class="para">
+      La cadena de entrada que contiene los datos OpenPGP, ya sea en formato binario o en formato ASCII-armored.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Ver las constantes predefinidas <strong><code><a href="#constant.rnp-dump-mpi">RNP_DUMP_<span class="replaceable">*</span></a></code></strong>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-dump-packets-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un texto que describe la secuencia de paquetes o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-dump-packets-to-json" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_dump_packets_to_json</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_dump_packets_to_json</span> — <span class="dc-title">Muestra la información del flujo de paquetes OpenPGP en un string JSON</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-dump-packets-to-json-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_dump_packets_to_json</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$input</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-dump-packets-to-json-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">input</code></dt>
+    <dd>
+     <p class="para">
+      El string de entrada que contiene los datos OpenPGP, ya sea en formato binario o en formato ASCII-armored.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Ver las constantes predefinidas <strong><code><a href="#constant.rnp-json-dump-mpi">RNP_JSON_DUMP_<span class="replaceable">*</span></a></code></strong>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-dump-packets-to-json-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un string JSON con la información o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-ffi-create" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_ffi_create</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_ffi_create</span> — <span class="dc-title">Crear un objeto de nivel superior utilizado para interactuar con la biblioteca</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-ffi-create-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_ffi_create</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$pub_format</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$sec_format</code></span>): <span class="type"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-ffi-create-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">pub_format</code></dt>
+    <dd>
+     <p class="para">
+      El formato del llavero de claves públicas, RNP_KEYSTORE_GPG o
+      otra constante RNP_KEYSTORE_*.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">sec_format</code></dt>
+    <dd>
+     <p class="para">
+      El formato del llavero de claves secretas, RNP_KEYSTORE_GPG o
+      otra constante RNP_KEYSTORE_*.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-ffi-create-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un objeto <span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-ffi-destroy" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_ffi_destroy</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_ffi_destroy</span> — <span class="dc-title">Destruye el objeto de nivel superior utilizado para interactuar con la biblioteca</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-ffi-destroy-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_ffi_destroy</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-ffi-destroy-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-ffi-destroy-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-ffi-set-pass-provider" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_ffi_set_pass_provider</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_ffi_set_pass_provider</span> — <span class="dc-title">Define la función de retrollamada del proveedor de contraseña</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-ffi-set-pass-provider-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_ffi_set_pass_provider</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.callable" class="type callable">callable</a></span> <code class="parameter">$password_callback</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Define la función de retrollamada del proveedor de contraseña. Esta función puede solicitar la contraseña en una entrada estándar
+   (si el script PHP se ejecuta en un entorno de línea de comandos), mostrar un cuadro de diálogo GUI o proporcionar
+   la contraseña de todas las maneras posibles. Las contraseñas solicitadas se utilizan para cifrar o descifrar
+   las claves secretas o realizar operaciones de cifrado/descifrado simétricas.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-ffi-set-pass-provider-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">password_callback</code></dt>
+    <dd>
+     <p class="para">
+      La función que debe ser llamada para cada solicitud de contraseña. Tiene la siguiente firma:
+      </p><div class="methodsynopsis dc-description">
+       <span class="methodname"><span class="replaceable">password_callback</span></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key_fp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$pgp_context</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$password</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+      <ul class="simplelist">
+       <li><code class="literal">$key_fp</code> - La huella de la clave, si corresponde. Puede estar vacío.</li>
+       <li><code class="literal">$pgp_context</code> - Cadena que describe por qué se solicita la clave.</li>
+       <li><code class="literal">$password</code> - Referencia de cadena donde debe almacenarse la contraseña proporcionada.</li>
+      </ul>
+      La función de retrollamada debe devolver <strong><code><a href="#constant.true">true</a></code></strong> si la contraseña se ha establecido correctamente o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+     
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-ffi-set-pass-provider-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.rnp-ffi-set-pass-provider-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+      </p><div class="example" id="example-1069">
+       <p><strong>Ejemplo #1 Ejemplo de una función de retrollamada simple</strong></p>
+       <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">function </span><span style="color: #0000BB">password_callback</span><span style="color: #007700">(</span><span style="color: #0000BB">string $key_fp</span><span style="color: #007700">, </span><span style="color: #0000BB">string $pgp_context</span><span style="color: #007700">, </span><span style="color: #0000BB">string </span><span style="color: #007700">&amp;</span><span style="color: #0000BB">$password</span><span style="color: #007700">)<br>{<br>    </span><span style="color: #0000BB">$password </span><span style="color: #007700">= </span><span style="color: #DD0000">"password"</span><span style="color: #007700">;<br><br>    return </span><span style="color: #0000BB">true</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">$ffi </span><span style="color: #007700">= </span><span style="color: #0000BB">rnp_ffi_create</span><span style="color: #007700">(</span><span style="color: #DD0000">'GPG'</span><span style="color: #007700">, </span><span style="color: #DD0000">'GPG'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">rnp_ffi_set_pass_provider</span><span style="color: #007700">(</span><span style="color: #0000BB">$ffi</span><span style="color: #007700">, </span><span style="color: #DD0000">'password_callback'</span><span style="color: #007700">);</span></span></code></div>
+       </div>
+
+      </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-import-keys" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_import_keys</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_import_keys</span> — <span class="dc-title">Importa claves desde una string PHP hacia el llavero de claves y devuelve un JSON describiendo las claves nuevas o actualizadas</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-import-keys-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_import_keys</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$input</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-import-keys-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">input</code></dt>
+    <dd>
+     <p class="para">
+      Los paquetes OpenPGP que contienen la o las claves a cargar. Puede ser binario o ASCII armored.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Ver las constantes predefinidas <strong><code><a href="#constant.rnp-load-save-public-keys">RNP_LOAD_SAVE_<span class="replaceable">*</span></a></code></strong>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-import-keys-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Una string JSON con la información sobre las claves nuevas y actualizadas en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-import-signatures" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_import_signatures</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_import_signatures</span> — <span class="dc-title">Importa firmas autónomas en el llavero de claves y devuelve un JSON que describe las claves actualizadas</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-import-signatures-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_import_signatures</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$input</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-import-signatures-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">input</code></dt>
+    <dd>
+     <p class="para">
+      Los paquetes OpenPGP que contienen las firmas a importar. Puede ser binario o ASCII armado.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Actualmente debe ser 0.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-import-signatures-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   La cadena JSON con información sobre las claves actualizadas en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-key-export" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_key_export</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_key_export</span> — <span class="dc-title">Exporta una clave</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-key-export-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_key_export</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key_fp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-key-export-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">key_fp</code></dt>
+    <dd>
+     <p class="para">
+      La huella de la clave.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Ver <strong><code><a href="#constant.rnp-key-export-armored">RNP_KEY_EXPORT_<span class="replaceable">*</span></a></code></strong> constantes predefinidas
+      (excepto <strong><code><a href="#constant.rnp-key-export-base64">RNP_KEY_EXPORT_BASE64</a></code></strong>).
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-key-export-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El paquete OpenPGP exportado de la clave (binario o ASCII-armored) en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-key-export-autocrypt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_key_export_autocrypt</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_key_export_autocrypt</span> — <span class="dc-title">
+   Exporta la clave mínima para la funcionalidad autocrypt (solo 5 paquetes: clave, uid, firma,
+   subclave de cifrado, firma)
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-key-export-autocrypt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_key_export_autocrypt</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key_fp</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$subkey_fp</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$uid</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-key-export-autocrypt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">key_fp</code></dt>
+    <dd>
+     <p class="para">
+      La huella de la clave primaria.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">subkey_fp</code></dt>
+    <dd>
+     <p class="para">
+      La subclave a exportar. Puede ser una string vacía
+      para elegir la primera subclave apropiada.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">uid</code></dt>
+    <dd>
+     <p class="para">
+      El identificador del usuario a exportar. Puede ser una string vacía
+      si la clave exportada solo tiene un identificador.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Solo <strong><code><a href="#constant.rnp-key-export-base64">RNP_KEY_EXPORT_BASE64</a></code></strong> es actualmente soportado. Activarlo
+      exportará los datos de la clave codificados en base64 en lugar de binario.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-key-export-autocrypt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Los paquetes OpenPGP de la clave exportada en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-key-export-revocation" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_key_export_revocation</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_key_export_revocation</span> — <span class="dc-title">Genera y exporta una firma de revocación de clave primaria</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-key-export-revocation-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_key_export_revocation</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key_fp</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Notas: para revocar una clave, será necesario importar esta firma en el llavero de claves o utilizar
+   la función <span class="function"><a href="#function.rnp-key-revoke" class="function">rnp_key_revoke()</a></span>.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-key-export-revocation-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">key_fp</code></dt>
+    <dd>
+     <p class="para">
+      La huella de la clave primaria a revocar.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      <strong><code><a href="#constant.rnp-key-export-armored">RNP_KEY_EXPORT_ARMORED</a></code></strong> o 0.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+      Un array asociativo con opciones.
+     </p>
+     <table class="doctable informaltable">
+      
+       <thead>
+        <tr>
+         <th>Key</th>
+         <th>Tipo de datos</th>
+         <th>Descripción</th>
+        </tr>
+
+       </thead>
+
+       <tbody class="tbody">
+        <tr>
+         <td><code class="literal">"hash"</code></td>
+         <td>string</td>
+         <td>Define el algoritmo de hash utilizado en el cálculo de la firma.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"code"</code></td>
+         <td>string</td>
+         <td>Código de razón de la revocación. Valores posibles: 'no', 'superseded', 'compromised',
+          'retired'. Si no se define, se utilizará el valor 'no' por omisión.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"reason"</code></td>
+         <td>string</td>
+         <td>Representación textual de la razón de la revocación.</td>
+        </tr>
+
+       </tbody>
+      
+     </table>
+
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-key-export-revocation-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Revocación exportada en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-key-get-info" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_key_get_info</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_key_get_info</span> — <span class="dc-title">Devuelve información sobre la clave</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-key-get-info-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_key_get_info</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key_fp</code></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-key-get-info-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">key_fp</code></dt>
+    <dd>
+     <p class="para">
+      La huella de la clave.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-key-get-info-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array asociativo con información sobre la clave o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Key</th>
+      <th>Tipo de datos</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><code class="literal">"is_primary"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave es la clave primaria.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"is_sub"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave es una subclave.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"is_valid"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si la clave pública es válida.
+       Esto incluye las verificaciones de auto-firmas,
+       las fechas de expiración, las revocaciones, etc.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"is_revoked"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave está revocada.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"is_superseded"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave está obsoleta. Presente solo si la clave está revocada.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"is_compromised"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave está comprometida. Presente solo si la clave está revocada.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"is_retired"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave está retirada. Presente solo si la clave está revocada.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"is_expired"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave está expirada.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"have_secret"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave tiene una parte secreta.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"is_locked"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave está actualmente bloqueada. Presente solo para claves secretas.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"is_protected"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave está protegida. Presente solo para claves secretas.
+       Una clave protegida es una clave que está cifrada y puede ser almacenada de manera segura en memoria
+       y bloqueada/desbloqueada según sea necesario.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"have_public"</code></td>
+      <td>boolean</td>
+      <td>
+       <strong><code><a href="#constant.true">true</a></code></strong> si esta clave tiene una parte pública. En general, todas las claves tienen una parte pública.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"valid_till"</code></td>
+      <td>integer</td>
+      <td>
+       El timestamp hasta el cual la clave puede ser considerada válida.
+       Nota: esto tendrá en cuenta no solo la expiración de la clave, sino también las revocaciones.
+       Para la subclave primaria, el tiempo de validez de la clave pública también será verificado.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"bits"</code></td>
+      <td>integer</td>
+      <td>
+       El número de bits en la clave. Para las claves basadas en EC, esto contendrá el tamaño de la curva.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"alg"</code></td>
+      <td>string</td>
+      <td>
+       El algoritmo de nombre de clave.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"subkeys"</code></td>
+      <td>array</td>
+      <td>
+       Un array indexado que contiene información sobre las subclaves.
+       Puede estar vacío si la clave primaria no tiene subclaves.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"uids"</code></td>
+      <td>array</td>
+      <td>
+       Un array indexado que contiene información sobre los identificadores de usuario.
+       Puede estar vacío si la clave primaria no tiene identificadores de usuario.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-key-remove" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_key_remove</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_key_remove</span> — <span class="dc-title">Elimina una clave de los llaveros</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-key-remove-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_key_remove</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key_fp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Nota: es necesario llamar a <span class="function"><a href="#function.rnp-save-keys" class="function">rnp_save_keys()</a></span> para escribir los llaveros actualizados.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-key-remove-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">key_fp</code></dt>
+    <dd>
+     <p class="para">
+      La huella de la clave.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Ver <strong><code><a href="#constant.rnp-key-remove-public">RNP_KEY_REMOVE_<span class="replaceable">*</span></a></code></strong> constantes predefinidas. El flag
+      <strong><code><a href="#constant.rnp-key-remove-subkeys">RNP_KEY_REMOVE_SUBKEYS</a></code></strong> solo funcionará para
+      la clave principal y eliminará también todas sus subclaves.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-key-remove-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-key-revoke" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_key_revoke</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_key_revoke</span> — <span class="dc-title">Elimina una clave o una subclave generando y añadiendo una firma de revocación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-key-revoke-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_key_revoke</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key_fp</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Nota: es necesario llamar a <span class="function"><a href="#function.rnp-save-keys" class="function">rnp_save_keys()</a></span> para escribir los ficheros de claves actualizados.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-key-revoke-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">key_fp</code></dt>
+    <dd>
+     <p class="para">
+      La huella de la clave.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Actualmente debe ser 0.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+      Un array asociativo con opciones.
+     </p>
+     <table class="doctable informaltable">
+      
+       <thead>
+        <tr>
+         <th>Key</th>
+         <th>Tipo de datos</th>
+         <th>Descripción</th>
+        </tr>
+
+       </thead>
+
+       <tbody class="tbody">
+        <tr>
+         <td><code class="literal">"hash"</code></td>
+         <td>string</td>
+         <td>Define el algoritmo de hash utilizado durante el cálculo de la firma.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"code"</code></td>
+         <td>string</td>
+         <td>El código de revocación de la clave. Los valores posibles son 'no', 'superseded', 'compromised', 'retired'.
+         Si no se define, se utilizará el valor 'no' por omisión.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"reason"</code></td>
+         <td>string</td>
+         <td>Representación textual de la razón de la revocación.</td>
+        </tr>
+
+       </tbody>
+      
+     </table>
+
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-key-revoke-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-list-keys" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_list_keys</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_list_keys</span> — <span class="dc-title">Enumera todas las claves presentes en un llavero de claves por tipo de identificador especificado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-list-keys-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_list_keys</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$identifier_type</code></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-list-keys-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">identifier_type</code></dt>
+    <dd>
+     <p class="para">
+      La clave de tipo de identificador ("userid", "keyid", "grip", "fingerprint").
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-list-keys-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array asociativo donde la clave es un string de identificador y el valor es una huella de clave PGP o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-load-keys" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_load_keys</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_load_keys</span> — <span class="dc-title">Carga las claves a partir de un string PHP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-load-keys-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_load_keys</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$format</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$input</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se debe tener en cuenta que para G10, la entrada debe ser un directorio (que ya debe existir).
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-load-keys-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">format</code></dt>
+    <dd>
+     <p class="para">
+      El formato de clave para los datos (GPG, KBX, G10).
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">input</code></dt>
+    <dd>
+     <p class="para">
+      Los paquetes OpenPGP que contienen la o las claves a cargar. Puede ser binario o ASCII armored.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Ver la descripción de los flags <strong><code>
+RNP_LOAD_SAVE_<span class="replaceable">*</span></code></strong>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-load-keys-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-load-keys-from-path" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_load_keys_from_path</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_load_keys_from_path</span> — <span class="dc-title">Carga claves a partir de la ruta especificada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-load-keys-from-path-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_load_keys_from_path</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$format</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$input_path</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Es importante señalar que para G10, la entrada debe ser un directorio (que ya debe existir).
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-load-keys-from-path-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">format</code></dt>
+    <dd>
+     <p class="para">
+      El formato de clave para los datos (GPG, KBX, G10).
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">input_path</code></dt>
+    <dd>
+     <p class="para">
+      El fichero o directorio que contiene las claves.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Ver la descripción de los flags <strong><code>
+RNP_LOAD_SAVE_<span class="replaceable">*</span></code></strong>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-load-keys-from-path-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-locate-key" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_locate_key</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_locate_key</span> — <span class="dc-title">Búsqueda de la clave</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-locate-key-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_locate_key</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$identifier_type</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$identifier</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Nota: los identificadores válidos se verifican durante la búsqueda por identificador.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-locate-key-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">identifier_type</code></dt>
+    <dd>
+     <p class="para">
+      Cadena de tipo de identificador: "userid", "keyid", "fingerprint", "grip".
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">identifier</code></dt>
+    <dd>
+     <p class="para">
+      El identificador del usuario OpenPGP (nombre y correo electrónico) para el tipo "userid", cadena hexadecimal
+      que representa el identificador de clave, la huella digital o el grip de clave correspondiente.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-locate-key-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la huella digital hexadecimal de la clave encontrada en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-op-encrypt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_op_encrypt</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_op_encrypt</span> — <span class="dc-title">Cifra un mensaje</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-op-encrypt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_op_encrypt</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$message</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$recipient_keys_fp</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-op-encrypt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">message</code></dt>
+    <dd>
+     <p class="para">
+      El mensaje a cifrar.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">recipient_keys_fp</code></dt>
+    <dd>
+     <p class="para">
+      Un array con las huellas de las claves del destinatario. Al menos una clave debe estar presente.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+      Un array asociativo con opciones.
+     </p>
+     <table class="doctable informaltable">
+      
+       <thead>
+        <tr>
+         <th>Key</th>
+         <th>Tipo de dato</th>
+         <th>Descripción</th>
+        </tr>
+
+       </thead>
+
+       <tbody class="tbody">
+        <tr>
+         <td><code class="literal">"compression_alg"</code></td>
+         <td>string</td>
+         <td>Algoritmo de compresión. Las opciones
+          <code class="literal">"compression_alg"</code> y <code class="literal">"compression_level"</code> deben estar ambas definidas
+          para activar la compresión de los datos.
+	       </td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"compression_level"</code></td>
+         <td>integer</td>
+         <td>El nivel de compresión, de 0 a 9. 0 desactiva la compresión.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"armor"</code></td>
+         <td>boolean</td>
+         <td>Activa la salida ASCII armada. Desactivada por omisión.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"add_signature"</code></td>
+         <td>boolean</td>
+         <td>El mensaje cifrado será también firmado.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"hash"</code></td>
+         <td>string</td>
+         <td>Define el algoritmo de hash utilizado en el cálculo de la firma. La opción "add_signature" debe estar definida a <strong><code><a href="#constant.true">true</a></code></strong>.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"creation_time"</code></td>
+         <td>integer</td>
+         <td>Define la hora de creación de la firma en segundos desde el 1 de enero de 1970 UTC. Por omisión, se utiliza la hora actual.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"expiration_time"</code></td>
+         <td>integer</td>
+         <td>Define el tiempo de expiración de la firma en segundos desde la hora de creación. El valor 0 se utiliza para marcar
+          la firma como no expirante (valor por omisión).</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"password"</code></td>
+         <td>string</td>
+         <td>Añade una contraseña utilizada para cifrar los datos.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"cipher"</code></td>
+         <td>string</td>
+         <td>
+          Define el algoritmo de cifrado simétrico. Los valores posibles son "IDEA", "TRIPLEDES",
+	      "CAST5", "BLOWFISH", "AES128", "AES192", "AES256", "TWOFISH", "CAMELLIA128",
+          "CAMELLIA192", "CAMELLIA256", "SM4".
+	 </td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"aead"</code></td>
+         <td>string</td>
+         <td>
+          Define el algoritmo de modo AEAD. Los valores posibles son "None" para desactivar AEAD, "EAX", "OCB".
+	 </td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"aead_bits"</code></td>
+         <td>integer</td>
+         <td>Define la longitud del chunk para el modo AEAD en número de bits de tamaño de chunk. Debe estar comprendido entre 0 y 56.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"flags"</code></td>
+         <td>integer</td>
+         <td>
+          Define indicadores de cifrado adicionales. Los indicadores soportados son: RNP_ENCRYPT_NOWRAP - no envolver
+          los datos en un paquete de datos literales. Esto permitiría cifrar datos ya firmados.
+         </td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"file_name"</code></td>
+         <td>string</td>
+         <td>Define el nombre de fichero almacenado internamente para los datos cifrados. El valor especial _CONSOLE puede ser utilizado para marcar
+          el mensaje como "para sus ojos solamente", es decir, que no debe ser almacenado en ningún lugar sino solo mostrado
+          al destinatario. Por omisión, es una cadena vacía.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"file_mtime"</code></td>
+         <td>integer</td>
+         <td>Define la fecha de modificación del fichero de entrada en segundos desde el 1 de enero de 1970 UTC.</td>
+        </tr>
+
+       </tbody>
+      
+     </table>
+
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-op-encrypt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Los datos cifrados en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-op-generate-key" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_op_generate_key</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_op_generate_key</span> — <span class="dc-title">Genera una clave</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-op-generate-key-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_op_generate_key</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$userid</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key_alg</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$sub_alg</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-op-generate-key-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">userid</code></dt>
+    <dd>
+     <p class="para">
+      El identificador del usuario PGP - texto que debe representar
+      el nombre y la dirección de correo electrónico del titular de la clave.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">key_alg</code></dt>
+    <dd>
+     <p class="para">
+      La clave del algoritmo (es decir, 'RSA', 'DSA', etc).
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">sub_alg</code></dt>
+    <dd>
+     <p class="para">
+      El algoritmo de subclave. Si no está definido, la subclave no será generada.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+      Un array asociativo con opciones.
+     </p>
+     <table class="doctable informaltable">
+      
+       <thead>
+        <tr>
+         <th>Clave</th>
+         <th>Tipo de datos</th>
+         <th>Descripción</th>
+        </tr>
+
+       </thead>
+
+       <tbody class="tbody">
+        <tr>
+         <td><code class="literal">"bits"</code></td>
+         <td>integer</td>
+         <td>El tamaño de la clave principal en bits. Aplicable únicamente a las claves RSA, DSA y El-Gamal.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"hash"</code></td>
+         <td>string</td>
+         <td>Algoritmo de hash utilizado en la firma de la clave o la firma de ligadura de subclave.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"dsa_qbits"</code></td>
+         <td>integer</td>
+         <td>Define el tamaño de un parámetro <code class="literal">q</code> para la clave DSA.
+          Nota: se definirá un valor predeterminado adecuado, según el número de bits de la clave. Sin embargo, puede
+          ser reemplazado si es necesario.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"curve"</code></td>
+         <td>string</td>
+         <td>Define la curva utilizada para la clave ECC. Nota: esto se aplica únicamente a las claves ECDSA, ECDH y SM2.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"request_password"</code></td>
+         <td>boolean</td>
+         <td>Activa la solicitud de contraseña a través del proveedor de contraseñas. Esta contraseña
+          será utilizada para el cifrado de la clave. La función de retrollamada del proveedor de contraseñas debe ser definida previamente
+          llamando a <span class="function"><a href="#function.rnp-ffi-set-pass-provider" class="function">rnp_ffi_set_pass_provider()</a></span>.
+          Nota: este parámetro será ignorado si la contraseña ha sido definida a través de <code class="literal">"password"</code></td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"password"</code></td>
+         <td>string</td>
+         <td>Define la contraseña utilizada para cifrar los datos de la clave secreta.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"expiration"</code></td>
+         <td>integer</td>
+         <td>Define el tiempo de expiración de la clave principal y la subclave en segundos.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"sub_bits"</code></td>
+         <td>integer</td>
+         <td>El tamaño de la subclave en bits. Aplicable únicamente a las claves RSA, DSA y El-Gamal.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"sub_hash"</code></td>
+         <td>string</td>
+         <td>Algoritmo de hash utilizado en la firma de la subclave o la firma de ligadura de subclave.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"sub_curve"</code></td>
+         <td>string</td>
+         <td>Define la curva utilizada para la subclave ECC. Nota: esto se aplica únicamente a las claves ECDSA, ECDH y SM2.</td>
+        </tr>
+
+       </tbody>
+      
+     </table>
+
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-op-generate-key-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   La huella de la clave principal generada o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error. Esta huella puede ser utilizada
+   más tarde para referenciar la clave en las operaciones de firma y cifrado. Los datos de la clave se almacenan en el contexto de memoria
+   FFI y pueden ser guardados utilizando
+   <span class="function"><a href="#function.rnp-save-keys" class="function">rnp_save_keys()</a></span> o <span class="function"><a href="#function.rnp-save-keys-to-path" class="function">rnp_save_keys_to_path()</a></span>.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-op-sign" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_op_sign</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_op_sign</span> — <span class="dc-title">Realiza una operación de firma sobre datos binarios, devuelve la o las firmas integradas</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-op-sign-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_op_sign</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$keys_fp</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-op-sign-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">data</code></dt>
+    <dd>
+     <p class="para">
+      Datos a firmar.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">keys_fp</code></dt>
+    <dd>
+     <p class="para">
+      Un array con las huellas de las claves. Al menos una clave debe ser proporcionada.
+      Las claves deben estar presentes en <code class="parameter">ffi</code>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+      Un array asociativo con opciones.
+     </p>
+     <table class="doctable informaltable">
+      
+       <thead>
+        <tr>
+         <th>Key</th>
+         <th>Tipo de datos</th>
+         <th>Descripción</th>
+        </tr>
+
+       </thead>
+
+       <tbody class="tbody">
+        <tr>
+         <td><code class="literal">"compression_alg"</code></td>
+         <td>string</td>
+        <td>Algoritmo de compresión. Las opciones
+          <code class="literal">"compression_alg"</code> y <code class="literal">"compression_level"</code>
+          deben ser ambas definidas para activar la compresión de datos.
+	      </td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"compression_level"</code></td>
+         <td>integer</td>
+         <td>Nivel de compresión, 0-9. 0 desactiva la compresión.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"armor"</code></td>
+         <td>boolean</td>
+         <td>Activa la salida ASCII armada. Desactivado por omisión.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"hash"</code></td>
+         <td>string</td>
+         <td>Define el algoritmo de hash utilizado en el cálculo de la firma.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"creation_time"</code></td>
+         <td>integer</td>
+         <td>Define la hora de creación de la firma en segundos desde el 1 de enero de 1970 UTC. Por omisión, se utiliza la hora actual.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"expiration_time"</code></td>
+         <td>integer</td>
+         <td>Define el tiempo de expiración de la firma en segundos desde la hora de creación. El valor 0 se utiliza
+          para marcar la firma como no expirante (valor por omisión).</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"file_name"</code></td>
+         <td>string</td>
+         <td>Define el nombre del fichero de entrada. El valor especial _CONSOLE puede ser utilizado para marcar el mensaje
+          como 'para sus ojos solamente', es decir, que no debe ser almacenado en ningún lugar sino solo mostrado
+          al destinatario. Por omisión, es una cadena vacía.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"file_mtime"</code></td>
+         <td>integer</td>
+         <td>Define la fecha de modificación del fichero de entrada en segundos desde el 1 de enero de 1970 UTC.</td>
+        </tr>
+
+       </tbody>
+      
+     </table>
+
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-op-sign-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Los datos firmados con la(s) firma(s) integrada en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-op-sign-cleartext" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_op_sign_cleartext</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_op_sign_cleartext</span> — <span class="dc-title">Realiza una operación de firma sobre datos textuales, devuelve el mensaje firmado en claro</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-op-sign-cleartext-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_op_sign_cleartext</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$keys_fp</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-op-sign-cleartext-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">data</code></dt>
+    <dd>
+     <p class="para">
+      Los datos a firmar.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">keys_fp</code></dt>
+    <dd>
+     <p class="para">
+      El array con las huellas de las claves. Al menos una clave debe ser proporcionada.
+      Las claves deben estar presentes en <code class="parameter">ffi</code>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+      Un array asociativo con opciones.
+     </p>
+     <table class="doctable informaltable">
+      
+       <thead>
+        <tr>
+         <th>Key</th>
+         <th>Tipo de dato</th>
+         <th>Descripción</th>
+        </tr>
+
+       </thead>
+
+       <tbody class="tbody">
+        <tr>
+         <td><code class="literal">"armor"</code></td>
+         <td>boolean</td>
+         <td>Activa la salida ASCII armada. Desactivado por omisión.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"hash"</code></td>
+         <td>string</td>
+         <td>Define el algoritmo de hash utilizado durante el cálculo de la firma.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"creation_time"</code></td>
+         <td>integer</td>
+         <td>Define la hora de creación de la firma en segundos desde el 1 de enero de 1970 UTC. Por omisión, se utiliza la hora actual.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"expiration_time"</code></td>
+         <td>integer</td>
+         <td>Define el tiempo de expiración de la firma en segundos desde la hora de creación. El valor 0 se utiliza para marcar
+         la firma como no expirada (valor por omisión).</td>
+        </tr>
+
+       </tbody>
+      
+     </table>
+
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-op-sign-cleartext-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El mensaje firmado en claro que contiene los datos fuente con
+   encabezados adicionales y la firma ASCII-armored en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-op-sign-detached" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_op_sign_detached</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_op_sign_detached</span> — <span class="dc-title">Realiza una operación de firma, devuelve la firma desvinculada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-op-sign-detached-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_op_sign_detached</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$keys_fp</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-op-sign-detached-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">data</code></dt>
+    <dd>
+     <p class="para">
+      Los datos a firmar.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">keys_fp</code></dt>
+    <dd>
+     <p class="para">
+      Un array con las huellas de las claves. Al menos una clave debe ser proporcionada.
+      Las claves deben estar presentes en <code class="parameter">ffi</code>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+      Un array asociativo con opciones.
+     </p>
+     <table class="doctable informaltable">
+      
+       <thead>
+        <tr>
+         <th>Key</th>
+         <th>Type de donnée</th>
+         <th>Descripción</th>
+        </tr>
+
+       </thead>
+
+       <tbody class="tbody">
+        <tr>
+         <td><code class="literal">"armor"</code></td>
+         <td>boolean</td>
+         <td>Activa la salida ASCII-armored. Desactivado por omisión.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"hash"</code></td>
+         <td>string</td>
+         <td>Define el algoritmo de hash utilizado durante el cálculo de la firma.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"creation_time"</code></td>
+         <td>integer</td>
+         <td>Define la hora de creación de la firma en segundos desde el 1 de enero de 1970 UTC. Por omisión, se utiliza la hora actual.</td>
+        </tr>
+
+        <tr>
+         <td><code class="literal">"expiration_time"</code></td>
+         <td>integer</td>
+         <td>Define el tiempo de expiración de la firma en segundos desde la hora de creación. El valor 0 se utiliza
+         para marcar la firma como no expirada (valor por omisión).</td>
+        </tr>
+
+       </tbody>
+      
+     </table>
+
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-op-sign-detached-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Los datos de firma(s) desvinculados en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-op-verify" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_op_verify</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_op_verify</span> — <span class="dc-title">Verifica las firmas integradas o en claro</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-op-verify-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_op_verify</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-op-verify-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">data</code></dt>
+    <dd>
+     <p class="para">
+      Los datos firmados.
+      Signed data.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-op-verify-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array asociativo con información sobre los resultados de la verificación o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Key</th>
+      <th>Tipo de datos</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><code class="literal">"verification_status"</code></td>
+      <td>string</td>
+      <td>
+       Resultados de la verificación global, ya sea la cadena "Success" o un mensaje de error apropiado.
+       El resultado "Success" se define cuando al menos una firma es válida y se verifica con éxito.
+       El resultado de la verificación individual para cada firma puede ser verificado en el array "signatures".
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"file_name"</code></td>
+      <td>string</td>
+      <td>El nombre del fichero.</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"file_mtime"</code></td>
+      <td>integer</td>
+      <td>Hora de modificación del fichero.</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"mode"</code></td>
+      <td>string</td>
+      <td>Modo de protección de los datos (cifrado) utilizado en el mensaje procesado.
+      Los valores actualmente definidos son "none", "cfb", "cfb-mdc", "aead-ocb", "aead-eax".
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"cipher"</code></td>
+      <td>string</td>
+      <td>Cifrado simétrico utilizado para el cifrado de los datos.</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"valid_integrity"</code></td>
+      <td>boolean</td>
+      <td><strong><code><a href="#constant.true">true</a></code></strong> si la protección de la integridad del mensaje ha sido utilizada (es decir, MDC o AEAD) y ha sido
+      validada con éxito.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"signatures"</code></td>
+      <td>array</td>
+      <td>
+       Un array asociativo que describe cada firma encontrada. Ver la descripción a continuación.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+  <p class="para">
+   El subarray "signatures".
+  </p>
+  <table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Key</th>
+       <th>Tipo de datos</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>"verification_status"</td>
+      <td>string</td>
+      <td>Estado de verificación de la firma, ya sea la cadena "Success" o un mensaje de error apropiado.</td>
+     </tr>
+
+     <tr>
+      <td>"creation_time"</td>
+      <td>integer</td>
+      <td>Hora de creación de la firma en segundos desde el 1 de enero de 1970 UTC.</td>
+     </tr>
+
+     <tr>
+      <td>"expiration_time"</td>
+      <td>integer</td>
+      <td>El tiempo de expiración de la firma en segundos desde el tiempo de creación o 0 si la firma no expira nunca.</td>
+     </tr>
+
+     <tr>
+      <td>"hash"</td>
+      <td>string</td>
+      <td>Algoritmo de hash utilizado para calcular la firma.</td>
+     </tr>
+
+     <tr>
+      <td>"signing_key"</td>
+      <td>string</td>
+      <td>La huella de la clave utilizada para firmar. Puede ser "Not found" si la clave pública correspondiente no está cargada en el objeto FFI.</td>
+     </tr>
+
+     <tr>
+      <td>"signature_type"</td>
+      <td>string</td>
+      <td>
+      El tipo de firma. Los valores actualmente definidos son "binary", "text", "standalone", "certification (generic)", "certification (persona)",
+      "certification (casual)", "certification (positive)", "subkey binding", "primary key binding", "direct", "key revocation",
+      "subkey revocation", "certification revocation", "timestamp", "uknown: 0..255".
+      </td>
+     </tr>
+
+    </tbody>
+    
+   </table>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-op-verify-detached" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_op_verify_detached</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_op_verify_detached</span> — <span class="dc-title">Verifica las firmas desvinculadas</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-op-verify-detached-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_op_verify_detached</strong></span>(<span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$signature</code></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-op-verify-detached-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">data</code></dt>
+    <dd>
+     <p class="para">
+      Los datos fuente.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">signature</code></dt>
+    <dd>
+     <p class="para">
+      Los datos de firma desvinculada.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-op-verify-detached-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array asociativo con información sobre los resultados de la verificación o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Key</th>
+      <th>Tipo de datos</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><code class="literal">"verification_status"</code></td>
+      <td>string</td>
+      <td>
+       Los resultados de la verificación global, ya sea la cadena "Success" o un mensaje de error apropiado.
+       El resultado "Success" se define cuando al menos una firma es válida y verificada con éxito.
+       Los resultados de verificación individuales para cada firma pueden ser verificados en el array "signatures".
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"file_name"</code></td>
+      <td>string</td>
+      <td>Nombre del fichero.</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"file_mtime"</code></td>
+      <td>integer</td>
+      <td>Hora de modificación del fichero.</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"mode"</code></td>
+      <td>string</td>
+      <td>Modo de protección de los datos (cifrado) utilizado en el mensaje procesado.
+      Los valores actualmente definidos son "none", "cfb", "cfb-mdc", "aead-ocb", "aead-eax".
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"cipher"</code></td>
+      <td>string</td>
+      <td>Algoritmo de cifrado simétrico utilizado para el cifrado de los datos.</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"valid_integrity"</code></td>
+      <td>boolean</td>
+      <td><strong><code><a href="#constant.true">true</a></code></strong> si la protección de la integridad del mensaje ha sido utilizada (es decir, MDC o AEAD) y ha sido
+      validada con éxito.
+      </td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">"signatures"</code></td>
+      <td>array</td>
+      <td>
+       Un array asociativo que describe cada firma encontrada. Ver la descripción a continuación.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+  <p class="para">
+   Un subarray "signatures".
+  </p>
+  <table class="doctable informaltable">
+  
+   <thead>
+    <tr>
+     <th>Key</th>
+     <th>Tipo de datos</th>
+     <th>Descripción</th>
+    </tr>
+
+   </thead>
+
+  <tbody class="tbody">
+   <tr>
+    <td>"verification_status"</td>
+    <td>string</td>
+    <td>Estado de verificación de la firma, ya sea la cadena "Success" o un mensaje de error apropiado.</td>
+   </tr>
+
+   <tr>
+    <td>"creation_time"</td>
+    <td>integer</td>
+    <td>Hora de creación de la firma en segundos desde el 1 de enero de 1970 UTC.</td>
+   </tr>
+
+   <tr>
+    <td>"expiration_time"</td>
+    <td>integer</td>
+    <td>Tiempo de expiración de la firma en segundos desde la hora de creación o 0 si la firma no expira nunca.</td>
+   </tr>
+
+   <tr>
+    <td>"hash"</td>
+    <td>string</td>
+    <td>Algoritmo de hash utilizado para calcular la firma.</td>
+   </tr>
+
+   <tr>
+    <td>"signing_key"</td>
+    <td>string</td>
+    <td>La huella de la clave utilizada para firmar. Puede ser "Not found" si la clave pública correspondiente no está cargada en el objeto FFI.</td>
+   </tr>
+
+   <tr>
+    <td>"signature_type"</td>
+    <td>string</td>
+    <td>
+     El tipo de firma. Los valores actualmente definidos son "binary", "text", "standalone", "certification (generic)", "certification (persona)",
+     "certification (casual)", "certification (positive)", "subkey binding", "primary key binding", "direct", "key revocation",
+     "subkey revocation", "certification revocation", "timestamp", "unknown: 0..255".
+    </td>
+   </tr>
+
+  </tbody>
+  
+  </table>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-save-keys" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_save_keys</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_save_keys</span> — <span class="dc-title">Guarda las claves en una string PHP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-save-keys-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_save_keys</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$format</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$output</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se debe tener en cuenta que para G10, la salida debe ser un directorio (que ya debe existir).
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-save-keys-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">format</code></dt>
+    <dd>
+     <p class="para">
+      El formato de clave para los datos (GPG, KBX, G10).
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">output</code></dt>
+    <dd>
+     <p class="para">
+      Los paquetes de claves se guardarán en la string referenciada por <code class="parameter">output</code>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Ver la descripción de los flags <strong><code>
+RNP_LOAD_SAVE_<span class="replaceable">*</span></code></strong>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-save-keys-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-save-keys-to-path" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_save_keys_to_path</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_save_keys_to_path</span> — <span class="dc-title">Guarda las claves en la ruta especificada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-save-keys-to-path-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_save_keys_to_path</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.rnpffi" class="type RnpFFI">RnpFFI</a></span> <code class="parameter">$ffi</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$format</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$output_path</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Guarda las claves presentes en el objeto FFI (cargadas o generadas) en el fichero o directorio especificado.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-save-keys-to-path-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ffi</code></dt>
+    <dd>
+     <p class="para">
+      El objeto FFI retornado por <span class="function"><a href="#function.rnp-ffi-create" class="function">rnp_ffi_create()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">format</code></dt>
+    <dd>
+     <p class="para">
+      El formato de clave para los datos (GPG, KBX, G10).
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">output_path</code></dt>
+    <dd>
+     <p class="para">
+      La ruta del fichero o directorio donde las claves deben ser guardadas.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+      Ver la descripción de los flags <strong><code>
+RNP_LOAD_SAVE_<span class="replaceable">*</span></code></strong>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-save-keys-to-path-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-supported-features" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_supported_features</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_supported_features</span> — <span class="dc-title">Devuelve las funcionalidades soportadas en formato JSON</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-supported-features-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_supported_features</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el formato JSON que contiene un array de los valores de funcionalidades rnp soportadas (algoritmos, curvas, etc.) por tipo.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-supported-features-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">type</code></dt>
+    <dd>
+     <p class="para">
+      Ver las constantes RNP_FEATURE_* para los valores soportados.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-supported-features-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un string que contiene un array formateado en JSON de los algoritmos, curvas, etc. soportados o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-version-string" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_version_string</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_version_string</span> — <span class="dc-title">La versión de la biblioteca RNP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-version-string-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rnp_version_string</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-version-string-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-version-string-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el string de versión de la biblioteca RNP.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rnp-version-string-full" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rnp_version_string_full</h1>
+  <p class="verinfo">(PECL rnp &gt;= 0.1.1)</p><p class="refpurpose"><span class="refname">rnp_version_string_full</span> — <span class="dc-title">La cadena de versión completa de la biblioteca RNP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rnp-version-string-full-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>rnp_version_string_full</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rnp-version-string-full-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rnp-version-string-full-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la cadena de versión completa de la biblioteca RNP.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.rnp-backend-string">rnp_backend_string</a> — Devuelve el nombre de la biblioteca back-end de criptografía</li><li><a href="#function.rnp-backend-version">rnp_backend_version</a> — Devuelve la versión de la biblioteca back-end de criptografía</li><li><a href="#function.rnp-decrypt">rnp_decrypt</a> — Desencripta un mensaje PGP</li><li><a href="#function.rnp-dump-packets">rnp_dump_packets</a> — Muestra la información del flujo de paquetes OpenPGP en un formato legible por el ser humano</li><li><a href="#function.rnp-dump-packets-to-json">rnp_dump_packets_to_json</a> — Muestra la información del flujo de paquetes OpenPGP en un string JSON</li><li><a href="#function.rnp-ffi-create">rnp_ffi_create</a> — Crear un objeto de nivel superior utilizado para interactuar con la biblioteca</li><li><a href="#function.rnp-ffi-destroy">rnp_ffi_destroy</a> — Destruye el objeto de nivel superior utilizado para interactuar con la biblioteca</li><li><a href="#function.rnp-ffi-set-pass-provider">rnp_ffi_set_pass_provider</a> — Define la función de retrollamada del proveedor de contraseña</li><li><a href="#function.rnp-import-keys">rnp_import_keys</a> — Importa claves desde una string PHP hacia el llavero de claves y devuelve un JSON describiendo las claves nuevas o actualizadas</li><li><a href="#function.rnp-import-signatures">rnp_import_signatures</a> — Importa firmas autónomas en el llavero de claves y devuelve un JSON que describe las claves actualizadas</li><li><a href="#function.rnp-key-export">rnp_key_export</a> — Exporta una clave</li><li><a href="#function.rnp-key-export-autocrypt">rnp_key_export_autocrypt</a> — Exporta la clave mínima para la funcionalidad autocrypt (solo 5 paquetes: clave, uid, firma,
+   subclave de cifrado, firma)</li><li><a href="#function.rnp-key-export-revocation">rnp_key_export_revocation</a> — Genera y exporta una firma de revocación de clave primaria</li><li><a href="#function.rnp-key-get-info">rnp_key_get_info</a> — Devuelve información sobre la clave</li><li><a href="#function.rnp-key-remove">rnp_key_remove</a> — Elimina una clave de los llaveros</li><li><a href="#function.rnp-key-revoke">rnp_key_revoke</a> — Elimina una clave o una subclave generando y añadiendo una firma de revocación</li><li><a href="#function.rnp-list-keys">rnp_list_keys</a> — Enumera todas las claves presentes en un llavero de claves por tipo de identificador especificado</li><li><a href="#function.rnp-load-keys">rnp_load_keys</a> — Carga las claves a partir de un string PHP</li><li><a href="#function.rnp-load-keys-from-path">rnp_load_keys_from_path</a> — Carga claves a partir de la ruta especificada</li><li><a href="#function.rnp-locate-key">rnp_locate_key</a> — Búsqueda de la clave</li><li><a href="#function.rnp-op-encrypt">rnp_op_encrypt</a> — Cifra un mensaje</li><li><a href="#function.rnp-op-generate-key">rnp_op_generate_key</a> — Genera una clave</li><li><a href="#function.rnp-op-sign">rnp_op_sign</a> — Realiza una operación de firma sobre datos binarios, devuelve la o las firmas integradas</li><li><a href="#function.rnp-op-sign-cleartext">rnp_op_sign_cleartext</a> — Realiza una operación de firma sobre datos textuales, devuelve el mensaje firmado en claro</li><li><a href="#function.rnp-op-sign-detached">rnp_op_sign_detached</a> — Realiza una operación de firma, devuelve la firma desvinculada</li><li><a href="#function.rnp-op-verify">rnp_op_verify</a> — Verifica las firmas integradas o en claro</li><li><a href="#function.rnp-op-verify-detached">rnp_op_verify_detached</a> — Verifica las firmas desvinculadas</li><li><a href="#function.rnp-save-keys">rnp_save_keys</a> — Guarda las claves en una string PHP</li><li><a href="#function.rnp-save-keys-to-path">rnp_save_keys_to_path</a> — Guarda las claves en la ruta especificada</li><li><a href="#function.rnp-supported-features">rnp_supported_features</a> — Devuelve las funcionalidades soportadas en formato JSON</li><li><a href="#function.rnp-version-string">rnp_version_string</a> — La versión de la biblioteca RNP</li><li><a href="#function.rnp-version-string-full">rnp_version_string_full</a> — La cadena de versión completa de la biblioteca RNP</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="class.rnpffi" class="reference"><hr>
+ <h1 class="title">La clase RnpFFI</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL rnp &gt;= 0.1.1)</p>
+
+
+  <div class="section" id="rnpffi.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="rnpffi.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">RnpFFI</strong>
+     </span>
+     {</div>
+
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.rnp">Introducción</a></li><li><a href="#rnp.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#rnp.requirements">Requerimientos</a></li><li><a href="#rnp.installation">Instalación</a></li></ul></li><li><a href="#rnp.constants">Constantes predefinidas</a></li><li><a href="#rnp.examples">Ejemplos</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#rnp.examples-clearsign">Texto firmado en claro</a></li></ul></li><li><a href="#ref.rnp">Funciones de Rnp</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.rnp-backend-string">rnp_backend_string</a> — Devuelve el nombre de la biblioteca back-end de criptografía</li><li><a href="#function.rnp-backend-version">rnp_backend_version</a> — Devuelve la versión de la biblioteca back-end de criptografía</li><li><a href="#function.rnp-decrypt">rnp_decrypt</a> — Desencripta un mensaje PGP</li><li><a href="#function.rnp-dump-packets">rnp_dump_packets</a> — Muestra la información del flujo de paquetes OpenPGP en un formato legible por el ser humano</li><li><a href="#function.rnp-dump-packets-to-json">rnp_dump_packets_to_json</a> — Muestra la información del flujo de paquetes OpenPGP en un string JSON</li><li><a href="#function.rnp-ffi-create">rnp_ffi_create</a> — Crear un objeto de nivel superior utilizado para interactuar con la biblioteca</li><li><a href="#function.rnp-ffi-destroy">rnp_ffi_destroy</a> — Destruye el objeto de nivel superior utilizado para interactuar con la biblioteca</li><li><a href="#function.rnp-ffi-set-pass-provider">rnp_ffi_set_pass_provider</a> — Define la función de retrollamada del proveedor de contraseña</li><li><a href="#function.rnp-import-keys">rnp_import_keys</a> — Importa claves desde una string PHP hacia el llavero de claves y devuelve un JSON describiendo las claves nuevas o actualizadas</li><li><a href="#function.rnp-import-signatures">rnp_import_signatures</a> — Importa firmas autónomas en el llavero de claves y devuelve un JSON que describe las claves actualizadas</li><li><a href="#function.rnp-key-export">rnp_key_export</a> — Exporta una clave</li><li><a href="#function.rnp-key-export-autocrypt">rnp_key_export_autocrypt</a> — Exporta la clave mínima para la funcionalidad autocrypt (solo 5 paquetes: clave, uid, firma,
+   subclave de cifrado, firma)</li><li><a href="#function.rnp-key-export-revocation">rnp_key_export_revocation</a> — Genera y exporta una firma de revocación de clave primaria</li><li><a href="#function.rnp-key-get-info">rnp_key_get_info</a> — Devuelve información sobre la clave</li><li><a href="#function.rnp-key-remove">rnp_key_remove</a> — Elimina una clave de los llaveros</li><li><a href="#function.rnp-key-revoke">rnp_key_revoke</a> — Elimina una clave o una subclave generando y añadiendo una firma de revocación</li><li><a href="#function.rnp-list-keys">rnp_list_keys</a> — Enumera todas las claves presentes en un llavero de claves por tipo de identificador especificado</li><li><a href="#function.rnp-load-keys">rnp_load_keys</a> — Carga las claves a partir de un string PHP</li><li><a href="#function.rnp-load-keys-from-path">rnp_load_keys_from_path</a> — Carga claves a partir de la ruta especificada</li><li><a href="#function.rnp-locate-key">rnp_locate_key</a> — Búsqueda de la clave</li><li><a href="#function.rnp-op-encrypt">rnp_op_encrypt</a> — Cifra un mensaje</li><li><a href="#function.rnp-op-generate-key">rnp_op_generate_key</a> — Genera una clave</li><li><a href="#function.rnp-op-sign">rnp_op_sign</a> — Realiza una operación de firma sobre datos binarios, devuelve la o las firmas integradas</li><li><a href="#function.rnp-op-sign-cleartext">rnp_op_sign_cleartext</a> — Realiza una operación de firma sobre datos textuales, devuelve el mensaje firmado en claro</li><li><a href="#function.rnp-op-sign-detached">rnp_op_sign_detached</a> — Realiza una operación de firma, devuelve la firma desvinculada</li><li><a href="#function.rnp-op-verify">rnp_op_verify</a> — Verifica las firmas integradas o en claro</li><li><a href="#function.rnp-op-verify-detached">rnp_op_verify_detached</a> — Verifica las firmas desvinculadas</li><li><a href="#function.rnp-save-keys">rnp_save_keys</a> — Guarda las claves en una string PHP</li><li><a href="#function.rnp-save-keys-to-path">rnp_save_keys_to_path</a> — Guarda las claves en la ruta especificada</li><li><a href="#function.rnp-supported-features">rnp_supported_features</a> — Devuelve las funcionalidades soportadas en formato JSON</li><li><a href="#function.rnp-version-string">rnp_version_string</a> — La versión de la biblioteca RNP</li><li><a href="#function.rnp-version-string-full">rnp_version_string_full</a> — La cadena de versión completa de la biblioteca RNP</li></ul></li><li><a href="#class.rnpffi">RnpFFI</a> — La clase RnpFFI</li></ul></div>

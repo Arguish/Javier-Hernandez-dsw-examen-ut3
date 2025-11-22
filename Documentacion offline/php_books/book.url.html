@@ -1,0 +1,1594 @@
+<div id="book.url" class="book"><hr>
+ 
+ <h1 class="title">URLs</h1>
+ 
+
+ <div id="intro.url" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Tratar con cadenas URL: codificación, decodificaicón y conversión.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+
+<div id="url.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <p class="para">
+  Las siguientes constantes están pensadas para usarse con
+  <span class="function"><a href="#function.parse-url" class="function">parse_url()</a></span>.
+ </p>
+ <dl>
+  
+   <dt id="constant.php-url-scheme">
+    <strong><code><a href="#constant.php-url-scheme">PHP_URL_SCHEME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+   
+   
+    <dt id="constant.php-url-host">
+     <strong><code><a href="#constant.php-url-host">PHP_URL_HOST</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra el nombre del host del URL analizado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.php-url-port">
+     <strong><code><a href="#constant.php-url-port">PHP_URL_PORT</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra el puerto del URL analizado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.php-url-user">
+     <strong><code><a href="#constant.php-url-user">PHP_URL_USER</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra el usuario del URL analizado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.php-url-pass">
+     <strong><code><a href="#constant.php-url-pass">PHP_URL_PASS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra la contraseña del URL analizado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.php-url-path">
+     <strong><code><a href="#constant.php-url-path">PHP_URL_PATH</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra la ruta del URL analizado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.php-url-query">
+     <strong><code><a href="#constant.php-url-query">PHP_URL_QUERY</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra el string de consulta del URL analizado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.php-url-fragment">
+     <strong><code><a href="#constant.php-url-fragment">PHP_URL_FRAGMENT</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Muestra el fragmento (string después del símbolo #) del URL analizado.
+     </span>
+    </dd>
+   
+ </dl>
+ <p class="para">
+  Las siguientes constantes están pensadas para utilizarlas con
+  <span class="function"><a href="#function.http-build-query" class="function">http_build_query()</a></span>.
+ </p>
+ <dl>
+  
+   <dt id="constant.php-query-rfc1738">
+    <strong><code><a href="#constant.php-query-rfc1738">PHP_QUERY_RFC1738</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Codificación realizada por
+     <a href="https://datatracker.ietf.org/doc/html/rfc1738" class="link external">» RFC 1738</a> y el
+     tipo de media <code class="literal">application/x-www-form-urlencoded</code>, lo que
+     implica que los espacios están codificados como signos "más" (<code class="literal">+</code>).
+    </span>
+   </dd>
+   
+   
+    <dt id="constant.php-query-rfc3986">
+     <strong><code><a href="#constant.php-query-rfc3986">PHP_QUERY_RFC3986</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      La codificación se lleva a cabo según el <a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC 3986</a>,
+      y los espacios se cofificarán con porcentajes (<code class="literal">%20</code>).
+     </span>
+    </dd>
+   
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="ref.url" class="reference"><hr>
+ <h1 class="title">Funciones de URL</h1>
+
+ 
+
+
+<div id="function.base64-decode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">base64_decode</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">base64_decode</span> — <span class="dc-title">Decodifica datos codificados con MIME base64</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.base64-decode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>base64_decode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$strict</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Decodifica los datos en <code class="parameter">string</code> codificados en base64.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.base64-decode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       Los datos codificados.
+      </p>
+     </dd>
+ 
+ 
+  <dt><code class="parameter">strict</code></dt>
+  <dd>
+   <p class="para">
+    Si el parámetro <code class="parameter">strict</code> está establecido a <strong><code><a href="#constant.true">true</a></code></strong>,
+    la función <span class="function"><strong>base64_decode()</strong></span> devolverá
+    <strong><code><a href="#constant.false">false</a></code></strong> si la entrada contiene algún carácter que no es del alfabeto de
+    base64. De lo contrario, los caracteres no válidos serán descartados silenciosamente.
+   </p>
+  </dd>
+ 
+ </dl>
+ 
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.base64-decode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve los datos decodificados  o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error. Los datos devueltos
+   pueden estar en formato binario.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.base64-decode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4138">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>base64_decode()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$str </span><span style="color: #007700">= </span><span style="color: #DD0000">'VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw=='</span><span style="color: #007700">;<br>echo </span><span style="color: #0000BB">base64_decode</span><span style="color: #007700">(</span><span style="color: #0000BB">$str</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Estos datos son una cadena codificada.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.base64-decode-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.base64-encode" class="function" rel="rdfs-seeAlso">base64_encode()</a> - Codifica datos con MIME base64</span></li>
+    <li><a href="https://datatracker.ietf.org/doc/html/rfc2045" class="link external">» RFC 2045</a> section 6.8</li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.base64-encode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">base64_encode</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">base64_encode</span> — <span class="dc-title">Codifica datos con MIME base64</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.base64-encode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>base64_encode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Codifica <code class="parameter">string</code> en base64.
+  </p>
+  <p class="para">
+   Este tipo de codificación está diseñado para que datos binarios sobrepasen capas de transporte
+   que no son de 8-bits 100%, como por ejemplo el cuerpo de un E-Mail.
+  </p>
+  <p class="para">
+   La codificación en Base64 hace que los datos sean un 33% más largos que
+   los datos originales.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.base64-encode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       Datos a codificar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.base64-encode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Los datos codificados, como un string.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.base64-encode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4139">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>base64_encode()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$str </span><span style="color: #007700">= </span><span style="color: #DD0000">'This is an encoded string'</span><span style="color: #007700">;<br>echo </span><span style="color: #0000BB">base64_encode</span><span style="color: #007700">(</span><span style="color: #0000BB">$str</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">VGhpcyBpcyBhbiBlbmNvZGVkIHN0cmluZw==</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.base64-encode-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.base64-decode" class="function" rel="rdfs-seeAlso">base64_decode()</a> - Decodifica datos codificados con MIME base64</span></li>
+    <li><span class="function"><a href="#function.chunk-split" class="function" rel="rdfs-seeAlso">chunk_split()</a> - Divide un string</span></li>
+    <li><span class="function"><a href="#function.convert-uuencode" class="function" rel="rdfs-seeAlso">convert_uuencode()</a> - Codifica un string utilizando el algoritmo uuencode</span></li>
+    <li><a href="https://datatracker.ietf.org/doc/html/rfc2045" class="link external">» RFC 2045</a> section 6.8</li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.get-headers" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">get_headers</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">get_headers</span> — <span class="dc-title">Devuelve todos los encabezados enviados por el servidor en respuesta a una petición HTTP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.get-headers-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>get_headers</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$url</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$associative</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>get_headers()</strong></span> devuelve un array con los encabezados enviados por el
+   servidor en respuesta a una petición HTTP.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.get-headers-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">url</code></dt>
+     <dd>
+      <p class="para">
+       La URL de destino.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">associative</code></dt>
+     <dd>
+      <p class="para">
+       Si el argumento opcional <code class="parameter">associative</code> está definido como <strong><code><a href="#constant.true">true</a></code></strong>,
+       <span class="function"><strong>get_headers()</strong></span> analiza la respuesta y define los índices del array.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+       Un contexto de recurso válido creado con
+       <span class="function"><a href="#function.stream-context-create" class="function">stream_context_create()</a></span>, o <strong><code><a href="#constant.null">null</a></code></strong> para utilizar el contexto por omisión.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.get-headers-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array indexado o asociativo que contiene los encabezados, o <strong><code><a href="#constant.false">false</a></code></strong>
+   en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.get-headers-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">associative</code> ha sido cambiado de <span class="type"><a href="#language.types.integer" class="type int">int</a></span> a <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>.
+       </td>
+      </tr>
+
+      <tr>
+       <td>7.1.0</td>
+       <td>
+        El argumento <code class="parameter">context</code> ha sido añadido.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.get-headers-examples">
+ <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4140">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>get_headers()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$url </span><span style="color: #007700">= </span><span style="color: #DD0000">'http://www.example.com'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">get_headers</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">));<br><br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">get_headers</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [0] =&gt; HTTP/1.1 200 OK
+    [1] =&gt; Date: Sat, 29 May 2004 12:28:13 GMT
+    [2] =&gt; Server: Apache/1.3.27 (Unix)  (Red-Hat/Linux)
+    [3] =&gt; Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT
+    [4] =&gt; ETag: "3f80f-1b6-3e1cb03b"
+    [5] =&gt; Accept-Ranges: bytes
+    [6] =&gt; Content-Length: 438
+    [7] =&gt; Connection: close
+    [8] =&gt; Content-Type: text/html
+)
+
+Array
+(
+    [0] =&gt; HTTP/1.1 200 OK
+    [Date] =&gt; Sat, 29 May 2004 12:28:14 GMT
+    [Server] =&gt; Apache/1.3.27 (Unix)  (Red-Hat/Linux)
+    [Last-Modified] =&gt; Wed, 08 Jan 2003 23:11:55 GMT
+    [ETag] =&gt; "3f80f-1b6-3e1cb03b"
+    [Accept-Ranges] =&gt; bytes
+    [Content-Length] =&gt; 438
+    [Connection] =&gt; close
+    [Content-Type] =&gt; text/html
+)</pre>
+</div>
+    </div>
+   </div>
+   <div class="example" id="example-4141">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>get_headers()</strong></span> utilizando HEAD</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Por omisión, get_headers utiliza una petición GET para recuperar los<br>// encabezados. Si se desea enviar una petición HEAD, puede hacerse<br>// utilizando un contexto de flujo:<br></span><span style="color: #0000BB">$context </span><span style="color: #007700">= </span><span style="color: #0000BB">stream_context_create</span><span style="color: #007700">(<br>    [<br>        </span><span style="color: #DD0000">'http' </span><span style="color: #007700">=&gt; array(<br>            </span><span style="color: #DD0000">'method' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'HEAD'<br>        </span><span style="color: #007700">)<br>    ]<br>);<br></span><span style="color: #0000BB">$headers </span><span style="color: #007700">= </span><span style="color: #0000BB">get_headers</span><span style="color: #007700">(</span><span style="color: #DD0000">'http://example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">$context</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.get-headers-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.apache-request-headers" class="function" rel="rdfs-seeAlso">apache_request_headers()</a> - Recupera todos los encabezados HTTP de la petición</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.get-meta-tags" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">get_meta_tags</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">get_meta_tags</span> — <span class="dc-title">Extrae todas las etiquetas meta de un fichero HTML</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.get-meta-tags-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>get_meta_tags</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$use_include_path</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>get_meta_tags()</strong></span> abre el fichero <code class="parameter">filename</code>
+   y lo analiza línea por línea en busca de etiquetas
+   <code class="literal">"meta"</code>. El análisis cesa al encontrar la etiqueta
+   <code class="literal">&lt;/head&gt;</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.get-meta-tags-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       La ruta de acceso a un fichero HTML, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>. Puede ser
+       un fichero local o una <abbr title="Uniform Resource Locator">URL</abbr>.
+      </p>
+      <p class="para">
+       </p><div class="example" id="example-4142">
+        <p><strong>Ejemplo #1 Lo que analiza la función <span class="function"><strong>get_meta_tags()</strong></span></strong></p>
+        <div class="example-contents">
+<div class="htmlcode"><pre class="htmlcode">&lt;meta name="author" content="name"&gt;
+&lt;meta name="keywords" content="php documentation"&gt;
+&lt;meta name="DESCRIPTION" content="a php manual"&gt;
+&lt;meta name="geo.position" content="49.33;-86.59"&gt;
+&lt;/head&gt; &lt;!-- cesa el análisis aquí --&gt;</pre>
+</div>
+        </div>
+
+       </div>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">use_include_path</code></dt>
+     <dd>
+      <p class="para">
+       Si el argumento opcional
+       <code class="parameter">use_include_path</code> vale <strong><code><a href="#constant.true">true</a></code></strong>,
+       <span class="function"><strong>get_meta_tags()</strong></span> buscará también el fichero
+       en el <a href="#ini.include-path" class="link">include_path</a>.
+       Este argumento se utiliza para ficheros locales, no para URLs.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.get-meta-tags-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array que contiene todas las etiquetas meta analizadas.
+  </p>
+  <p class="para">
+   El valor de la propiedad se utilizará como clave del array,
+   y su valor como valor correspondiente de la clave. Así se podrá
+   recorrer fácilmente este array con las funciones
+   estándar de array. Los caracteres especiales presentes en
+   el valor serán reemplazados por un guion bajo (<code class="literal">"_"</code>),
+   y el resto se convertirá a minúsculas. Si dos etiquetas meta poseen
+   el mismo nombre, solo se devolverá la última.
+  </p>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.get-meta-tags-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4143">
+    <p><strong>Ejemplo #2 Lo que devuelve la función <span class="function"><strong>get_meta_tags()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Supongamos que las etiquetas anteriores están disponibles en example.com<br></span><span style="color: #0000BB">$tags </span><span style="color: #007700">= </span><span style="color: #0000BB">get_meta_tags</span><span style="color: #007700">(</span><span style="color: #DD0000">'http://www.example.com/'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Observe que las claves están en minúsculas, y<br>// el . ha sido reemplazado por _ en la clave<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">$tags</span><span style="color: #007700">[</span><span style="color: #DD0000">'author'</span><span style="color: #007700">];       </span><span style="color: #FF8000">// name<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">$tags</span><span style="color: #007700">[</span><span style="color: #DD0000">'keywords'</span><span style="color: #007700">];     </span><span style="color: #FF8000">// php documentation<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">$tags</span><span style="color: #007700">[</span><span style="color: #DD0000">'description'</span><span style="color: #007700">];  </span><span style="color: #FF8000">// a php manual<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">$tags</span><span style="color: #007700">[</span><span style="color: #DD0000">'geo_position'</span><span style="color: #007700">]; </span><span style="color: #FF8000">// 49.33;-86.59<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.get-meta-tags-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Solo se analizarán las etiquetas meta con un atributo name.
+    Las comillas no son necesarias.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.get-meta-tags-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.htmlentities" class="function" rel="rdfs-seeAlso">htmlentities()</a> - Convierte todos los caracteres elegibles en entidades HTML</span></li>
+    <li><span class="function"><a href="#function.urlencode" class="function" rel="rdfs-seeAlso">urlencode()</a> - Codifica como URL una cadena</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.http-build-query" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">http_build_query</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">http_build_query</span> — <span class="dc-title">Genera una string de consulta con codificación URL</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.http-build-query-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>http_build_query</strong></span>(<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.object" class="type object">object</a></span></span> <code class="parameter">$data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$numeric_prefix</code><span class="initializer"> = ""</span></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$arg_separator</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$encoding_type</code><span class="initializer"> = <strong><code><a href="#constant.php-query-rfc1738">PHP_QUERY_RFC1738</a></code></strong></span></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Genera una string con codificación URL, construida a partir del array
+   indexado o asociativo <code class="parameter">data</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.http-build-query-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Puede ser un array o un objeto que contiene propiedades.
+      </p>
+      <p class="para">
+       Si <code class="parameter">data</code> es un array, entonces puede
+       ser un array de una o varias dimensiones.
+      </p>
+      <p class="para">
+       Si <code class="parameter">data</code> es un objeto, entonces solo los
+       atributos públicos serán utilizados en el resultado.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">numeric_prefix</code></dt>
+     <dd>
+      <p class="para">
+       Si se utilizan índices numéricos en
+       el array base y <code class="parameter">numeric_prefix</code> es proporcionado,
+       será utilizado para prefijar los nombres de los índices para los elementos del array
+       base solamente.
+      </p>
+      <p class="para">
+       Esto permite generar nombres de variables válidos si
+       los datos son luego decodificados por PHP o una aplicación CGI.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">arg_separator</code></dt>
+     <dd>
+      <p class="para">
+       El separador de argumentos. Si no está definido o es <strong><code><a href="#constant.null">null</a></code></strong>,
+       <a href="#ini.arg-separator.output" class="link">arg_separator.output</a> es
+       utilizado para separar los argumentos.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding_type</code></dt>
+     <dd>
+      <p class="para">
+       Por omisión, vale <strong><code><a href="#constant.php-query-rfc1738">PHP_QUERY_RFC1738</a></code></strong>.
+      </p>
+      <p class="para">
+       Si <code class="parameter">encoding_type</code> vale
+       <strong><code><a href="#constant.php-query-rfc1738">PHP_QUERY_RFC1738</a></code></strong>,
+       entonces la codificación se realiza conforme a la
+       <a href="https://datatracker.ietf.org/doc/html/rfc1738" class="link external">» RFC 1738</a>
+       y los espacios del tipo de medio
+       <code class="literal">application/x-www-form-urlencoded</code>, que
+       se ve afectado por esta elección, serán codificados en forma
+       de un signo más (<code class="literal">+</code>).
+      </p>
+      <p class="para">
+       Si <code class="parameter">encoding_type</code> vale
+       <strong><code><a href="#constant.php-query-rfc3986">PHP_QUERY_RFC3986</a></code></strong>, entonces la codificación
+       se realiza conforme a la
+       <a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC 3986</a>, y los
+       espacios serán codificados como signo de porcentaje (<code class="literal">%20</code>).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.http-build-query-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una <span class="type"><a href="#language.types.string" class="type string">string</a></span> codificada URL.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.http-build-query-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.4.0</td>
+      <td>
+       Antes de PHP 8.4.0, las propiedades <span class="interfacename"><a href="#class.backedenum" class="interfacename">BackedEnum</a></span> de
+       <code class="parameter">data</code> se convertían en objetos, en lugar de sus equivalentes escalares.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">arg_separator</code> ahora puede ser nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.http-build-query-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-4144">
+   <p><strong>Ejemplo #1 Uso simple de <span class="function"><strong>http_build_query()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$data </span><span style="color: #007700">= array(<br>    </span><span style="color: #DD0000">'foo' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'baz' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'boom'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'cow' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'milk'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'null' </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">null</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'php' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'hypertext processor'<br></span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">http_build_query</span><span style="color: #007700">(</span><span style="color: #0000BB">$data</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #0000BB">http_build_query</span><span style="color: #007700">(</span><span style="color: #0000BB">$data</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #DD0000">'&amp;amp;'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">foo=bar&amp;baz=boom&amp;cow=milk&amp;php=hypertext+processor
+foo=bar&amp;amp;baz=boom&amp;amp;cow=milk&amp;amp;php=hypertext+processor</pre>
+</div>
+   </div>
+  </div>
+
+  <div class="example" id="example-4145">
+   <p><strong>Ejemplo #2 <span class="function"><strong>http_build_query()</strong></span> con array indexado</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$data </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'foo'</span><span style="color: #007700">, </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">, </span><span style="color: #DD0000">'baz'</span><span style="color: #007700">, </span><span style="color: #0000BB">null</span><span style="color: #007700">, </span><span style="color: #DD0000">'boom'</span><span style="color: #007700">, </span><span style="color: #DD0000">'cow' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'milk'</span><span style="color: #007700">, </span><span style="color: #DD0000">'php' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'hypertext processor'</span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">http_build_query</span><span style="color: #007700">(</span><span style="color: #0000BB">$data</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #0000BB">http_build_query</span><span style="color: #007700">(</span><span style="color: #0000BB">$data</span><span style="color: #007700">, </span><span style="color: #DD0000">'myvar_'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">0=foo&amp;1=bar&amp;2=baz&amp;4=boom&amp;cow=milk&amp;php=hypertext+processor
+myvar_0=foo&amp;myvar_1=bar&amp;myvar_2=baz&amp;myvar_4=boom&amp;cow=milk&amp;php=hypertext+processor</pre>
+</div>
+   </div>
+  </div>
+  <div class="example" id="example-4146">
+   <p><strong>Ejemplo #3 <span class="function"><strong>http_build_query()</strong></span> con array complejo</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$data </span><span style="color: #007700">= array(<br>    </span><span style="color: #DD0000">'user' </span><span style="color: #007700">=&gt; array(<br>        </span><span style="color: #DD0000">'name' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'Bob Smith'</span><span style="color: #007700">,<br>        </span><span style="color: #DD0000">'age'  </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">47</span><span style="color: #007700">,<br>        </span><span style="color: #DD0000">'sex'  </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'M'</span><span style="color: #007700">,<br>        </span><span style="color: #DD0000">'dob'  </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'5/12/1956'<br>    </span><span style="color: #007700">),<br>    </span><span style="color: #DD0000">'pastimes' </span><span style="color: #007700">=&gt; array(</span><span style="color: #DD0000">'golf'</span><span style="color: #007700">, </span><span style="color: #DD0000">'opera'</span><span style="color: #007700">, </span><span style="color: #DD0000">'poker'</span><span style="color: #007700">, </span><span style="color: #DD0000">'rap'</span><span style="color: #007700">),<br>    </span><span style="color: #DD0000">'children' </span><span style="color: #007700">=&gt; array(<br>        </span><span style="color: #DD0000">'bobby' </span><span style="color: #007700">=&gt; array(</span><span style="color: #DD0000">'age'</span><span style="color: #007700">=&gt;</span><span style="color: #0000BB">12</span><span style="color: #007700">, </span><span style="color: #DD0000">'sex'</span><span style="color: #007700">=&gt;</span><span style="color: #DD0000">'M'</span><span style="color: #007700">),<br>        </span><span style="color: #DD0000">'sally' </span><span style="color: #007700">=&gt; array(</span><span style="color: #DD0000">'age'</span><span style="color: #007700">=&gt;</span><span style="color: #0000BB">8</span><span style="color: #007700">, </span><span style="color: #DD0000">'sex'</span><span style="color: #007700">=&gt;</span><span style="color: #DD0000">'F'</span><span style="color: #007700">)<br>    ),<br>    </span><span style="color: #DD0000">'CEO'<br></span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">http_build_query</span><span style="color: #007700">(</span><span style="color: #0000BB">$data</span><span style="color: #007700">, </span><span style="color: #DD0000">'flags_'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>
+    El ejemplo anterior mostrará: (en varias líneas para mayor legibilidad)
+   </p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">user%5Bname%5D=Bob+Smith&amp;user%5Bage%5D=47&amp;user%5Bsex%5D=M&amp;
+user%5Bdob%5D=5%2F12%2F1956&amp;pastimes%5B0%5D=golf&amp;pastimes%5B1%5D=opera&amp;
+pastimes%5B2%5D=poker&amp;pastimes%5B3%5D=rap&amp;children%5Bbobby%5D%5Bage%5D=12&amp;
+children%5Bbobby%5D%5Bsex%5D=M&amp;children%5Bsally%5D%5Bage%5D=8&amp;
+children%5Bsally%5D%5Bsex%5D=F&amp;flags_0=CEO</pre>
+</div>
+   </div>
+   <div class="example-contents"><p>
+    </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+     </p><p class="para">
+      Solo los elementos indexados numéricamente ("<code class="literal">CEO</code>")
+      en el array base son prefijados. Los otros índices numéricos en
+      otros niveles no necesitan serlo para tener nombres válidos.
+     </p>
+    </blockquote>
+   </div>
+  </div>
+
+  <div class="example" id="example-4147">
+   <p><strong>Ejemplo #4 Uso de <span class="function"><strong>http_build_query()</strong></span> con un objeto</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">parentClass </span><span style="color: #007700">{<br>    public    </span><span style="color: #0000BB">$pub      </span><span style="color: #007700">= </span><span style="color: #DD0000">'publicParent'</span><span style="color: #007700">;<br>    protected </span><span style="color: #0000BB">$prot     </span><span style="color: #007700">= </span><span style="color: #DD0000">'protectedParent'</span><span style="color: #007700">;<br>    private   </span><span style="color: #0000BB">$priv     </span><span style="color: #007700">= </span><span style="color: #DD0000">'privateParent'</span><span style="color: #007700">;<br>    public    </span><span style="color: #0000BB">$pub_bar  </span><span style="color: #007700">= </span><span style="color: #0000BB">null</span><span style="color: #007700">;<br>    protected </span><span style="color: #0000BB">$prot_bar </span><span style="color: #007700">= </span><span style="color: #0000BB">null</span><span style="color: #007700">;<br>    private   </span><span style="color: #0000BB">$priv_bar </span><span style="color: #007700">= </span><span style="color: #0000BB">null</span><span style="color: #007700">;<br><br>    public function </span><span style="color: #0000BB">__construct</span><span style="color: #007700">(){<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">pub_bar  </span><span style="color: #007700">= new </span><span style="color: #0000BB">childClass</span><span style="color: #007700">();<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">prot_bar </span><span style="color: #007700">= new </span><span style="color: #0000BB">childClass</span><span style="color: #007700">();<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">priv_bar </span><span style="color: #007700">= new </span><span style="color: #0000BB">childClass</span><span style="color: #007700">();<br>    }<br>}<br><br>class </span><span style="color: #0000BB">childClass </span><span style="color: #007700">{<br>    public    </span><span style="color: #0000BB">$pub  </span><span style="color: #007700">= </span><span style="color: #DD0000">'publicChild'</span><span style="color: #007700">;<br>    protected </span><span style="color: #0000BB">$prot </span><span style="color: #007700">= </span><span style="color: #DD0000">'protectedChild'</span><span style="color: #007700">;<br>    private   </span><span style="color: #0000BB">$priv </span><span style="color: #007700">= </span><span style="color: #DD0000">'privateChild'</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">$parent </span><span style="color: #007700">= new </span><span style="color: #0000BB">parentClass</span><span style="color: #007700">();<br><br>echo </span><span style="color: #0000BB">http_build_query</span><span style="color: #007700">(</span><span style="color: #0000BB">$parent</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">pub=publicParent&amp;pub_bar%5Bpub%5D=publicChild</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.http-build-query-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.parse-str" class="function" rel="rdfs-seeAlso">parse_str()</a> - Analiza una string como una cadena de consulta URL</span></li>
+    <li><span class="function"><a href="#function.parse-url" class="function" rel="rdfs-seeAlso">parse_url()</a> - Analiza una URL y devuelve sus componentes</span></li>
+    <li><span class="function"><a href="#function.urlencode" class="function" rel="rdfs-seeAlso">urlencode()</a> - Codifica como URL una cadena</span></li>
+    <li><span class="function"><a href="#function.array-walk" class="function" rel="rdfs-seeAlso">array_walk()</a> - Ejecuta una función proporcionada por el usuario en cada uno de los elementos de un array</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.parse-url" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">parse_url</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">parse_url</span> — <span class="dc-title">Analiza una URL y devuelve sus componentes</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.parse-url-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>parse_url</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$url</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$component</code><span class="initializer"> = -1</span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.null" class="type null">null</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función analiza una URL y devuelve un array asociativo que contiene
+   todos los elementos presentes en la misma.
+   Los valores de los elementos del array <em>NO ESTÁN</em> decodificados de la URL.
+  </p>
+  <p class="para">
+   Esta función <strong>no está</strong>
+   diseñada para validar la URL proporcionada, solo la divide en las partes enumeradas
+   a continuación. Las URL parciales e inválidas también son aceptadas, la función
+   <span class="function"><strong>parse_url()</strong></span> hará todo lo posible para analizarlas correctamente.
+  </p>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    Esta función puede no proporcionar resultados correctos para URL relativas o inválidas y los resultados pueden no coincidir con
+    el comportamiento estándar de los clientes HTTP.
+    Si se deben analizar URL provenientes de la entrada del usuario,
+    se requieren verificaciones adicionales, por ejemplo utilizando
+    <span class="function"><a href="#function.filter-var" class="function">filter_var()</a></span> con el filtro
+    <strong><code><a href="#constant.filter-validate-url">FILTER_VALIDATE_URL</a></code></strong>.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.parse-url-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">url</code></dt>
+     <dd>
+      <p class="para">
+       La URL a analizar.
+      </p>
+     </dd>
+    
+   </dl>
+   <dl>
+    
+     <dt><code class="parameter">component</code></dt>
+     <dd>
+      <p class="para">
+       Puede ser una de las constantes entre <strong><code><a href="#constant.php-url-scheme">PHP_URL_SCHEME</a></code></strong>,
+       <strong><code><a href="#constant.php-url-host">PHP_URL_HOST</a></code></strong>, <strong><code><a href="#constant.php-url-port">PHP_URL_PORT</a></code></strong>,
+       <strong><code><a href="#constant.php-url-user">PHP_URL_USER</a></code></strong>, <strong><code><a href="#constant.php-url-pass">PHP_URL_PASS</a></code></strong>,
+       <strong><code><a href="#constant.php-url-path">PHP_URL_PATH</a></code></strong>, <strong><code><a href="#constant.php-url-query">PHP_URL_QUERY</a></code></strong>
+       o <strong><code><a href="#constant.php-url-fragment">PHP_URL_FRAGMENT</a></code></strong> para recuperar únicamente
+       una parte de la URL como string (excepto cuando
+       se proporciona <strong><code><a href="#constant.php-url-port">PHP_URL_PORT</a></code></strong>; en este caso, el valor devuelto
+       será un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.parse-url-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Para URL realmente mal formadas, <span class="function"><strong>parse_url()</strong></span> puede devolver
+   <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+  <p class="para">
+   Si el parámetro <code class="parameter">component</code> se omite, se devuelve un <span class="type"><a href="#language.types.array" class="type array">array</a></span>
+   asociativo. Al menos un elemento estará presente en el array. Estas
+   son las claves potenciales de este array:
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      <var class="varname">scheme</var> - por ejemplo <code class="literal">http</code>
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <var class="varname">host</var>
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <var class="varname">port</var>
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <var class="varname">user</var>
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <var class="varname">pass</var>
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <var class="varname">path</var>
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <var class="varname">query</var> - después del signo de interrogación "<code class="literal">?</code>"
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <var class="varname">fragment</var> - después del símbolo de almohadilla "<code class="literal">#</code>"
+     </span>
+    </li>
+   </ul>
+  
+  <p class="para">
+   Si el parámetro <code class="parameter">component</code> está especificado, <span class="function"><strong>parse_url()</strong></span>
+   devuelve un <span class="type"><a href="#language.types.string" class="type string">string</a></span> (o un <span class="type"><a href="#language.types.integer" class="type int">int</a></span> en el caso de uso de la
+   constante <strong><code><a href="#constant.php-url-port">PHP_URL_PORT</a></code></strong>) en lugar de un <span class="type"><a href="#language.types.array" class="type array">array</a></span>. Si el componente
+   solicitado no existe en la URL, <strong><code><a href="#constant.null">null</a></code></strong> será devuelto.
+   A partir de PHP 8.0.0, <span class="function"><strong>parse_url()</strong></span> distingue entre los
+   fragmentos y consultas ausentes y vacíos:
+  </p>
+  <p class="para">
+   </p><div class="informalexample">
+    <div class="example-contents screen">
+<div class="returnvaluescode"><pre class="returnvaluescode">http://example.com/foo → query = null, fragment = null
+http://example.com/foo? → query = "",   fragment = null
+http://example.com/foo# → query = null, fragment = ""
+http://example.com/foo?# → query = "",   fragment = ""</pre>
+</div>
+    </div>
+   </div>
+  
+  <p class="para">
+   Anteriormente todos los casos resultaban en la consulta y el fragmento siendo <strong><code><a href="#constant.null">null</a></code></strong>.
+  </p>
+  <p class="para">
+   Cabe señalar que los caracteres de control (ver <span class="function"><a href="#function.ctype-cntrl" class="function">ctype_cntrl()</a></span>)
+   en los componentes son reemplazados por un guion bajo
+   (<code class="literal">_</code>).
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.parse-url-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <span class="function"><strong>parse_url()</strong></span> distingue ahora entre los fragmentos
+       y consultas ausentes y vacíos.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.parse-url-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4148">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>parse_url()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$url </span><span style="color: #007700">= </span><span style="color: #DD0000">'http://username:password@hostname:9090/path?arg=value#anchor'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_URL_SCHEME</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_URL_USER</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_URL_PASS</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_URL_HOST</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_URL_PORT</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_URL_PATH</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_URL_QUERY</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_URL_FRAGMENT</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(8) {
+  ["scheme"]=&gt;
+  string(4) "http"
+  ["host"]=&gt;
+  string(8) "hostname"
+  ["port"]=&gt;
+  int(9090)
+  ["user"]=&gt;
+  string(8) "username"
+  ["pass"]=&gt;
+  string(8) "password"
+  ["path"]=&gt;
+  string(5) "/path"
+  ["query"]=&gt;
+  string(9) "arg=value"
+  ["fragment"]=&gt;
+  string(6) "anchor"
+}
+string(4) "http"
+string(8) "username"
+string(8) "password"
+string(8) "hostname"
+int(9090)
+string(5) "/path"
+string(9) "arg=value"
+string(6) "anchor"</pre>
+</div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4149">
+    <p><strong>Ejemplo #2 Ejemplo con la función <span class="function"><strong>parse_url()</strong></span> sin esquema</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$url </span><span style="color: #007700">= </span><span style="color: #DD0000">'//www.example.com/path?googleguy=googley'</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">// Antes de PHP 5.4.7, la ruta sería "//www.example.com/path"<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">parse_url</span><span style="color: #007700">(</span><span style="color: #0000BB">$url</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(3) {
+  ["host"]=&gt;
+  string(15) "www.example.com"
+  ["path"]=&gt;
+  string(5) "/path"
+  ["query"]=&gt;
+  string(17) "googleguy=googley"
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.parse-url-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    <span class="function"><strong>parse_url()</strong></span> fue creada específicamente para analizar URL
+    y no URI. Sin embargo, por razones de compatibilidad adyacente, PHP
+    hace una excepción para el esquema <code class="literal">file://</code> donde los triples slashs
+    (<code class="literal">file:///</code>...) están permitidos. Todos los demás esquemas son inválidos.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.parse-url-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.pathinfo" class="function" rel="rdfs-seeAlso">pathinfo()</a> - Devuelve información sobre una ruta del sistema</span></li>
+    <li><span class="function"><a href="#function.parse-str" class="function" rel="rdfs-seeAlso">parse_str()</a> - Analiza una string como una cadena de consulta URL</span></li>
+    <li><span class="function"><a href="#function.http-build-query" class="function" rel="rdfs-seeAlso">http_build_query()</a> - Genera una string de consulta con codificación URL</span></li>
+    <li><span class="function"><a href="#function.dirname" class="function" rel="rdfs-seeAlso">dirname()</a> - Devuelve la ruta de la carpeta padre</span></li>
+    <li><span class="function"><a href="#function.basename" class="function" rel="rdfs-seeAlso">basename()</a> - Devuelve el nombre del componente final de una ruta</span></li>
+    <li><a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC 3986</a></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.rawurldecode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rawurldecode</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">rawurldecode</span> — <span class="dc-title">Decodificar cadenas codificadas estilo URL</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rawurldecode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rawurldecode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve una cadena en donde las con secuencias con signos de porcentaje
+   (<code class="literal">%</code>) seguidos de dos dígitos hexadecimales, son
+   reemplazados con caracteres literales.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rawurldecode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       La URL a ser decodificada.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rawurldecode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la URL decodificada, como una cadena.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.rawurldecode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4150">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>rawurldecode()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">echo </span><span style="color: #0000BB">rawurldecode</span><span style="color: #007700">(</span><span style="color: #DD0000">'foo%20bar%40baz'</span><span style="color: #007700">); </span><span style="color: #FF8000">// foo bar@baz<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.rawurldecode-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    <span class="function"><strong>rawurldecode()</strong></span> no decodifica los símbolos más ('+')
+    como espacios. <span class="function"><a href="#function.urldecode" class="function">urldecode()</a></span> lo hace.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.rawurldecode-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.rawurlencode" class="function" rel="rdfs-seeAlso">rawurlencode()</a> - Codificar estilo URL de acuerdo al RFC 3986</span></li>
+    <li><span class="function"><a href="#function.urldecode" class="function" rel="rdfs-seeAlso">urldecode()</a> - Decodifica una cadena cifrada como URL</span></li>
+    <li><span class="function"><a href="#function.urlencode" class="function" rel="rdfs-seeAlso">urlencode()</a> - Codifica como URL una cadena</span></li>
+    <li><a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC 3986</a></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rawurlencode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rawurlencode</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">rawurlencode</span> — <span class="dc-title">Codificar estilo URL de acuerdo al RFC 3986</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rawurlencode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rawurlencode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Codifica la cadena dada de acuerdo al <a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC 3986</a>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rawurlencode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       La URL a ser codificada.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rawurlencode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una cadena en donde todos los caracteres no-alfanuméricos,
+   excepto <code class="literal">-_.~</code>, son reemplazados con un signo de
+   porcentaje (<code class="literal">%</code>) seguido de dos dígitos hexadecimales.
+   Este es el tipo de codificación descrito en el <a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC 3986</a> para evitar que caracteres
+   literales sean interpretados como delimitadores de URL especiales, y para
+   evitar que las URLs sean modificadas por medios de transmisión con
+   conversiones de caracteres (como algunos sistemas de correo electrónico).
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.rawurlencode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4151">
+    <p><strong>Ejemplo #1 Inclusión de una contraseña en una URL FTP</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #DD0000">'&lt;a href="ftp://user:'</span><span style="color: #007700">, </span><span style="color: #0000BB">rawurlencode</span><span style="color: #007700">(</span><span style="color: #DD0000">'foo @+%/'</span><span style="color: #007700">),<br>     </span><span style="color: #DD0000">'@ftp.example.com/x.txt"&gt;'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">&lt;a href="ftp://user:foo%20%40%2B%25%2F@ftp.example.com/x.txt"&gt;</pre>
+</div>
+    </div>
+   </div>
+  
+  <p class="para">
+   O, si pasa información en un componente PATH_INFO de la URL:
+  </p>
+  <p class="para">
+   </p><div class="example" id="example-4152">
+    <p><strong>Ejemplo #2 Ejemplo 2 de <span class="function"><strong>rawurlencode()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #DD0000">'&lt;a href="http://example.com/department_list_script/'</span><span style="color: #007700">,<br>    </span><span style="color: #0000BB">rawurlencode</span><span style="color: #007700">(</span><span style="color: #DD0000">'sales and marketing/Miami'</span><span style="color: #007700">), </span><span style="color: #DD0000">'"&gt;'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">&lt;a href="http://example.com/department_list_script/sales%20and%20marketing%2FMiami"&gt;</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.rawurlencode-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.rawurldecode" class="function" rel="rdfs-seeAlso">rawurldecode()</a> - Decodificar cadenas codificadas estilo URL</span></li>
+    <li><span class="function"><a href="#function.urldecode" class="function" rel="rdfs-seeAlso">urldecode()</a> - Decodifica una cadena cifrada como URL</span></li>
+    <li><span class="function"><a href="#function.urlencode" class="function" rel="rdfs-seeAlso">urlencode()</a> - Codifica como URL una cadena</span></li>
+    <li><a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC 3986</a></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.urldecode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">urldecode</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">urldecode</span> — <span class="dc-title">Decodifica una cadena cifrada como URL</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.urldecode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>urldecode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Decodifica cualquier cifrado tipo
+   <code class="literal">%<span class="replaceable">##</span></code> en la cadena dada.
+   Los símbolos ('<code class="literal">+</code>') son
+   decodificados como el caracter espacio.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.urldecode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       La cadena a ser decodificada.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.urldecode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la cadena decodificada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.urldecode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4153">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>urldecode()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$query </span><span style="color: #007700">= </span><span style="color: #DD0000">"my=apples&amp;are=green+and+red"</span><span style="color: #007700">;<br><br>foreach (</span><span style="color: #0000BB">explode</span><span style="color: #007700">(</span><span style="color: #DD0000">'&amp;'</span><span style="color: #007700">, </span><span style="color: #0000BB">$query</span><span style="color: #007700">) as </span><span style="color: #0000BB">$chunk</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$param </span><span style="color: #007700">= </span><span style="color: #0000BB">explode</span><span style="color: #007700">(</span><span style="color: #DD0000">"="</span><span style="color: #007700">, </span><span style="color: #0000BB">$chunk</span><span style="color: #007700">);<br><br>    if (</span><span style="color: #0000BB">$param</span><span style="color: #007700">) {<br>        </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"Value for parameter \"%s\" is \"%s\"&lt;br/&gt;\n"</span><span style="color: #007700">, </span><span style="color: #0000BB">urldecode</span><span style="color: #007700">(</span><span style="color: #0000BB">$param</span><span style="color: #007700">[</span><span style="color: #0000BB">0</span><span style="color: #007700">]), </span><span style="color: #0000BB">urldecode</span><span style="color: #007700">(</span><span style="color: #0000BB">$param</span><span style="color: #007700">[</span><span style="color: #0000BB">1</span><span style="color: #007700">]));<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.urldecode-notes">
+  <h3 class="title">Notas</h3>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    Las superglobales <var class="varname"><a href="#reserved.variables.get" class="classname">$_GET</a></var> y <var class="varname"><a href="#reserved.variables.request" class="classname">$_REQUEST</a></var>
+    ya están decodificadas. El uso de <span class="function"><strong>urldecode()</strong></span> en un elemento
+    en <var class="varname"><a href="#reserved.variables.get" class="classname">$_GET</a></var> o <var class="varname"><a href="#reserved.variables.request" class="classname">$_REQUEST</a></var> puede tener
+    resultados inesperados y peligrosos.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.urldecode-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.urlencode" class="function" rel="rdfs-seeAlso">urlencode()</a> - Codifica como URL una cadena</span></li>
+    <li><span class="function"><a href="#function.rawurlencode" class="function" rel="rdfs-seeAlso">rawurlencode()</a> - Codificar estilo URL de acuerdo al RFC 3986</span></li>
+    <li><span class="function"><a href="#function.rawurldecode" class="function" rel="rdfs-seeAlso">rawurldecode()</a> - Decodificar cadenas codificadas estilo URL</span></li>
+    <li><a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC 3986</a></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.urlencode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">urlencode</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">urlencode</span> — <span class="dc-title">Codifica como URL una cadena</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.urlencode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>urlencode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función es conveniente cuando se codifica una cadena a ser usada
+   como la parte de consulta de una URL, como método práctico para pasar
+   variables a la siguiente página.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.urlencode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       La cadena a ser codificada.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.urlencode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una cadena en la que todos los caracteres no-alfanuméricos
+   excepto <code class="literal">-_.</code> han sido reemplazados con un signo de
+   porcentaje (<code class="literal">%</code>) seguido por dos dígitos hexadecimales y
+   los espacios son codificados como signos de suma (<code class="literal">+</code>).
+   Esta es la misma codificación usada en los datos publicados desde un
+   formulario WWW, es decir, el mismo mecanismo usado para el tipo de medios
+   <code class="literal">application/x-www-form-urlencoded</code>. Este mecanismo
+   difiere de la codificación en el <a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC
+   3986</a> (vea <span class="function"><a href="#function.rawurlencode" class="function">rawurlencode()</a></span>) en que, por razones
+   históricas, los espacios son codificados como signos de suma (+).
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.urlencode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4154">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>urlencode()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$userinput </span><span style="color: #007700">= </span><span style="color: #DD0000">'Data123!@-_ +'</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"UserInput: </span><span style="color: #0000BB">$userinput</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">'&lt;a href="mycgi?foo='</span><span style="color: #007700">, </span><span style="color: #0000BB">urlencode</span><span style="color: #007700">(</span><span style="color: #0000BB">$userinput</span><span style="color: #007700">), </span><span style="color: #DD0000">'"&gt;'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">UserInput: Data123!@-_ +
+&lt;a href="mycgi?foo=Data123%21%40-_+%2B"&gt;</pre>
+</div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4155">
+    <p><strong>Ejemplo #2 Ejemplo de <span class="function"><strong>urlencode()</strong></span> y ejemplo de <span class="function"><a href="#function.htmlentities" class="function">htmlentities()</a></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$foo </span><span style="color: #007700">= </span><span style="color: #DD0000">'Data123!@-_ +'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$bar </span><span style="color: #007700">= </span><span style="color: #DD0000">"Not the same content as </span><span style="color: #0000BB">$foo</span><span style="color: #DD0000">"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"foo: </span><span style="color: #0000BB">$foo</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"bar: </span><span style="color: #0000BB">$bar</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$query_string </span><span style="color: #007700">= </span><span style="color: #DD0000">'foo=' </span><span style="color: #007700">. </span><span style="color: #0000BB">urlencode</span><span style="color: #007700">(</span><span style="color: #0000BB">$foo</span><span style="color: #007700">) . </span><span style="color: #DD0000">'&amp;bar=' </span><span style="color: #007700">. </span><span style="color: #0000BB">urlencode</span><span style="color: #007700">(</span><span style="color: #0000BB">$bar</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">'&lt;a href="mycgi?' </span><span style="color: #007700">. </span><span style="color: #0000BB">htmlentities</span><span style="color: #007700">(</span><span style="color: #0000BB">$query_string</span><span style="color: #007700">) . </span><span style="color: #DD0000">'"&gt;'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">foo: Data123!@-_ +
+bar: Not the same content as Data123!@-_ +
+&lt;a href="mycgi?foo=Data123%21%40-_+%2B&amp;amp;bar=Not+the+same+content+as+Data123%21%40-_+%2B"&gt;</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.urlencode-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Tenga cuidado con las variables que puedan coincidir con entidades HTML.
+    Secuencias como &amp;amp, &amp;copy y &amp;pound son procesadas por el
+    navegador y la entidad real es usada en lugar del nombre de variable
+    deseado. Este es un problema obvio sobre el cual el consorcio W3 ha
+    estado alertando a las personas por años. La referencia esta aquí: <a href="http://www.w3.org/TR/html4/appendix/notes.html#h-B.2.2" class="link external">» http://www.w3.org/TR/html4/appendix/notes.html#h-B.2.2</a>.
+   </p>
+   <p class="para">
+    PHP soporta la modificación del separador de argumentos al punto-y-coma
+    sugerido por el W3C a través de la directiva .ini arg_separator.
+    Desafortunadamente, la mayoría de agentes de usuario no envían datos de
+    formularios en este formato separado por punto-y-coma. Una forma más
+    portable es usar &amp;amp; en lugar de &amp; como separador. No es
+    necesario modificar el valor arg_separator de PHP para esto. Déjelo como
+    &amp;, y simplemente codifique sus URLs usando
+    <span class="function"><a href="#function.htmlentities" class="function">htmlentities()</a></span> o
+    <span class="function"><a href="#function.htmlspecialchars" class="function">htmlspecialchars()</a></span>.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.urlencode-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.urldecode" class="function" rel="rdfs-seeAlso">urldecode()</a> - Decodifica una cadena cifrada como URL</span></li>
+    <li><span class="function"><a href="#function.htmlentities" class="function" rel="rdfs-seeAlso">htmlentities()</a> - Convierte todos los caracteres elegibles en entidades HTML</span></li>
+    <li><span class="function"><a href="#function.rawurlencode" class="function" rel="rdfs-seeAlso">rawurlencode()</a> - Codificar estilo URL de acuerdo al RFC 3986</span></li>
+    <li><span class="function"><a href="#function.rawurldecode" class="function" rel="rdfs-seeAlso">rawurldecode()</a> - Decodificar cadenas codificadas estilo URL</span></li>
+    <li><a href="https://datatracker.ietf.org/doc/html/rfc3986" class="link external">» RFC 3986</a></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.base64-decode">base64_decode</a> — Decodifica datos codificados con MIME base64</li><li><a href="#function.base64-encode">base64_encode</a> — Codifica datos con MIME base64</li><li><a href="#function.get-headers">get_headers</a> — Devuelve todos los encabezados enviados por el servidor en respuesta a una petición HTTP</li><li><a href="#function.get-meta-tags">get_meta_tags</a> — Extrae todas las etiquetas meta de un fichero HTML</li><li><a href="#function.http-build-query">http_build_query</a> — Genera una string de consulta con codificación URL</li><li><a href="#function.parse-url">parse_url</a> — Analiza una URL y devuelve sus componentes</li><li><a href="#function.rawurldecode">rawurldecode</a> — Decodificar cadenas codificadas estilo URL</li><li><a href="#function.rawurlencode">rawurlencode</a> — Codificar estilo URL de acuerdo al RFC 3986</li><li><a href="#function.urldecode">urldecode</a> — Decodifica una cadena cifrada como URL</li><li><a href="#function.urlencode">urlencode</a> — Codifica como URL una cadena</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.url">Introducción</a></li><li><a href="#url.constants">Constantes predefinidas</a></li><li><a href="#ref.url">Funciones de URL</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.base64-decode">base64_decode</a> — Decodifica datos codificados con MIME base64</li><li><a href="#function.base64-encode">base64_encode</a> — Codifica datos con MIME base64</li><li><a href="#function.get-headers">get_headers</a> — Devuelve todos los encabezados enviados por el servidor en respuesta a una petición HTTP</li><li><a href="#function.get-meta-tags">get_meta_tags</a> — Extrae todas las etiquetas meta de un fichero HTML</li><li><a href="#function.http-build-query">http_build_query</a> — Genera una string de consulta con codificación URL</li><li><a href="#function.parse-url">parse_url</a> — Analiza una URL y devuelve sus componentes</li><li><a href="#function.rawurldecode">rawurldecode</a> — Decodificar cadenas codificadas estilo URL</li><li><a href="#function.rawurlencode">rawurlencode</a> — Codificar estilo URL de acuerdo al RFC 3986</li><li><a href="#function.urldecode">urldecode</a> — Decodifica una cadena cifrada como URL</li><li><a href="#function.urlencode">urlencode</a> — Codifica como URL una cadena</li></ul></li></ul></div>

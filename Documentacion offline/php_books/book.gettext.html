@@ -1,0 +1,1063 @@
+<div id="book.gettext" class="book"><hr>
+ 
+ <h1 class="title">Gettext</h1>
+
+ 
+ <div id="intro.gettext" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="simpara">
+   Las funciones de gettext implementan una API de Soporte de Lenguaje Nativo (NLS de las siglas en inglés Native Language Support)
+   la cual se puede utilizar para internacionalizar las aplicaciones de PHP.
+   Por favor, consulte la documentación de gettext para su sistema para obtener una
+   explicación detallada de estas funciones o vea la documentación en
+   <a href="http://www.gnu.org/software/gettext/manual/gettext.html" class="link external">» http://www.gnu.org/software/gettext/manual/gettext.html</a>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="gettext.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#gettext.requirements">Requerimientos</a></li><li><a href="#gettext.installation">Instalación</a></li></ul>
+
+
+ 
+ <div id="gettext.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Para utilizar estas funciones, es necesario descargar e instalar las bibliotecas
+   GNU gettext desde <a href="http://www.gnu.org/software/gettext/gettext.html" class="link external">» http://www.gnu.org/software/gettext/gettext.html</a>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+<div id="gettext.installation" class="section"><hr>
+<h2 class="title">Instalación</h2>
+ <p class="para">
+  Para incluir soporte para GNU gettext en su instalación de PHP, debe añadir la opción
+  <strong class="option configure">--with-gettext[=DIR]</strong> donde DIR es el directorio de
+  la instalación de gettext, por omisión es <var class="filename">/usr/local</var>.
+ </p>
+</div>
+<hr>
+
+
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="ref.gettext" class="reference"><hr>
+ <h1 class="title">Funciones de Gettext</h1>
+
+ 
+
+
+<div id="function.-" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">_</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">_</span> — <span class="dc-title">Alias de <span class="function"><a href="#function.gettext" class="function">gettext()</a></span></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.--description">
+  <h3 class="title">Descripción</h3>
+  <p class="simpara">
+   Esta función es un alias de: 
+   <span class="function"><a href="#function.gettext" class="function">gettext()</a></span>.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.bind-textdomain-codeset" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">bind_textdomain_codeset</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">bind_textdomain_codeset</span> — <span class="dc-title">Especifica o recupera el juego de caracteres utilizado para los mensajes del dominio DOMAIN</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.bind-textdomain-codeset-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>bind_textdomain_codeset</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$domain</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$codeset</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>bind_textdomain_codeset()</strong></span> permite recuperar o definir
+   la codificación en la cual los mensajes de <code class="parameter">domain</code> serán
+   devueltos por <span class="function"><a href="#function.gettext" class="function">gettext()</a></span> y funciones similares.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.bind-textdomain-codeset-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">domain</code></dt>
+     <dd>
+      <p class="para">
+       El dominio.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">codeset</code></dt>
+     <dd>
+      <p class="para">
+       El juego de caracteres.
+       Si <strong><code><a href="#constant.null">null</a></code></strong>, la codificación actualmente definida es devuelta.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.bind-textdomain-codeset-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Una <span class="type"><a href="#language.types.string" class="type string">string</a></span> en caso de éxito.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.bind-textdomain-codeset-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="simpara">
+   Lanza una <span class="exceptionname"><a href="#class.valueerror" class="exceptionname">ValueError</a></span> si <code class="parameter">domain</code>
+   es una <span class="type"><a href="#language.types.string" class="type string">string</a></span> vacía.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.bind-textdomain-codeset-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.4.0</td>
+      <td>
+       Lanza ahora una <span class="exceptionname"><a href="#class.valueerror" class="exceptionname">ValueError</a></span> si <code class="parameter">domain</code>
+       es una <span class="type"><a href="#language.types.string" class="type string">string</a></span> vacía.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.4.0</td>
+      <td>
+       <code class="parameter">codeset</code> es ahora opcional.
+       Anteriormente, este parámetro debía siempre ser especificado.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.3</td>
+      <td>
+       <code class="parameter">codeset</code> es ahora nullable.
+       Anteriormente, no era posible recuperar la codificación actualmente definida.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.bind-textdomain-codeset-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    La información <span class="function"><strong>bind_textdomain_codeset()</strong></span> es mantenida por proceso,
+    y no por hilo.
+   </p>
+  </blockquote>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.bindtextdomain" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">bindtextdomain</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">bindtextdomain</span> — <span class="dc-title">Especifica o recupera la ruta de un dominio</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.bindtextdomain-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>bindtextdomain</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$domain</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$directory</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>bindtextdomain()</strong></span> define o recupera la ruta
+   de un dominio.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.bindtextdomain-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">domain</code></dt>
+     <dd>
+      <p class="para">
+       El dominio.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">directory</code></dt>
+     <dd>
+      <p class="para">
+       La ruta hacia el directorio.
+       Una cadena vacía significa el directorio actual.
+       Si <strong><code><a href="#constant.null">null</a></code></strong>, se devuelve el directorio actualmente definido.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.bindtextdomain-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   La ruta completa para el <code class="parameter">domain</code> actualmente definido,
+    o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.bindtextdomain-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.4.0</td>
+      <td>
+       <code class="parameter">directory</code> ahora es opcional.
+       Anteriormente, este parámetro debía ser siempre especificado.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.3</td>
+      <td>
+       <code class="parameter">directory</code> ahora es nullable.
+       Anteriormente, no era posible recuperar el directorio actualmente definido.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.bindtextdomain-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2471">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>bindtextdomain()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$domain </span><span style="color: #007700">= </span><span style="color: #DD0000">'myapp'</span><span style="color: #007700">;<br>echo </span><span style="color: #0000BB">bindtextdomain</span><span style="color: #007700">(</span><span style="color: #0000BB">$domain</span><span style="color: #007700">, </span><span style="color: #DD0000">'/usr/share/myapp/locale'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">/usr/share/myapp/locale</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.bindtextdomain-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    La información <span class="function"><strong>bindtextdomain()</strong></span> se mantiene por proceso,
+    y no por hilo.
+   </p>
+  </blockquote>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dcgettext" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dcgettext</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dcgettext</span> — <span class="dc-title">Reemplaza el dominio durante una búsqueda</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dcgettext-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dcgettext</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$domain</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$message</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$category</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Permite reemplazar el dominio actual durante la búsqueda de un mensaje.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dcgettext-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">domain</code></dt>
+     <dd>
+      <p class="para">
+       El dominio
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">message</code></dt>
+     <dd>
+      <p class="para">
+       El mensaje
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">category</code></dt>
+     <dd>
+      <p class="para">
+       La categoría
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dcgettext-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Una <span class="type"><a href="#language.types.string" class="type string">string</a></span> en caso de éxito.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dcgettext-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.gettext" class="function" rel="rdfs-seeAlso">gettext()</a> - Busca un mensaje en el dominio actual</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dcngettext" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dcngettext</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dcngettext</span> — <span class="dc-title">Versión plural de dcgettext</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dcngettext-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dcngettext</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$domain</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$singular</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$plural</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$count</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$category</code></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Permite reemplazar el dominio actual para una búsqueda simple en plural de un mensaje.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dcngettext-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">domain</code></dt>
+     <dd>
+      <p class="para">
+       El dominio
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">singular</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">plural</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">count</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">category</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dcngettext-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Una <span class="type"><a href="#language.types.string" class="type string">string</a></span> en caso de éxito.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dcngettext-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ngettext" class="function" rel="rdfs-seeAlso">ngettext()</a> - Versión plural de gettext</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dgettext" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dgettext</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dgettext</span> — <span class="dc-title">Reemplaza el dominio actual</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dgettext-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dgettext</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$domain</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$message</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dgettext()</strong></span> reemplaza el dominio actual
+   <code class="parameter">domain</code> para una búsqueda simple en
+   <code class="parameter">message</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dgettext-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">domain</code></dt>
+     <dd>
+      <p class="para">
+       El dominio
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">message</code></dt>
+     <dd>
+      <p class="para">
+       El mensaje
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dgettext-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un string en caso de éxito.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.dgettext-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="simpara">
+    Lanza una <span class="exceptionname"><a href="#class.valueerror" class="exceptionname">ValueError</a></span> si <code class="parameter">domain</code>
+    es un string vacío.
+   </p>
+  </div>
+
+
+  <div class="refsect1 changelog" id="refsect1-function.dgettext-changelog">
+   <h3 class="title">Historial de cambios</h3>
+   <table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.4.0</td>
+       <td>
+        Ahora lanza una <span class="exceptionname"><a href="#class.valueerror" class="exceptionname">ValueError</a></span> si <code class="parameter">domain</code>
+        es un string vacío.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </div>
+
+
+  <div class="refsect1 seealso" id="refsect1-function.dgettext-seealso">
+   <h3 class="title">Ver también</h3>
+   <p class="para">
+    </p><ul class="simplelist">
+     <li><span class="function"><a href="#function.gettext" class="function" rel="rdfs-seeAlso">gettext()</a> - Busca un mensaje en el dominio actual</span></li>
+    </ul>
+   
+  </div>
+
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+
+<div id="function.dngettext" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dngettext</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dngettext</span> — <span class="dc-title">Versión plural de dgettext</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dngettext-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dngettext</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$domain</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$singular</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$plural</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$count</code></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dngettext()</strong></span> permite reemplazar el dominio actual
+   <code class="parameter">domain</code> para una búsqueda simple en plural
+   de un mensaje.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dngettext-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">domain</code></dt>
+     <dd>
+      <p class="para">
+       El dominio
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">singular</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">plural</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">count</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dngettext-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un <span class="type"><a href="#language.types.string" class="type string">string</a></span> en caso de éxito.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.dngettext-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="simpara">
+    Genera una <span class="exceptionname"><a href="#class.valueerror" class="exceptionname">ValueError</a></span> si <code class="parameter">domain</code>
+    es un <span class="type"><a href="#language.types.string" class="type string">string</a></span> vacío.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dngettext-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.4.0</td>
+      <td>
+       Genera ahora una <span class="exceptionname"><a href="#class.valueerror" class="exceptionname">ValueError</a></span> si <code class="parameter">domain</code>
+       es un <span class="type"><a href="#language.types.string" class="type string">string</a></span> vacío.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dngettext-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ngettext" class="function" rel="rdfs-seeAlso">ngettext()</a> - Versión plural de gettext</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.gettext" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gettext</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">gettext</span> — <span class="dc-title">Busca un mensaje en el dominio actual</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gettext-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gettext</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$message</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Busca un mensaje en el dominio actual.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gettext-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">message</code></dt>
+     <dd>
+      <p class="para">
+       El mensaje a traducir.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gettext-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un string traducido, si se encuentra uno en la tabla
+   de traducción, o bien el mensaje <code class="parameter">message</code>,
+   si no se encuentra.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gettext-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2472">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gettext()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Selección del alemán<br></span><span style="color: #0000BB">putenv</span><span style="color: #007700">(</span><span style="color: #DD0000">'LC_ALL=de_DE'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">setlocale</span><span style="color: #007700">(</span><span style="color: #0000BB">LC_ALL</span><span style="color: #007700">, </span><span style="color: #DD0000">'de_DE'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Especifica la localización de las tablas de traducción<br></span><span style="color: #0000BB">bindtextdomain</span><span style="color: #007700">(</span><span style="color: #DD0000">"myPHPApp"</span><span style="color: #007700">, </span><span style="color: #DD0000">"./locale"</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Elige el dominio<br></span><span style="color: #0000BB">textdomain</span><span style="color: #007700">(</span><span style="color: #DD0000">"myPHPApp"</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// La traducción se busca en ./locale/de_DE/LC_MESSAGES/myPHPApp.mo<br><br>// Mostrar un mensaje de prueba<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">gettext</span><span style="color: #007700">(</span><span style="color: #DD0000">"Bienvenue dans mon application PHP"</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// O utiliza el alias _() para reemplazar gettext()<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">_</span><span style="color: #007700">(</span><span style="color: #DD0000">"Passez une bonne journée"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.gettext-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Puede utilizarse el carácter guión bajo (_) como alias de esta función.
+   </p>
+  </blockquote>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Definir un idioma no es suficiente para algunos
+    sistemas operativos y puede ser necesario utilizar la función
+    <span class="function"><a href="#function.putenv" class="function">putenv()</a></span> para definir la configuración local actual.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.gettext-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.-" class="function" rel="rdfs-seeAlso">_()</a> - Alias de gettext</span></li>
+    <li><span class="function"><a href="#function.setlocale" class="function" rel="rdfs-seeAlso">setlocale()</a> - Establece la información de configuración local</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.ngettext" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ngettext</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ngettext</span> — <span class="dc-title">Versión plural de gettext</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ngettext-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ngettext</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$singular</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$plural</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$count</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Versión plural de <span class="function"><a href="#function.gettext" class="function">gettext()</a></span>. Algunas lenguas tienen más de una forma
+   de mensajes plurales dependiendo del contador.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ngettext-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">singular</code></dt>
+     <dd>
+      <p class="para">
+       El ID singular del mensaje.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">plural</code></dt>
+     <dd>
+      <p class="para">
+       El ID plural del mensaje.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">count</code></dt>
+     <dd>
+      <p class="para">
+       El número (es decir, número de elementos) para determinar la traducción del
+       número gramatical respectivo.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ngettext-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un mensaje plural identificado por
+   <code class="parameter">msgid1</code> y <code class="parameter">msgid2</code>
+   para el contador <code class="parameter">n</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ngettext-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2473">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>ngettext()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>setlocale</span><span style="color: #007700">(</span><span style="color: #0000BB">LC_ALL</span><span style="color: #007700">, </span><span style="color: #DD0000">'cs_CZ'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #0000BB">ngettext</span><span style="color: #007700">(</span><span style="color: #DD0000">"%d window"</span><span style="color: #007700">, </span><span style="color: #DD0000">"%d windows"</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">), </span><span style="color: #0000BB">1</span><span style="color: #007700">); </span><span style="color: #FF8000">// 1 okno<br></span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #0000BB">ngettext</span><span style="color: #007700">(</span><span style="color: #DD0000">"%d window"</span><span style="color: #007700">, </span><span style="color: #DD0000">"%d windows"</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">), </span><span style="color: #0000BB">2</span><span style="color: #007700">); </span><span style="color: #FF8000">// 2 okna<br></span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #0000BB">ngettext</span><span style="color: #007700">(</span><span style="color: #DD0000">"%d window"</span><span style="color: #007700">, </span><span style="color: #DD0000">"%d windows"</span><span style="color: #007700">, </span><span style="color: #0000BB">5</span><span style="color: #007700">), </span><span style="color: #0000BB">5</span><span style="color: #007700">); </span><span style="color: #FF8000">// 5 oken<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.textdomain" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">textdomain</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">textdomain</span> — <span class="dc-title">Define el dominio por defecto</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.textdomain-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>textdomain</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$domain</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función define el dominio de búsqueda a utilizar durante las llamadas
+   a <span class="function"><a href="#function.gettext" class="function">gettext()</a></span>. Este
+   dominio depende generalmente de la aplicación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.textdomain-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">domain</code></dt>
+     <dd>
+      <p class="para">
+       El nuevo dominio de mensajes, o <strong><code><a href="#constant.null">null</a></code></strong> para recuperar
+       la configuración actual sin modificaciones.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.textdomain-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función devuelve el mensaje actual del dominio en caso de éxito,
+   después de una posible modificación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.textdomain-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="simpara">
+    Genera una <span class="exceptionname"><a href="#class.valueerror" class="exceptionname">ValueError</a></span> si <code class="parameter">domain</code>
+    es un <span class="type"><a href="#language.types.string" class="type string">string</a></span> vacío.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.textdomain-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.4.0</td>
+      <td>
+       Genera ahora una <span class="exceptionname"><a href="#class.valueerror" class="exceptionname">ValueError</a></span> si <code class="parameter">domain</code>
+       es un <span class="type"><a href="#language.types.string" class="type string">string</a></span> vacío.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.4.0</td>
+      <td>
+       <code class="parameter">domain</code> ahora es opcional.
+       Anteriormente, este argumento debía especificarse siempre.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.textdomain-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    La información de <span class="function"><strong>textdomain()</strong></span> se mantiene por proceso,
+    y no por hilo.
+   </p>
+  </blockquote>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.-">_</a> — Alias de gettext</li><li><a href="#function.bind-textdomain-codeset">bind_textdomain_codeset</a> — Especifica o recupera el juego de caracteres utilizado para los mensajes del dominio DOMAIN</li><li><a href="#function.bindtextdomain">bindtextdomain</a> — Especifica o recupera la ruta de un dominio</li><li><a href="#function.dcgettext">dcgettext</a> — Reemplaza el dominio durante una búsqueda</li><li><a href="#function.dcngettext">dcngettext</a> — Versión plural de dcgettext</li><li><a href="#function.dgettext">dgettext</a> — Reemplaza el dominio actual</li><li><a href="#function.dngettext">dngettext</a> — Versión plural de dgettext</li><li><a href="#function.gettext">gettext</a> — Busca un mensaje en el dominio actual</li><li><a href="#function.ngettext">ngettext</a> — Versión plural de gettext</li><li><a href="#function.textdomain">textdomain</a> — Define el dominio por defecto</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.gettext">Introducción</a></li><li><a href="#gettext.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#gettext.requirements">Requerimientos</a></li><li><a href="#gettext.installation">Instalación</a></li></ul></li><li><a href="#ref.gettext">Funciones de Gettext</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.-">_</a> — Alias de gettext</li><li><a href="#function.bind-textdomain-codeset">bind_textdomain_codeset</a> — Especifica o recupera el juego de caracteres utilizado para los mensajes del dominio DOMAIN</li><li><a href="#function.bindtextdomain">bindtextdomain</a> — Especifica o recupera la ruta de un dominio</li><li><a href="#function.dcgettext">dcgettext</a> — Reemplaza el dominio durante una búsqueda</li><li><a href="#function.dcngettext">dcngettext</a> — Versión plural de dcgettext</li><li><a href="#function.dgettext">dgettext</a> — Reemplaza el dominio actual</li><li><a href="#function.dngettext">dngettext</a> — Versión plural de dgettext</li><li><a href="#function.gettext">gettext</a> — Busca un mensaje en el dominio actual</li><li><a href="#function.ngettext">ngettext</a> — Versión plural de gettext</li><li><a href="#function.textdomain">textdomain</a> — Define el dominio por defecto</li></ul></li></ul></div>

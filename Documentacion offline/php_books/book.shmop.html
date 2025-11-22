@@ -1,0 +1,956 @@
+<div id="book.shmop" class="book"><hr>
+ 
+ <h1 class="title">Memoria compartida</h1>
+
+ 
+ <div id="intro.shmop" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Shmop es un conjunto de funciones que permiten a PHP leer,
+   escribir, crear y borrar de forma sencilla segmentos de memoria compartida de tipo UNIX.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="shmop.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#shmop.installation">Instalación</a></li><li><a href="#shmop.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ 
+
+
+
+
+<div id="shmop.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Para utilizar shmop tendrá que compilar PHP con el parámetro
+  <strong class="option configure">--enable-shmop</strong> en su
+  línea de configuración.
+ </p>
+</div>
+<hr>
+
+
+
+
+
+ 
+
+ 
+ <div id="shmop.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="simpara">
+   Anterior a PHP 8.0.0 esta extensión define el tipo de recurso
+   <code class="literal">shmop</code> que es un manejador para un bloque de memoria compartida.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="shmop.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#shmop.examples-basic">Uso básico</a></li></ul>
+
+ <div id="shmop.examples-basic" class="section"><hr>
+  <h2 class="title">Uso básico</h2>
+  <p class="para">
+   </p><div class="example" id="example-3653">
+    <p><strong>Ejemplo #1 Resumen de las operaciones con Memoria Compartida</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">// Crear un segmento de memoria compartida de 100 bytes con un identificador igual a 0xff3<br></span><span style="color: #0000BB">$shm_id </span><span style="color: #007700">= </span><span style="color: #0000BB">shmop_open</span><span style="color: #007700">(</span><span style="color: #0000BB">0xff3</span><span style="color: #007700">, </span><span style="color: #DD0000">"c"</span><span style="color: #007700">, </span><span style="color: #0000BB">0644</span><span style="color: #007700">, </span><span style="color: #0000BB">100</span><span style="color: #007700">);<br>if (!</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">"Couldn't create shared memory segment\n"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #FF8000">// Obtener tamaño del segmento de memoria compartida<br></span><span style="color: #0000BB">$shm_size </span><span style="color: #007700">= </span><span style="color: #0000BB">shmop_size</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">"SHM Block Size: " </span><span style="color: #007700">. </span><span style="color: #0000BB">$shm_size </span><span style="color: #007700">. </span><span style="color: #DD0000">" has been created.\n"</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">// Escribir una cadena de prueba en la memoria compartida<br></span><span style="color: #0000BB">$shm_bytes_written </span><span style="color: #007700">= </span><span style="color: #0000BB">shmop_write</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">, </span><span style="color: #DD0000">"my shared memory block"</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$shm_bytes_written </span><span style="color: #007700">!= </span><span style="color: #0000BB">strlen</span><span style="color: #007700">(</span><span style="color: #DD0000">"my shared memory block"</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">"Couldn't write the entire length of data\n"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #FF8000">// Ahora vamos a leer la cadena de texto<br></span><span style="color: #0000BB">$my_string </span><span style="color: #007700">= </span><span style="color: #0000BB">shmop_read</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">$shm_size</span><span style="color: #007700">);<br>if (!</span><span style="color: #0000BB">$my_string</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">"Couldn't read from shared memory block\n"</span><span style="color: #007700">;<br>}<br>echo </span><span style="color: #DD0000">"The data inside shared memory was: " </span><span style="color: #007700">. </span><span style="color: #0000BB">$my_string </span><span style="color: #007700">. </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">//Ahora vamos a eliminar y cerrar el segmento de memoria compartida<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">shmop_delete</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">"Couldn't mark shared memory block for deletion."</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">shmop_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+<hr>
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+
+<div id="ref.shmop" class="reference"><hr>
+ <h1 class="title">Funciones de memoria compartida</h1>
+
+ 
+
+
+
+<div id="function.shmop-close" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shmop_close</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shmop_close</span> — <span class="dc-title">Cierra un bloque de memoria compartida</span></p>
+
+ </div>
+
+ <div id="function.shmop-close-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">Esta función está
+<em>OBSOLETA</em> a partir de PHP 8.0.0. Depender de esta función
+está altamente desaconsejado.</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.shmop-close-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="attribute"><a href="class.deprecated.html">#[\Deprecated]</a> </span><br>
+   <span class="methodname"><strong>shmop_close</strong></span>(<span class="methodparam"><span class="type"><a href="#class.shmop" class="type Shmop">Shmop</a></span> <code class="parameter">$shmop</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+ </p><p class="para">
+  Esta función no tiene ningún efecto. Anterior a PHP 8.0.0,
+  esta función era utilizada para cerrar un recurso.
+ </p>
+</blockquote>
+
+  <p class="para">
+   <span class="function"><strong>shmop_close()</strong></span> sirve para cerrar un bloque de
+   memoria compartida.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.shmop-close-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shmop</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de memoria compartida creado por
+       <span class="function"><a href="#function.shmop-open" class="function">shmop_open()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shmop-close-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shmop-close-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       Esta función ha sido declarada obsoleta, ya que no tiene ningún efecto.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">shmop</code> espera una instancia de <span class="classname"><a href="#class.shmop" class="classname">Shmop</a></span>
+       ahora; anteriormente se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.shmop-close-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3654">
+    <p><strong>Ejemplo #1 Cierre de un bloque de memoria compartida</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>shmop_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   Este ejemplo cierra el bloque de memoria compartida
+   identificado por <code class="literal">$shm_id</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.shmop-close-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shmop-open" class="function" rel="rdfs-seeAlso">shmop_open()</a> - Crea o abre un bloque de memoria compartida</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shmop-delete" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shmop_delete</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shmop_delete</span> — <span class="dc-title">Destruye un bloque de memoria compartida</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.shmop-delete-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shmop_delete</strong></span>(<span class="methodparam"><span class="type"><a href="#class.shmop" class="type Shmop">Shmop</a></span> <code class="parameter">$shmop</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shmop_delete()</strong></span> se utiliza para destruir un bloque de memoria compartida.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.shmop-delete-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shmop</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de memoria compartida creado por
+       <span class="function"><a href="#function.shmop-open" class="function">shmop_open()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shmop-delete-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shmop-delete-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">shmop</code> ahora requiere una instancia de <span class="classname"><a href="#class.shmop" class="classname">Shmop</a></span>;
+       anteriormente se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.shmop-delete-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3655">
+    <p><strong>Ejemplo #1 Eliminación de un bloque de memoria compartida</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>shmop_delete</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   Este ejemplo elimina el bloque de memoria compartida
+   identificado por <code class="literal">$shm_id</code>.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shmop-open" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shmop_open</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shmop_open</span> — <span class="dc-title">Crea o abre un bloque de memoria compartida</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.shmop-open-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shmop_open</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$permissions</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span><br>): <span class="type"><span class="type"><a href="#class.shmop" class="type Shmop">Shmop</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shmop_open()</strong></span> puede crear o abrir un bloque
+   de memoria compartida.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.shmop-open-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       Identificador del sistema para el bloque de memoria compartida.
+       Este argumento puede ser pasado como un decimal o
+       un hexadecimal.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       Se pueden utilizar:
+       </p><ul class="itemizedlist">
+        <li class="listitem">
+         <span class="simpara">
+          <code class="literal">"a"</code> para acceso (utiliza <code class="literal">SHM_RDONLY</code> para shmat)
+          utilice esta opción para abrir un bloque ya existente en modo solo lectura.
+         </span>
+        </li>
+        <li class="listitem">
+         <span class="simpara">
+          <code class="literal">"c"</code> para creación (utiliza <code class="literal">IPC_CREATE</code>)
+          utilice esta opción para crear un nuevo bloque, o, si un
+          segmento con el mismo identificador existe, intentar acceder a él en
+          modo lectura y escritura.
+         </span>
+        </li>
+        <li class="listitem">
+         <span class="simpara">
+          <code class="literal">"w"</code> para acceso en lectura y escritura. Utilice
+          esta opción cuando se deba acceder en lectura y
+          escritura a un segmento de memoria compartida.
+          Este es el caso más común.
+         </span>
+        </li>
+        <li class="listitem">
+         <span class="simpara">
+          <code class="literal">"n"</code> crea un nuevo segmento de memoria compartida
+          (utiliza <code class="literal">IPC_CREATE|IPC_EXCL</code>). Utilice esta opción
+          cuando se quiera crear un nuevo segmento de memoria
+          compartida a menos que ya exista uno corrupto con la
+          misma opción. Esto es muy útil por razones de seguridad, para evitar
+          agujeros de seguridad que exploten la carrera por los recursos.
+         </span>
+        </li>
+       </ul>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">permissions</code></dt>
+     <dd>
+      <p class="para">
+       Los permisos que se otorgan a este bloque. Son
+       los mismos que para los archivos. Estos permisos deben
+       ser pasados en formato octal (i.e. 0644).
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">size</code></dt>
+     <dd>
+      <p class="para">
+       El tamaño del bloque de memoria compartida que se quiere crear, en bytes
+      </p>
+     </dd>
+    
+   </dl>
+   <blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     Nota: Los tercer y cuarto argumentos deben ser pasados a 0 si se quiere abrir un bloque de memoria compartida ya existente.
+    </p>
+   </blockquote>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shmop-open-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, <span class="function"><strong>shmop_open()</strong></span> devuelve una
+   instancia de <span class="classname"><a href="#class.shmop" class="classname">Shmop</a></span> que puede ser utilizada para acceder a la memoria que
+   se acaba de crear. <strong><code><a href="#constant.false">false</a></code></strong> será devuelto en caso de fallo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.shmop-open-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Si <code class="parameter">mode</code> es inválido, o si <code class="parameter">size</code> es inferior o igual a cero,
+   se lanza una <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span>.
+   En otros casos de fallo, se emite un <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shmop-open-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">shmop</code> ahora espera una instancia de <span class="classname"><a href="#class.shmop" class="classname">Shmop</a></span>
+       anteriormente se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       Si <code class="parameter">mode</code> es inválido, o si <code class="parameter">size</code> es inferior o igual a cero,
+       se lanza una <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span>; anteriormente, se emitía un <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong> en su lugar,
+       y la función devolvía <strong><code><a href="#constant.false">false</a></code></strong>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.shmop-open-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3656">
+    <p><strong>Ejemplo #1 Crear un nuevo bloque de memoria compartida Shmop</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$shm_key </span><span style="color: #007700">= </span><span style="color: #0000BB">ftok</span><span style="color: #007700">(</span><span style="color: #0000BB">__FILE__</span><span style="color: #007700">, </span><span style="color: #DD0000">'t'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$shm_id </span><span style="color: #007700">= </span><span style="color: #0000BB">shmop_open</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_key</span><span style="color: #007700">, </span><span style="color: #DD0000">"c"</span><span style="color: #007700">, </span><span style="color: #0000BB">0644</span><span style="color: #007700">, </span><span style="color: #0000BB">100</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   Este ejemplo abre un nuevo bloque de memoria compartida,
+   cuyo identificador es devuelto por <span class="function"><a href="#function.ftok" class="function">ftok()</a></span>.
+  </p>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.shmop-open-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shmop-close" class="function" rel="rdfs-seeAlso">shmop_close()</a> - Cierra un bloque de memoria compartida</span></li>
+    <li><span class="function"><a href="#function.shmop-delete" class="function" rel="rdfs-seeAlso">shmop_delete()</a> - Destruye un bloque de memoria compartida</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.shmop-read" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shmop_read</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shmop_read</span> — <span class="dc-title">Lee datos a partir de un bloque</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.shmop-read-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shmop_read</strong></span>(<span class="methodparam"><span class="type"><a href="#class.shmop" class="type Shmop">Shmop</a></span> <code class="parameter">$shmop</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$offset</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shmop_read()</strong></span> lee una cadena en un bloque de
+   memoria compartida.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.shmop-read-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shmop</code></dt>
+     <dd>
+      <p class="para">
+       El identificador del bloque de memoria compartida, creado por la función
+       <span class="function"><a href="#function.shmop-open" class="function">shmop_open()</a></span>
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">offset</code></dt>
+     <dd>
+      <p class="para">
+       Posición desde la cual se debe comenzar a leer; debe ser superior o igual a cero
+       e inferior o igual a la longitud real del segmento de memoria compartida.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">size</code></dt>
+     <dd>
+      <p class="para">
+       El número de bytes a leer; debe ser superior o igual a cero,
+       y la suma de <code class="parameter">offset</code> y <code class="parameter">size</code>
+       debe ser inferior o igual a la longitud real del segmento de memoria compartida.
+       <code class="literal">0</code> lee <code class="code">shmop_size($shmid) - $start</code> bytes.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shmop-read-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve los datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.shmop-read-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Si <code class="parameter">offset</code> o <code class="parameter">size</code> están fuera del rango,
+   se lanza una <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shmop-read-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">shmop</code> ahora requiere una instancia de <span class="classname"><a href="#class.shmop" class="classname">Shmop</a></span>
+       en lugar de un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       Si <code class="parameter">offset</code> o <code class="parameter">size</code> están fuera de límite,
+       se lanza una <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span>; anteriormente se emitía una <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong>
+       y se devolvía <strong><code><a href="#constant.false">false</a></code></strong>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.shmop-read-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3657">
+    <p><strong>Ejemplo #1 Lee un bloque de memoria compartida</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$shm_data </span><span style="color: #007700">= </span><span style="color: #0000BB">shmop_read</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">50</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   Este ejemplo lee 50 bytes del bloque de memoria compartida
+   y los coloca en <code class="literal">$shm_data</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.shmop-read-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shmop-write" class="function" rel="rdfs-seeAlso">shmop_write()</a> - Escribir en un bloque de memoria compartida</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shmop-size" class="refentry"><hr>
+<div class="refnamediv">
+ <h1 class="refname">shmop_size</h1>
+ <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shmop_size</span> — <span class="dc-title">Leer el tamaño del bloque de memoria compartida</span></p>
+
+</div>
+<div class="refsect1 description" id="refsect1-function.shmop-size-description">
+ <h3 class="title">Descripción</h3>
+ <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shmop_size</strong></span>(<span class="methodparam"><span class="type"><a href="#class.shmop" class="type Shmop">Shmop</a></span> <code class="parameter">$shmop</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shmop_size()</strong></span> sirve para conocer
+   el tamaño en bytes de un bloque de memoria compartida.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.shmop-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shmop</code></dt>
+     <dd>
+      <p class="para">
+       El identificador del bloque de memoria compartido creado por la función
+       <span class="function"><a href="#function.shmop-open" class="function">shmop_open()</a></span>
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shmop-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>, que representa el número de bytes que ocupa
+   la memoria compartida.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shmop-size-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">shmop</code> espera ahora una instancia de <span class="classname"><a href="#class.shmop" class="classname">Shmop</a></span>
+       anteriormente se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.shmop-size-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3658">
+    <p><strong>Ejemplo #1 Lee el tamaño de un bloque de memoria compartida</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$shm_size </span><span style="color: #007700">= </span><span style="color: #0000BB">shmop_size</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   Este ejemplo lee el tamaño del bloque identificado por
+   <code class="literal">$shm_id</code>, y lo coloca en <code class="literal">$shm_size</code>.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shmop-write" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shmop_write</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shmop_write</span> — <span class="dc-title">Escribir en un bloque de memoria compartida</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.shmop-write-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shmop_write</strong></span>(<span class="methodparam"><span class="type"><a href="#class.shmop" class="type Shmop">Shmop</a></span> <code class="parameter">$shmop</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$offset</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shmop_write()</strong></span> escribe una cadena en
+   un bloque de memoria compartida.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.shmop-write-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shmop</code></dt>
+     <dd>
+      <p class="para">
+       El identificador del bloque de memoria compartida, creado por la función
+       <span class="function"><a href="#function.shmop-open" class="function">shmop_open()</a></span>
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Una cadena para escribir en el bloque de la memoria compartida
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">offset</code></dt>
+     <dd>
+      <p class="para">
+       Especifica la posición desde la cual los datos deben ser escritos
+       en la memoria compartida. El offset debe ser superior o igual a cero
+       e inferior o igual al tamaño real del segmento de memoria compartida.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shmop-write-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El tamaño de los datos escritos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.shmop-write-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Si <code class="parameter">offset</code> está fuera de límite, o si un segmento de memoria compartida
+   de solo lectura debe ser escrito, se levanta una <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shmop-write-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       Anterior a PHP 8.0.0, <strong><code><a href="#constant.false">false</a></code></strong> era devuelto en caso de fallo.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">shmop</code> espera ahora una instancia de <span class="classname"><a href="#class.shmop" class="classname">Shmop</a></span>;
+       anteriormente se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.shmop-write-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3659">
+    <p><strong>Ejemplo #1 Escribe un bloque de memoria compartida</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$shm_bytes_written </span><span style="color: #007700">= </span><span style="color: #0000BB">shmop_write</span><span style="color: #007700">(</span><span style="color: #0000BB">$shm_id</span><span style="color: #007700">, </span><span style="color: #0000BB">$my_string</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   Este ejemplo escribe los datos de la cadena
+   <code class="literal">$my_string</code> en un bloque de memoria
+   compartida. <code class="literal">$shm_bytes_written</code>
+   representará el número de bytes escritos.
+  </p>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.shmop-write-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shmop-read" class="function" rel="rdfs-seeAlso">shmop_read()</a> - Lee datos a partir de un bloque</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.shmop-close">shmop_close</a> — Cierra un bloque de memoria compartida</li><li><a href="#function.shmop-delete">shmop_delete</a> — Destruye un bloque de memoria compartida</li><li><a href="#function.shmop-open">shmop_open</a> — Crea o abre un bloque de memoria compartida</li><li><a href="#function.shmop-read">shmop_read</a> — Lee datos a partir de un bloque</li><li><a href="#function.shmop-size">shmop_size</a> — Leer el tamaño del bloque de memoria compartida</li><li><a href="#function.shmop-write">shmop_write</a> — Escribir en un bloque de memoria compartida</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="class.shmop" class="reference"><hr>
+ <h1 class="title">La clase Shmop</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 8)</p>
+
+
+  <div class="section" id="shmop.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Una clase opaca que reemplaza los recursos <code class="literal">shmop</code> a partir de PHP 8.0.0.
+   </p>
+  </div>
+
+
+  <div class="section" id="shmop.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">Shmop</strong></strong>
+     {</div>
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.shmop">Introducción</a></li><li><a href="#shmop.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#shmop.installation">Instalación</a></li><li><a href="#shmop.resources">Tipos de recursos</a></li></ul></li><li><a href="#shmop.examples">Ejemplos</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#shmop.examples-basic">Uso básico</a></li></ul></li><li><a href="#ref.shmop">Funciones de memoria compartida</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.shmop-close">shmop_close</a> — Cierra un bloque de memoria compartida</li><li><a href="#function.shmop-delete">shmop_delete</a> — Destruye un bloque de memoria compartida</li><li><a href="#function.shmop-open">shmop_open</a> — Crea o abre un bloque de memoria compartida</li><li><a href="#function.shmop-read">shmop_read</a> — Lee datos a partir de un bloque</li><li><a href="#function.shmop-size">shmop_size</a> — Leer el tamaño del bloque de memoria compartida</li><li><a href="#function.shmop-write">shmop_write</a> — Escribir en un bloque de memoria compartida</li></ul></li><li><a href="#class.shmop">Shmop</a> — La clase Shmop</li></ul></div>

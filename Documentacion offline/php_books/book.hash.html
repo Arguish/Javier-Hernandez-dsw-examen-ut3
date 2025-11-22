@@ -1,0 +1,2514 @@
+<div id="book.hash" class="book"><hr>
+ 
+ <h1 class="title">HASH Message Digest Framework</h1>
+ 
+
+ 
+ <div id="intro.hash" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Esta extensión proporciona funciones que pueden usarse para el procesamiento directo o
+   incremental de mensajes de longitud arbitraria utilizando una variedad de
+   algoritmos de hash, incluyendo la generación de valores <abbr title="Hash-based Message Authentication Code">HMAC</abbr>
+   y derivaciones de claves incluyendo <abbr title="HMAC Key Definition Function">HKDF</abbr> y
+   <abbr title="Password-Based Key Derivation Function 2">PBKDF2</abbr>.
+  </p>
+  <p class="para">
+   Existen aproximadamente tres categorías de algoritmos de hash, y una lista completa de
+   algoritmos puede encontrarse en la documentación de <span class="function"><a href="#function.hash-algos" class="function">hash_algos()</a></span>.
+
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      Algoritmos de suma de verificación (como <code class="literal">"crc32b"</code> o <code class="literal">"adler32"</code>):
+      Estos se utilizan para calcular sumas de verificación, útiles en situaciones como cuando
+      se deben detectar errores de transmisión. Suelen ser muy rápidos. Estos
+      algoritmos a menudo generan valores que son fácilmente "adivinables" o pueden ser manipulados
+      para crear colisiones, por lo que son completamente inadecuados para uso criptográfico.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Algoritmos no criptográficos (como la familia xxHash):
+      Estos se utilizan a menudo para calcular valores hash para tablas hash, ya que están
+      diseñados para ofrecer una buena distribución sobre entradas de string arbitrarias. También
+      suelen ser rápidos, pero no son adecuados para uso criptográfico.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Algoritmos criptográficos (como la familia SHA-2):
+      Estos están diseñados para generar valores hash que sean representativos de sus
+      entradas pero que no sean adivinables ni propensos a colisiones. El rendimiento suele
+      ser una preocupación secundaria, pero el hardware moderno a menudo admite un manejo especial
+      para estos algoritmos que PHP intenta utilizar cuando está disponible.
+     </span>
+     <span class="simpara">
+      El Centro de Recursos de Seguridad Informática del <abbr>NIST</abbr> tiene
+      <a href="https://csrc.nist.gov/projects/hash-functions" class="link external">» una explicación de los algoritmos
+      actualmente aprobados por los Estándares Federales de Procesamiento de Información
+      de los Estados Unidos</a>.
+     </span>
+     <div class="caution"><strong class="caution">Precaución</strong>
+      <p class="para">
+       Algunos de los primeros algoritmos criptográficos, como <code class="literal">"md4"</code>,
+       <code class="literal">"md5"</code> y <code class="literal">"sha1"</code>, han demostrado
+       ser propensos a ataques de colisión y generalmente se recomienda no
+       utilizarlos más para aplicaciones criptográficas.
+      </p>
+     </div>
+    </li>
+   </ul>
+  
+
+  <p class="para">
+   Consulte también las <a href="#faq.passwords" class="link">preguntas frecuentes sobre el Hashing Seguro de Contraseñas</a>
+   para obtener información sobre las mejores prácticas para el uso de funciones hash en el manejo
+   de contraseñas.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+<div id="hash.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#hash.installation">Instalación</a></li><li><a href="#hash.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ <div id="hash.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   La extensión Hash es una extensión principal de PHP, por lo que siempre está habilitada.
+  </p>
+  <p class="para">
+   Antes de PHP 7.4.0, la extensión Hash se incluía y compilaba con PHP por defecto, pero podía deshabilitarse explícitamente usando <strong class="option configure">--disable-hash</strong>.
+  </p>
+  <p class="para">
+   Antes de 5.1.2, la extensión Hash se instalaba como un
+   <a href="https://pecl.php.net/package/hash" class="link external">» módulo PECL</a>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ <div id="hash.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   Esta extensión define un recurso de Contexto de Hashing devuelto por
+   <span class="function"><a href="#function.hash-init" class="function">hash_init()</a></span>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="hash.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.hash-hmac">
+    <strong><code><a href="#constant.hash-hmac">HASH_HMAC</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Flag opcional para <span class="function"><a href="#function.hash-init" class="function">hash_init()</a></span>.
+     Indica que el algoritmo de clave HMAC debe ser aplicado al contexto
+     actual de hash.
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="class.hashcontext" class="reference"><hr>
+
+ <h1 class="title">La clase HashContext</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 7 &gt;= 7.2.0, PHP 8)</p>
+
+
+  <div class="section" id="hashcontext.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="hashcontext.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">HashContext</strong></strong>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">private</span> <span class="methodname"><a href="#hashcontext.construct" class="methodname">__construct</a></span>()</div>
+
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#hashcontext.serialize" class="methodname">__serialize</a></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#hashcontext.unserialize" class="methodname">__unserialize</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$data</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+<div id="hashcontext.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HashContext::__construct</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.2.0, PHP 8)</p><p class="refpurpose"><span class="refname">HashContext::__construct</span> — <span class="dc-title">Constructor privado para prohibir la instanciación directa</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hashcontext.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="modifier">private</span> <span class="methodname"><strong>HashContext::__construct</strong></span>()</div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hashcontext.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="hashcontext.serialize" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HashContext::__serialize</h1>
+  <p class="verinfo">(PHP 8)</p><p class="refpurpose"><span class="refname">HashContext::__serialize</span> — <span class="dc-title">Serializa el objeto HashContext</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hashcontext.serialize-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>HashContext::__serialize</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hashcontext.serialize-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hashcontext.serialize-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="hashcontext.unserialize" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HashContext::__unserialize</h1>
+  <p class="verinfo">(PHP 8)</p><p class="refpurpose"><span class="refname">HashContext::__unserialize</span> — <span class="dc-title">Deserializa el parámetro <code class="parameter">data</code> en un objeto HashContext</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hashcontext.unserialize-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>HashContext::__unserialize</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$data</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hashcontext.unserialize-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">data</code></dt>
+    <dd>
+     <p class="para">
+      El valor que se está deserializando.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hashcontext.unserialize-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#hashcontext.construct">HashContext::__construct</a> — Constructor privado para prohibir la instanciación directa</li><li><a href="#hashcontext.serialize">HashContext::__serialize</a> — Serializa el objeto HashContext</li><li><a href="#hashcontext.unserialize">HashContext::__unserialize</a> — Deserializa el parámetro data en un objeto HashContext</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="ref.hash" class="reference"><hr>
+ <h1 class="title">Funciones de hash</h1>
+
+ 
+
+
+<div id="function.hash" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash</span> — <span class="dc-title">Genera un valor de hachado (huella digital)</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algo</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$binary</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = []</span></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algo</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del algoritmo de hachado seleccionado (por ejemplo: <code class="literal">"sha256"</code>).
+       Para una lista de los algoritmos soportados ver <span class="function"><a href="#function.hash-algos" class="function">hash_algos()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Mensaje a hachar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">binary</code></dt>
+     <dd>
+      <p class="para">
+       Cuando vale <strong><code><a href="#constant.true">true</a></code></strong>, la salida será datos binarios sin tratar.
+       Cuando vale <strong><code><a href="#constant.false">false</a></code></strong>, la salida será dígitos hexadecimales en
+       minúscula.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">options</code></dt>
+     <dd>
+      <p class="para">
+       Un array de opciones para los diversos algoritmos de hachado.
+       Actualmente, solo el parámetro <code class="parameter">"seed"</code> es
+       soportado para las variantes MurmurHash.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un string que contiene la huella digital calculada
+   en dígitos hexadecimales minúsculos a menos que
+   <code class="parameter">binary</code> esté fijado a <strong><code><a href="#constant.true">true</a></code></strong>. En este caso, la
+   representación binaria sin tratar de la huella digital es devuelta.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.1.0</td>
+       <td>El parámetro <code class="parameter">options</code> ha sido añadido.</td>
+      </tr>
+
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <span class="function"><strong>hash()</strong></span> ahora lanza una excepción
+        <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> si el <code class="parameter">algo</code>
+        es desconocido; anteriormente, <strong><code><a href="#constant.false">false</a></code></strong> era devuelto en su lugar.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-987">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>hash()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">hash</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">, </span><span style="color: #DD0000">'The quick brown fox jumped over the lazy dog.'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-init" class="function" rel="rdfs-seeAlso">hash_init()</a> - Inicializa un contexto de hachado incremental</span></li>
+    <li><span class="function"><a href="#function.hash-file" class="function" rel="rdfs-seeAlso">hash_file()</a> - Genera un valor de hash utilizando el contenido de un fichero dado</span></li>
+    <li><span class="function"><a href="#function.hash-hmac" class="function" rel="rdfs-seeAlso">hash_hmac()</a> - Genera un valor de clave de hash utilizando el método HMAC</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.hash-algos" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_algos</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash_algos</span> — <span class="dc-title">Devuelve una lista de los algoritmos de hash registrados</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-algos-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_algos</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-algos-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-algos-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array indexado numéricamente que contiene la lista de algoritmos
+   de hash disponibles.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-algos-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.1.0</td>
+       <td>
+        Se ha añadido soporte para MurmurHash3 y xxHash.
+       </td>
+      </tr>
+
+      <tr>
+       <td>7.4.0</td>
+       <td>
+        Se ha añadido soporte para crc32c.
+       </td>
+      </tr>
+
+      <tr>
+       <td>7.1.0</td>
+       <td>
+        Se ha añadido soporte para sha512/224, sha512/256, sha3-224, sha3-256, sha3-384 y
+        sha3-512.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-algos-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-988">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>hash_algos()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     A partir de PHP 8.1.0, <span class="function"><strong>hash_algos()</strong></span> devolverá la siguiente lista
+     de algoritmos:
+    </p></div>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">hash_algos</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">Array
+(
+    [0] =&gt; md2
+    [1] =&gt; md4
+    [2] =&gt; md5
+    [3] =&gt; sha1
+    [4] =&gt; sha224
+    [5] =&gt; sha256
+    [6] =&gt; sha384
+    [7] =&gt; sha512/224
+    [8] =&gt; sha512/256
+    [9] =&gt; sha512
+    [10] =&gt; sha3-224
+    [11] =&gt; sha3-256
+    [12] =&gt; sha3-384
+    [13] =&gt; sha3-512
+    [14] =&gt; ripemd128
+    [15] =&gt; ripemd160
+    [16] =&gt; ripemd256
+    [17] =&gt; ripemd320
+    [18] =&gt; whirlpool
+    [19] =&gt; tiger128,3
+    [20] =&gt; tiger160,3
+    [21] =&gt; tiger192,3
+    [22] =&gt; tiger128,4
+    [23] =&gt; tiger160,4
+    [24] =&gt; tiger192,4
+    [25] =&gt; snefru
+    [26] =&gt; snefru256
+    [27] =&gt; gost
+    [28] =&gt; gost-crypto
+    [29] =&gt; adler32
+    [30] =&gt; crc32
+    [31] =&gt; crc32b
+    [32] =&gt; crc32c
+    [33] =&gt; fnv132
+    [34] =&gt; fnv1a32
+    [35] =&gt; fnv164
+    [36] =&gt; fnv1a64
+    [37] =&gt; joaat
+    [38] =&gt; murmur3a
+    [39] =&gt; murmur3c
+    [40] =&gt; murmur3f
+    [41] =&gt; xxh32
+    [42] =&gt; xxh64
+    [43] =&gt; xxh3
+    [44] =&gt; xxh128
+    [45] =&gt; haval128,3
+    [46] =&gt; haval160,3
+    [47] =&gt; haval192,3
+    [48] =&gt; haval224,3
+    [49] =&gt; haval256,3
+    [50] =&gt; haval128,4
+    [51] =&gt; haval160,4
+    [52] =&gt; haval192,4
+    [53] =&gt; haval224,4
+    [54] =&gt; haval256,4
+    [55] =&gt; haval128,5
+    [56] =&gt; haval160,5
+    [57] =&gt; haval192,5
+    [58] =&gt; haval224,5
+    [59] =&gt; haval256,5
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-algos-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.hash" class="function" rel="rdfs-seeAlso">hash()</a> - Genera un valor de hachado (huella digital)</span></li>
+   <li><span class="function"><a href="#function.hash-hmac-algos" class="function" rel="rdfs-seeAlso">hash_hmac_algos()</a> - Devuelve una lista de algoritmos de hash registrados adecuados para hash_hmac</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.hash-copy" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_copy</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.3.0, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">hash_copy</span> — <span class="dc-title">Copia un contexto de hachado</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-copy-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_copy</strong></span>(<span class="methodparam"><span class="type"><a href="#class.hashcontext" class="type HashContext">HashContext</a></span> <code class="parameter">$context</code></span>): <span class="type"><a href="#class.hashcontext" class="type HashContext">HashContext</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-copy-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+       Contexto de hachado, retornado por la función
+       <span class="function"><a href="#function.hash-init" class="function">hash_init()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-copy-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna una copia del contexto de hachado Hashing Context.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-copy-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        Acepta y retorna una clase <span class="classname"><a href="#class.hashcontext" class="classname">HashContext</a></span> en lugar de un recurso.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-copy-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-989">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>hash_copy()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$context </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_init</span><span style="color: #007700">(</span><span style="color: #DD0000">"sha256"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">hash_update</span><span style="color: #007700">(</span><span style="color: #0000BB">$context</span><span style="color: #007700">, </span><span style="color: #DD0000">"The quick brown fox "</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* copia el contexto para poder continuar utilizándolo */<br></span><span style="color: #0000BB">$copy_context </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_copy</span><span style="color: #007700">(</span><span style="color: #0000BB">$context</span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">hash_final</span><span style="color: #007700">(</span><span style="color: #0000BB">$context</span><span style="color: #007700">), </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">hash_update</span><span style="color: #007700">(</span><span style="color: #0000BB">$copy_context</span><span style="color: #007700">, </span><span style="color: #DD0000">"jumped over the lazy dog."</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">hash_final</span><span style="color: #007700">(</span><span style="color: #0000BB">$copy_context</span><span style="color: #007700">), </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">b29d66e56ed90cce9b0165c43fedec612b60a071974d8be4513e18580d55b5bd
+68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.hash-equals" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_equals</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.6.0, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">hash_equals</span> — <span class="dc-title">Comparación de strings resistente a ataques temporales</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.hash-equals-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_equals</strong></span>(<span class="methodparam"><span class="attribute"><a href="class.sensitiveparameter.html">#[\SensitiveParameter]</a> </span><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$known_string</code></span>, <span class="methodparam"><span class="attribute"><a href="class.sensitiveparameter.html">#[\SensitiveParameter]</a> </span><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$user_string</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si dos strings son iguales sin revelar información
+   sobre el contenido de <code class="parameter">known_string</code> mediante el tiempo de ejecución.
+  </p>
+  <p class="para">
+   Esta función puede ser utilizada para mitigar ataques temporales.
+   La ejecución de una comparación regular con <code class="code">===</code> tomará más
+   o menos tiempo dependiendo de si las dos valores son diferentes o no y
+   según la posición en la que la primera diferencia pueda ser encontrada,
+   dejando así filtrar información sobre el contenido
+   de la <code class="parameter">known_string</code> secreta.
+  </p>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    Es importante pasar el string proporcionado por el usuario como segundo
+    argumento en lugar del primero.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-equals-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">known_string</code></dt>
+    <dd>
+     <p class="para">
+      El string conocido que debe ser mantenido en secreto.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">user_string</code></dt>
+    <dd>
+     <p class="para">
+      El string proporcionado por el usuario a comparar.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-equals-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+    Retorna <strong><code><a href="#constant.true">true</a></code></strong> si los dos strings son iguales, <strong><code><a href="#constant.false">false</a></code></strong> en caso contrario.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-equals-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="foobar.examples.basic">
+    <p><strong>Ejemplo #1 Ejemplo de<span class="function"><strong>hash_equals()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$secretKey </span><span style="color: #007700">= </span><span style="color: #DD0000">'8uRhAeH89naXfFXKGOEj'</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">// Value and signature are provided by the user, e.g. within the URL<br>// and retrieved using $_GET.<br></span><span style="color: #0000BB">$value </span><span style="color: #007700">= </span><span style="color: #DD0000">'username=rasmuslerdorf'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$signature </span><span style="color: #007700">= </span><span style="color: #DD0000">'8c35009d3b50caf7f5d2c1e031842e6b7823a1bb781d33c5237cd27b57b5f327'</span><span style="color: #007700">;<br><br>if (</span><span style="color: #0000BB">hash_equals</span><span style="color: #007700">(</span><span style="color: #0000BB">hash_hmac</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">, </span><span style="color: #0000BB">$value</span><span style="color: #007700">, </span><span style="color: #0000BB">$secretKey</span><span style="color: #007700">), </span><span style="color: #0000BB">$signature</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">"The value is correctly signed."</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br>} else {<br>    echo </span><span style="color: #DD0000">"The value was tampered with."</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">The value is correctly signed.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.hash-equals-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Ambos argumentos deben tener la misma longitud para ser comparados con éxito.
+    Cuando se pasan argumentos de longitud diferente, <strong><code><a href="#constant.false">false</a></code></strong> es retornado inmediatamente y
+    la longitud del string conocido puede ser revelada en caso de ataque temporal.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-equals-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-hmac" class="function" rel="rdfs-seeAlso">hash_hmac()</a> - Genera un valor de clave de hash utilizando el método HMAC</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.hash-file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_file</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash_file</span> — <span class="dc-title">Genera un valor de hash utilizando el contenido de un fichero dado</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-file-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_file</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algo</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$binary</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = []</span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-file-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algo</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del algoritmo de hash seleccionado (por ejemplo: <code class="literal">"sha256"</code>).
+       Para una lista de los algoritmos disponibles ver <span class="function"><a href="#function.hash-algos" class="function">hash_algos()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       URL que indica la ubicación del fichero que será hasheado;
+       Soporta los envolventes <span class="function"><a href="#function.fopen" class="function">fopen()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">binary</code></dt>
+     <dd>
+      <p class="para">
+       Cuando vale <strong><code><a href="#constant.true">true</a></code></strong>, la salida será datos binarios sin tratar.
+       Cuando vale <strong><code><a href="#constant.false">false</a></code></strong>, la salida será dígitos hexadecimales en
+       minúscula.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">options</code></dt>
+     <dd>
+      <p class="para">
+       Un array de opciones para los diversos algoritmos de hash.
+       Actualmente, solo el parámetro <code class="parameter">"seed"</code> es
+       soportado para las variantes MurmurHash.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-file-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un string que contiene la huella digital calculada
+   en dígitos hexadecimales minúsculos a menos que
+   <code class="parameter">binary</code> esté fijado a <strong><code><a href="#constant.true">true</a></code></strong>. En este caso, la
+   representación binaria sin tratar de la huella digital es devuelta,  o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-file-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.1.0</td>
+       <td>El parámetro <code class="parameter">options</code> ha sido añadido.</td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-file-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-991">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>hash_file()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">/* Crea un fichero para calcular su huella digital */<br></span><span style="color: #0000BB">file_put_contents</span><span style="color: #007700">(</span><span style="color: #DD0000">'example.txt'</span><span style="color: #007700">, </span><span style="color: #DD0000">'The quick brown fox jumped over the lazy dog.'</span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">hash_file</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">, </span><span style="color: #DD0000">'example.txt'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-file-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-init" class="function" rel="rdfs-seeAlso">hash_init()</a> - Inicializa un contexto de hachado incremental</span></li>
+    <li><span class="function"><a href="#function.hash-hmac-file" class="function" rel="rdfs-seeAlso">hash_hmac_file()</a> - Genera un valor de clave de hash utilizando el método HMAC y el contenido de un fichero dado</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.hash-final" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_final</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash_final</span> — <span class="dc-title">Finaliza un hachaje incremental y devuelve el resultado de la huella digital</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-final-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_final</strong></span>(<span class="methodparam"><span class="type"><a href="#class.hashcontext" class="type HashContext">HashContext</a></span> <code class="parameter">$context</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$binary</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-final-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+       Contexto de hachaje devuelto por <span class="function"><a href="#function.hash-init" class="function">hash_init()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">binary</code></dt>
+     <dd>
+      <p class="para">
+       Cuando es <strong><code><a href="#constant.true">true</a></code></strong>, la salida será datos brutos binarios.
+       Cuando es <strong><code><a href="#constant.false">false</a></code></strong>, la salida será dígitos hexadecimales en
+       minúscula.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-final-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una cadena de caracteres que contiene la huella digital calculada
+   en dígitos hexadecimales en minúscula a menos que
+   <code class="parameter">binary</code> esté fijado a <strong><code><a href="#constant.true">true</a></code></strong>. En este caso, se devuelve
+   la representación bruta binaria de la huella digital.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-final-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        Acepta una <span class="classname"><a href="#class.hashcontext" class="classname">HashContext</a></span> en lugar de un recurso.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-final-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-init" class="function" rel="rdfs-seeAlso">hash_init()</a> - Inicializa un contexto de hachado incremental</span></li>
+    <li><span class="function"><a href="#function.hash-update" class="function" rel="rdfs-seeAlso">hash_update()</a> - Añade datos en el contexto de hash activo</span></li>
+    <li><span class="function"><a href="#function.hash-update-stream" class="function" rel="rdfs-seeAlso">hash_update_stream()</a> - Introduce datos en un contexto de hash activo desde un flujo abierto</span></li>
+    <li><span class="function"><a href="#function.hash-update-file" class="function" rel="rdfs-seeAlso">hash_update_file()</a> - Se añaden datos en un contexto de hash activo a partir de un fichero</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.hash-hkdf" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_hkdf</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.1.2, PHP 8)</p><p class="refpurpose"><span class="refname">hash_hkdf</span> — <span class="dc-title">Genera una derivación de clave HKDF a partir de una clave de entrada proporcionada</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-hkdf-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_hkdf</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algo</code></span>,<br>    <span class="methodparam"><span class="attribute"><a href="class.sensitiveparameter.html">#[\SensitiveParameter]</a> </span><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$length</code><span class="initializer"> = 0</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$info</code><span class="initializer"> = ""</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$salt</code><span class="initializer"> = ""</span></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-hkdf-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algo</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del algoritmo hash seleccionado (por ejemplo, <code class="literal">"sha256"</code>).
+       Para ver una lista de algoritmos soportados, consulte <span class="function"><a href="#function.hash-hmac-algos" class="function">hash_hmac_algos()</a></span>.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+        </p><p class="para">
+         No se permiten funciones hash no criptográficas.
+        </p>
+       </blockquote>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       Material de clave de entrada (binario sin tratar). No puede estar vacío.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">length</code></dt>
+     <dd>
+      <p class="para">
+       Longitud deseada de la salida en bytes.
+       No puede ser mayor que 255 veces el tamaño de la función hash elegida.
+      </p>
+      <p class="para">
+       Si <code class="parameter">length</code> es <code class="literal">0</code>, la longitud de salida
+       será por omisión el tamaño de la función hash elegida.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">info</code></dt>
+     <dd>
+      <p class="para">
+       String de información específica de la aplicación/contexto.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">salt</code></dt>
+     <dd>
+      <p class="para">
+       Salt a utilizar durante la derivación.
+      </p>
+      <p class="para">
+       Aunque es opcional, añadir un salt aleatorio mejora significativamente la robustez de HKDF.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-hkdf-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un string que contiene una representación binaria sin tratar de la clave derivada
+   (también conocida como material de clave de salida - OKM).
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.hash-hkdf-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Lanza una excepción <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> si <code class="parameter">key</code>
+   está vacío, <code class="parameter">algo</code> es desconocido/no criptográfico,
+   <code class="parameter">length</code> es menor que <code class="literal">0</code> o demasiado grande
+   (mayor que 255 veces el tamaño de la función hash).
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-hkdf-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        Ahora lanza una excepción <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> en caso de error.
+        Anteriormente, se devolvía <strong><code><a href="#constant.false">false</a></code></strong> y se emitía un mensaje
+        <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-hkdf-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   El ejemplo siguiente produce un par de claves separadas, adecuadas para crear
+   una construcción de tipo encrypt-then-HMAC, utilizando AES-256 y SHA-256 para
+   cifrado y autenticación respectivamente.
+  </p>
+  <p class="para">
+   </p><div class="example" id="example-992">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>hash_hkdf()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Generar una clave aleatoria y un salt para fortalecerla durante la derivación.<br></span><span style="color: #0000BB">$inputKey </span><span style="color: #007700">= </span><span style="color: #0000BB">random_bytes</span><span style="color: #007700">(</span><span style="color: #0000BB">32</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$salt </span><span style="color: #007700">= </span><span style="color: #0000BB">random_bytes</span><span style="color: #007700">(</span><span style="color: #0000BB">16</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Derivar un par de claves separadas, utilizando la misma entrada creada arriba.<br></span><span style="color: #0000BB">$encryptionKey </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_hkdf</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">, </span><span style="color: #0000BB">$inputKey</span><span style="color: #007700">, </span><span style="color: #0000BB">32</span><span style="color: #007700">, </span><span style="color: #DD0000">'aes-256-encryption'</span><span style="color: #007700">, </span><span style="color: #0000BB">$salt</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$authenticationKey </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_hkdf</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">, </span><span style="color: #0000BB">$inputKey</span><span style="color: #007700">, </span><span style="color: #0000BB">32</span><span style="color: #007700">, </span><span style="color: #DD0000">'sha-256-authentication'</span><span style="color: #007700">, </span><span style="color: #0000BB">$salt</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$encryptionKey </span><span style="color: #007700">!== </span><span style="color: #0000BB">$authenticationKey</span><span style="color: #007700">); </span><span style="color: #FF8000">// bool(true)<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-hkdf-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><strong>hash_pbkdf2()</strong></span></li>
+    <li><a href="https://datatracker.ietf.org/doc/html/rfc5869" class="link external">» RFC 5869</a></li>
+    <li><a href="https://github.com/narfbg/hash_hkdf_compat" class="link external">» implementación en espacio de usuario</a></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.hash-hmac" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_hmac</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash_hmac</span> — <span class="dc-title">Genera un valor de clave de hash utilizando el método HMAC</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-hmac-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_hmac</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algo</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>,<br>    <span class="methodparam"><span class="attribute"><a href="class.sensitiveparameter.html">#[\SensitiveParameter]</a> </span><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$binary</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-hmac-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algo</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del algoritmo de hash seleccionado (por ejemplo: <code class="literal">"sha256"</code>).
+       Para una lista de los algoritmos soportados ver <span class="function"><a href="#function.hash-hmac-algos" class="function">hash_hmac_algos()</a></span>.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+        </p><p class="para">
+         Las funciones de hash no criptográficas no están permitidas.
+        </p>
+       </blockquote>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       El mensaje que será hasheado.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       Clave secreta compartida utilizada para generar la variación HMAC de
+       la huella digital.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">binary</code></dt>
+     <dd>
+      <p class="para">
+       Cuando es <strong><code><a href="#constant.true">true</a></code></strong>, la salida será datos binarios sin tratar.
+       Cuando es <strong><code><a href="#constant.false">false</a></code></strong>, la salida será dígitos hexadecimales en
+       minúscula.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-hmac-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna un string que contiene la huella digital calculada
+   en dígitos hexadecimales en minúscula a menos que
+   <code class="parameter">binary</code> esté fijado a <strong><code><a href="#constant.true">true</a></code></strong>. En este caso, la
+   representación binaria sin tratar de la huella digital es retornada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.hash-hmac-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Levanta una excepción <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> si
+   el argumento <code class="parameter">algo</code> es desconocido o no es
+   una función de hash criptográfica.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-hmac-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <span class="function"><strong>hash_hmac()</strong></span> ahora levanta una excepción
+        <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> si el <code class="parameter">algo</code>
+        es desconocido o no es una función de hash criptográfica ;
+        anteriormente, <strong><code><a href="#constant.false">false</a></code></strong> era retornado en su lugar.
+       </td>
+      </tr>
+
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        El uso de funciones de hash no criptográficas (adler32,
+        crc32, crc32b, fnv132, fnv1a32, fnv164, fnv1a64, joaat) ha sido desactivado.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-hmac-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-993">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>hash_hmac()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">hash_hmac</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">, </span><span style="color: #DD0000">'The quick brown fox jumped over the lazy dog.'</span><span style="color: #007700">, </span><span style="color: #DD0000">'secret'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">9c5c42422b03f0ee32949920649445e417b2c634050833c5165704b825c2a53b</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-hmac-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-hmac-algos" class="function" rel="rdfs-seeAlso">hash_hmac_algos()</a> - Devuelve una lista de algoritmos de hash registrados adecuados para hash_hmac</span></li>
+    <li><span class="function"><a href="#function.hash-hmac-file" class="function" rel="rdfs-seeAlso">hash_hmac_file()</a> - Genera un valor de clave de hash utilizando el método HMAC y el contenido de un fichero dado</span></li>
+    <li><span class="function"><a href="#function.hash-equals" class="function" rel="rdfs-seeAlso">hash_equals()</a> - Comparación de strings resistente a ataques temporales</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.hash-hmac-algos" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_hmac_algos</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.2.0, PHP 8)</p><p class="refpurpose"><span class="refname">hash_hmac_algos</span> — <span class="dc-title">Devuelve una lista de algoritmos de hash registrados adecuados para hash_hmac</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.hash-hmac-algos-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_hmac_algos</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-hmac-algos-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-hmac-algos-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array indexado numéricamente que contiene la lista de todos los
+   algoritmos de hash disponibles que son adecuados para <span class="function"><a href="#function.hash-hmac" class="function">hash_hmac()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-hmac-algos-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="hash-hmac-algos.example.basic">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>hash_hmac_algos()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">hash_hmac_algos</span><span style="color: #007700">());</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+   <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">Array
+(
+    [0] =&gt; md2
+    [1] =&gt; md4
+    [2] =&gt; md5
+    [3] =&gt; sha1
+    [4] =&gt; sha224
+    [5] =&gt; sha256
+    [6] =&gt; sha384
+    [7] =&gt; sha512/224
+    [8] =&gt; sha512/256
+    [9] =&gt; sha512
+    [10] =&gt; sha3-224
+    [11] =&gt; sha3-256
+    [12] =&gt; sha3-384
+    [13] =&gt; sha3-512
+    [14] =&gt; ripemd128
+    [15] =&gt; ripemd160
+    [16] =&gt; ripemd256
+    [17] =&gt; ripemd320
+    [18] =&gt; whirlpool
+    [19] =&gt; tiger128,3
+    [20] =&gt; tiger160,3
+    [21] =&gt; tiger192,3
+    [22] =&gt; tiger128,4
+    [23] =&gt; tiger160,4
+    [24] =&gt; tiger192,4
+    [25] =&gt; snefru
+    [26] =&gt; snefru256
+    [27] =&gt; gost
+    [28] =&gt; gost-crypto
+    [29] =&gt; haval128,3
+    [30] =&gt; haval160,3
+    [31] =&gt; haval192,3
+    [32] =&gt; haval224,3
+    [33] =&gt; haval256,3
+    [34] =&gt; haval128,4
+    [35] =&gt; haval160,4
+    [36] =&gt; haval192,4
+    [37] =&gt; haval224,4
+    [38] =&gt; haval256,4
+    [39] =&gt; haval128,5
+    [40] =&gt; haval160,5
+    [41] =&gt; haval192,5
+    [42] =&gt; haval224,5
+    [43] =&gt; haval256,5
+)</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.hash-hmac-algos-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Antes de PHP 7.2.0 la única forma de recuperar una lista de los algoritmos disponibles
+    era llamar a <span class="function"><a href="#function.hash-algos" class="function">hash_algos()</a></span> que también devolvía
+    algoritmos que no son adecuados para <span class="function"><a href="#function.hash-hmac" class="function">hash_hmac()</a></span>.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-hmac-algos-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.hash-hmac" class="function" rel="rdfs-seeAlso">hash_hmac()</a> - Genera un valor de clave de hash utilizando el método HMAC</span></li>
+   <li><span class="function"><a href="#function.hash-algos" class="function" rel="rdfs-seeAlso">hash_algos()</a> - Devuelve una lista de los algoritmos de hash registrados</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.hash-hmac-file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_hmac_file</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash_hmac_file</span> — <span class="dc-title">Genera un valor de clave de hash utilizando el método HMAC y el contenido de un fichero dado</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-hmac-file-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_hmac_file</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algo</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>,<br>    <span class="methodparam"><span class="attribute"><a href="class.sensitiveparameter.html">#[\SensitiveParameter]</a> </span><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$binary</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-hmac-file-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algo</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del algoritmo de hash seleccionado (por ejemplo: <code class="literal">"sha256"</code>).
+       Para una lista de los algoritmos soportados ver <span class="function"><a href="#function.hash-hmac-algos" class="function">hash_hmac_algos()</a></span>.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+        </p><p class="para">
+         Las funciones de hash no criptográficas no están autorizadas.
+        </p>
+       </blockquote>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       URL que indica la ubicación del fichero que será hasheado;
+       Soporta las envolturas <span class="function"><a href="#function.fopen" class="function">fopen()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       Clave secreta compartida utilizada para generar la varianza HMAC de
+       la huella digital.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">binary</code></dt>
+     <dd>
+      <p class="para">
+       Cuando vale <strong><code><a href="#constant.true">true</a></code></strong>, la salida será datos brutos binarios.
+       Cuando vale <strong><code><a href="#constant.false">false</a></code></strong>, la salida serán dígitos hexadecimales en
+       minúscula.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-hmac-file-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una cadena de caracteres que contiene la huella digital calculada
+   en dígitos hexadecimales en minúscula a menos que
+   <code class="parameter">binary</code> esté fijado a <strong><code><a href="#constant.true">true</a></code></strong>. En este caso, se
+   devuelve la representación bruta binaria de la huella digital.
+   Devuelve <strong><code><a href="#constant.false">false</a></code></strong> si el fichero <code class="parameter">filename</code> no puede ser leído.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.hash-hmac-file-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Levanta una excepción <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> si
+   el parámetro <code class="parameter">algo</code> es desconocido o no es
+   una función de hash criptográfica.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-hmac-file-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        El uso de funciones de hash no criptográficas (adler32,
+        crc32, crc32b, fnv132, fnv1a32, fnv164, fnv1a64, joaat) ha sido desactivado.
+       </td>
+      </tr>
+
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        Levanta una excepción <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> a partir de ahora si
+        el parámetro <code class="parameter">algo</code> es desconocido o no es
+        una función de hash criptográfica; previamente, <strong><code><a href="#constant.false">false</a></code></strong>
+        era devuelto en su lugar.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-hmac-file-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-995">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>hash_hmac_file()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">/* Crea un fichero para calcular su huella digital */<br></span><span style="color: #0000BB">file_put_contents</span><span style="color: #007700">(</span><span style="color: #DD0000">'example.txt'</span><span style="color: #007700">, </span><span style="color: #DD0000">'The quick brown fox jumped over the lazy dog.'</span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">hash_hmac_file</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">, </span><span style="color: #DD0000">'example.txt'</span><span style="color: #007700">, </span><span style="color: #DD0000">'secret'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">9c5c42422b03f0ee32949920649445e417b2c634050833c5165704b825c2a53b</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-hmac-file-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-hmac" class="function" rel="rdfs-seeAlso">hash_hmac()</a> - Genera un valor de clave de hash utilizando el método HMAC</span></li>
+    <li><span class="function"><a href="#function.hash-hmac-algos" class="function" rel="rdfs-seeAlso">hash_hmac_algos()</a> - Devuelve una lista de algoritmos de hash registrados adecuados para hash_hmac</span></li>
+    <li><span class="function"><a href="#function.hash-init" class="function" rel="rdfs-seeAlso">hash_init()</a> - Inicializa un contexto de hachado incremental</span></li>
+    <li><span class="function"><a href="#function.hash-equals" class="function" rel="rdfs-seeAlso">hash_equals()</a> - Comparación de strings resistente a ataques temporales</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.hash-init" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_init</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash_init</span> — <span class="dc-title">Inicializa un contexto de hachado incremental</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-init-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_init</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algo</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = 0</span></span>,<br>    <span class="methodparam"><span class="attribute"><a href="class.sensitiveparameter.html">#[\SensitiveParameter]</a> </span><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code><span class="initializer"> = ""</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = []</span></span><br>): <span class="type"><a href="#class.hashcontext" class="type HashContext">HashContext</a></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-init-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algo</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del algoritmo de hachado seleccionado (por ejemplo: <code class="literal">"sha256"</code>).
+       Para una lista de los algoritmos soportados ver <span class="function"><a href="#function.hash-algos" class="function">hash_algos()</a></span>.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+        </p><p class="para">
+         Las funciones de hachado no criptográficas no están permitidas si se especifica el flag <strong><code><a href="#constant.hash-hmac">HASH_HMAC</a></code></strong>.
+        </p>
+       </blockquote>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       Configuraciones opcionales para la generación del hachado, actualmente solo soporta
+       una opción:
+       <strong><code><a href="#constant.hash-hmac">HASH_HMAC</a></code></strong>. Cuando esta opción es especificada, el parámetro
+       <code class="parameter">key</code> <em>debe</em> ser especificado.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       Cuando <strong><code><a href="#constant.hash-hmac">HASH_HMAC</a></code></strong> es especificada para <code class="parameter">flags</code>,
+       una clave secreta compartida que será utilizada con el método de hachado
+       HMAC debe ser proporcionada en este parámetro.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">options</code></dt>
+     <dd>
+      <p class="para">
+       Un array de opciones para los algoritmos diversos de hachado.
+       Actualmente, solo el parámetro <code class="parameter">"seed"</code> es
+       soportado para las variantes MurmurHash.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-init-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna el contexto de hachado HashContext para su utilización con
+   <span class="function"><a href="#function.hash-update" class="function">hash_update()</a></span>, <span class="function"><a href="#function.hash-update-stream" class="function">hash_update_stream()</a></span>,
+   <span class="function"><a href="#function.hash-update-file" class="function">hash_update_file()</a></span> y <span class="function"><a href="#function.hash-final" class="function">hash_final()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.hash-init-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <ul class="itemizedlist">
+   <li class="listitem">
+    <span class="simpara">
+     Levanta una excepción <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> si el
+     <code class="parameter">algo</code> es desconocido, si es una función de
+     hachado no criptográfica, o si <code class="parameter">key</code> está vacío.
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     Pasar opciones de configuración de tipo incorrecto en
+     <code class="parameter">options</code> emitirá ahora un error
+     <strong><code><a href="#constant.e-deprecated">E_DEPRECATED</a></code></strong>, ya que pueden ser mal interpretadas.
+     Esto resultará en una excepción <span class="exceptionname"><a href="#class.valueerror" class="exceptionname">ValueError</a></span> en el futuro.
+    </span>
+   </li>
+  </ul>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-init-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.4.0</td>
+       <td>Pasar opciones de un tipo incorrecto está ahora desaconsejado.</td>
+      </tr>
+
+      <tr>
+       <td>8.1.0</td>
+       <td>El parámetro <code class="parameter">options</code> ha sido añadido.</td>
+      </tr>
+
+      <tr>
+       <td>7.2.0</td>
+       <td>El uso de funciones de hachado no criptográficas (adler32, crc32, crc32b, fnv132, fnv1a32, fnv164, fnv1a64, joaat) con <strong><code><a href="#constant.hash-hmac">HASH_HMAC</a></code></strong> ha sido desactivado.</td>
+      </tr>
+
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        Retorna una <span class="classname"><a href="#class.hashcontext" class="classname">HashContext</a></span> en lugar de un recurso.
+       </td>
+       <td>8.0.0</td>
+       <td>
+        Levanta una excepción <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> ahora si el
+        parámetro <code class="parameter">algo</code> es desconocido o no es
+        una función de hachado criptográfica, o si el parámetro
+        <code class="parameter">key</code> está vacío.
+        Anteriormente, <strong><code><a href="#constant.false">false</a></code></strong> era retornado y un mensaje
+        <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong> era emitido.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-init-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-996">
+    <p><strong>Ejemplo #1 Ejemplo de hachado incremental</strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$hash </span><span style="color: #007700">= </span><span style="color: #0000BB">hash</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">, </span><span style="color: #DD0000">'The quick brown fox jumped over the lazy dog.'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$ctx </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_init</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">hash_update</span><span style="color: #007700">(</span><span style="color: #0000BB">$ctx</span><span style="color: #007700">, </span><span style="color: #DD0000">'The quick brown fox '</span><span style="color: #007700">);<br></span><span style="color: #0000BB">hash_update</span><span style="color: #007700">(</span><span style="color: #0000BB">$ctx</span><span style="color: #007700">, </span><span style="color: #DD0000">'jumped over the lazy dog.'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$incremental_hash </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_final</span><span style="color: #007700">(</span><span style="color: #0000BB">$ctx</span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">$incremental_hash</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$hash </span><span style="color: #007700">=== </span><span style="color: #0000BB">$incremental_hash</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483
+bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-init-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-algos" class="function" rel="rdfs-seeAlso">hash_algos()</a> - Devuelve una lista de los algoritmos de hash registrados</span></li>
+    <li><span class="function"><a href="#function.hash-update" class="function" rel="rdfs-seeAlso">hash_update()</a> - Añade datos en el contexto de hash activo</span></li>
+    <li><span class="function"><a href="#function.hash-update-file" class="function" rel="rdfs-seeAlso">hash_update_file()</a> - Se añaden datos en un contexto de hash activo a partir de un fichero</span></li>
+    <li><span class="function"><a href="#function.hash-update-stream" class="function" rel="rdfs-seeAlso">hash_update_stream()</a> - Introduce datos en un contexto de hash activo desde un flujo abierto</span></li>
+    <li><span class="function"><a href="#function.hash-final" class="function" rel="rdfs-seeAlso">hash_final()</a> - Finaliza un hachaje incremental y devuelve el resultado de la huella digital</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="691af49e9870a" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_pbkdf2</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.5.0, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">hash_pbkdf2</span> — <span class="dc-title">Genera una clave PBKDF2 derivada de la contraseña proporcionada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-691af49e9870a-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_pbkdf2</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algo</code></span>,<br>    <span class="methodparam"><span class="attribute"><a href="class.sensitiveparameter.html">#[\SensitiveParameter]</a> </span><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$password</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$salt</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$iterations</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$length</code><span class="initializer"> = 0</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$binary</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = []</span></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-691af49e9870a-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algo</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del algoritmo de hash seleccionado (por ejemplo: <code class="literal">"sha256"</code>).
+       Para una lista de los algoritmos soportados ver <span class="function"><a href="#function.hash-hmac-algos" class="function">hash_hmac_algos()</a></span>.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+        </p><p class="para">
+         Las funciones de hash no criptográficas no están permitidas.
+        </p>
+       </blockquote>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">password</code></dt>
+     <dd>
+      <p class="para">
+       La contraseña a utilizar para la derivación.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">salt</code></dt>
+     <dd>
+      <p class="para">
+       El salt a utilizar para la derivación. Este valor debe
+       ser generado aleatoriamente.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">iterations</code></dt>
+     <dd>
+      <p class="para">
+       El número de iteraciones internas para efectuar la
+       derivación.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">length</code></dt>
+     <dd>
+      <p class="para">
+       La longitud de la cadena de salida. Si el parámetro
+       <code class="parameter">binary</code> vale <strong><code><a href="#constant.true">true</a></code></strong>, este parámetro
+       corresponderá a la longitud, en bytes, de la clave derivada; si
+       el parámetro <code class="parameter">binary</code> vale <strong><code><a href="#constant.false">false</a></code></strong>,
+       corresponderá al doble de la longitud, en bytes, de la clave
+       derivada (ya que cada byte de la clave es devuelto sobre
+       dos hexits).
+      </p>
+      <p class="para">
+       Si <code class="literal">0</code> es pasado, la salida completa del algoritmo
+       elegido será utilizada.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">binary</code></dt>
+     <dd>
+      <p class="para">
+       Cuando está definido a <strong><code><a href="#constant.true">true</a></code></strong>, la función mostrará los datos
+       binarios brutos. Si vale <strong><code><a href="#constant.false">false</a></code></strong>, la visualización se hará
+       en minúsculas.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">options</code></dt>
+     <dd>
+      <p class="para">
+       Un array de opciones para los diferentes algoritmos de hash.
+       Actualmente, solo la clave <code class="literal">"seed"</code> es
+       soportada por las variantes MurmurHash.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-691af49e9870a-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una cadena que contiene la clave derivada en minúsculas,
+   a menos que el parámetro <code class="parameter">binary</code> esté
+   posicionado a <strong><code><a href="#constant.true">true</a></code></strong> en cuyo caso, la representación binaria bruta
+   de la clave derivada será devuelta.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-691af49e9870a-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Una excepción <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> si
+   el algoritmo no es conocido, si el parámetro <code class="parameter">iterations</code>
+   es inferior o igual a <code class="literal">0</code>, si la longitud
+   <code class="parameter">length</code> es inferior o igual a <code class="literal">0</code>
+   o si el <code class="parameter">salt</code> es demasiado largo
+   (mayor que <strong><code><a href="#constant.int-max">INT_MAX</a></code></strong><code class="literal"> - 4</code>).
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-691af49e9870a-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        El uso de funciones de hash no criptográficas (adler32,
+        crc32, crc32b, fnv132, fnv1a32, fnv164, fnv1a64, joaat) ha sido desactivado.
+       </td>
+      </tr>
+
+      <tr>
+      <td>8.0.0</td>
+       <td>
+        Levanta una excepción <span class="classname"><a href="#class.valueerror" class="classname">ValueError</a></span> ahora en
+        caso de error.
+        Anteriormente, <strong><code><a href="#constant.false">false</a></code></strong> era devuelto y un mensaje
+        <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong> era emitido.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-691af49e9870a-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-997">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>hash_pbkdf2()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$password </span><span style="color: #007700">= </span><span style="color: #DD0000">"password"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$iterations </span><span style="color: #007700">= </span><span style="color: #0000BB">600000</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">// Genera un salt criptográficamente seguro aleatorio usando la función random_bytes(),<br></span><span style="color: #0000BB">$salt </span><span style="color: #007700">= </span><span style="color: #0000BB">random_bytes</span><span style="color: #007700">(</span><span style="color: #0000BB">16</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$hash </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_pbkdf2</span><span style="color: #007700">(</span><span style="color: #DD0000">"sha256"</span><span style="color: #007700">, </span><span style="color: #0000BB">$password</span><span style="color: #007700">, </span><span style="color: #0000BB">$salt</span><span style="color: #007700">, </span><span style="color: #0000BB">$iterations</span><span style="color: #007700">, </span><span style="color: #0000BB">20</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$hash</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Para binario bruto, $length debe ser dividido por dos para resultados equivalentes<br></span><span style="color: #0000BB">$hash </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_pbkdf2</span><span style="color: #007700">(</span><span style="color: #DD0000">"sha256"</span><span style="color: #007700">, </span><span style="color: #0000BB">$password</span><span style="color: #007700">, </span><span style="color: #0000BB">$salt</span><span style="color: #007700">, </span><span style="color: #0000BB">$iterations</span><span style="color: #007700">, </span><span style="color: #0000BB">10</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">bin2hex</span><span style="color: #007700">(</span><span style="color: #0000BB">$hash</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">string(20) "120fb6cffcf8b32c43e7"
+string(20) "120fb6cffcf8b32c43e7"</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-691af49e9870a-notes">
+  <h3 class="title">Notas</h3>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    El método PBKDF2 puede ser utilizado para hashear contraseñas
+    para el almacenamiento. Sin embargo, debe tenerse en cuenta que
+    la función <span class="function"><a href="#function.password-hash" class="function">password_hash()</a></span> o la función
+    <span class="function"><a href="#function.crypt" class="function">crypt()</a></span> con la constante <strong><code><a href="#constant.crypt-blowfish">CRYPT_BLOWFISH</a></code></strong>
+    es mejor para este uso.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-691af49e9870a-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.password-hash" class="function" rel="rdfs-seeAlso">password_hash()</a> - Crea una clave de hash para una contraseña</span></li>
+    <li><span class="function"><a href="#function.hash-hkdf" class="function" rel="rdfs-seeAlso">hash_hkdf()</a> - Genera una derivación de clave HKDF a partir de una clave de entrada proporcionada</span></li>
+    <li><span class="function"><a href="#function.sodium-crypto-pwhash" class="function" rel="rdfs-seeAlso">sodium_crypto_pwhash()</a> - Deriva una clave a partir de una contraseña, utilizando Argon2</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.hash-update" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_update</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash_update</span> — <span class="dc-title">Añade datos en el contexto de hash activo</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-update-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_update</strong></span>(<span class="methodparam"><span class="type"><a href="#class.hashcontext" class="type HashContext">HashContext</a></span> <code class="parameter">$context</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>): <span class="type"><a href="#language.types.singleton" class="type true">true</a></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-update-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+       Contexto de hash devuelto por <span class="function"><a href="#function.hash-init" class="function">hash_init()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Mensaje que será incluido en la huella de hash.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-update-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+    Retorna siempre <strong><code><a href="#constant.true">true</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-update-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.4.0</td>
+       <td>
+        Posee ahora un tipo de retorno <span class="type"><a href="#language.types.singleton" class="type true">true</a></span> en lugar de
+        <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>.
+       </td>
+      </tr>
+
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        Acepta una <span class="classname"><a href="#class.hashcontext" class="classname">HashContext</a></span> en lugar de un recurso.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-update-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-init" class="function" rel="rdfs-seeAlso">hash_init()</a> - Inicializa un contexto de hachado incremental</span></li>
+    <li><span class="function"><a href="#function.hash-update-file" class="function" rel="rdfs-seeAlso">hash_update_file()</a> - Se añaden datos en un contexto de hash activo a partir de un fichero</span></li>
+    <li><span class="function"><a href="#function.hash-update-stream" class="function" rel="rdfs-seeAlso">hash_update_stream()</a> - Introduce datos en un contexto de hash activo desde un flujo abierto</span></li>
+    <li><span class="function"><a href="#function.hash-final" class="function" rel="rdfs-seeAlso">hash_final()</a> - Finaliza un hachaje incremental y devuelve el resultado de la huella digital</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.hash-update-file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_update_file</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash_update_file</span> — <span class="dc-title">Se añaden datos en un contexto de hash activo a partir de un fichero</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-update-file-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_update_file</strong></span>(<span class="methodparam"><span class="type"><a href="#class.hashcontext" class="type HashContext">HashContext</a></span> <code class="parameter">$context</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$stream_context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-update-file-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+       Contexto de hash devuelto por <span class="function"><a href="#function.hash-init" class="function">hash_init()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       URL que indica la ubicación del fichero que será hasheado; admite las
+       envolturas <span class="function"><a href="#function.fopen" class="function">fopen()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">stream_context</code></dt>
+     <dd>
+      <p class="para">
+       Contexto de flujo devuelto por
+       <span class="function"><a href="#function.stream-context-create" class="function">stream_context_create()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-update-file-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-update-file-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">stream_context</code> ahora es nullable.
+       </td>
+      </tr>
+
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        Acepta una <span class="classname"><a href="#class.hashcontext" class="classname">HashContext</a></span> en lugar de un recurso.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-update-file-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-init" class="function" rel="rdfs-seeAlso">hash_init()</a> - Inicializa un contexto de hachado incremental</span></li>
+    <li><span class="function"><a href="#function.hash-update" class="function" rel="rdfs-seeAlso">hash_update()</a> - Añade datos en el contexto de hash activo</span></li>
+    <li><span class="function"><a href="#function.hash-update-stream" class="function" rel="rdfs-seeAlso">hash_update_stream()</a> - Introduce datos en un contexto de hash activo desde un flujo abierto</span></li>
+    <li><span class="function"><a href="#function.hash-final" class="function" rel="rdfs-seeAlso">hash_final()</a> - Finaliza un hachaje incremental y devuelve el resultado de la huella digital</span></li>
+    <li><span class="function"><a href="#function.hash-file" class="function" rel="rdfs-seeAlso">hash_file()</a> - Genera un valor de hash utilizando el contenido de un fichero dado</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.hash-update-stream" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">hash_update_stream</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.1.2, PHP 7, PHP 8, PECL hash &gt;= 1.1)</p><p class="refpurpose"><span class="refname">hash_update_stream</span> — <span class="dc-title">Introduce datos en un contexto de hash activo desde un flujo abierto</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.hash-update-stream-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>hash_update_stream</strong></span>(<span class="methodparam"><span class="type"><a href="#class.hashcontext" class="type HashContext">HashContext</a></span> <code class="parameter">$context</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$stream</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$length</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.hash-update-stream-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+       Contexto de hash devuelto por <span class="function"><a href="#function.hash-init" class="function">hash_init()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">stream</code></dt>
+     <dd>
+      <p class="para">
+       Gestor de fichero abierto como el devuelto por cualquier función de creación de flujos.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">length</code></dt>
+     <dd>
+      <p class="para">
+       Número máximo de caracteres a copiar desde <code class="parameter">stream</code>
+       al contexto de hash.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.hash-update-stream-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Número real de bytes añadidos al contexto de hash desde <code class="parameter">stream</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.hash-update-stream-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        Acepta <span class="classname"><a href="#class.hashcontext" class="classname">HashContext</a></span> en lugar de resource.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.hash-update-stream-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-998">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>hash_update_stream()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="annotation-interactive phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$fp </span><span style="color: #007700">= </span><span style="color: #0000BB">tmpfile</span><span style="color: #007700">();<br></span><span style="color: #0000BB">fwrite</span><span style="color: #007700">(</span><span style="color: #0000BB">$fp</span><span style="color: #007700">, </span><span style="color: #DD0000">'jumped over the lazy dog.'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">rewind</span><span style="color: #007700">(</span><span style="color: #0000BB">$fp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$ctx </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_init</span><span style="color: #007700">(</span><span style="color: #DD0000">'sha256'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">hash_update</span><span style="color: #007700">(</span><span style="color: #0000BB">$ctx</span><span style="color: #007700">, </span><span style="color: #DD0000">'The quick brown fox '</span><span style="color: #007700">);<br></span><span style="color: #0000BB">hash_update_stream</span><span style="color: #007700">(</span><span style="color: #0000BB">$ctx</span><span style="color: #007700">, </span><span style="color: #0000BB">$fp</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">hash_final</span><span style="color: #007700">(</span><span style="color: #0000BB">$ctx</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="annotation-interactive examplescode"><pre class="examplescode">68b1282b91de2c054c36629cb8dd447f12f096d3e3c587978dc2248444633483</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.hash-update-stream-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.hash-init" class="function" rel="rdfs-seeAlso">hash_init()</a> - Inicializa un contexto de hachado incremental</span></li>
+    <li><span class="function"><a href="#function.hash-update" class="function" rel="rdfs-seeAlso">hash_update()</a> - Añade datos en el contexto de hash activo</span></li>
+    <li><span class="function"><a href="#function.hash-final" class="function" rel="rdfs-seeAlso">hash_final()</a> - Finaliza un hachaje incremental y devuelve el resultado de la huella digital</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.hash">hash</a> — Genera un valor de hachado (huella digital)</li><li><a href="#function.hash-algos">hash_algos</a> — Devuelve una lista de los algoritmos de hash registrados</li><li><a href="#function.hash-copy">hash_copy</a> — Copia un contexto de hachado</li><li><a href="#function.hash-equals">hash_equals</a> — Comparación de strings resistente a ataques temporales</li><li><a href="#function.hash-file">hash_file</a> — Genera un valor de hash utilizando el contenido de un fichero dado</li><li><a href="#function.hash-final">hash_final</a> — Finaliza un hachaje incremental y devuelve el resultado de la huella digital</li><li><a href="#function.hash-hkdf">hash_hkdf</a> — Genera una derivación de clave HKDF a partir de una clave de entrada proporcionada</li><li><a href="#function.hash-hmac">hash_hmac</a> — Genera un valor de clave de hash utilizando el método HMAC</li><li><a href="#function.hash-hmac-algos">hash_hmac_algos</a> — Devuelve una lista de algoritmos de hash registrados adecuados para hash_hmac</li><li><a href="#function.hash-hmac-file">hash_hmac_file</a> — Genera un valor de clave de hash utilizando el método HMAC y el contenido de un fichero dado</li><li><a href="#function.hash-init">hash_init</a> — Inicializa un contexto de hachado incremental</li><li><a href="#function.hash-update">hash_update</a> — Añade datos en el contexto de hash activo</li><li><a href="#function.hash-update-file">hash_update_file</a> — Se añaden datos en un contexto de hash activo a partir de un fichero</li><li><a href="#function.hash-update-stream">hash_update_stream</a> — Introduce datos en un contexto de hash activo desde un flujo abierto</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.hash">Introducción</a></li><li><a href="#hash.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#hash.installation">Instalación</a></li><li><a href="#hash.resources">Tipos de recursos</a></li></ul></li><li><a href="#hash.constants">Constantes predefinidas</a></li><li><a href="#class.hashcontext">HashContext</a> — La clase HashContext<ul class="chunklist chunklist_book chunklist_children"><li><a href="#hashcontext.construct">HashContext::__construct</a> — Constructor privado para prohibir la instanciación directa</li><li><a href="#hashcontext.serialize">HashContext::__serialize</a> — Serializa el objeto HashContext</li><li><a href="#hashcontext.unserialize">HashContext::__unserialize</a> — Deserializa el parámetro data en un objeto HashContext</li></ul></li><li><a href="#ref.hash">hash_pbkdf2</a> — Funciones de hash<ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.hash">hash</a> — Genera un valor de hachado (huella digital)</li><li><a href="#function.hash-algos">hash_algos</a> — Devuelve una lista de los algoritmos de hash registrados</li><li><a href="#function.hash-copy">hash_copy</a> — Copia un contexto de hachado</li><li><a href="#function.hash-equals">hash_equals</a> — Comparación de strings resistente a ataques temporales</li><li><a href="#function.hash-file">hash_file</a> — Genera un valor de hash utilizando el contenido de un fichero dado</li><li><a href="#function.hash-final">hash_final</a> — Finaliza un hachaje incremental y devuelve el resultado de la huella digital</li><li><a href="#function.hash-hkdf">hash_hkdf</a> — Genera una derivación de clave HKDF a partir de una clave de entrada proporcionada</li><li><a href="#function.hash-hmac">hash_hmac</a> — Genera un valor de clave de hash utilizando el método HMAC</li><li><a href="#function.hash-hmac-algos">hash_hmac_algos</a> — Devuelve una lista de algoritmos de hash registrados adecuados para hash_hmac</li><li><a href="#function.hash-hmac-file">hash_hmac_file</a> — Genera un valor de clave de hash utilizando el método HMAC y el contenido de un fichero dado</li><li><a href="#function.hash-init">hash_init</a> — Inicializa un contexto de hachado incremental</li><li><a href="#function.hash-update">hash_update</a> — Añade datos en el contexto de hash activo</li><li><a href="#function.hash-update-file">hash_update_file</a> — Se añaden datos en un contexto de hash activo a partir de un fichero</li><li><a href="#function.hash-update-stream">hash_update_stream</a> — Introduce datos en un contexto de hash activo desde un flujo abierto</li></ul></li></ul></div>

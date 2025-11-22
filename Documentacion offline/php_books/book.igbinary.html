@@ -1,0 +1,458 @@
+<div id="book.igbinary" class="book"><hr>
+ 
+ <h1 class="title">Igbinary</h1>
+ 
+
+ <div id="intro.igbinary" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="simpara">
+   Igbinary es una mejora del proceso estándar de serialización de datos de PHP que no requiere
+   ningún cambio de configuración.
+   En lugar de la representación textual, consumidora de tiempo y espacio, utilizada por la función
+   <span class="function"><a href="#function.serialize" class="function">serialize()</a></span> de PHP, igbinary almacena las estructuras de datos de PHP en un formato binario
+   compacto.
+   Los ahorros de memoria son significativos cuando memcached, APCu u otras herramientas de almacenamiento similares
+   basadas en memoria son utilizadas para los datos serializados.
+   Las reducciones características de los requisitos de almacenamiento son de aproximadamente 50%.
+   El porcentaje exacto depende de los datos.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+<div id="igbinary.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#igbinary.installation">Instalación</a></li><li><a href="#igbinary.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ <div id="igbinary.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   Esta extensión <a href="https://pecl.php.net/" class="link external">» PECL</a> no está integrada en PHP.
+  </p>
+  <p class="para">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/igbinary" class="link external">» https://pecl.php.net/package/igbinary</a>.
+  </p>
+  <p class="para">
+   Los binarios Windows
+        (los archivos <abbr title="Dynamic Link Library">DLL</abbr>)
+        para esta extensión <abbr title="PHP Extension and Application Repository">PECL</abbr> están disponibles en el sitio web PECL.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+
+<div id="igbinary.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Igbinary Opciones de configuración</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.igbinary.compact-strings" class="link">igbinary.compact_strings</a></td>
+      <td>1</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+  <table class="doctable table">
+   <caption><strong>Opciones de configuración de sesión que afectan al comportamiento de igbinary</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.igbinary.save-handler" class="link">session.save_handler</a></td>
+      <td>"files"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+  Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+ <p class="para">
+ </p><dl>
+  
+   <dt id="ini.igbinary.compact-strings">
+    <code class="parameter">igbinary.compact_strings</code>
+    <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Activa o no el compactado de strings duplicados.
+     El valor por omisión es On.
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.igbinary.save-handler">
+    <code class="parameter">session.save_handler</code>
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Igbinary es utilizado como gestor de sesión al establecer el valor de esta opción a <code class="literal">igbinary</code>.
+    </p>
+   </dd>
+  
+
+  </dl>
+ 
+</div>
+<hr>
+
+
+
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="ref.igbinary" class="reference"><hr>
+ <h1 class="title">Funciones de Igbinary</h1>
+
+ 
+
+
+<div id="function.igbinary-serialize" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">igbinary_serialize</h1>
+  <p class="verinfo">(PECL igbinary &gt;= 1.1.1)</p><p class="refpurpose"><span class="refname">igbinary_serialize</span> — <span class="dc-title">Genera una representación binaria almacenable y compacta de un valor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.igbinary-serialize-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>igbinary_serialize</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Genera una representación almacenable de un valor.
+  </p>
+  <p class="para">
+   Es una técnica práctica para almacenar o pasar valores PHP entre scripts, sin perder su estructura ni su tipo.
+  </p>
+  <p class="para">
+   Para reconvertir la cadena sérializada en un valor PHP,
+   la función <span class="function"><a href="#function.igbinary-unserialize" class="function">igbinary_unserialize()</a></span> puede ser utilizada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.igbinary-serialize-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       El valor a serializar. <span class="function"><strong>igbinary_serialize()</strong></span>
+       gestiona todos los tipos excepto los <span class="type">recurso</span>s y ciertos <span class="type">objeto</span>s (confiere la nota a continuación).
+       Incluso los <span class="type"><a href="#language.types.array" class="type array">array</a></span>x que contienen referencias a sí mismos pueden ser serializados con <span class="function"><strong>igbinary_serialize()</strong></span>.
+       Las referencias circulares dentro de un <span class="type"><a href="#language.types.array" class="type array">array</a></span> o de un <span class="type"><a href="#language.types.object" class="type object">object</a></span> a serializar serán igualmente almacenadas.
+       Cualquier otra referencia será perdida.
+      </p>
+      <p class="para">
+       Al serializar objetos, igbinary intentará llamar a los métodos mágicos
+       <a href="#object.serialize" class="link">__serialize()</a> o
+       <a href="#object.sleep" class="link">__sleep()</a> antes de la serialización.
+       Esto permitirá al objeto realizar una limpieza de último momento, etc., antes de ser serializado.
+       De igual manera, cuando el objeto es restaurado utilizando la función
+       <span class="function"><a href="#function.igbinary-unserialize" class="function">igbinary_unserialize()</a></span>, uno de los métodos mágicos <a href="#object.unserialize" class="link">__unserialize()</a>
+       o <a href="#object.wakeup" class="link">__wakeup()</a> es llamado.
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        Los atributos privados de un objeto tendrán el nombre de la clase prefijado al nombre del atributo;
+        los atributos protegidos serán prefijados con un asterisco <code class="literal">'*'</code>.
+        Estos valores prefijados tienen caracteres nulos en ambos lados.
+       </p>
+      </blockquote>
+     </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.igbinary-serialize-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna una cadena de caracteres que contiene una representación del parámetro <code class="parameter">value</code>
+   en forma de flujo de bytes que puede ser almacenado en cualquier lugar.
+  </p>
+  <p class="para">
+   Es de notar que es una cadena binaria que puede incluir caracteres nulos, y debe por lo tanto ser almacenada y gestionada como tal.
+   Por ejemplo, en una base de datos, la salida de la función <span class="function"><strong>igbinary_serialize()</strong></span>
+   debe, en general, ser almacenada en un campo de tipo <code class="literal">BLOB</code>
+   en lugar de en un campo de tipo <code class="literal">CHAR</code> o <code class="literal">TEXT</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.igbinary-serialize-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3708">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>igbinary_serialize()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$ser </span><span style="color: #007700">= </span><span style="color: #0000BB">igbinary_serialize</span><span style="color: #007700">([</span><span style="color: #DD0000">'test'</span><span style="color: #007700">, </span><span style="color: #DD0000">'test'</span><span style="color: #007700">]);<br>echo </span><span style="color: #0000BB">urlencode</span><span style="color: #007700">(</span><span style="color: #0000BB">$ser</span><span style="color: #007700">), </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">var_export</span><span style="color: #007700">(</span><span style="color: #0000BB">igbinary_unserialize</span><span style="color: #007700">(</span><span style="color: #0000BB">$ser</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">%00%00%00%02%14%02%06%00%11%04test%06%01%0E%00
+array (
+  0 =&gt; 'test',
+  1 =&gt; 'test',
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.igbinary-serialize-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Es de notar que muchos objetos internos de PHP no pueden ser serializados. Sin embargo, aquellos que pueden
+    implementan ya sea la interfaz <span class="interfacename"><a href="#class.serializable" class="interfacename">Serializable</a></span> o los métodos mágicos
+    <a href="#object.serialize" class="link">__serialize()</a>/<a href="#object.unserialize" class="link">__unserialize()</a>
+    o <a href="#object.sleep" class="link">__sleep()</a>/<a href="#object.wakeup" class="link">__wakeup()</a>.
+    Si una clase interna no cumple ninguna de estas condiciones, no puede ser serializada de manera fiable.
+   </p>
+   <p class="para">
+    Existen excepciones históricas a esta regla, donde objetos internos pueden ser serializados
+    sin implementar ni la interfaz ni los métodos mágicos.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.igbinary-serialize-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.serialize" class="function" rel="rdfs-seeAlso">serialize()</a> - Genera una representación almacenable de un valor</span></li>
+    <li><span class="function"><a href="#function.igbinary-unserialize" class="function" rel="rdfs-seeAlso">igbinary_unserialize()</a> - Crea una variable PHP a partir de un valor serializado por igbinary_serialize</span></li>
+    <li><span class="function"><a href="#function.var-export" class="function" rel="rdfs-seeAlso">var_export()</a> - Devuelve el código PHP utilizado para generar una variable</span></li>
+    <li><span class="function"><a href="#function.json-encode" class="function" rel="rdfs-seeAlso">json_encode()</a> - Retorna la representación JSON de un valor</span></li>
+    <li><a href="#language.oop5.serialization" class="link">Serialización de objetos</a></li>
+    <li><a href="#object.sleep" class="link">__sleep()</a></li>
+    <li><a href="#object.wakeup" class="link">__wakeup()</a></li>
+    <li><a href="#object.serialize" class="link">__serialize()</a></li>
+    <li><a href="#object.unserialize" class="link">__unserialize()</a></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.igbinary-unserialize" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">igbinary_unserialize</h1>
+  <p class="verinfo">(PECL igbinary &gt;= 1.1.1)</p><p class="refpurpose"><span class="refname">igbinary_unserialize</span> — <span class="dc-title">
+   Crea una variable PHP a partir de un valor serializado por <span class="function"><a href="#function.igbinary-serialize" class="function">igbinary_serialize()</a></span>
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.igbinary-unserialize-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>igbinary_unserialize</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$str</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="simpara">
+   <span class="function"><strong>igbinary_unserialize()</strong></span> toma una variable serializada por
+   <span class="function"><a href="#function.igbinary-serialize" class="function">igbinary_serialize()</a></span> y la convierte en una variable PHP.
+  </p>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    Las entradas de usuario no confiables no deben pasarse a la función
+    <span class="function"><strong>igbinary_unserialize()</strong></span>.
+    La deserialización puede resultar en la ejecución de código cargado y ejecutado durante la instanciación
+    y el autochargado de objetos, y así, un usuario malintencionado puede ser capaz de explotar
+    este comportamiento.
+    En su lugar, un estándar de intercambio seguro como JSON (a través de <span class="function"><a href="#function.json-decode" class="function">json_decode()</a></span> y
+    <span class="function"><a href="#function.json-encode" class="function">json_encode()</a></span>) debe usarse para pasar datos serializados al usuario.
+   </p>
+   <p class="para">
+    Si es indispensable deserializar datos serializados provenientes del exterior, la función
+    <span class="function"><a href="#function.hash-hmac" class="function">hash_hmac()</a></span> puede usarse para validar los datos.
+    Es importante verificar que nadie haya alterado los datos.
+   </p>
+  </div>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    El protocolo de serialización por igbinary no permite distinguir entre los diferentes grupos de
+    referencias. Todas las referencias PHP a un valor dado son vistas como miembros de un mismo
+    grupo durante la deserialización, incluso si pertenecían a grupos diferentes antes de la
+    serialización.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.igbinary-unserialize-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">str</code></dt>
+    <dd>
+     <p class="para">
+      La cadena serializada, generada por <span class="function"><a href="#function.igbinary-serialize" class="function">igbinary_serialize()</a></span>.
+     </p>
+     <p class="para">
+      Si la variable deserializada es un <span class="type"><a href="#language.types.object" class="type object">object</a></span>, después de reconstruirla con éxito,
+      PHP intentará automáticamente llamar a los métodos mágicos
+      <a href="#object.unserialize" class="link">__unserialize()</a> o
+      <a href="#object.wakeup" class="link">__wakeup()</a> (si alguno de ellos existe).
+     </p>
+     <p class="para">
+      </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+       <strong>
+        La directiva <a href="#ini.unserialize-callback-func" class="link">unserialize_callback_func</a>
+       </strong><br>
+       </p><p class="para">
+        La función de retrollamada especificada en la directiva
+        <a href="#ini.unserialize-callback-func" class="link">unserialize_callback_func</a>
+        es llamada cuando una clase no definida es deserializada.
+        Si ninguna función de retrollamada es especificada, el objeto será instanciado
+        como <span class="classname"><a href="#class.php-incomplete-class" class="classname">__PHP_Incomplete_Class</a></span>.
+       </p>
+      </blockquote>
+     
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.igbinary-unserialize-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El valor convertido es retornado por la función, y puede ser de tipo <span class="type"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></span>,
+   <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span></span>, <span class="type"><span class="type"><a href="#language.types.float" class="type float">float</a></span></span>, <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span></span>,
+   <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span></span>, <span class="type"><span class="type"><a href="#language.types.object" class="type object">object</a></span></span>, o de tipo <span class="type"><a href="#language.types.null" class="type null">null</a></span>.
+  </p>
+  <p class="para">
+   Si la cadena pasada no puede ser deserializada, esta función retorna <strong><code><a href="#constant.false">false</a></code></strong>  y
+   un diagnóstico <strong><code><a href="#constant.e-notice">E_NOTICE</a></code></strong> o <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong> es emitido.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.igbinary-unserialize-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Los objetos pueden lanzar un <span class="classname"><a href="#class.throwable" class="classname">Throwable</a></span> en su gestor de deserialización.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.igbinary-unserialize-notes">
+  <h3 class="title">Notas</h3>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    <strong><code><a href="#constant.null">null</a></code></strong> o <strong><code><a href="#constant.false">false</a></code></strong> es retornado ya sea en caso de error o después de deserializar
+    el resultado de la serialización de <strong><code><a href="#constant.null">null</a></code></strong> o <strong><code><a href="#constant.false">false</a></code></strong>. Es posible discriminar entre estos dos casos
+    especiales comparando el valor del parámetro <code class="parameter">str</code> con el resultado de la ejecución
+    de <code class="code">igbinary_serialize(null)</code> o de <code class="code">igbinary_serialize(false)</code>
+    o bien atrapando un diagnóstico <strong><code><a href="#constant.e-notice">E_NOTICE</a></code></strong>.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.igbinary-unserialize-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.unserialize" class="function" rel="rdfs-seeAlso">unserialize()</a> - Crea una variable PHP a partir de un valor serializado</span></li>
+    <li><span class="function"><a href="#function.json-encode" class="function" rel="rdfs-seeAlso">json_encode()</a> - Retorna la representación JSON de un valor</span></li>
+    <li><span class="function"><a href="#function.json-decode" class="function" rel="rdfs-seeAlso">json_decode()</a> - Decodifica una cadena JSON</span></li>
+    <li><span class="function"><a href="#function.hash-hmac" class="function" rel="rdfs-seeAlso">hash_hmac()</a> - Genera un valor de clave de hash utilizando el método HMAC</span></li>
+    <li><span class="function"><a href="#function.igbinary-serialize" class="function" rel="rdfs-seeAlso">igbinary_serialize()</a> - Genera una representación binaria almacenable y compacta de un valor</span></li>
+    <li><a href="#language.oop5.autoload" class="link">Autocargado de clases</a></li>
+    <li><a href="#ini.unserialize-callback-func" class="link">unserialize_callback_func</a></li>
+    <li><a href="#object.wakeup" class="link">__wakeup()</a></li>
+    <li><a href="#object.serialize" class="link">__serialize()</a></li>
+    <li><a href="#object.unserialize" class="link">__unserialize()</a></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.igbinary-serialize">igbinary_serialize</a> — Genera una representación binaria almacenable y compacta de un valor</li><li><a href="#function.igbinary-unserialize">igbinary_unserialize</a> — Crea una variable PHP a partir de un valor serializado por igbinary_serialize</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.igbinary">Introducción</a></li><li><a href="#igbinary.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#igbinary.installation">Instalación</a></li><li><a href="#igbinary.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#ref.igbinary">Funciones de Igbinary</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.igbinary-serialize">igbinary_serialize</a> — Genera una representación binaria almacenable y compacta de un valor</li><li><a href="#function.igbinary-unserialize">igbinary_unserialize</a> — Crea una variable PHP a partir de un valor serializado por igbinary_serialize</li></ul></li></ul></div>

@@ -1,0 +1,1996 @@
+<div id="book.xdiff" class="book"><hr>
+ 
+ <h1 class="title">xdiff</h1>
+
+ 
+ <div id="intro.xdiff" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   La extensión xdiff permite crear y aplicar archivos parche que contienen
+   diferencias entre diferentes revisiones de archivos.
+  </p>
+  <p class="para">
+   Esta extensión soporta dos modos de funcionamiento - sobre cadenas y sobre archivos, así como
+   dos formatos de parches diferentes - unificado y binario. Los parches unificados son excelentes
+   para archivos de texto, ya que son legibles y fáciles de revisar. Para los archivos binarios como
+   archivos o imágenes, los parches binarios serán la opción adecuada, ya que ellos son binary safe y
+   manejan caracteres no imprimibles.
+  </p>
+  <p class="para">
+   A partir de la versión 1.5.0 hay dos diferentes conjuntos de funciones para la generación de
+   parches binarios. Las nuevas funciones - <span class="function"><a href="#function.xdiff-string-rabdiff" class="function">xdiff_string_rabdiff()</a></span>
+   <span class="function"><a href="#function.xdiff-file-rabdiff" class="function">xdiff_file_rabdiff()</a></span> generan salidas compatibles con funciones más antiguas
+   pero suelen ser más rápidas y generan resultados más pequeños. Para más detalles sobre los métodos de
+   la generación de parches binarios y diferencias entre ellos, por favor consulte la website
+   <a href="http://www.xmailserver.org/xdiff-lib.html" class="link external">» libxdiff</a>.
+  </p>
+  <p class="para">
+   Esta extensión utiliza libxdiff para implementar estas funciones. Consulte
+   <a href="http://www.xmailserver.org/xdiff-lib.html" class="link external">» http://www.xmailserver.org/xdiff-lib.html</a> para mayor información.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+<div id="xdiff.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#xdiff.requirements">Requerimientos</a></li><li><a href="#xdiff.installation">Instalación</a></li></ul>
+
+
+ 
+ <div id="xdiff.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Para usar xdiff, es necesario contar con libxdiff instalado, disponible
+   en la web de libxdiff <a href="http://www.xmailserver.org/xdiff-lib.html" class="link external">» http://www.xmailserver.org/xdiff-lib.html</a>.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Para que estas funciones tengan en cuenta la directiva memory_limit es necesario contar con, al menos, libxdiff 0.7.
+   </p>
+  </blockquote>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="xdiff.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/xdiff" class="link external">» https://pecl.php.net/package/xdiff</a>.
+ </p>
+ <p class="para">
+  Los binarios Windows
+        (los archivos <abbr title="Dynamic Link Library">DLL</abbr>)
+        para esta extensión <abbr title="PHP Extension and Application Repository">PECL</abbr> están disponibles en el sitio web PECL.
+ </p>
+</div>
+<hr>
+
+
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+<div id="xdiff.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.xdiff-patch-normal">
+    <strong><code><a href="#constant.xdiff-patch-normal">XDIFF_PATCH_NORMAL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Este indicador indica que las funciones <span class="function"><a href="#function.xdiff-string-patch" class="function">xdiff_string_patch()</a></span> y
+     <span class="function"><a href="#function.xdiff-file-patch" class="function">xdiff_file_patch()</a></span> deben crear el resultado de
+     aplicar el parche al contenido original, creando así una versión más reciente del archivo. Este es el
+     modo por defecto de funcionamiento.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.xdiff-patch-reverse">
+    <strong><code><a href="#constant.xdiff-patch-reverse">XDIFF_PATCH_REVERSE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Este indicador indica que las funciones <span class="function"><a href="#function.xdiff-string-patch" class="function">xdiff_string_patch()</a></span> y
+     <span class="function"><a href="#function.xdiff-file-patch" class="function">xdiff_file_patch()</a></span> deben crear el resultado de
+     revertir el parche de modificación desde el nuevo contenido, creando así la versión original.
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="ref.xdiff" class="reference"><hr>
+ <h1 class="title">Funciones de xdiff</h1>
+
+ 
+
+
+
+
+
+<div id="function.xdiff-file-bdiff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_file_bdiff</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 1.5.0)</p><p class="refpurpose"><span class="refname">xdiff_file_bdiff</span> — <span class="dc-title">Realiza una diferencia binaria de dos archivos</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-file-bdiff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_file_bdiff</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dest</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace una diferencia binaria de dos archivos y almacena el resultado en un archivo de revisión.
+   Esta función trabaja con archivos de texto y binarios. El archivo parche
+   resultante puede ser aplicado posteriormente utilizando <span class="function"><a href="#function.xdiff-file-bpatch" class="function">xdiff_file_bpatch()</a></span>/<span class="function"><a href="#function.xdiff-string-bpatch" class="function">xdiff_string_bpatch()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-file-bdiff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el primer archivo. Este archivo actúa como "viejo" archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el segundo archivo. Este archivo actúa como "nuevo" archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dest</code></dt>
+     <dd>
+      <p class="para">
+       Ruta de el archivo parche resultante. El archivo resultante contiene diferencias
+       entre los archivos "viejo" y "nuevo". Este será en formato binario y no leible por humanos.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-file-bdiff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-file-bdiff-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2447">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_file_bdiff()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código hace una diferencia binaria de dos archivos.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script_1.0.tgz'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$new_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script_1.1.tgz'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">xdiff_file_bdiff</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_version</span><span style="color: #007700">, </span><span style="color: #0000BB">$new_version</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_script.bdiff'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.xdiff-file-bdiff-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Ambos archivos serán cargados en memoria así que asegúrese que el valor de memory_limit es
+    lo suficientemente alto.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-file-bdiff-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-file-bpatch" class="function" rel="rdfs-seeAlso">xdiff_file_bpatch()</a> - Parchea un archivo con una diferencia binaria</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-file-bdiff-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_file_bdiff_size</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 1.5.0)</p><p class="refpurpose"><span class="refname">xdiff_file_bdiff_size</span> — <span class="dc-title">Lee el tamaño de un archivo creado tras aplicar una diferencia binaria</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-file-bdiff-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_file_bdiff_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$file</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el tamaño de un archivo resultado que se creó después de aplicar el parche binario desde el archivo
+   <code class="parameter">file</code> a el archivo original.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-file-bdiff-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">file</code></dt>
+     <dd>
+      <p class="para">
+       La ruta al parche binario creado por la función <span class="function"><a href="#function.xdiff-string-bdiff" class="function">xdiff_string_bdiff()</a></span> o
+       <span class="function"><a href="#function.xdiff-string-rabdiff" class="function">xdiff_string_rabdiff()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-file-bdiff-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tamaño del archivo que se creará.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-file-bdiff-size-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2448">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_file_bdiff_size()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código lee el tamaño de un archivo que se creará
+     tras realizar una diferencia binaria.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$length </span><span style="color: #007700">= </span><span style="color: #0000BB">xdiff_string_bdiff_size</span><span style="color: #007700">(</span><span style="color: #DD0000">'file.bdiff'</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">"El archivo resultante tendrá </span><span style="color: #0000BB">$length</span><span style="color: #DD0000"> bytes de longitud"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-file-bdiff-size-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-file-bdiff" class="function" rel="rdfs-seeAlso">xdiff_file_bdiff()</a> - Realiza una diferencia binaria de dos archivos</span></li>
+    <li><span class="function"><a href="#function.xdiff-file-rabdiff" class="function" rel="rdfs-seeAlso">xdiff_file_rabdiff()</a> - Hacer una diferencia binaria de dos archivos utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</span></li>
+    <li><span class="function"><a href="#function.xdiff-file-bpatch" class="function" rel="rdfs-seeAlso">xdiff_file_bpatch()</a> - Parchea un archivo con una diferencia binaria</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-file-bpatch" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_file_bpatch</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 1.5.0)</p><p class="refpurpose"><span class="refname">xdiff_file_bpatch</span> — <span class="dc-title">Parchea un archivo con una diferencia binaria</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-file-bpatch-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_file_bpatch</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$patch</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dest</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Parchea un <code class="parameter">file</code> con un
+   <code class="parameter">patch</code> binario y almacena el resultado en un archivo <code class="parameter">dest</code>.
+   Esta función acepta parches creados tanto a través de la funciones <span class="function"><a href="#function.xdiff-file-bdiff" class="function">xdiff_file_bdiff()</a></span>
+   y <span class="function"><a href="#function.xdiff-file-rabdiff" class="function">xdiff_file_rabdiff()</a></span> como de sus equivalentes de cadena.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-file-bpatch-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">file</code></dt>
+     <dd>
+      <p class="para">
+       El archivo original.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">patch</code></dt>
+     <dd>
+      <p class="para">
+       El archivo parche binario.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dest</code></dt>
+     <dd>
+      <p class="para">
+       La ruta del archivo resultante.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-file-bpatch-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-file-bpatch-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2449">
+    <p><strong>Ejemplo #1 <span class="function"><strong>xdiff_file_bpatch()</strong></span> example</strong></p>
+    <div class="example-contents"><p>
+     El siguiente código aplica una diferencia binaria a un archivo.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'archive-1.0.tgz'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$patch </span><span style="color: #007700">= </span><span style="color: #DD0000">'archive.bpatch'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">xdiff_file_bpatch</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_version</span><span style="color: #007700">, </span><span style="color: #0000BB">$patch</span><span style="color: #007700">, </span><span style="color: #DD0000">'archive-1.1.tgz'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$result</span><span style="color: #007700">) {<br>   echo </span><span style="color: #DD0000">"Archivo parcheado"</span><span style="color: #007700">;<br>} else {<br>   echo </span><span style="color: #DD0000">"El archivo no pudo ser parcheado"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.xdiff-file-bpatch-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Ambos archivos (<code class="parameter">file</code> y <code class="parameter">patch</code>)
+    serán cargados en memoria así que asegúrese que el valor de memory_limit es
+    lo suficientemente alto.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-file-bpatch-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-file-bdiff" class="function" rel="rdfs-seeAlso">xdiff_file_bdiff()</a> - Realiza una diferencia binaria de dos archivos</span></li>
+    <li><span class="function"><a href="#function.xdiff-file-rabdiff" class="function" rel="rdfs-seeAlso">xdiff_file_rabdiff()</a> - Hacer una diferencia binaria de dos archivos utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-file-diff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_file_diff</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_file_diff</span> — <span class="dc-title">Hacer un diff unificado de dos archivos</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-file-diff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_file_diff</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_file</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_file</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dest</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$context</code><span class="initializer"> = 3</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$minimal</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace un diff unificado que contiene las diferencias entre <code class="parameter">old_file</code> y
+   <code class="parameter">new_file</code> y almacena este en el archivo <code class="parameter">dest</code>. El
+   archivo resultante es legible. Un parámetro opcional <code class="parameter">context</code>
+   especifica el número de líneas de contexto que hay que añadir alrededor de cada cambio.
+   Establecer el parámetro <code class="parameter">minimal</code> a true dará como resultado de salida el archivo
+   parche más corto posible (puede tomar algo de tiempo).
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-file-diff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el primer archivo. Este archivo actúa como "viejo" archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el segundo archivo. Este archivo actúa como "nuevo" archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dest</code></dt>
+     <dd>
+      <p class="para">
+       Ruta del archivo parche resultante.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+       Indica el número de líneas de contexto que desea incluir en el resultado
+       diff.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">minimal</code></dt>
+     <dd>
+      <p class="para">
+       Establezca este parámetro a <strong><code><a href="#constant.true">true</a></code></strong> si desea reducir el tamaño del resultado
+       (puede tomar algo de tiempo).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-file-diff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-file-diff-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2450">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_file_diff()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código hace un diff unificado de dos archivos php con una longitud de contexto de 2.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script.php'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$new_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_new_script.php'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">xdiff_file_diff</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_version</span><span style="color: #007700">, </span><span style="color: #0000BB">$new_version</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_script.diff'</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.xdiff-file-diff-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta función no funciona bien con archivos binarios. Para hacer una diferencia binaria de
+    archivos utilice la <span class="function"><a href="#function.xdiff-file-bdiff" class="function">xdiff_file_bdiff()</a></span>/<span class="function"><a href="#function.xdiff-file-rabdiff" class="function">xdiff_file_rabdiff()</a></span>.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-file-diff-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-file-patch" class="function" rel="rdfs-seeAlso">xdiff_file_patch()</a> - Parchea un archivo con un diff unificado</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-file-diff-binary" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_file_diff_binary</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_file_diff_binary</span> — <span class="dc-title">Alias de <span class="function"><a href="#function.xdiff-file-bdiff" class="function">xdiff_file_bdiff()</a></span></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-file-diff-binary-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_file_diff_binary</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dest</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace una diferencia binaria de dos archivos y almacena el resultado en un archivo de revisión.
+   Esta función trabaja con archivos de texto y binarios. El archivo parche resultante
+   puede ser posteriormente aplicado con <span class="function"><a href="#function.xdiff-file-bpatch" class="function">xdiff_file_bpatch()</a></span>.
+  </p>
+  <p class="para">
+   Desde la versión 1.5.0 de esta función es un alias de <span class="function"><a href="#function.xdiff-file-bdiff" class="function">xdiff_file_bdiff()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-file-diff-binary-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el primer archivo. Este archivo actúa como "viejo" archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el segundo archivo. Este archivo actúa como "nuevo" archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dest</code></dt>
+     <dd>
+      <p class="para">
+       Ruta de el archivo parche resultante. El archivo resultante contiene diferencias
+       entre los archivos "viejo" y "nuevo". Este será en formato binario y no legible por humanos.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-file-diff-binary-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-file-diff-binary-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2451">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_file_diff_binary()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código hace una diferencia binaria de dos archivos.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script_1.0.tgz'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$new_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script_1.1.tgz'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">xdiff_file_diff_binary</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_version</span><span style="color: #007700">, </span><span style="color: #0000BB">$new_version</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_script.bdiff'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.xdiff-file-diff-binary-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Ambos archivos serán cargados en memoria así que asegúrese que el valor de memory_limit es
+    lo suficientemente alto.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-file-diff-binary-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-file-bdiff" class="function" rel="rdfs-seeAlso">xdiff_file_bdiff()</a> - Realiza una diferencia binaria de dos archivos</span></li>
+    <li><span class="function"><a href="#function.xdiff-file-bpatch" class="function" rel="rdfs-seeAlso">xdiff_file_bpatch()</a> - Parchea un archivo con una diferencia binaria</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-file-merge3" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_file_merge3</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_file_merge3</span> — <span class="dc-title">Une 3 archivos en uno</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-file-merge3-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_file_merge3</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_file</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_file1</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_file2</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dest</code></span><br>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   Une tres archivos en uno y almacena el resultado en un archivo <code class="parameter">dest</code>.
+   El <code class="parameter">old_file</code> es una versión original mientras <code class="parameter">new_file1</code>
+   y <code class="parameter">new_file2</code> son versiones modificadas de un original.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-file-merge3-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el primer archivo. Este archivo actúa como "viejo" archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_file1</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el segundo archivo. Este actúa como una versión modificada de <code class="parameter">old_file</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_file2</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el tercer archivo. Este actúa como una versión modificada de <code class="parameter">old_file</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dest</code></dt>
+     <dd>
+      <p class="para">
+       La ruta del archivo resultante, contiene la unión modificada de <code class="parameter">new_file1</code> y
+       <code class="parameter">new_file2</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-file-merge3-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si la unión fue satisfactoria, una cadena con fragmento erróneo si
+   esta no lo fue o <strong><code><a href="#constant.false">false</a></code></strong> si ocurrió un error interno.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-file-merge3-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2452">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_file_merge3()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El código siguiente combina tres archivos en uno.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'original_script.php'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$fix1 </span><span style="color: #007700">= </span><span style="color: #DD0000">'script_with_fix1.php'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$fix2 </span><span style="color: #007700">= </span><span style="color: #DD0000">'script_with_fix2.php'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$errors </span><span style="color: #007700">= </span><span style="color: #0000BB">xdiff_file_merge3</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_version</span><span style="color: #007700">, </span><span style="color: #0000BB">$fix1</span><span style="color: #007700">, </span><span style="color: #0000BB">$fix2</span><span style="color: #007700">, </span><span style="color: #DD0000">'fixed_script.php'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">is_string</span><span style="color: #007700">(</span><span style="color: #0000BB">$errors</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">"Rejects:\n"</span><span style="color: #007700">;<br>    echo </span><span style="color: #0000BB">$errors</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-file-merge3-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-merge3" class="function" rel="rdfs-seeAlso">xdiff_string_merge3()</a> - Unir tres cadenas en una</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-file-patch" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_file_patch</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_file_patch</span> — <span class="dc-title">Parchea un archivo con un diff unificado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-file-patch-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_file_patch</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$file</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$patch</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dest</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = DIFF_PATCH_NORMAL</span></span><br>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   Parchea un <code class="parameter">file</code> con un <code class="parameter">patch</code> y almacena el resultado en un archivo.
+   <code class="parameter">patch</code> tiene que ser un diff unificado creado por la función
+   <span class="function"><a href="#function.xdiff-file-diff" class="function">xdiff_file_diff()</a></span>/<span class="function"><a href="#function.xdiff-string-diff" class="function">xdiff_string_diff()</a></span>.
+   Un parámetro opcional <code class="parameter">flags</code> especifica el modo de operación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-file-patch-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">file</code></dt>
+     <dd>
+      <p class="para">
+       El archivo original.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">patch</code></dt>
+     <dd>
+      <p class="para">
+       El archivo de revisión unificado. Este tiene que ser creado con las funciones <span class="function"><a href="#function.xdiff-string-diff" class="function">xdiff_string_diff()</a></span>,
+       <span class="function"><a href="#function.xdiff-file-diff" class="function">xdiff_file_diff()</a></span> o herramientas compatibles.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dest</code></dt>
+     <dd>
+      <p class="para">
+       Ruta de el archivo resultante.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       Puede ser <strong><code><a href="#constant.xdiff-patch-normal">XDIFF_PATCH_NORMAL</a></code></strong> (modo por defecto,
+       parche normal) o <strong><code><a href="#constant.xdiff-patch-reverse">XDIFF_PATCH_REVERSE</a></code></strong> (parche
+       invertido).
+      </p>
+      <p class="para">
+       A partir de la versión 1.5.0, también puede utilizar binario OR para habilitar el indicador
+       <strong><code><a href="#constant.xdiff-patch-ignorespace">XDIFF_PATCH_IGNORESPACE</a></code></strong>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-file-patch-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.false">false</a></code></strong> si ocurrió un error interno, una cadena con fragmento erróneo
+   si el parche no pudo ser aplicado o <strong><code><a href="#constant.true">true</a></code></strong> si el parche fue aplicado con éxito.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-file-patch-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2453">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_file_patch()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código aplica un diff unificado a un archivo.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script-1.0.php'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$patch </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script.patch'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$errors </span><span style="color: #007700">= </span><span style="color: #0000BB">xdiff_file_patch</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_version</span><span style="color: #007700">, </span><span style="color: #0000BB">$patch</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_script-1.1.php'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">is_string</span><span style="color: #007700">(</span><span style="color: #0000BB">$errors</span><span style="color: #007700">)) {<br>   echo </span><span style="color: #DD0000">"Rejects:\n"</span><span style="color: #007700">;<br>   echo </span><span style="color: #0000BB">$errors</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-2454">
+    <p><strong>Ejemplo #2 Ejemplo de parche invertido</strong></p>
+    <div class="example-contents"><p>
+     El código siguiente invierte un parche.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$new_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script-1.1.php'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$patch </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script.patch'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$errors </span><span style="color: #007700">= </span><span style="color: #0000BB">xdiff_file_patch</span><span style="color: #007700">(</span><span style="color: #0000BB">$new_version</span><span style="color: #007700">, </span><span style="color: #0000BB">$patch</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_script-1.0.php'</span><span style="color: #007700">, </span><span style="color: #0000BB">XDIFF_PATCH_REVERSE</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">is_string</span><span style="color: #007700">(</span><span style="color: #0000BB">$errors</span><span style="color: #007700">)) {<br>   echo </span><span style="color: #DD0000">"Fragmentos erróneos:\n"</span><span style="color: #007700">;<br>   echo </span><span style="color: #0000BB">$errors</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-file-patch-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-file-diff" class="function" rel="rdfs-seeAlso">xdiff_file_diff()</a> - Hacer un diff unificado de dos archivos</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-file-patch-binary" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_file_patch_binary</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_file_patch_binary</span> — <span class="dc-title">Alias de <span class="function"><a href="#function.xdiff-file-bpatch" class="function">xdiff_file_bpatch()</a></span></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-file-patch-binary-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_file_patch_binary</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$patch</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dest</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Parchea un <code class="parameter">file</code> con un
+   <code class="parameter">patch</code> binario y almacena el resultado en un archivo <code class="parameter">dest</code>.
+   Esta función acepta parches creados tanto a través de funciones <span class="function"><a href="#function.xdiff-file-bdiff" class="function">xdiff_file_bdiff()</a></span>
+   o <span class="function"><a href="#function.xdiff-file-rabdiff" class="function">xdiff_file_rabdiff()</a></span> como de sus equivalentes de cadena.
+  </p>
+  <p class="para">
+   Desde la versión 1.5.0 esta función es un alias de <span class="function"><a href="#function.xdiff-file-bpatch" class="function">xdiff_file_bpatch()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-file-patch-binary-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">file</code></dt>
+     <dd>
+      <p class="para">
+       El archivo original.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">patch</code></dt>
+     <dd>
+      <p class="para">
+       El archivo parche binario.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dest</code></dt>
+     <dd>
+      <p class="para">
+       La ruta de el archivo resultante.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-file-patch-binary-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-file-patch-binary-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2455">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_file_patch_binary()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código aplica una diferencia binaria a un archivo.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'archive-1.0.tgz'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$patch </span><span style="color: #007700">= </span><span style="color: #DD0000">'archive.bpatch'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">xdiff_file_patch_binary</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_version</span><span style="color: #007700">, </span><span style="color: #0000BB">$patch</span><span style="color: #007700">, </span><span style="color: #DD0000">'archive-1.1.tgz'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$result</span><span style="color: #007700">) {<br>   echo </span><span style="color: #DD0000">"Archivo parcheado"</span><span style="color: #007700">;<br>} else {<br>   echo </span><span style="color: #DD0000">"El archivo no pudo ser parcheado"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.xdiff-file-patch-binary-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Ambos archivos (<code class="parameter">file</code> y <code class="parameter">patch</code>)
+    serán cargados en memoria así que asegúrese que el valor de memory_limit es
+    lo suficientemente alto.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-file-patch-binary-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-patch-binary" class="function" rel="rdfs-seeAlso">xdiff_string_patch_binary()</a> - Alias de xdiff_string_bpatch</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-file-rabdiff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_file_rabdiff</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 1.5.0)</p><p class="refpurpose"><span class="refname">xdiff_file_rabdiff</span> — <span class="dc-title">Hacer una diferencia binaria de dos archivos utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-file-rabdiff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_file_rabdiff</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dest</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace una diferencia binaria de dos archivos y almacena el resultado en un archivo de revisión.
+   La diferencia entre esta función y <span class="function"><a href="#function.xdiff-file-bdiff" class="function">xdiff_file_bdiff()</a></span> es el diferente
+   algoritmo que se utiliza que debería traducirse en una ejecución más rápida y un diff producido menor.
+   Esta función trabaja con archivos de texto y binarios. El archivo parche resultante
+   puede ser posteriormente aplicado utilizando <span class="function"><a href="#function.xdiff-file-bpatch" class="function">xdiff_file_bpatch()</a></span>/<span class="function"><a href="#function.xdiff-string-bpatch" class="function">xdiff_string_bpatch()</a></span>.
+  </p>
+  <p class="para">
+   Para obtener más información sobre las diferencias entre el algoritmo utilizado por favor vea
+   el sitio web <a href="http://www.xmailserver.org/xdiff-lib.html" class="link external">» libxdiff</a>
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-file-rabdiff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el primer archivo. Este archivo actúa como "viejo" archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta a el segundo archivo. Este archivo actúa como "nuevo" archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dest</code></dt>
+     <dd>
+      <p class="para">
+       Ruta de el archivo parche resultante. El archivo resultante contiene diferencias
+       entre  los archivos "viejo" y "nuevo". Este será en formato binario y no legible por humanos.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-file-rabdiff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-file-rabdiff-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2456">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_file_rabdiff()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código hace una diferencia binaria de dos archivos.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script_1.0.tgz'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$new_version </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_script_1.1.tgz'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">xdiff_file_rabdiff</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_version</span><span style="color: #007700">, </span><span style="color: #0000BB">$new_version</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_script.bdiff'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.xdiff-file-rabdiff-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Ambos archivos serán cargados en memoria así que asegúrese que el valor de memory_limit es
+    lo suficientemente alto.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-file-rabdiff-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-file-bpatch" class="function" rel="rdfs-seeAlso">xdiff_file_bpatch()</a> - Parchea un archivo con una diferencia binaria</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-string-bdiff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_string_bdiff</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 1.5.0)</p><p class="refpurpose"><span class="refname">xdiff_string_bdiff</span> — <span class="dc-title">Hacer una diferencia binaria de dos cadenas</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-string-bdiff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_string_bdiff</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_data</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_data</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace una diferencia binaria de dos cadenas y devuelve el resultado.
+   Esta función trabaja con texto y datos binarios. El parche resultante
+   puede ser posteriormente aplicado utilizando <span class="function"><a href="#function.xdiff-string-bpatch" class="function">xdiff_string_bpatch()</a></span>/<span class="function"><a href="#function.xdiff-file-bpatch" class="function">xdiff_file_bpatch()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-string-bdiff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_data</code></dt>
+     <dd>
+      <p class="para">
+       Primera cadena con información binaria. Esta actúa como "vieja" información.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_data</code></dt>
+     <dd>
+      <p class="para">
+       Segunda cadena con información binaria. Esta actúa como "nueva" información.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-string-bdiff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la cadena con la diferencia binaria conteniendo las diferencias entre "vieja" y "nueva"
+   información o <strong><code><a href="#constant.false">false</a></code></strong> si se producido un error interno.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-string-bdiff-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-bpatch" class="function" rel="rdfs-seeAlso">xdiff_string_bpatch()</a> - Parchear una cadena con una diferencia binaria</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-string-bdiff-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_string_bdiff_size</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 1.5.0)</p><p class="refpurpose"><span class="refname">xdiff_string_bdiff_size</span> — <span class="dc-title">Lee el tamaño de un archivo creado tras aplicar una diferencia binaria</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-string-bdiff-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_string_bdiff_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$patch</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el tamaño de un archivo resultante que será creado tras aplicar el <code class="parameter">patch</code> binario a
+   el archivo original.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-string-bdiff-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">patch</code></dt>
+     <dd>
+      <p class="para">
+       El parche binario creado por la función <span class="function"><a href="#function.xdiff-string-bdiff" class="function">xdiff_string_bdiff()</a></span> o
+       <span class="function"><a href="#function.xdiff-string-rabdiff" class="function">xdiff_string_rabdiff()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-string-bdiff-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tamaño del archivo que fue creado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-string-bdiff-size-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2457">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_string_bdiff_size()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código lee el tamaño de un archivo que fue creado
+     tras aplicar una diferencia binaria.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$binary_patch </span><span style="color: #007700">= </span><span style="color: #0000BB">file_get_contents</span><span style="color: #007700">(</span><span style="color: #DD0000">'file.bdiff'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$length </span><span style="color: #007700">= </span><span style="color: #0000BB">xdiff_string_bdiff_size</span><span style="color: #007700">(</span><span style="color: #0000BB">$binary_patch</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">"El archivo resultante tendrá </span><span style="color: #0000BB">$length</span><span style="color: #DD0000"> bytes de longitud"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-string-bdiff-size-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-bdiff" class="function" rel="rdfs-seeAlso">xdiff_string_bdiff()</a> - Hacer una diferencia binaria de dos cadenas</span></li>
+    <li><span class="function"><a href="#function.xdiff-string-rabdiff" class="function" rel="rdfs-seeAlso">xdiff_string_rabdiff()</a> - Hacer una diferencia binaria de dos cadenas utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</span></li>
+    <li><span class="function"><a href="#function.xdiff-string-bpatch" class="function" rel="rdfs-seeAlso">xdiff_string_bpatch()</a> - Parchear una cadena con una diferencia binaria</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-string-bpatch" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_string_bpatch</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 1.5.0)</p><p class="refpurpose"><span class="refname">xdiff_string_bpatch</span> — <span class="dc-title">Parchear una cadena con una diferencia binaria</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-string-bpatch-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_string_bpatch</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$str</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$patch</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Parchea una cadena <code class="parameter">str</code> con un <code class="parameter">patch</code> binario.
+   Esta función acepta parches creados tanto a través de las funciones <span class="function"><a href="#function.xdiff-string-bdiff" class="function">xdiff_string_bdiff()</a></span>
+   y <span class="function"><a href="#function.xdiff-string-rabdiff" class="function">xdiff_string_rabdiff()</a></span> o su archivo homólogo equivalente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-string-bpatch-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">str</code></dt>
+     <dd>
+      <p class="para">
+       La cadena binaria original.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">patch</code></dt>
+     <dd>
+      <p class="para">
+       La cadena parche binaria.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-string-bpatch-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la cadena parcheada, o <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-string-bpatch-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-bdiff" class="function" rel="rdfs-seeAlso">xdiff_string_bdiff()</a> - Hacer una diferencia binaria de dos cadenas</span></li>
+    <li><span class="function"><a href="#function.xdiff-string-rabdiff" class="function" rel="rdfs-seeAlso">xdiff_string_rabdiff()</a> - Hacer una diferencia binaria de dos cadenas utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-string-diff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_string_diff</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_string_diff</span> — <span class="dc-title">Hacer un diff unificado de dos strings</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-string-diff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_string_diff</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$context</code><span class="initializer"> = 3</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$minimal</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace un diff unificado que contiene diferencias entre el string <code class="parameter">old_data</code> y
+   el string <code class="parameter">new_data</code> y devuelve este. El diff resultante es legible.
+   Un parámetro opcional <code class="parameter">context</code> especifica el número de líneas de contexto que hay que añadir
+   alrededor de cada cambio. Establecer el parámetro <code class="parameter">minimal</code>
+   a true dará como resultado de salida el archivo parche más corto posible (puede tomar algo de tiempo).
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-string-diff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_data</code></dt>
+     <dd>
+      <p class="para">
+       Primera cadena con información. Esta actúa como "vieja" información.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_data</code></dt>
+     <dd>
+      <p class="para">
+       Segundo string con información. Esta actúa como "nueva" información.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+       Indica el número de líneas de contexto que desea incluir en el diff
+       resultado.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">minimal</code></dt>
+     <dd>
+      <p class="para">
+       Establezca este parámetro a <strong><code><a href="#constant.true">true</a></code></strong> si desea reducir el tamaño del
+       resultado (puede tomar algo de tiempo).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-string-diff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un string con el resultado diff o <strong><code><a href="#constant.false">false</a></code></strong> si ocurriera un error interno.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-string-diff-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2458">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_string_diff()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código hace un diff unificado de dos artículos.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_article </span><span style="color: #007700">= </span><span style="color: #0000BB">file_get_contents</span><span style="color: #007700">(</span><span style="color: #DD0000">'./old_article.txt'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$new_article </span><span style="color: #007700">= </span><span style="color: #0000BB">$_REQUEST</span><span style="color: #007700">[</span><span style="color: #DD0000">'article'</span><span style="color: #007700">]; </span><span style="color: #FF8000">/* Supongamos que alguien pega un nuevo artículo en formato html */<br><br></span><span style="color: #0000BB">$diff </span><span style="color: #007700">= </span><span style="color: #0000BB">xdiff_string_diff</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_article</span><span style="color: #007700">, </span><span style="color: #0000BB">$new_article</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">is_string</span><span style="color: #007700">(</span><span style="color: #0000BB">$diff</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">"Diferencias entre los dos artículos:\n"</span><span style="color: #007700">;<br>    echo </span><span style="color: #0000BB">$diff</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.xdiff-string-diff-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta función no funciona bien con string binarios. Para hacer un diff de string binario
+    utilice <span class="function"><a href="#function.xdiff-string-bdiff" class="function">xdiff_string_bdiff()</a></span>/<span class="function"><a href="#function.xdiff-string-rabdiff" class="function">xdiff_string_rabdiff()</a></span>.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-string-diff-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-patch" class="function" rel="rdfs-seeAlso">xdiff_string_patch()</a> - Parchear una cadena con un diff unificado</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-string-diff-binary" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_string_diff_binary</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_string_diff_binary</span> — <span class="dc-title">Alias de <span class="function"><a href="#function.xdiff-string-bdiff" class="function">xdiff_string_bdiff()</a></span></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-string-diff-binary-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><a href="#function.xdiff-string-bdiff" class="methodname">xdiff_string_bdiff</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_data</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_data</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace una diferencia binaria de dos cadenas y devuelve el resultado.
+   Esta función trabaja con texto y datos binarios. El parche resultante
+   puede ser posteriormente aplicado utilizando <span class="function"><a href="#function.xdiff-string-bpatch" class="function">xdiff_string_bpatch()</a></span>/<span class="function"><a href="#function.xdiff-file-bpatch" class="function">xdiff_file_bpatch()</a></span>.
+  </p>
+  <p class="para">
+   Desde la versión 1.5.0 esta función es un alias de <span class="function"><a href="#function.xdiff-string-bdiff" class="function">xdiff_string_bdiff()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-string-diff-binary-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_data</code></dt>
+     <dd>
+      <p class="para">
+       Primera cadena con información binaria. Esta actúa como "vieja" información.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_data</code></dt>
+     <dd>
+      <p class="para">
+       Segunda cadena con información binaria. Esta actúa como "nueva" información.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-string-diff-binary-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve cadena con resultado o <strong><code><a href="#constant.false">false</a></code></strong> si se produce un error interno.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-string-diff-binary-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-bdiff" class="function" rel="rdfs-seeAlso">xdiff_string_bdiff()</a> - Hacer una diferencia binaria de dos cadenas</span></li>
+    <li><span class="function"><a href="#function.xdiff-string-bpatch" class="function" rel="rdfs-seeAlso">xdiff_string_bpatch()</a> - Parchear una cadena con una diferencia binaria</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-string-merge3" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_string_merge3</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_string_merge3</span> — <span class="dc-title">Unir tres cadenas en una</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-string-merge3-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_string_merge3</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_data1</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_data2</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$error</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   Une tres cadenas en una y devuelve el resultado.
+   El parámetro <code class="parameter">old_data</code> es una versión original de los datos
+   mientras <code class="parameter">new_data1</code> y <code class="parameter">new_data2</code> son versiones
+   modificadas de un original. El parámetro opcional <code class="parameter">error</code> es utilizado para admitir cualquier
+   fragmento erróneo durante el proceso de unión.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-string-merge3-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_data</code></dt>
+     <dd>
+      <p class="para">
+       Primera cadena con información. Esta actúa como "vieja" información.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_data1</code></dt>
+     <dd>
+      <p class="para">
+       Segunda cadena con información. Esta actúa como versión modificada del <code class="parameter">old_data</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_data2</code></dt>
+     <dd>
+      <p class="para">
+       La tercera cadena con información. Esta actúa como versión modificada del <code class="parameter">old_data</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">error</code></dt>
+     <dd>
+      <p class="para">
+       Si se produce algún fragmento erróneo entonces se almacenan dentro de esta variable.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-string-merge3-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la cadena unida, <strong><code><a href="#constant.false">false</a></code></strong> si se produce un error interno, o <strong><code><a href="#constant.true">true</a></code></strong>
+   si la cadena unida está vacía.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-string-merge3-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-file-merge3" class="function" rel="rdfs-seeAlso">xdiff_file_merge3()</a> - Une 3 archivos en uno</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-string-patch" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_string_patch</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_string_patch</span> — <span class="dc-title">Parchear una cadena con un diff unificado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-string-patch-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_string_patch</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$str</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$patch</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$error</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Parchea una cadena <code class="parameter">str</code> con un parche unificado en parámetro <code class="parameter">patch</code>
+   y devuelve el resultado. <code class="parameter">patch</code> tiene que ser un diff unificado creado por la función
+   <span class="function"><a href="#function.xdiff-file-diff" class="function">xdiff_file_diff()</a></span>/<span class="function"><a href="#function.xdiff-string-diff" class="function">xdiff_string_diff()</a></span>.
+   Un parámetro opcional <code class="parameter">flags</code> especifica el modo de operación. Cualquier
+   fragmento erróneo del parche será almacenado en el interior de la variable <code class="parameter">error</code> si
+   si esta es proporcionada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-string-patch-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">str</code></dt>
+     <dd>
+      <p class="para">
+       La cadena original.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">patch</code></dt>
+     <dd>
+      <p class="para">
+       La cadena parche unificada. Esta tiene que ser creada utilizando las funciones <span class="function"><a href="#function.xdiff-string-diff" class="function">xdiff_string_diff()</a></span>,
+       <span class="function"><a href="#function.xdiff-file-diff" class="function">xdiff_file_diff()</a></span> o herramientas compatibles.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">flags</code> uede ser
+       <strong><code><a href="#constant.xdiff-patch-normal">XDIFF_PATCH_NORMAL</a></code></strong> (modo por defecto, parche normal)
+       o <strong><code><a href="#constant.xdiff-patch-reverse">XDIFF_PATCH_REVERSE</a></code></strong> (parche invertido).
+      </p>
+      <p class="para">
+       A partir de la versión 1.5.0, también se puede utilizar binario OR para habilitar el indicador
+       <strong><code><a href="#constant.xdiff-patch-ignorespace">XDIFF_PATCH_IGNORESPACE</a></code></strong>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">error</code></dt>
+     <dd>
+      <p class="para">
+       Si se proporciona entonces los fragmentos erróneos se almacenan dentro de esta variable.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-string-patch-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la cadena parcheada, o <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xdiff-string-patch-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2459">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xdiff_string_patch()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código aplica cambios en algún artículo.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$old_article </span><span style="color: #007700">= </span><span style="color: #0000BB">file_get_contents</span><span style="color: #007700">(</span><span style="color: #DD0000">'./old_article.txt'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$diff </span><span style="color: #007700">= </span><span style="color: #0000BB">$_SERVER</span><span style="color: #007700">[</span><span style="color: #DD0000">'patch'</span><span style="color: #007700">]; </span><span style="color: #FF8000">/* Supongamos que alguien pega un parche para un formulario html */<br><br></span><span style="color: #0000BB">$errors </span><span style="color: #007700">= </span><span style="color: #DD0000">''</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$new_article </span><span style="color: #007700">= </span><span style="color: #0000BB">xdiff_string_patch</span><span style="color: #007700">(</span><span style="color: #0000BB">$old_article</span><span style="color: #007700">, </span><span style="color: #0000BB">$diff</span><span style="color: #007700">, </span><span style="color: #0000BB">XDIFF_PATCH_NORMAL</span><span style="color: #007700">, </span><span style="color: #0000BB">$errors</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">is_string</span><span style="color: #007700">(</span><span style="color: #0000BB">$new_article</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">"Nuevo artículo:\n"</span><span style="color: #007700">;<br>    echo </span><span style="color: #0000BB">$new_article</span><span style="color: #007700">;<br>}<br><br>if (</span><span style="color: #0000BB">strlen</span><span style="color: #007700">(</span><span style="color: #0000BB">$errors</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">"Fragmentos erróneos: \n"</span><span style="color: #007700">;<br>    echo </span><span style="color: #0000BB">$errors</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-string-patch-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-diff" class="function" rel="rdfs-seeAlso">xdiff_string_diff()</a> - Hacer un diff unificado de dos strings</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-string-patch-binary" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_string_patch_binary</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">xdiff_string_patch_binary</span> — <span class="dc-title">Alias de <span class="function"><a href="#function.xdiff-string-bpatch" class="function">xdiff_string_bpatch()</a></span></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-string-patch-binary-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xdiff_string_patch_binary</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$str</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$patch</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Parchea una cadena <code class="parameter">str</code> con un <code class="parameter">patch</code> binario.
+   Esta función acepta parches creados tanto a través de las funciones <span class="function"><a href="#function.xdiff-string-bdiff" class="function">xdiff_string_bdiff()</a></span>
+   y <span class="function"><a href="#function.xdiff-string-rabdiff" class="function">xdiff_string_rabdiff()</a></span> o de su archivo homólogo equivalente.
+  </p>
+  <p class="para">
+   Desde la versión 1.5.0 esta función es un alias de <span class="function"><a href="#function.xdiff-string-bpatch" class="function">xdiff_string_bpatch()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-string-patch-binary-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">str</code></dt>
+     <dd>
+      <p class="para">
+       La cadena binaria original.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">patch</code></dt>
+     <dd>
+      <p class="para">
+       La cadena parche binaria.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-string-patch-binary-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la cadena parcheada, o <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-string-patch-binary-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-bpatch" class="function" rel="rdfs-seeAlso">xdiff_string_bpatch()</a> - Parchear una cadena con una diferencia binaria</span></li>
+    <li><span class="function"><a href="#function.xdiff-string-bdiff" class="function" rel="rdfs-seeAlso">xdiff_string_bdiff()</a> - Hacer una diferencia binaria de dos cadenas</span></li>
+    <li><span class="function"><a href="#function.xdiff-string-rabdiff" class="function" rel="rdfs-seeAlso">xdiff_string_rabdiff()</a> - Hacer una diferencia binaria de dos cadenas utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.xdiff-string-rabdiff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xdiff_string_rabdiff</h1>
+  <p class="verinfo">(PECL xdiff &gt;= 1.5.0)</p><p class="refpurpose"><span class="refname">xdiff_string_rabdiff</span> — <span class="dc-title">Hacer una diferencia binaria de dos cadenas utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.xdiff-string-rabdiff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><a href="#function.xdiff-string-bdiff" class="methodname">xdiff_string_bdiff</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$old_data</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$new_data</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace una diferencia binaria de dos cadenas y almacena el resultado.
+   La diferencia entre esta función y <span class="function"><a href="#function.xdiff-string-bdiff" class="function">xdiff_string_bdiff()</a></span> es el diferente
+   algoritmo que se utiliza que debería traducirse en una ejecución más rápida y un diff producido menor.
+   Esta función trabaja con archivos de texto y binarios. El archivo parche resultante
+   puede ser posteriormente aplicado utilizando <span class="function"><a href="#function.xdiff-string-bpatch" class="function">xdiff_string_bpatch()</a></span>/<span class="function"><a href="#function.xdiff-file-bpatch" class="function">xdiff_file_bpatch()</a></span>.
+  </p>
+  <p class="para">
+   Para obtener más información sobre las diferencias entre el algoritmo utilizado por favor vea
+   el sitio web <a href="http://www.xmailserver.org/xdiff-lib.html" class="link external">» libxdiff</a>
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xdiff-string-rabdiff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">old_data</code></dt>
+     <dd>
+      <p class="para">
+       Primera cadena con información binaria. Esta actúa como "vieja" información.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">new_data</code></dt>
+     <dd>
+      <p class="para">
+       Segunda cadena con información binaria. Esta actúa como "nueva" información.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xdiff-string-rabdiff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la cadena con la diferencia binaria conteniendo las diferencias entre "vieja" y "nueva"
+   información o <strong><code><a href="#constant.false">false</a></code></strong> si se ha producido un error interno.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xdiff-string-rabdiff-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xdiff-string-bpatch" class="function" rel="rdfs-seeAlso">xdiff_string_bpatch()</a> - Parchear una cadena con una diferencia binaria</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.xdiff-file-bdiff">xdiff_file_bdiff</a> — Realiza una diferencia binaria de dos archivos</li><li><a href="#function.xdiff-file-bdiff-size">xdiff_file_bdiff_size</a> — Lee el tamaño de un archivo creado tras aplicar una diferencia binaria</li><li><a href="#function.xdiff-file-bpatch">xdiff_file_bpatch</a> — Parchea un archivo con una diferencia binaria</li><li><a href="#function.xdiff-file-diff">xdiff_file_diff</a> — Hacer un diff unificado de dos archivos</li><li><a href="#function.xdiff-file-diff-binary">xdiff_file_diff_binary</a> — Alias de xdiff_file_bdiff</li><li><a href="#function.xdiff-file-merge3">xdiff_file_merge3</a> — Une 3 archivos en uno</li><li><a href="#function.xdiff-file-patch">xdiff_file_patch</a> — Parchea un archivo con un diff unificado</li><li><a href="#function.xdiff-file-patch-binary">xdiff_file_patch_binary</a> — Alias de xdiff_file_bpatch</li><li><a href="#function.xdiff-file-rabdiff">xdiff_file_rabdiff</a> — Hacer una diferencia binaria de dos archivos utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</li><li><a href="#function.xdiff-string-bdiff">xdiff_string_bdiff</a> — Hacer una diferencia binaria de dos cadenas</li><li><a href="#function.xdiff-string-bdiff-size">xdiff_string_bdiff_size</a> — Lee el tamaño de un archivo creado tras aplicar una diferencia binaria</li><li><a href="#function.xdiff-string-bpatch">xdiff_string_bpatch</a> — Parchear una cadena con una diferencia binaria</li><li><a href="#function.xdiff-string-diff">xdiff_string_diff</a> — Hacer un diff unificado de dos strings</li><li><a href="#function.xdiff-string-diff-binary">xdiff_string_diff_binary</a> — Alias de xdiff_string_bdiff</li><li><a href="#function.xdiff-string-merge3">xdiff_string_merge3</a> — Unir tres cadenas en una</li><li><a href="#function.xdiff-string-patch">xdiff_string_patch</a> — Parchear una cadena con un diff unificado</li><li><a href="#function.xdiff-string-patch-binary">xdiff_string_patch_binary</a> — Alias de xdiff_string_bpatch</li><li><a href="#function.xdiff-string-rabdiff">xdiff_string_rabdiff</a> — Hacer una diferencia binaria de dos cadenas utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.xdiff">Introducción</a></li><li><a href="#xdiff.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#xdiff.requirements">Requerimientos</a></li><li><a href="#xdiff.installation">Instalación</a></li></ul></li><li><a href="#xdiff.constants">Constantes predefinidas</a></li><li><a href="#ref.xdiff">Funciones de xdiff</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.xdiff-file-bdiff">xdiff_file_bdiff</a> — Realiza una diferencia binaria de dos archivos</li><li><a href="#function.xdiff-file-bdiff-size">xdiff_file_bdiff_size</a> — Lee el tamaño de un archivo creado tras aplicar una diferencia binaria</li><li><a href="#function.xdiff-file-bpatch">xdiff_file_bpatch</a> — Parchea un archivo con una diferencia binaria</li><li><a href="#function.xdiff-file-diff">xdiff_file_diff</a> — Hacer un diff unificado de dos archivos</li><li><a href="#function.xdiff-file-diff-binary">xdiff_file_diff_binary</a> — Alias de xdiff_file_bdiff</li><li><a href="#function.xdiff-file-merge3">xdiff_file_merge3</a> — Une 3 archivos en uno</li><li><a href="#function.xdiff-file-patch">xdiff_file_patch</a> — Parchea un archivo con un diff unificado</li><li><a href="#function.xdiff-file-patch-binary">xdiff_file_patch_binary</a> — Alias de xdiff_file_bpatch</li><li><a href="#function.xdiff-file-rabdiff">xdiff_file_rabdiff</a> — Hacer una diferencia binaria de dos archivos utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</li><li><a href="#function.xdiff-string-bdiff">xdiff_string_bdiff</a> — Hacer una diferencia binaria de dos cadenas</li><li><a href="#function.xdiff-string-bdiff-size">xdiff_string_bdiff_size</a> — Lee el tamaño de un archivo creado tras aplicar una diferencia binaria</li><li><a href="#function.xdiff-string-bpatch">xdiff_string_bpatch</a> — Parchear una cadena con una diferencia binaria</li><li><a href="#function.xdiff-string-diff">xdiff_string_diff</a> — Hacer un diff unificado de dos strings</li><li><a href="#function.xdiff-string-diff-binary">xdiff_string_diff_binary</a> — Alias de xdiff_string_bdiff</li><li><a href="#function.xdiff-string-merge3">xdiff_string_merge3</a> — Unir tres cadenas en una</li><li><a href="#function.xdiff-string-patch">xdiff_string_patch</a> — Parchear una cadena con un diff unificado</li><li><a href="#function.xdiff-string-patch-binary">xdiff_string_patch_binary</a> — Alias de xdiff_string_bpatch</li><li><a href="#function.xdiff-string-rabdiff">xdiff_string_rabdiff</a> — Hacer una diferencia binaria de dos cadenas utilizando el algoritmo polinomial de huella digital (fingerprinting) de Rabin</li></ul></li></ul></div>

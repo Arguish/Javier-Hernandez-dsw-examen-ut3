@@ -1,0 +1,2641 @@
+<div id="book.gnupg" class="book"><hr>
+ 
+ <h1 class="title">GNU PG</h1>
+ 
+
+ 
+ <div id="intro.gnupg" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Este módulo permite interactuar con
+  <a href="http://www.gnupg.org/" class="link external">» gnupg</a>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="gnupg.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#gnupg.requirements">Requerimientos</a></li><li><a href="#gnupg.installation">Instalación</a></li></ul>
+
+
+ 
+ <div id="gnupg.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Esta extensión requiere la <a href="http://www.gnupg.org/related_software/gpgme/" class="link external">» biblioteca gpgme</a>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+<div id="gnupg.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/gnupg" class="link external">» https://pecl.php.net/package/gnupg</a>.
+ </p>
+</div>
+<hr>
+
+
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="gnupg.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <dl>
+  
+   <dt id="constant.gnupg-sig-mode-normal">
+    <strong><code><a href="#constant.gnupg-sig-mode-normal">GNUPG_SIG_MODE_NORMAL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sig-mode-detach">
+    <strong><code><a href="#constant.gnupg-sig-mode-detach">GNUPG_SIG_MODE_DETACH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sig-mode-clear">
+    <strong><code><a href="#constant.gnupg-sig-mode-clear">GNUPG_SIG_MODE_CLEAR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-validity-unknown">
+    <strong><code><a href="#constant.gnupg-validity-unknown">GNUPG_VALIDITY_UNKNOWN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-validity-undefined">
+    <strong><code><a href="#constant.gnupg-validity-undefined">GNUPG_VALIDITY_UNDEFINED</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-validity-never">
+    <strong><code><a href="#constant.gnupg-validity-never">GNUPG_VALIDITY_NEVER</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-validity-marginal">
+    <strong><code><a href="#constant.gnupg-validity-marginal">GNUPG_VALIDITY_MARGINAL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-validity-full">
+    <strong><code><a href="#constant.gnupg-validity-full">GNUPG_VALIDITY_FULL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-validity-ultimate">
+    <strong><code><a href="#constant.gnupg-validity-ultimate">GNUPG_VALIDITY_ULTIMATE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-protocol-openpgp">
+    <strong><code><a href="#constant.gnupg-protocol-openpgp">GNUPG_PROTOCOL_OpenPGP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-protocol-cms">
+    <strong><code><a href="#constant.gnupg-protocol-cms">GNUPG_PROTOCOL_CMS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-valid">
+    <strong><code><a href="#constant.gnupg-sigsum-valid">GNUPG_SIGSUM_VALID</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-green">
+    <strong><code><a href="#constant.gnupg-sigsum-green">GNUPG_SIGSUM_GREEN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-red">
+    <strong><code><a href="#constant.gnupg-sigsum-red">GNUPG_SIGSUM_RED</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-key-revoked">
+    <strong><code><a href="#constant.gnupg-sigsum-key-revoked">GNUPG_SIGSUM_KEY_REVOKED</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-key-expired">
+    <strong><code><a href="#constant.gnupg-sigsum-key-expired">GNUPG_SIGSUM_KEY_EXPIRED</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-key-missing">
+    <strong><code><a href="#constant.gnupg-sigsum-key-missing">GNUPG_SIGSUM_KEY_MISSING</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-sig-expired">
+    <strong><code><a href="#constant.gnupg-sigsum-sig-expired">GNUPG_SIGSUM_SIG_EXPIRED</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-crl-missing">
+    <strong><code><a href="#constant.gnupg-sigsum-crl-missing">GNUPG_SIGSUM_CRL_MISSING</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-crl-too-old">
+    <strong><code><a href="#constant.gnupg-sigsum-crl-too-old">GNUPG_SIGSUM_CRL_TOO_OLD</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-bad-policy">
+    <strong><code><a href="#constant.gnupg-sigsum-bad-policy">GNUPG_SIGSUM_BAD_POLICY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-sigsum-sys-error">
+    <strong><code><a href="#constant.gnupg-sigsum-sys-error">GNUPG_SIGSUM_SYS_ERROR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-error-warning">
+    <strong><code><a href="#constant.gnupg-error-warning">GNUPG_ERROR_WARNING</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-error-exception">
+    <strong><code><a href="#constant.gnupg-error-exception">GNUPG_ERROR_EXCEPTION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.gnupg-error-silent">
+    <strong><code><a href="#constant.gnupg-error-silent">GNUPG_ERROR_SILENT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="gnupg.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#gnupg.examples-clearsign">Firma de texto (clearsign)</a></li></ul>
+
+ <div id="gnupg.examples-clearsign" class="section"><hr>
+  <h2 class="title">Firma de texto (clearsign)</h2>
+  <p class="para">
+   Ejemplo que firma un texto dado.
+  </p>
+  <div class="example" id="example-3416">
+   <p><strong>Ejemplo #1 Ejemplo de firma (clearsign) gnupg mediante funciones</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Inicializamos gnupg<br></span><span style="color: #0000BB">$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #FF8000">// Esto realmente no es necesario, clearsign es el valor por defecto<br></span><span style="color: #0000BB">gnupg_setsignmode</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #0000BB">GNUPG_SIG_MODE_CLEAR</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// Añade clave con la contraseña 'test' para firmar<br></span><span style="color: #0000BB">gnupg_addsignkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// Firma<br></span><span style="color: #0000BB">$signed </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_sign</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"just a test"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$signed</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+  <div class="example" id="example-3417">
+   <p><strong>Ejemplo #2 Ejemplo de firma gnupg (clearsign) mediante orientación a objetos</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Instanciamos la clase<br></span><span style="color: #0000BB">$gnupg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #FF8000">// Esto realmente no es necesario, clearsign es el valor por defecto<br></span><span style="color: #0000BB">$gnupg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">setsignmode</span><span style="color: #007700">(</span><span style="color: #0000BB">gnupg</span><span style="color: #007700">::</span><span style="color: #0000BB">SIG_MODE_CLEAR</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// Añade clave con la contraseña 'test' para firmar<br></span><span style="color: #0000BB">$gnupg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addsignkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// Firma<br></span><span style="color: #0000BB">$signed </span><span style="color: #007700">= </span><span style="color: #0000BB">$gnupg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">sign</span><span style="color: #007700">(</span><span style="color: #DD0000">"just a test"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$signed</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+  <div class="example" id="gnupg.keylistiterator">
+   <p><strong>Ejemplo #3 keylistiterator</strong></p>
+   <div class="example-contents"><p>
+    Esta extensión trae también un Iterator para un juego de claves
+   </p></div>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Crea un nuevo Iterator para listar todas las claves públicas que coinciden<br>// con 'example'<br></span><span style="color: #0000BB">$iterator </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg_keylistiterator</span><span style="color: #007700">(</span><span style="color: #DD0000">"example"</span><span style="color: #007700">);<br>foreach(</span><span style="color: #0000BB">$iterator </span><span style="color: #007700">as </span><span style="color: #0000BB">$fingerprint </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$userid</span><span style="color: #007700">){<br>    echo </span><span style="color: #0000BB">$fingerprint</span><span style="color: #007700">.</span><span style="color: #DD0000">" -&gt; "</span><span style="color: #007700">.</span><span style="color: #0000BB">$userid</span><span style="color: #007700">.</span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+<hr>
+
+</div>
+
+<hr>
+
+
+
+
+ 
+ 
+
+
+
+
+<div id="ref.gnupg" class="reference"><hr>
+ <h1 class="title">Funciones GnuPG</h1>
+
+ <div class="partintro">
+   <h1 class="title">Notas</h1>
+   <p class="para">
+    Esta extensión utiliza el trousseau del usuario actual. Este trousseau se
+    encuentra normalmente en ~./.gnupg/.
+    Para especificar una ubicación diferente, registrar la ruta del trousseau en la variable de entorno GNUPGHOME. Ver
+    <a href="#function.putenv" class="link">putenv</a> para más información sobre cómo realizar esto.
+   </p>
+   <p class="para">
+    Algunas funciones requieren la especificación de una clave. Esta especificación puede ser algo que haga referencia a una clave única (userid, key-id, fingerprint, ...).
+    Esta documentación utiliza los fingerprint en todos los ejemplos.
+   </p>
+   <blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     Como alternativa a las funciones que utilizan explícitamente los
+     <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>, también puede utilizarse un estilo orientado a objetos mediante objetos <span class="classname"><strong class="classname">GnuPG</strong></span>.
+    </p>
+   </blockquote>
+  </div>
+
+ 
+
+
+
+<div id="function.gnupg-adddecryptkey" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_adddecryptkey</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.5)</p><p class="refpurpose"><span class="refname">gnupg_adddecryptkey</span> — <span class="dc-title">Añade una clave para descifrado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-adddecryptkey-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_adddecryptkey</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fingerprint</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$passphrase</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-adddecryptkey-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fingerprint</code></dt>
+     <dd>
+      <p class="para">La huella de la clave.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">passphrase</code></dt>
+     <dd>
+      <p class="para">
+       La frase de contraseña (similar a la contraseña, pero más larga).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-adddecryptkey-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-adddecryptkey-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3419">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_adddecryptkey()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_adddecryptkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3420">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_adddecryptkey()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">adddecryptkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-addencryptkey" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_addencryptkey</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.5)</p><p class="refpurpose"><span class="refname">gnupg_addencryptkey</span> — <span class="dc-title">Añade una clave para cifrado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-addencryptkey-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_addencryptkey</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fingerprint</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-addencryptkey-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fingerprint</code></dt>
+     <dd>
+      <p class="para">La huella de la clave.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-addencryptkey-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-addencryptkey-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3421">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_addencryptkey()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_addencryptkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3422">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_addencryptkey()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addencryptkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-addsignkey" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_addsignkey</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.5)</p><p class="refpurpose"><span class="refname">gnupg_addsignkey</span> — <span class="dc-title">Añade una clave para firmar</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-addsignkey-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_addsignkey</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fingerprint</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$passphrase</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-addsignkey-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fingerprint</code></dt>
+     <dd>
+      <p class="para">La huella de la clave.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">passphrase</code></dt>
+     <dd>
+      <p class="para">
+       La frase de contraseña (similar a la contraseña, pero más larga).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-addsignkey-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-addsignkey-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3423">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_addsignkey()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_addsignkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3424">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_addsignkey()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addsignkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-cleardecryptkeys" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_cleardecryptkeys</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.5)</p><p class="refpurpose"><span class="refname">gnupg_cleardecryptkeys</span> — <span class="dc-title">Elimina todas las claves que fueron fijadas para el descifrado anteriormente</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-cleardecryptkeys-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_cleardecryptkeys</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-cleardecryptkeys-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-cleardecryptkeys-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-cleardecryptkeys-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3425">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_cleardecryptkeys()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_cleardecryptkeys</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3426">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_cleardecryptkeys()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cleardecryptkeys</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-clearencryptkeys" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_clearencryptkeys</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.5)</p><p class="refpurpose"><span class="refname">gnupg_clearencryptkeys</span> — <span class="dc-title">Elimina todas las claves que fueron establecidas para cifrado con anterioridad</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-clearencryptkeys-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_clearencryptkeys</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-clearencryptkeys-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-clearencryptkeys-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-clearencryptkeys-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3427">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_clearencryptkeys()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_clearencryptkeys</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3428">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_clearencryptkeys()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">clearencryptkeys</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-clearsignkeys" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_clearsignkeys</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.5)</p><p class="refpurpose"><span class="refname">gnupg_clearsignkeys</span> — <span class="dc-title">Elimina todas las claves que fueron fijadas para firma previamente</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-clearsignkeys-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_clearsignkeys</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-clearsignkeys-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-clearsignkeys-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-clearsignkeys-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3429">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_clearsignkeys()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_clearsignkeys</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3430">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_clearsignkeys()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">clearsignkeys</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-decrypt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_decrypt</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_decrypt</span> — <span class="dc-title">Descifra un texto dado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-decrypt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_decrypt</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$text</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Descifra un texto dado con las claves que se han establecido con <a href="#function.gnupg-adddecryptkey" class="link">gnupg_adddecryptkey</a>
+   previamente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-decrypt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       El texto a descifrar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-decrypt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-decrypt-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3431">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_decrypt()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_adddecryptkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$plain </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_decrypt</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #0000BB">$encrypted_text</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$plain</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3432">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_decrypt()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">adddecryptkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$plain </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">decrypt</span><span style="color: #007700">(</span><span style="color: #0000BB">$encrypted_text</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$plain</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-decryptverify" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_decryptverify</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.2)</p><p class="refpurpose"><span class="refname">gnupg_decryptverify</span> — <span class="dc-title">Descifra y verifica un texto dado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-decryptverify-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_decryptverify</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$text</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$plaintext</code></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Descifra y verifica un texto dado y devuelve las informaciones sobre
+   la firma.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-decryptverify-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       El texto a descifrar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">plaintext</code></dt>
+     <dd>
+      <p class="para">
+       El argumento <code class="parameter">plaintext</code> se rellena con el texto
+       descifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-decryptverify-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, esta función devuelve las informaciones sobre la
+   firma y rellena el argumento <code class="parameter">plaintext</code> con el
+   texto descifrado. En caso de fallo, esta función devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-decryptverify-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3433">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_decryptverify()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$plaintext </span><span style="color: #007700">= </span><span style="color: #DD0000">""</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_adddecryptkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_decryptverify</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #0000BB">$text</span><span style="color: #007700">,</span><span style="color: #0000BB">$plaintext</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3434">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_decryptverify()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$plaintext </span><span style="color: #007700">= </span><span style="color: #DD0000">""</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">adddecryptkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">decryptverify</span><span style="color: #007700">(</span><span style="color: #0000BB">$text</span><span style="color: #007700">,</span><span style="color: #0000BB">$plaintext</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.gnupg-deletekey" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_deletekey</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.5)</p><p class="refpurpose"><span class="refname">gnupg_deletekey</span> — <span class="dc-title">Elimina una clave del llavero</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-deletekey-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_deletekey</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$allow_secret</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-deletekey-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave a eliminar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">allow_secret</code></dt>
+     <dd>
+      <p class="para">
+       Especifica si se deben eliminar las claves secretas.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-deletekey-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-deletekey-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3435">
+    <p><strong>Ejemplo #1 Ejemplo procedimental <span class="function"><strong>gnupg_deletekey()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_deletekey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">, </span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3436">
+    <p><strong>Ejemplo #2 Ejemplo orientado a objetos <span class="function"><strong>gnupg_deletekey()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">deletekey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.gnupg-encrypt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_encrypt</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_encrypt</span> — <span class="dc-title">Cifra un texto dado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-encrypt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_encrypt</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$plaintext</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Cifra el argumento <code class="parameter">plaintext</code> con las claves que han
+   sido establecidas con <a href="#function.gnupg-addencryptkey" class="link">gnupg_addencryptkey</a>
+   previamente y devuelve el texto cifrado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-encrypt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">plaintext</code></dt>
+     <dd>
+      <p class="para">
+       El texto a cifrar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-encrypt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, esta función devuelve el texto cifrado.
+   En caso de error, esta función devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-encrypt-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3437">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_encrypt()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_addencryptkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$enc </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_encrypt</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">, </span><span style="color: #DD0000">"juste un test"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$enc</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3438">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_encrypt()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addencryptkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$enc </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">encrypt</span><span style="color: #007700">(</span><span style="color: #DD0000">"juste un test"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$enc</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-encryptsign" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_encryptsign</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.2)</p><p class="refpurpose"><span class="refname">gnupg_encryptsign</span> — <span class="dc-title">Cifra y firma un texto dado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-encryptsign-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_encryptsign</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$plaintext</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Cifra y firma el parámetro <code class="parameter">plaintext</code> con las
+   claves que han sido establecidas con
+   <a href="#function.gnupg-addsignkey" class="link">gnupg_addsignkey</a> y <a href="#function.gnupg-addencryptkey" class="link">gnupg_addencryptkey</a>
+   previamente y devuelve el texto cifrado y firmado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-encryptsign-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">plaintext</code></dt>
+     <dd>
+      <p class="para">
+       El texto a cifrar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-encryptsign-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, esta función devuelve el texto firmado y cifrado.
+   En caso de fallo, esta función devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-encryptsign-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3439">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_encryptsign()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_addencryptkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">gnupg_addsignkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$enc </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_encryptsign</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">, </span><span style="color: #DD0000">"juste un test"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$enc</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3440">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_encryptsign()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addencryptkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addsignkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$enc </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">encryptsign</span><span style="color: #007700">(</span><span style="color: #DD0000">"juste un test"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$enc</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-export" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_export</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_export</span> — <span class="dc-title">Exporta una clave</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-export-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_export</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fingerprint</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Exporta la clave <code class="parameter">fingerprint</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-export-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fingerprint</code></dt>
+     <dd>
+      <p class="para">La huella de la clave.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-export-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, esta función devuelve los datos de la clave.
+   En caso de fallo, esta función devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-export-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3441">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_export()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$export </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_export</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$export</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3442">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_export()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$export </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">export</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.gnupg-getengineinfo" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_getengineinfo</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 1.5)</p><p class="refpurpose"><span class="refname">gnupg_getengineinfo</span> — <span class="dc-title">Devuelve la información del motor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-getengineinfo-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_getengineinfo</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-getengineinfo-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-getengineinfo-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array que contiene la información del motor compuesto por <code class="literal">protocol</code>,
+   <code class="literal">file_name</code> y <code class="literal">home_dir</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-getengineinfo-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3443">
+    <p><strong>Ejemplo #1 Ejemplo procedimental <span class="function"><strong>gnupg_getengineinfo()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">gnupg_getengineinfo</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(3) {
+  ["protocol"]=&gt;
+  int(0)
+  ["file_name"]=&gt;
+  string(12) "/usr/bin/gpg"
+  ["home_dir"]=&gt;
+  string(0) ""
+}</pre>
+</div>
+    </div>
+   </div>
+   <div class="example" id="example-3444">
+    <p><strong>Ejemplo #2 Ejemplo orientado a objetos <span class="function"><strong>gnupg_getengineinfo()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">([</span><span style="color: #DD0000">"file_name" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"/usr/bin/gpg2"</span><span style="color: #007700">, </span><span style="color: #DD0000">"home_dir" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"/var/www/.gnupg"</span><span style="color: #007700">]);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getengineinfo</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(3) {
+  ["protocol"]=&gt;
+  int(0)
+  ["file_name"]=&gt;
+  string(13) "/usr/bin/gpg2"
+  ["home_dir"]=&gt;
+  string(15) "/var/www/.gnupg"
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.gnupg-geterror" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_geterror</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_geterror</span> — <span class="dc-title">Devuelve el texto de error, si una función falla</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-geterror-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_geterror</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-geterror-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-geterror-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el texto de error si se ha producido un error, en caso contrario devuelve
+   <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-geterror-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3445">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_geterror()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br>echo </span><span style="color: #0000BB">gnupg_geterror</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3446">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_geterror()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br>echo </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">geterror</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.gnupg-geterrorinfo" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_geterrorinfo</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 1.5)</p><p class="refpurpose"><span class="refname">gnupg_geterrorinfo</span> — <span class="dc-title">Devuelve la información de error</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-geterrorinfo-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_geterrorinfo</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-geterrorinfo-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-geterrorinfo-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array con la información de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-geterrorinfo-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3447">
+    <p><strong>Ejemplo #1 Ejemplo procedimental <span class="function"><strong>gnupg_geterrorinfo()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #FF8000">// esto es llamado sin error<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">gnupg_geterrorinfo</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(4) {
+  ["generic_message"]=&gt;
+  bool(false)
+  ["gpgme_code"]=&gt;
+  int(0)
+  ["gpgme_source"]=&gt;
+  string(18) "Unspecified source"
+  ["gpgme_message"]=&gt;
+  string(7) "Success"
+}</pre>
+</div>
+    </div>
+   </div>
+   <div class="example" id="example-3448">
+    <p><strong>Ejemplo #2 Ejemplo orientado a objetos <span class="function"><strong>gnupg_geterrorinfo()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #FF8000">// llamada con error<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">decrypt</span><span style="color: #007700">(</span><span style="color: #DD0000">'abc'</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// la información de error debe ser mostrada<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">geterrorinfo</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(4) {
+  ["generic_message"]=&gt;
+  string(14) "decrypt failed"
+  ["gpgme_code"]=&gt;
+  int(117440570)
+  ["gpgme_source"]=&gt;
+  string(5) "GPGME"
+  ["gpgme_message"]=&gt;
+  string(7) "No data"
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.gnupg-getprotocol" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_getprotocol</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_getprotocol</span> — <span class="dc-title">Devuelve el protocolo activo actual para todas las operaciones</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-getprotocol-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_getprotocol</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-getprotocol-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-getprotocol-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el protocolo activo actual, que puede ser uno de estos:
+   <strong><code><a href="#constant.gnupg-protocol-openpgp">GNUPG_PROTOCOL_OpenPGP</a></code></strong> o
+   <strong><code><a href="#constant.gnupg-protocol-cms">GNUPG_PROTOCOL_CMS</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-getprotocol-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3449">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_getprotocol()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br>echo </span><span style="color: #0000BB">gnupg_getprotocol</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3450">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_getprotocol()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br>echo </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getprotocol</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.gnupg-gettrustlist" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_gettrustlist</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.5)</p><p class="refpurpose"><span class="refname">gnupg_gettrustlist</span> — <span class="dc-title">Busca los elementos de confianza</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-gettrustlist-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_gettrustlist</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$pattern</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.array" class="type array">array</a></span></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-gettrustlist-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">pattern</code></dt>
+     <dd>
+      <p class="para">
+       Una expresión para limitar la lista de elementos de confianza a los elementos que coinciden con el patrón.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-gettrustlist-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, esta función devuelve un array de elementos de confianza.
+   En caso de error, esta función devuelve <strong><code><a href="#constant.null">null</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-gettrustlist-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3451">
+    <p><strong>Ejemplo #1 Ejemplo procedimental <span class="function"><strong>gnupg_gettrustlist()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$items </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_gettrustlist</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$items</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3452">
+    <p><strong>Ejemplo #2 Ejemplo orientado a objetos <span class="function"><strong>gnupg_gettrustlist()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$items </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">gettrustlist</span><span style="color: #007700">();<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$items</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.gnupg-import" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_import</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.3)</p><p class="refpurpose"><span class="refname">gnupg_import</span> — <span class="dc-title">Importa una clave</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-import-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_import</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$keydata</code></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Importa la clave <code class="parameter">keydata</code> y devuelve un array con
+   la información sobre el proceso de importación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-import-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">keydata</code></dt>
+     <dd>
+      <p class="para">
+       La clave a importar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-import-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, esta función devuelve un array de información sobre
+   el proceso de importación.
+   En caso de fallo, esta función devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-import-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3453">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_import()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_import</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #0000BB">$keydata</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3454">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_import()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">import</span><span style="color: #007700">(</span><span style="color: #0000BB">$keydata</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-init" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_init</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.4)</p><p class="refpurpose"><span class="refname">gnupg_init</span> — <span class="dc-title">Inicializa una conexión</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-init-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_init</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$options</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-init-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">options</code></dt>
+     <dd>
+      <p class="para">
+       Debe ser un array asociativo. Se utiliza para modificar la configuración
+       por omisión del motor criptográfico.
+       </p><table class="doctable table">
+        <caption><strong>Sustitución de la configuración</strong></caption>
+        
+         <thead>
+          <tr>
+           <th>Clave</th>
+           <th>Tipo</th>
+           <th>Descripción</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td>file_name</td>
+           <td><span class="type"><a href="#language.types.string" class="type string">string</a></span></td>
+           <td>
+            Es el nombre de fichero del programa ejecutable que implementa
+            este protocolo, que generalmente es la ruta del ejecutable <code class="literal">gpg</code>.
+           </td>
+          </tr>
+
+          <tr>
+           <td>home_dir</td>
+           <td><span class="type"><a href="#language.types.string" class="type string">string</a></span></td>
+           <td>
+            Es el nombre del directorio de configuración.
+            También sustituye a la variable de entorno <code class="literal">GNUPGHOME</code>
+            que se utiliza con el mismo propósito.
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-init-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un recurso de conexión GnuPG, utilizado por otras funciones GnuPG.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.gnupg-init-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL gnupg 1.5.0</td>
+      <td>
+       Se ha añadido el argumento <code class="parameter">options</code>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-init-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3455">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_init()</strong></span> con configuración por omisión (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3456">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_init()</strong></span> con nombre de fichero y directorio de origen sobrescritos (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">([</span><span style="color: #DD0000">"file_name" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"/usr/bin/gpg2"</span><span style="color: #007700">, </span><span style="color: #DD0000">"home_dir" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"/var/www/.gnupg"</span><span style="color: #007700">]);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3457">
+    <p><strong>Ejemplo #3 Ejemplo con <span class="function"><strong>gnupg_init()</strong></span> con configuración por omisión (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3458">
+    <p><strong>Ejemplo #4 Ejemplo con <span class="function"><strong>gnupg_init()</strong></span> con nombre de fichero y directorio de origen sobrescritos (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">([</span><span style="color: #DD0000">"file_name" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"/usr/bin/gpg2"</span><span style="color: #007700">, </span><span style="color: #DD0000">"home_dir" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"/var/www/.gnupg"</span><span style="color: #007700">]);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-keyinfo" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_keyinfo</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_keyinfo</span> — <span class="dc-title">Retorna un array con las informaciones acerca de todas las
+  claves que coinciden con el patrón dado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-keyinfo-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_keyinfo</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$pattern</code></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-keyinfo-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">pattern</code></dt>
+     <dd>
+      <p class="para">
+       La máscara a utilizar sobre las claves.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-keyinfo-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna un array con las informaciones acerca de todas las claves que
+   coinciden con el patrón dado o retorna <strong><code><a href="#constant.false">false</a></code></strong> si ha ocurrido un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-keyinfo-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3459">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_keyinfo()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_keyinfo</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">, </span><span style="color: #DD0000">'test'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3460">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_keyinfo()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">keyinfo</span><span style="color: #007700">(</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.gnupg-listsignatures" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_listsignatures</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.5)</p><p class="refpurpose"><span class="refname">gnupg_listsignatures</span> — <span class="dc-title">Lista las firmas de clave</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-listsignatures-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_listsignatures</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$keyid</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.array" class="type array">array</a></span></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-listsignatures-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">keyid</code></dt>
+     <dd>
+      <p class="para">
+       El identificador de clave para listar las firmas.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-listsignatures-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, esta función devuelve un array de firmas de clave.
+   En caso de error, esta función devuelve <strong><code><a href="#constant.null">null</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-listsignatures-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3461">
+    <p><strong>Ejemplo #1 Ejemplo procedimental <span class="function"><strong>gnupg_listsignatures()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$signatures </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_listsignatures</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">, </span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$signatures</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3462">
+    <p><strong>Ejemplo #2 Ejemplo orientado a objetos <span class="function"><strong>gnupg_listsignatures()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$signatures </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">listsignatures</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$signatures</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.gnupg-setarmor" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_setarmor</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_setarmor</span> — <span class="dc-title">Cambia la salida blindada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-setarmor-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_setarmor</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$armor</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Cambia la salida blindada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-setarmor-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">armor</code></dt>
+     <dd>
+      <p class="para">
+       Pase un valor entero diferente de cero a esta función para activar
+       la salida blindada (valor por omisión).
+       Pase 0 para desactivar la salida blindada.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-setarmor-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-setarmor-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3463">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_setarmor()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_setarmor</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #0000BB">1</span><span style="color: #007700">); </span><span style="color: #FF8000">// Activa la salida blindada;<br></span><span style="color: #0000BB">gnupg_setarmor</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #0000BB">0</span><span style="color: #007700">); </span><span style="color: #FF8000">// Desactiva la salida blindada;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3464">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_setarmor()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">setarmor</span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">); </span><span style="color: #FF8000">// Activa la salida blindada;<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">setarmor</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">); </span><span style="color: #FF8000">// Desactiva la salida blindada;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-seterrormode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_seterrormode</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.6)</p><p class="refpurpose"><span class="refname">gnupg_seterrormode</span> — <span class="dc-title">Establece el modo para error_reporting</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-seterrormode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_seterrormode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$errormode</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Establece el modo para <a href="#ini.error-reporting" class="link">error_reporting</a>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-seterrormode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">errormode</code></dt>
+     <dd>
+      <p class="para">
+       El modo de error.
+      </p>
+      <p class="para">
+       <code class="parameter">errormode</code> acepta una constante que indica qué tipo de
+       error_reporting debe ser utilizado. Los valores posibles son
+       <strong><code><a href="#constant.gnupg-error-warning">GNUPG_ERROR_WARNING</a></code></strong>,
+       <strong><code><a href="#constant.gnupg-error-exception">GNUPG_ERROR_EXCEPTION</a></code></strong> y
+       <strong><code><a href="#constant.gnupg-error-silent">GNUPG_ERROR_SILENT</a></code></strong>.
+       Por omisión <strong><code><a href="#constant.gnupg-error-silent">GNUPG_ERROR_SILENT</a></code></strong>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-seterrormode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-seterrormode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3465">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_seterrormode()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_seterrormode</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">, </span><span style="color: #0000BB">GNUPG_ERROR_WARNING</span><span style="color: #007700">); </span><span style="color: #FF8000">// emite un PHP-Warning en caso de error<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3466">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_seterrormode()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">seterrormode</span><span style="color: #007700">(</span><span style="color: #0000BB">gnupg</span><span style="color: #007700">::</span><span style="color: #0000BB">ERROR_EXCEPTION</span><span style="color: #007700">); </span><span style="color: #FF8000">// lanza una excepción en caso de error<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.gnupg-setsignmode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_setsignmode</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_setsignmode</span> — <span class="dc-title">Establece el modo para firmar</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-setsignmode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_setsignmode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$signmode</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Establece el modo para firmar.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-setsignmode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">sigmode</code></dt>
+     <dd>
+      <p class="para">
+       El modo de firma.
+      </p>
+      <p class="para">
+       <code class="parameter">signmode</code> acepta una constante que indica qué tipo de
+       firma debe ser producida. Los valores posibles son:
+       <strong><code><a href="#constant.gnupg-sig-mode-normal">GNUPG_SIG_MODE_NORMAL</a></code></strong>,
+       <strong><code><a href="#constant.gnupg-sig-mode-detach">GNUPG_SIG_MODE_DETACH</a></code></strong> y
+       <strong><code><a href="#constant.gnupg-sig-mode-clear">GNUPG_SIG_MODE_CLEAR</a></code></strong>.
+       Por omisión, se utiliza <strong><code><a href="#constant.gnupg-sig-mode-clear">GNUPG_SIG_MODE_CLEAR</a></code></strong>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-setsignmode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-setsignmode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3467">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_setsignmode()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_setsignmode</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">, </span><span style="color: #0000BB">GNUPG_SIG_MODE_DETACH</span><span style="color: #007700">); </span><span style="color: #FF8000">// produce una firma desvinculada<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3468">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_setsignmode()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">setsignmode</span><span style="color: #007700">(</span><span style="color: #0000BB">gnupg</span><span style="color: #007700">::</span><span style="color: #0000BB">SIG_MODE_DETACH</span><span style="color: #007700">); </span><span style="color: #FF8000">// produce una firma desvinculada<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.gnupg-sign" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_sign</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_sign</span> — <span class="dc-title">Firma un texto dado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-sign-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_sign</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$plaintext</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Firma el argumento <code class="parameter">plaintext</code> con las claves que
+   fueron establecidas con <a href="#function.gnupg-addsignkey" class="link">gnupg_addsignkey</a> previamente
+   y devuelve el texto firmado o la firma, dependiendo de lo que fue
+   establecido con
+   <a href="#function.gnupg-setsignmode" class="link">gnupg_setsignmode</a>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-sign-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">plaintext</code></dt>
+     <dd>
+      <p class="para">
+       El texto a firmar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-sign-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, esta función devuelve el texto firmado o la firma.
+   En caso de fallo, esta función devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-sign-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3469">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_sign()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #0000BB">gnupg_addsignkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$signed </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_sign</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">, </span><span style="color: #DD0000">"juste un test"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$signed</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3470">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_sign()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addsignkey</span><span style="color: #007700">(</span><span style="color: #DD0000">"8660281B6051D071D94B5B230549F9DC851566DC"</span><span style="color: #007700">,</span><span style="color: #DD0000">"test"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$signed </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">sign</span><span style="color: #007700">(</span><span style="color: #DD0000">"just a test"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$signed</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.gnupg-verify" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">gnupg_verify</h1>
+  <p class="verinfo">(PECL gnupg &gt;= 0.1)</p><p class="refpurpose"><span class="refname">gnupg_verify</span> — <span class="dc-title">Verifica un texto firmado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.gnupg-verify-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>gnupg_verify</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$identifier</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$signed_text</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$signature</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$plaintext</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica el argumento <code class="parameter">signed_text</code> y devuelve las
+   informaciones acerca de la firma.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.gnupg-verify-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">identifier</code></dt>
+     <dd>
+      <p class="para">El identificador gnupg, generado por una llamada
+a la función <span class="function"><a href="#function.gnupg-init" class="function">gnupg_init()</a></span> o a la función
+<span class="classname"><strong class="classname">gnupg</strong></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">signed_text</code></dt>
+     <dd>
+      <p class="para">
+       El texto firmado.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">signature</code></dt>
+     <dd>
+      <p class="para">
+       La firma. Para verificar un texto firmado en claro, se establece la firma
+       a <strong><code><a href="#constant.false">false</a></code></strong>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">plaintext</code></dt>
+     <dd>
+      <p class="para">
+       El texto. Si este argumento opcional es pasado, se rellena con el <code class="parameter">plaintext</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.gnupg-verify-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, esta función devuelve informaciones acerca de la
+   firma.
+   En caso de fallo, esta función devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.gnupg-verify-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3471">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>gnupg_verify()</strong></span> (Estilo procedimental)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$plaintext </span><span style="color: #007700">= </span><span style="color: #DD0000">""</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$res </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_init</span><span style="color: #007700">();<br></span><span style="color: #FF8000">// firmado en claro<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_verify</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #0000BB">$signed_text</span><span style="color: #007700">,</span><span style="color: #0000BB">false</span><span style="color: #007700">,</span><span style="color: #0000BB">$plaintext</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// firma separada<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">gnupg_verify</span><span style="color: #007700">(</span><span style="color: #0000BB">$res</span><span style="color: #007700">,</span><span style="color: #0000BB">$signed_text</span><span style="color: #007700">,</span><span style="color: #0000BB">$signature</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-3472">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>gnupg_verify()</strong></span> (Estilo orientado a objetos)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$plaintext </span><span style="color: #007700">= </span><span style="color: #DD0000">""</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$gpg </span><span style="color: #007700">= new </span><span style="color: #0000BB">gnupg</span><span style="color: #007700">();<br></span><span style="color: #FF8000">// firmado en claro<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">verify</span><span style="color: #007700">(</span><span style="color: #0000BB">$signed_text</span><span style="color: #007700">,</span><span style="color: #0000BB">false</span><span style="color: #007700">,</span><span style="color: #0000BB">$plaintext</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// firma separada<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">$gpg</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">verify</span><span style="color: #007700">(</span><span style="color: #0000BB">$signed_text</span><span style="color: #007700">,</span><span style="color: #0000BB">$signature</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.gnupg-adddecryptkey">gnupg_adddecryptkey</a> — Añade una clave para descifrado</li><li><a href="#function.gnupg-addencryptkey">gnupg_addencryptkey</a> — Añade una clave para cifrado</li><li><a href="#function.gnupg-addsignkey">gnupg_addsignkey</a> — Añade una clave para firmar</li><li><a href="#function.gnupg-cleardecryptkeys">gnupg_cleardecryptkeys</a> — Elimina todas las claves que fueron fijadas para el descifrado anteriormente</li><li><a href="#function.gnupg-clearencryptkeys">gnupg_clearencryptkeys</a> — Elimina todas las claves que fueron establecidas para cifrado con anterioridad</li><li><a href="#function.gnupg-clearsignkeys">gnupg_clearsignkeys</a> — Elimina todas las claves que fueron fijadas para firma previamente</li><li><a href="#function.gnupg-decrypt">gnupg_decrypt</a> — Descifra un texto dado</li><li><a href="#function.gnupg-decryptverify">gnupg_decryptverify</a> — Descifra y verifica un texto dado</li><li><a href="#function.gnupg-deletekey">gnupg_deletekey</a> — Elimina una clave del llavero</li><li><a href="#function.gnupg-encrypt">gnupg_encrypt</a> — Cifra un texto dado</li><li><a href="#function.gnupg-encryptsign">gnupg_encryptsign</a> — Cifra y firma un texto dado</li><li><a href="#function.gnupg-export">gnupg_export</a> — Exporta una clave</li><li><a href="#function.gnupg-getengineinfo">gnupg_getengineinfo</a> — Devuelve la información del motor</li><li><a href="#function.gnupg-geterror">gnupg_geterror</a> — Devuelve el texto de error, si una función falla</li><li><a href="#function.gnupg-geterrorinfo">gnupg_geterrorinfo</a> — Devuelve la información de error</li><li><a href="#function.gnupg-getprotocol">gnupg_getprotocol</a> — Devuelve el protocolo activo actual para todas las operaciones</li><li><a href="#function.gnupg-gettrustlist">gnupg_gettrustlist</a> — Busca los elementos de confianza</li><li><a href="#function.gnupg-import">gnupg_import</a> — Importa una clave</li><li><a href="#function.gnupg-init">gnupg_init</a> — Inicializa una conexión</li><li><a href="#function.gnupg-keyinfo">gnupg_keyinfo</a> — Retorna un array con las informaciones acerca de todas las
+  claves que coinciden con el patrón dado</li><li><a href="#function.gnupg-listsignatures">gnupg_listsignatures</a> — Lista las firmas de clave</li><li><a href="#function.gnupg-setarmor">gnupg_setarmor</a> — Cambia la salida blindada</li><li><a href="#function.gnupg-seterrormode">gnupg_seterrormode</a> — Establece el modo para error_reporting</li><li><a href="#function.gnupg-setsignmode">gnupg_setsignmode</a> — Establece el modo para firmar</li><li><a href="#function.gnupg-sign">gnupg_sign</a> — Firma un texto dado</li><li><a href="#function.gnupg-verify">gnupg_verify</a> — Verifica un texto firmado</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.gnupg">Introducción</a></li><li><a href="#gnupg.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#gnupg.requirements">Requerimientos</a></li><li><a href="#gnupg.installation">Instalación</a></li></ul></li><li><a href="#gnupg.constants">Constantes predefinidas</a></li><li><a href="#gnupg.examples">Ejemplos</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#gnupg.examples-clearsign">Firma de texto (clearsign)</a></li></ul></li><li><a href="#ref.gnupg">Funciones GnuPG</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.gnupg-adddecryptkey">gnupg_adddecryptkey</a> — Añade una clave para descifrado</li><li><a href="#function.gnupg-addencryptkey">gnupg_addencryptkey</a> — Añade una clave para cifrado</li><li><a href="#function.gnupg-addsignkey">gnupg_addsignkey</a> — Añade una clave para firmar</li><li><a href="#function.gnupg-cleardecryptkeys">gnupg_cleardecryptkeys</a> — Elimina todas las claves que fueron fijadas para el descifrado anteriormente</li><li><a href="#function.gnupg-clearencryptkeys">gnupg_clearencryptkeys</a> — Elimina todas las claves que fueron establecidas para cifrado con anterioridad</li><li><a href="#function.gnupg-clearsignkeys">gnupg_clearsignkeys</a> — Elimina todas las claves que fueron fijadas para firma previamente</li><li><a href="#function.gnupg-decrypt">gnupg_decrypt</a> — Descifra un texto dado</li><li><a href="#function.gnupg-decryptverify">gnupg_decryptverify</a> — Descifra y verifica un texto dado</li><li><a href="#function.gnupg-deletekey">gnupg_deletekey</a> — Elimina una clave del llavero</li><li><a href="#function.gnupg-encrypt">gnupg_encrypt</a> — Cifra un texto dado</li><li><a href="#function.gnupg-encryptsign">gnupg_encryptsign</a> — Cifra y firma un texto dado</li><li><a href="#function.gnupg-export">gnupg_export</a> — Exporta una clave</li><li><a href="#function.gnupg-getengineinfo">gnupg_getengineinfo</a> — Devuelve la información del motor</li><li><a href="#function.gnupg-geterror">gnupg_geterror</a> — Devuelve el texto de error, si una función falla</li><li><a href="#function.gnupg-geterrorinfo">gnupg_geterrorinfo</a> — Devuelve la información de error</li><li><a href="#function.gnupg-getprotocol">gnupg_getprotocol</a> — Devuelve el protocolo activo actual para todas las operaciones</li><li><a href="#function.gnupg-gettrustlist">gnupg_gettrustlist</a> — Busca los elementos de confianza</li><li><a href="#function.gnupg-import">gnupg_import</a> — Importa una clave</li><li><a href="#function.gnupg-init">gnupg_init</a> — Inicializa una conexión</li><li><a href="#function.gnupg-keyinfo">gnupg_keyinfo</a> — Retorna un array con las informaciones acerca de todas las
+  claves que coinciden con el patrón dado</li><li><a href="#function.gnupg-listsignatures">gnupg_listsignatures</a> — Lista las firmas de clave</li><li><a href="#function.gnupg-setarmor">gnupg_setarmor</a> — Cambia la salida blindada</li><li><a href="#function.gnupg-seterrormode">gnupg_seterrormode</a> — Establece el modo para error_reporting</li><li><a href="#function.gnupg-setsignmode">gnupg_setsignmode</a> — Establece el modo para firmar</li><li><a href="#function.gnupg-sign">gnupg_sign</a> — Firma un texto dado</li><li><a href="#function.gnupg-verify">gnupg_verify</a> — Verifica un texto firmado</li></ul></li></ul></div>

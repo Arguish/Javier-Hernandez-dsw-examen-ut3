@@ -1,0 +1,506 @@
+<div id="book.fpm" class="book"><hr>
+ 
+ <h1 class="title">Gestor de procesos FastCGI</h1>
+
+ <div id="intro.fpm" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">FPM (FastCGI Process Manager, gestor de procesos FastCGI)
+es una alternativa a la implementación PHP FastCGI con funcionalidades adicionales útiles para sitios muy altamente cargados.
+</p>
+  <p class="para">
+   Este SAPI está incluido en PHP.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="fpm.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+
+
+ <p class="para">
+  La información sobre la instalación y configuración de FPM se puede encontrar
+  en la sección de <a href="#install.fpm" class="link">instalación y configuración </a> del
+  manual de PHP.
+ </p>
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="fpm.observability" class="chapter"><hr>
+ <h1 class="title">Observabilidad</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#fpm.status">Página de estado</a></li></ul>
+
+
+ 
+
+
+
+<div id="fpm.status" class="sect1"><hr>
+ <h2 class="title">Página de estado</h2>
+
+ <p class="para">
+  Esta página proporciona información sobre la configuración y el contenido de la página de estado de FPM. Ver también
+  <span class="function"><a href="#function.fpm-get-status" class="function">fpm_get_status()</a></span>.
+ </p>
+
+ <div class="sect2" id="fpm.status.configuration">
+  <h3 class="title">Configuración</h3>
+
+  <p class="para">
+   La página de estado de FPM puede activarse definiendo el parámetro
+   <a href="#pm.status-path" class="link">pm.status_path</a>
+   en la configuración del grupo de FPM.
+  </p>
+
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    Por razones de seguridad, la página de estado de FPM debería limitarse a las peticiones internas o a las direcciones IP de clientes conocidas, ya que la página revela las URLs de las peticiones y la información sobre los recursos disponibles.
+   </p>
+  </div>
+
+  <p class="para">
+   Según la configuración del servidor web, puede ser necesario configurar el servidor web para
+   permitir las peticiones directamente a esta ruta, omitiendo los scripts PHP. Un ejemplo de configuración
+   para Apache con FPM escuchando en UDS y <code class="literal">pm.status_path</code> establecido en
+   <code class="literal">/fpm-status</code>:
+  </p>
+
+  <div class="informalexample">
+   <div class="example-contents">
+    <div class="apache-confcode"><pre class="apache-confcode">&lt;LocationMatch "/fpm-status"&gt;
+ Order Allow,Deny
+ Allow from 127.0.0.1
+ ProxyPass "unix:/var/run/php-fpm.sock|fcgi://localhost/fpm-status"
+&lt;/LocationMatch&gt;</pre>
+</div>
+   </div>
+
+  </div>
+
+  <p class="para">
+   Tras el recarga o reinicio de FPM y del servidor web, la página de estado estará accesible desde
+   el navegador (siempre que la petición provenga de una dirección IP autorizada si se ha configurado la restricción de IP).
+  </p>
+ </div>
+
+ <div class="sect2" id="fpm.status.parameters">
+  <h3 class="title">Parámetros de la petición</h3>
+
+  <p class="para">
+   El formato de la página de estado puede modificarse especificando uno de los siguientes parámetros de petición:
+  </p>
+
+  <ul class="simplelist">
+   <li><code class="literal">html</code></li>
+   <li><code class="literal">json</code></li>
+   <li><code class="literal">openmetrics</code></li>
+   <li><code class="literal">xml</code></li>
+  </ul>
+
+  <p class="para">
+   Información adicional también puede devolverse utilizando el parámetro de petición <code class="literal">full</code>.
+  </p>
+
+  <p class="para">
+   Ejemplo de URL de página de estado:
+  </p>
+
+  <ul class="simplelist">
+   <li>
+    <code class="literal">https://localhost/fpm-status</code>
+    - Salida breve en el formato de texto por defecto
+   </li>
+   <li>
+    <code class="literal">https://localhost/fpm-status?full</code>
+    - Resultados completos en el formato de texto por defecto
+   </li>
+   <li>
+    <code class="literal">https://localhost/fpm-status?json</code>
+    - Resultado conciso en formato JSON
+   </li>
+   <li>
+    <code class="literal">https://localhost/fpm-status?html&amp;full</code>
+    - Resultados completos en formato HTML
+   </li>
+  </ul>
+ </div>
+
+ <div class="sect2" id="fpm.status.contents">
+  <h3 class="title">Información mostrada</h3>
+
+  <p class="para">
+   Los valores de fecha y hora utilizan el formato de marca de tiempo Unix en las salidas JSON y XML,
+   de lo contrario utilizan el formato resultante del siguiente ejemplo
+   <code class="literal">"03/Jun/2021:07:21:46 +0100"</code>.
+  </p>
+
+  <table class="doctable table">
+   <caption><strong>Información básica - Siempre mostrada en la página de estado</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Parámetro</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>pool</td>
+      <td>El nombre del grupo de procesos FPM.</td>
+     </tr>
+
+     <tr>
+      <td>proccess manager</td>
+      <td>El tipo de gestor de procesos - estático, dinámico o bajo demanda.</td>
+     </tr>
+
+     <tr>
+      <td>start time</td>
+      <td>Fecha y hora del último inicio del grupo de procesos.</td>
+     </tr>
+
+     <tr>
+      <td>start since</td>
+      <td>Tiempo en segundos transcurrido desde el último inicio del grupo de procesos.</td>
+     </tr>
+
+     <tr>
+      <td>accepted conn</td>
+      <td>Número total de conexiones aceptadas.</td>
+     </tr>
+
+     <tr>
+      <td>listen queue</td>
+      <td>Número de peticiones (backlog) en espera de un proceso libre.</td>
+     </tr>
+
+     <tr>
+      <td>max listen queue</td>
+      <td>El número máximo de peticiones vistas en la cola en un momento dado.</td>
+     </tr>
+
+     <tr>
+      <td>listen queue len</td>
+      <td>Tamaño máximo permitido de la cola.</td>
+     </tr>
+
+     <tr>
+      <td>idle processes</td>
+      <td>Número de procesos actualmente inactivos (en espera de peticiones).</td>
+     </tr>
+
+     <tr>
+      <td>active processes</td>
+      <td>Número de procesos que actualmente están procesando peticiones.</td>
+     </tr>
+
+     <tr>
+      <td>total processes</td>
+      <td>Número total de procesos en curso.</td>
+     </tr>
+
+     <tr>
+      <td>max active processes</td>
+      <td>Número máximo de procesos activos simultáneamente.</td>
+     </tr>
+
+     <tr>
+      <td>max children reached</td>
+      <td>
+       ¿Se ha alcanzado ya el número máximo de procesos? Si es así, el valor mostrado es
+       mayor o igual a <code class="literal">1</code>, de lo contrario el valor mostrado es <code class="literal">0</code>.
+      </td>
+     </tr>
+
+     <tr>
+      <td>slow requests</td>
+      <td>
+       El número total de peticiones que han alcanzado el tiempo de espera configurado de
+       <code class="literal">request_slowlog_timeout</code>.
+      </td>
+     </tr>
+
+     <tr>
+      <td>memory peak</td>
+      <td>
+       El pico de uso de memoria desde el inicio de FPM.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+
+  <table class="doctable table">
+   <caption><strong>Información por proceso - mostrada únicamente en modo de salida completa (<code class="literal">full</code>)</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Parámetro</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>pid</td>
+      <td>El PID del sistema del proceso.</td>
+     </tr>
+
+     <tr>
+      <td>state</td>
+      <td>El estado del proceso - Idle, Running, ...</td>
+     </tr>
+
+     <tr>
+      <td>start time</td>
+      <td>La fecha/hora en que el proceso comenzó.</td>
+     </tr>
+
+     <tr>
+      <td>start since</td>
+      <td>El número de segundos transcurridos desde el inicio del proceso.</td>
+     </tr>
+
+     <tr>
+      <td>requests</td>
+      <td>El número total de peticiones servidas.</td>
+     </tr>
+
+     <tr>
+      <td>request duration</td>
+      <td>El tiempo total en microsegundos pasados procesando peticiones.</td>
+     </tr>
+
+     <tr>
+      <td>request method</td>
+      <td>El método HTTP de la última petición servida.</td>
+     </tr>
+
+     <tr>
+      <td>request uri</td>
+      <td>
+       La URI de la última petición servida (tras el procesamiento por el servidor web, puede seguir siendo
+       <code class="literal">/index.php</code> si se utiliza un patrón de redirección del controlador frontal).
+      </td>
+     </tr>
+
+     <tr>
+      <td>content length</td>
+      <td>La longitud del cuerpo de la petición, en bytes, de la última petición.</td>
+     </tr>
+
+     <tr>
+      <td>user</td>
+      <td>El usuario HTTP (<code class="literal">PHP_AUTH_USER</code>) de la última petición.</td>
+     </tr>
+
+     <tr>
+      <td>script</td>
+      <td>
+       La ruta completa del script ejecutado por la última petición. Será
+       <code class="literal">'-'</code> si no es aplicable (por ejemplo, las peticiones de la página de estado).
+      </td>
+     </tr>
+
+     <tr>
+      <td>last request cpu</td>
+      <td>
+       El %cpu de la última petición. Será 0 si el proceso no está en reposo ya que el
+       cálculo se realiza cuando el procesamiento de la petición ha finalizado.
+       El valor puede superar el 100%, ya que el indicador mostrará el porcentaje total del tiempo de CPU utilizado en la última petición -
+       tiene en cuenta los procesos en todos los núcleos, mientras que el 100% es para un solo núcleo.
+      </td>
+     </tr>
+
+     <tr>
+      <td>last request memory</td>
+      <td>
+       La cantidad máxima de memoria consumida por la última petición. Este valor será 0 si el proceso
+       no está en reposo, ya que el cálculo se realiza cuando el procesamiento de la petición ha finalizado.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Todos los valores son específicos del grupo y se reinician cuando se reinicia FPM.
+   </p>
+  </blockquote>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    El formato de salida OpenMetrics utiliza diferentes tipos de parámetros para adaptarse mejor al formato OpenMetrics.
+    Los parámetros y las descripciones de sus valores están incluidos en la salida del formato OpenMetrics.
+   </p>
+  </blockquote>
+ </div>
+
+ <div class="sect2">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.1.0</td>
+      <td>Se añadió el formato openmetrics.</td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+</div>
+<hr>
+
+
+ 
+
+
+</div>
+
+<hr>
+
+
+ 
+
+ 
+
+
+
+
+<div id="ref.fpm" class="reference"><hr>
+ <h1 class="title">FPM Funciones</h1>
+
+ 
+
+
+
+
+<div id="function.fastcgi-finish-request" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fastcgi_finish_request</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.3.3, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">fastcgi_finish_request</span> — <span class="dc-title">Descarga todos los datos de la respuesta al cliente</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fastcgi-finish-request-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fastcgi_finish_request</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función descarga todos los datos de la respuesta al cliente y finaliza
+   la solicitud. Esto permite que las tareas que consumen tiempo se realicen sin
+   dejar la conexión con el cliente abierta.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fastcgi-finish-request-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fastcgi-finish-request-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.fpm-get-status" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fpm_get_status</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.3, PHP 8)</p><p class="refpurpose"><span class="refname">fpm_get_status</span> — <span class="dc-title">Devuelve el estado actual del pool FPM</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fpm-get-status-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fpm_get_status</strong></span>(): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función devuelve el estado completo del pool de FPM en forma de un array asociativo. Siempre
+   devuelve el estado completo, incluyendo las informaciones de estado por proceso. Ver el manual de la
+   <a href="#fpm.status" class="link">página de estado FPM</a> para más detalles.
+  </p>
+  <p class="para">
+   Tenga en cuenta que esta función solo estará definida si FPM se utiliza para servir el script.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fpm-get-status-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fpm-get-status-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Array asociativo que contiene el estado completo del pool FPM, o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.fastcgi-finish-request">fastcgi_finish_request</a> — Descarga todos los datos de la respuesta al cliente</li><li><a href="#function.fpm-get-status">fpm_get_status</a> — Devuelve el estado actual del pool FPM</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.fpm">Introducción</a></li><li><a href="#fpm.setup">Instalación/Configuración</a></li><li><a href="#fpm.observability">Observabilidad</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#fpm.status">Página de estado</a></li></ul></li><li><a href="#ref.fpm">FPM Funciones</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.fastcgi-finish-request">fastcgi_finish_request</a> — Descarga todos los datos de la respuesta al cliente</li><li><a href="#function.fpm-get-status">fpm_get_status</a> — Devuelve el estado actual del pool FPM</li></ul></li></ul></div>

@@ -1,0 +1,3294 @@
+<div id="book.pthreads" class="book"><hr>
+ 
+ <h1 class="title">pthreads</h1>
+ 
+
+ <div id="intro.pthreads" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   pthreads es una API orientada a objetos que aporta todas las herramientas necesarias para
+   el multithreading en PHP.
+   Las aplicaciones PHP pueden crear, leer, escribir, ejecutar
+   y sincronizar Threads, Workers, y objetos Threaded.
+  </p>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="simpara">
+    Esta extensión es considerada no mantenida y obsoleta.
+   </p>
+  </div>
+  <div class="tip"><strong class="tip">Sugerencia</strong>
+   <p class="simpara">
+    Considerar el uso de <a href="#book.parallel" class="link">parallel</a> en su lugar.
+   </p>
+  </div>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    La extensión pthreads no puede ser utilizada en un entorno de
+    servidor Web. El threading en PHP se limita por tanto a aplicaciones basadas
+    en CLI únicamente.
+   </p>
+  </div>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    pthreads (v3) puede ser utilizado únicamente con PHP 7.2+ debido a un
+    modo ZTS peligroso en PHP 7.0 y 7.1.
+   </p>
+  </div>
+  <p class="para">
+   La clase <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span> constituye la base de la
+   funcionalidad que permite a pthreads funcionar. Expone los métodos
+   de sincronización y algunas interfaces útiles para el programador.
+  </p>
+  <p class="para">
+   La clase <span class="classname"><a href="#class.thread" class="classname">Thread</a></span> permite crear threads extendiéndola simplemente e
+   implementando un método <code class="literal">run</code>. Todos los miembros pueden ser escritos y leídos
+   por cualquier contexto con una referencia al thread. Todo contexto puede igualmente ejecutar
+   todos los métodos públicos y protegidos. El cuerpo del método run será ejecutado
+   en un thread separado cuando el método <span class="methodname"><a href="#thread.start" class="methodname">Thread::start()</a></span>
+   de la implementación sea llamado desde el contexto que lo creó. Solo el
+   contexto que crea un thread puede iniciarlo y unirse a él.
+  </p>
+  <p class="para">
+   La clase <span class="classname"><a href="#class.worker" class="classname">Worker</a></span> tiene un estado persistente y estará
+   disponible desde la llamada a <span class="methodname"><a href="#thread.start" class="methodname">Thread::start()</a></span> (un método heredado)
+   hasta que el objeto esté fuera de alcance, o sea explícitamente detenido (vía
+   <span class="methodname"><a href="#worker.shutdown" class="methodname">Worker::shutdown()</a></span>). Todo contexto con una referencia al objeto Worker
+   puede apilar tareas en el Worker (vía <span class="methodname"><a href="#worker.stack" class="methodname">Worker::stack()</a></span>), donde estas
+   tareas serán ejecutadas por el Worker en un thread separado. El método
+   <code class="literal">run</code> de un objeto worker es ejecutado antes de cualquier objeto de la pila del worker,
+   lo que permite que los recursos sean inicializados para que los objetos a ejecutar puedan usarlos.
+  </p>
+  <p class="para">
+   La clase <span class="classname"><a href="#class.pool" class="classname">Pool</a></span> se utiliza para crear un grupo de
+   workers para distribuir objetos <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span> entre ellos.
+   Es el medio más fácil y eficiente de utilizar múltiples threads en aplicaciones PHP.
+  </p>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    La clase <span class="classname"><a href="#class.pool" class="classname">Pool</a></span> no extiende la clase
+   <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span>, y por tanto los objetos basados en pool son
+   considerados como objetos PHP normales. En consecuencia, sus instancias no
+   deben ser compartidas entre contextos diferentes.
+   </p>
+  </div>
+  <p class="para">
+   La clase <span class="classname"><a href="#class.volatile" class="classname">Volatile</a></span> es nueva para pthreads v3.
+   Se utiliza para designar las propiedades <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span> mutables
+   de las clases <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span> (ya que estas son ahora inmutables por defecto).
+   También se utiliza para almacenar arrays PHP en contextos <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span>.
+  </p>
+  <p class="para">
+   La sincronización es una capacidad importante al realizar threading. Todos los
+   objetos creados por pthreads han sido construidos con sincronización en la forma
+   (que será familiar a los programadores Java) de
+   <span class="methodname"><a href="#threaded.wait" class="methodname">Threaded::wait()</a></span> y
+   <span class="methodname"><a href="#threaded.notify" class="methodname">Threaded::notify()</a></span>. La llamada a
+   <span class="methodname"><a href="#threaded.wait" class="methodname">Threaded::wait()</a></span> sobre un objeto hará que el contexto
+   espere a que otro contexto llame a
+   <span class="methodname"><a href="#threaded.notify" class="methodname">Threaded::notify()</a></span> sobre el mismo objeto. Este mecanismo
+   permite una sincronización poderosa entre los objetos
+   <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span> en PHP.
+  </p>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    Todo objeto previsto para ser utilizado en una parte multithread de la aplicación
+    debe extender <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span>.
+   </p>
+  </div>
+  <p class="para">
+   Almacenamiento de datos: En regla general, todos los tipos de datos que puedan ser serializados pueden
+   ser utilizados como miembro de un objeto Threaded, pueden ser leídos y escritos desde cualquier
+   contexto con una referencia al objeto Threaded. No todos los tipos de datos son almacenados
+   después de la serialización; los tipos simples son almacenados en su forma inicial. Los tipos
+   complejos, los arrays y los objetos que no son Threaded, son almacenados serializados; pueden ser
+   leídos y escritos en el objeto Threaded desde cualquier contexto con una referencia.
+   A excepción de los objetos Threaded, toda referencia utilizada para definir un miembro de un objeto
+   Threaded es separada de la referencia en el objeto Threaded; los mismos datos pueden ser leídos
+   directamente desde el objeto Threaded en cualquier momento por cualquier contexto con una referencia
+   al objeto Threaded.
+  </p>
+  <p class="para">
+   Miembros estáticos: Cuando un nuevo contexto es creado (Thread o Worker),
+   generalmente son copiados, pero los recursos y objetos con estado interno son nullificados
+   (por razones de seguridad). Esto permite a la función una especie de almacenamiento local
+   a nivel de thread. Por ejemplo, al iniciar el contexto, una clase cuyos miembros estáticos
+   incluyen información de conexión a un servidor de base de datos, solo la información
+   será copiada, y no la conexión en sí. Esto permite al nuevo contexto inicializar
+   una conexión de la misma forma que el contexto que lo creó, almacenando la conexión
+   en el mismo lugar sin afectar al contexto original.
+  </p>
+  <div class="caution"><strong class="caution">Precaución</strong>
+  <p class="para">
+   Cuando print_r, var_dump y otras funciones de depuración son ejecutadas, no incluyen
+   protección contra la recursión.
+  </p>
+  </div>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Recursos: Las extensiones y funcionalidades que definen recursos en PHP no están preparadas
+    para este tipo de entorno; pthreads toma disposiciones en materia de recursos a compartir entre
+    los contextos, sin embargo, para la mayoría de los recursos, deberán ser considerados como peligrosos.
+    Un cuidado y una extrema precaución deberán ser de aplicación para compartir recursos entre los contextos.
+   </p>
+  </blockquote>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    En el entorno de ejecución de pthreads, restricciones y limitaciones son necesarias para
+    proporcionar un entorno estable.
+   </p>
+  </div>
+ </div>
+<hr>
+
+
+ 
+
+
+
+<div id="pthreads.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#pthreads.requirements">Requerimientos</a></li><li><a href="#pthreads.installation">Instalación</a></li></ul>
+
+
+ <div id="pthreads.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Pthreads requiere una construcción de PHP con ZTS activado
+   (<strong class="option configure">--enable-zts</strong>, o en sistemas no-Windows anteriores a PHP 8.0.0,
+   <strong class="option configure">--enable-maintainer-zts</strong>).
+  </p>
+  <div class="caution"><strong class="caution">Precaución</strong>
+  <p class="para">
+   La seguridad de los Threads Zend (Zend Thread Safety - ZTS) no puede ser activada
+   después de la construcción; es una opción de compilación.
+  </p>
+  </div>
+  <p class="para">
+   pthreads debería compilar siempre que exista un encabezado Posix Threads funcional
+   (pthread.h) así como una construcción ZTS de PHP, lo cual incluye Windows (utilizando
+   el proyecto pthread-w32 de redhat).
+  </p>
+ </div>
+<hr>
+
+
+ <div id="pthreads.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   Las versiones de pthreads están alojadas en PECL y las fuentes en
+   <a href="https://github.com/krakjoe/pthreads" class="link external">» github</a>.
+   El procedimiento de instalación más sencillo es el estándar de PECL:
+   <a href="https://pecl.php.net/package/pthreads" class="link external">» https://pecl.php.net/package/pthreads</a>.
+  </p>
+  <p class="para">
+   Los usuarios de Windows pueden descargar binarios preconstruidos desde
+   el sitio de <a href="https://pecl.php.net/package/pthreads" class="link external">» PECL</a>.
+  </p>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    Los usuarios de Windows deben añadir pthreadVC2.dll (distribuido
+    con Windows) a su <var class="envar">PATH</var>.
+   </p>
+  </div>
+ </div>
+<hr>
+
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="pthreads.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <p class="para">
+  </p><dl>
+   
+    <dt id="constant.pthreads-inherit-all">
+     <strong><code><a href="#constant.pthreads-inherit-all">PTHREADS_INHERIT_ALL</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Las opciones por omisión para todos los hilos,
+      haciendo que los pthreads copien los entornos
+      cuando los nuevos hilos son iniciados
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.pthreads-inherit-none">
+     <strong><code><a href="#constant.pthreads-inherit-none">PTHREADS_INHERIT_NONE</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      No hereda nada cuando los nuevos hilos son iniciados
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.pthreads-inherit-ini">
+     <strong><code><a href="#constant.pthreads-inherit-ini">PTHREADS_INHERIT_INI</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Hereda las entradas INI cuando los nuevos hilos son iniciados
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.pthreads-inherit-constants">
+     <strong><code><a href="#constant.pthreads-inherit-constants">PTHREADS_INHERIT_CONSTANTS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Hereda las constantes declaradas por el usuario cuando los
+      nuevos hilos son iniciados
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.pthreads-inherit-classes">
+     <strong><code><a href="#constant.pthreads-inherit-classes">PTHREADS_INHERIT_CLASSES</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Hereda las clases declaradas por el usuario cuando los nuevos
+      hilos son iniciados
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.pthreads-inherit-functions">
+     <strong><code><a href="#constant.pthreads-inherit-functions">PTHREADS_INHERIT_FUNCTIONS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Hereda las funciones declaradas por el usuario cuando los nuevos
+      hilos son iniciados
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.pthreads-inherit-includes">
+     <strong><code><a href="#constant.pthreads-inherit-includes">PTHREADS_INHERIT_INCLUDES</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      La herencia incluye la información de fichero cuando los nuevos
+      hilos son iniciados
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.pthreads-inherit-comments">
+     <strong><code><a href="#constant.pthreads-inherit-comments">PTHREADS_INHERIT_COMMENTS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Hereda todos los comentarios cuando los nuevos hilos son
+      iniciados
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.pthreads-allow-headers">
+     <strong><code><a href="#constant.pthreads-allow-headers">PTHREADS_ALLOW_HEADERS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Permite que los nuevos hilos envíen los encabezados a la salida
+      estándar (normalmente no permitido)
+     </span>
+    </dd>
+   
+  </dl>
+ 
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.threaded" class="reference"><hr>
+
+ <h1 class="title">La clase Threaded</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p>
+
+  
+  <div class="section" id="threaded.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Los objetos Threaded constituyen la base de pthreads para ejecutar código de forma paralela; exponen e incluyen métodos de sincronización así como diversas interfaces útiles.
+   </p>
+   <p class="para">
+    Los objetos Threaded proporcionan seguridad nativa para el desarrollador; todas las operaciones son thread-safe dentro del ámbito del objeto.
+   </p>
+  </div>
+  
+
+  <div class="section" id="threaded.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+   
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+    
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">Threaded</strong>
+     </span>
+
+     <span class="oointerface"><span class="modifier">implements</span> 
+       <a href="#class.collectable" class="interfacename">Collectable</a></span><span class="oointerface">,  <a href="#class.traversable" class="interfacename">Traversable</a></span><span class="oointerface">,  <a href="#class.countable" class="interfacename">Countable</a></span><span class="oointerface">,  <a href="#class.arrayaccess" class="interfacename">ArrayAccess</a></span> {</div>
+    
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#threaded.chunk" class="methodname">chunk</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$preserve</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.count" class="methodname">count</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.extend" class="methodname">extend</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.isrunning" class="methodname">isRunning</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.isterminated" class="methodname">isTerminated</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.merge" class="methodname">merge</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$overwrite</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.notify" class="methodname">notify</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.notifyone" class="methodname">notifyOne</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.pop" class="methodname">pop</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.run" class="methodname">run</a></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.shift" class="methodname">shift</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.synchronized" class="methodname">synchronized</a></span>(<span class="methodparam"><span class="type"><a href="#class.closure" class="type Closure">Closure</a></span> <code class="parameter">$block</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">...$args</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.wait" class="methodname">wait</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+   }</div>
+   
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="threaded.chunk" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::chunk</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::chunk</span> — <span class="dc-title">Manipulación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.chunk-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::chunk</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$preserve</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recorre una parte de la tabla de propiedades de los objetos
+   preservando, opcionalmente, las claves.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.chunk-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      El número de elementos a recorrer
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">preserve</code></dt>
+    <dd>
+     <p class="para">
+      Preserva las claves de los miembros; por omisión, vale <strong><code><a href="#constant.false">false</a></code></strong>
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.chunk-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array de elementos desde la tabla de propiedades de los objetos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.chunk-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3620">
+    <p><strong>Ejemplo #1 Recorrido de una parte de la tabla de propiedades</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$safe </span><span style="color: #007700">= new </span><span style="color: #0000BB">Threaded</span><span style="color: #007700">();<br><br>while (</span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">) &lt; </span><span style="color: #0000BB">10</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$safe</span><span style="color: #007700">[] = </span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">chunk</span><span style="color: #007700">(</span><span style="color: #0000BB">5</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(5) {
+  [0]=&gt;
+  int(0)
+  [1]=&gt;
+  int(1)
+  [2]=&gt;
+  int(2)
+  [3]=&gt;
+  int(3)
+  [4]=&gt;
+  int(4)
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.count" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::count</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::count</span> — <span class="dc-title">Manipulación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.count-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::count</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el número de propiedades para este objeto.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.count-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.count-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.count-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3621">
+    <p><strong>Ejemplo #1 Cuenta las propiedades de un objeto</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$safe </span><span style="color: #007700">= new </span><span style="color: #0000BB">Threaded</span><span style="color: #007700">();<br><br>while (</span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">) &lt; </span><span style="color: #0000BB">10</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$safe</span><span style="color: #007700">[] = </span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">int(10)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.extend" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::extend</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.8)</p><p class="refpurpose"><span class="refname">Threaded::extend</span> — <span class="dc-title">Manipulación durante la ejecución</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.extend-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::extend</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace que la clase estándar sea segura a nivel de thread durante la ejecución.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.extend-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">class</code></dt>
+    <dd>
+     <p class="para">
+      La clase a extender.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.extend-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.extend-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3622">
+    <p><strong>Ejemplo #1 Herencia durante la ejecución</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">{}<br><br></span><span style="color: #0000BB">Threaded</span><span style="color: #007700">::</span><span style="color: #0000BB">extend</span><span style="color: #007700">(</span><span style="color: #0000BB">My</span><span style="color: #007700">::class);<br><br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my </span><span style="color: #007700">instanceof </span><span style="color: #0000BB">Threaded</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="thread.isrunning" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::isRunning</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::isRunning</span> — <span class="dc-title">Detección de estado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-thread.isrunning-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::isRunning</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se verifica si el objeto referenciado está en ejecución.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-thread.isrunning-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-thread.isrunning-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un valor booleano que indica el estado.
+   </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     Un objeto se considera en ejecución cuando ejecuta el método run.
+    </p>
+   </blockquote>
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-thread.isrunning-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3623">
+    <p><strong>Ejemplo #1 Detecta el estado del objeto referenciado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>            if (!</span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done</span><span style="color: #007700">)<br>                </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br>        }, </span><span style="color: #0000BB">$this</span><span style="color: #007700">);<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">isRunning</span><span style="color: #007700">());<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">;<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">notify</span><span style="color: #007700">();<br>}, </span><span style="color: #0000BB">$my</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.isterminated" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::isTerminated</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::isTerminated</span> — <span class="dc-title">Detección de estado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.isterminated-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::isTerminated</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se verifica si el objeto referenciado ha finalizado durante la ejecución;
+   si ha sufrido un error fatal o ha generado excepciones que no han podido
+   ser capturadas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.isterminated-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.isterminated-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un valor booleano que indica el estado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.isterminated-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3624">
+    <p><strong>Ejemplo #1 Detecta el estado del objeto referenciado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #0000BB">i_do_not_exist</span><span style="color: #007700">();<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">join</span><span style="color: #007700">();<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">isTerminated</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.merge" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::merge</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::merge</span> — <span class="dc-title">Manipulación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.merge-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::merge</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$overwrite</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Fusiona los datos en el objeto actual
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.merge-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">from</code></dt>
+    <dd>
+     <p class="para">
+      Los datos a fusionar
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">overwrite</code></dt>
+    <dd>
+     <p class="para">
+      Sobrescribe las claves existentes; por omisión vale <strong><code><a href="#constant.true">true</a></code></strong>
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.merge-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.merge-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3625">
+    <p><strong>Ejemplo #1 Fusiona el objeto thread en la tabla de propiedades</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$array </span><span style="color: #007700">= [];<br><br>while (</span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$array</span><span style="color: #007700">) &lt; </span><span style="color: #0000BB">10</span><span style="color: #007700">)<br>    </span><span style="color: #0000BB">$array</span><span style="color: #007700">[] = </span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$array</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$stdClass </span><span style="color: #007700">= new </span><span style="color: #0000BB">stdClass</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$stdClass</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">foo </span><span style="color: #007700">= </span><span style="color: #DD0000">"foo"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$stdClass</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">bar </span><span style="color: #007700">= </span><span style="color: #DD0000">"bar"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$stdClass</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">baz </span><span style="color: #007700">= </span><span style="color: #DD0000">"baz"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$safe </span><span style="color: #007700">= new </span><span style="color: #0000BB">Threaded</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$safe</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">merge</span><span style="color: #007700">(</span><span style="color: #0000BB">$array</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$safe</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">merge</span><span style="color: #007700">(</span><span style="color: #0000BB">$stdClass</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">object(Threaded)#2 (13) {
+  ["0"]=&gt;
+  int(0)
+  ["1"]=&gt;
+  int(1)
+  ["2"]=&gt;
+  int(2)
+  ["3"]=&gt;
+  int(3)
+  ["4"]=&gt;
+  int(4)
+  ["5"]=&gt;
+  int(5)
+  ["6"]=&gt;
+  int(6)
+  ["7"]=&gt;
+  int(7)
+  ["8"]=&gt;
+  int(8)
+  ["9"]=&gt;
+  int(9)
+  ["foo"]=&gt;
+  string(3) "foo"
+  ["bar"]=&gt;
+  string(3) "bar"
+  ["baz"]=&gt;
+  string(3) "baz"
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.notify" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::notify</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::notify</span> — <span class="dc-title">Sincronización</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.notify-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::notify</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Envía una notificación al objeto referenciado
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.notify-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.notify-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.notify-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3626">
+    <p><strong>Ejemplo #1 Notificaciones y espera</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #FF8000">/** hace que el hilo espere **/<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>            if (!</span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done</span><span style="color: #007700">)<br>                </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br>        }, </span><span style="color: #0000BB">$this</span><span style="color: #007700">);<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/** envía la notificación al hilo que espera **/<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">;<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">notify</span><span style="color: #007700">();<br>}, </span><span style="color: #0000BB">$my</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">join</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="threaded.notifyone" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::notifyOne</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 3.0.0)</p><p class="refpurpose"><span class="refname">Threaded::notifyOne</span> — <span class="dc-title">Sincronizar</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.notifyone-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::notifyOne</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Envía una notificación al objeto referenciado. Esto desbloquea al menos uno de
+   los threads bloqueados (a diferencia de desbloquearlos todos, como ocurre con
+   <span class="methodname"><a href="#threaded.notify" class="methodname">Threaded::notify()</a></span>).
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.notifyone-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.notifyone-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.notifyone-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3627">
+    <p><strong>Ejemplo #1 Notificaciones y espera</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #FF8000">/** causa que este thread espere **/<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>            if (!</span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done</span><span style="color: #007700">)<br>                </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br>        }, </span><span style="color: #0000BB">$this</span><span style="color: #007700">);<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/** envía una notificación al thread en espera **/<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">;<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">notifyOne</span><span style="color: #007700">();<br>}, </span><span style="color: #0000BB">$my</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">join</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.pop" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::pop</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::pop</span> — <span class="dc-title">Manipulación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.pop-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::pop</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se elimina el último elemento de la tabla de propiedades del objeto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.pop-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.pop-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El último elemento de la tabla de propiedades del objeto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.pop-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3628">
+    <p><strong>Ejemplo #1 Eliminar el último elemento de la tabla de propiedades de un objeto thread</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$safe </span><span style="color: #007700">= new </span><span style="color: #0000BB">Threaded</span><span style="color: #007700">();<br><br>while (</span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">) &lt; </span><span style="color: #0000BB">10</span><span style="color: #007700">)<br>    </span><span style="color: #0000BB">$safe</span><span style="color: #007700">[] = </span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">pop</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">int(9)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.run" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::run</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::run</span> — <span class="dc-title">Ejecución</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.run-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::run</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   El desarrollador debe siempre implementar el método run para los objetos
+   que deben ser ejecutados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.run-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.run-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.shift" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::shift</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::shift</span> — <span class="dc-title">Manipulación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.shift-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>Threaded::shift</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se elimina el primer elemento de la tabla de propiedades del objeto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.shift-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.shift-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El primer elemento de la tabla de propiedades del objeto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.shift-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3629">
+    <p><strong>Ejemplo #1 
+     Eliminación del primer elemento de la tabla de propiedades del objeto threadado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$safe </span><span style="color: #007700">= new </span><span style="color: #0000BB">Threaded</span><span style="color: #007700">();<br><br>while (</span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">) &lt; </span><span style="color: #0000BB">10</span><span style="color: #007700">)<br>    </span><span style="color: #0000BB">$safe</span><span style="color: #007700">[] = </span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$safe</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">shift</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">int(0)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.synchronized" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::synchronized</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::synchronized</span> — <span class="dc-title">Sincronización</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.synchronized-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::synchronized</strong></span>(<span class="methodparam"><span class="type"><a href="#class.closure" class="type Closure">Closure</a></span> <code class="parameter">$block</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">...$args</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se ejecuta el bloque mientras se retienen los candados de sincronización
+   de los objetos referenciados para el contexto llamante.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.synchronized-parameters">
+  <h3 class="title">Parámetros</h3>
+   <dl>
+   
+    <dt><code class="parameter">block</code></dt>
+    <dd>
+     <p class="para">
+      El bloque de código a ejecutar
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">args</code></dt>
+    <dd>
+     <p class="para">
+      Lista variable de argumentos a utilizar como argumento de la función
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.synchronized-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El valor devuelto del bloque
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.synchronized-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3630">
+    <p><strong>Ejemplo #1 Sincronización</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>            if (!</span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done</span><span style="color: #007700">)<br>                </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br>        }, </span><span style="color: #0000BB">$this</span><span style="color: #007700">);<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">;<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">notify</span><span style="color: #007700">();<br>}, </span><span style="color: #0000BB">$my</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">join</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="threaded.wait" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Threaded::wait</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Threaded::wait</span> — <span class="dc-title">Sincronización</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-threaded.wait-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Threaded::wait</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Hace esperar al contexto llamante una notificación desde el objeto referenciado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-threaded.wait-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">timeout</code></dt>
+    <dd>
+     <p class="para">
+      Un tiempo de espera máximo opcional, en microsegundos.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-threaded.wait-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-threaded.wait-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3631">
+    <p><strong>Ejemplo #1 Notificaciones y espera</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #FF8000">/** Hace esperar este hilo **/<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>            if (!</span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done</span><span style="color: #007700">)<br>                </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br>        }, </span><span style="color: #0000BB">$this</span><span style="color: #007700">);<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/** Envía la notificación al hilo que espera **/<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">;<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">notify</span><span style="color: #007700">();<br>}, </span><span style="color: #0000BB">$my</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">join</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#threaded.chunk">Threaded::chunk</a> — Manipulación</li><li><a href="#threaded.count">Threaded::count</a> — Manipulación</li><li><a href="#threaded.extend">Threaded::extend</a> — Manipulación durante la ejecución</li><li><a href="#thread.isrunning">Threaded::isRunning</a> — Detección de estado</li><li><a href="#threaded.isterminated">Threaded::isTerminated</a> — Detección de estado</li><li><a href="#threaded.merge">Threaded::merge</a> — Manipulación</li><li><a href="#threaded.notify">Threaded::notify</a> — Sincronización</li><li><a href="#threaded.notifyone">Threaded::notifyOne</a> — Sincronizar</li><li><a href="#threaded.pop">Threaded::pop</a> — Manipulación</li><li><a href="#threaded.run">Threaded::run</a> — Ejecución</li><li><a href="#threaded.shift">Threaded::shift</a> — Manipulación</li><li><a href="#threaded.synchronized">Threaded::synchronized</a> — Sincronización</li><li><a href="#threaded.wait">Threaded::wait</a> — Sincronización</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.thread" class="reference"><hr>
+
+ <h1 class="title">La clase Thread</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p>
+
+
+  <div class="section" id="thread.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Cuando el método start de un Thread es llamado, el código del método run será
+    ejecutado de forma paralela en un Thread separado.
+   </p>
+   <p class="para">
+     Después de la ejecución del método run, el Thread se terminará inmediatamente, será
+     vinculado al Thread original posteriormente.
+   </p>
+   <div class="warning"><strong class="warning">Advertencia</strong>
+    <p class="para">
+     Basarse en el motor para determinar cuándo un Thread será vinculado puede
+     provocar un comportamiento no deseado. El desarrollador debe ser explícito
+     en la medida de lo posible.
+    </p>
+   </div>
+  </div>
+
+
+  <div class="section" id="thread.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">Thread</strong>
+     </span>
+
+     <span class="ooclass">
+      <span class="modifier">extends</span>
+       <a href="#class.threaded" class="classname">Threaded</a>
+     </span>
+
+     <span class="oointerface"><span class="modifier">implements</span> 
+       <a href="#class.countable" class="interfacename">Countable</a></span><span class="oointerface">,  <a href="#class.traversable" class="interfacename">Traversable</a></span><span class="oointerface">,  <a href="#class.arrayaccess" class="interfacename">ArrayAccess</a></span> {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#thread.getcreatorid" class="methodname">getCreatorId</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#thread.getcurrentthread" class="methodname">getCurrentThread</a></span>(): <span class="type"><a href="#class.thread" class="type Thread">Thread</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#thread.getcurrentthreadid" class="methodname">getCurrentThreadId</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.getthreadid" class="methodname">getThreadId</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.isjoined" class="methodname">isJoined</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.isstarted" class="methodname">isStarted</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.join" class="methodname">join</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.start" class="methodname">start</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.chunk" class="methodname">Threaded::chunk</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$preserve</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.count" class="methodname">Threaded::count</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.extend" class="methodname">Threaded::extend</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.isrunning" class="methodname">Threaded::isRunning</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.isterminated" class="methodname">Threaded::isTerminated</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.merge" class="methodname">Threaded::merge</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$overwrite</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.notify" class="methodname">Threaded::notify</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.notifyone" class="methodname">Threaded::notifyOne</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.pop" class="methodname">Threaded::pop</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.run" class="methodname">Threaded::run</a></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.shift" class="methodname">Threaded::shift</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.synchronized" class="methodname">Threaded::synchronized</a></span>(<span class="methodparam"><span class="type"><a href="#class.closure" class="type Closure">Closure</a></span> <code class="parameter">$block</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">...$args</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.wait" class="methodname">Threaded::wait</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="thread.getcreatorid" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Thread::getCreatorId</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Thread::getCreatorId</span> — <span class="dc-title">Identificación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-thread.getcreatorid-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Thread::getCreatorId</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve la identidad del Thread que ha creado el Thread referenciado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-thread.getcreatorid-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-thread.getcreatorid-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Una identidad numérica.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-thread.getcreatorid-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3632">
+    <p><strong>Ejemplo #1 Devuelve la identidad del Thread o del proceso que ha creado el Thread referenciado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"%s ha sido creado por el Thread #%lu\n"</span><span style="color: #007700">, </span><span style="color: #0000BB">__CLASS__</span><span style="color: #007700">, </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getCreatorId</span><span style="color: #007700">());<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">My ha sido creado por el Thread #123456778899</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="thread.getcurrentthread" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Thread::getCurrentThread</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Thread::getCurrentThread</span> — <span class="dc-title">Identificación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-thread.getcurrentthread-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>Thread::getCurrentThread</strong></span>(): <span class="type"><a href="#class.thread" class="type Thread">Thread</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve una referencia del hilo actualmente en ejecución
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-thread.getcurrentthread-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-thread.getcurrentthread-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un objeto que representa el hilo actualmente en ejecución.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-thread.getcurrentthread-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3633">
+    <p><strong>Ejemplo #1 Devuelve el hilo actualmente en ejecución</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">Thread</span><span style="color: #007700">::</span><span style="color: #0000BB">getCurrentThread</span><span style="color: #007700">());<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">object(My)#2 (0) {
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="thread.getcurrentthreadid" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Thread::getCurrentThreadId</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Thread::getCurrentThreadId</span> — <span class="dc-title">Identificación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-thread.getcurrentthreadid-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>Thread::getCurrentThreadId</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se devuelve la identidad del hilo actualmente en ejecución
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-thread.getcurrentthreadid-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-thread.getcurrentthreadid-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Una identidad numérica
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-thread.getcurrentthreadid-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3634">
+    <p><strong>Ejemplo #1 Se devuelve la identidad del hilo actualmente en ejecución</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"%s es Hilo #%lu\n"</span><span style="color: #007700">, </span><span style="color: #0000BB">__CLASS__</span><span style="color: #007700">, </span><span style="color: #0000BB">Thread</span><span style="color: #007700">::</span><span style="color: #0000BB">getCurrentThreadId</span><span style="color: #007700">());<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">My es Hilo #123456778899</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="thread.getthreadid" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Thread::getThreadId</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Thread::getThreadId</span> — <span class="dc-title">Identificación</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-thread.getthreadid-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Thread::getThreadId</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se devuelve la identidad del Thread referenciado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-thread.getthreadid-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-thread.getthreadid-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Una identidad numérica.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-thread.getthreadid-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3635">
+    <p><strong>Ejemplo #1 Se devuelve la identidad del Thread referenciado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"%s es el Thread #%lu\n"</span><span style="color: #007700">, </span><span style="color: #0000BB">__CLASS__</span><span style="color: #007700">, </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getThreadId</span><span style="color: #007700">());<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">My es el Thread #123456778899</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="thread.isjoined" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Thread::isJoined</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Thread::isJoined</span> — <span class="dc-title">Detección de estado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-thread.isjoined-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Thread::isJoined</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Indica si el Thread referenciado ha sido unido.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-thread.isjoined-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-thread.isjoined-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-thread.isjoined-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3636">
+    <p><strong>Ejemplo #1 Detecta el estado del Thread referenciado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>            if (!</span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done</span><span style="color: #007700">)<br>                </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br>        }, </span><span style="color: #0000BB">$this</span><span style="color: #007700">);<br>    }<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">isJoined</span><span style="color: #007700">());<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">synchronized</span><span style="color: #007700">(function(</span><span style="color: #0000BB">$thread</span><span style="color: #007700">){<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">done </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">;<br>    </span><span style="color: #0000BB">$thread</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">notify</span><span style="color: #007700">();<br>}, </span><span style="color: #0000BB">$my</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(false)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="thread.isstarted" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Thread::isStarted</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Thread::isStarted</span> — <span class="dc-title">Detección de estado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-thread.isstarted-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Thread::isStarted</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Indica si el Thread referenciado ha sido iniciado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-thread.isstarted-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-thread.isstarted-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-thread.isstarted-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3637">
+    <p><strong>Ejemplo #1 Indica si el Thread referenciado ha sido iniciado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$worker </span><span style="color: #007700">= new </span><span style="color: #0000BB">Worker</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">isStarted</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="thread.join" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Thread::join</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Thread::join</span> — <span class="dc-title">Sincronización</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-thread.join-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Thread::join</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Permite esperar al contexto llamante del Thread referenciado
+   hasta que finalice la ejecución.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-thread.join-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-thread.join-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-thread.join-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3638">
+    <p><strong>Ejemplo #1 Une el Thread referenciado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #FF8000">/* ... */<br>    </span><span style="color: #007700">}<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">join</span><span style="color: #007700">());<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="thread.start" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Thread::start</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Thread::start</span> — <span class="dc-title">Ejecución</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-thread.start-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Thread::start</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Inicia un nuevo Thread y ejecuta el método run implementado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-thread.start-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+      Una máscara opcional de constantes heredadas; por omisión,
+      PTHREADS_INHERIT_ALL
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-thread.start-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-thread.start-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3639">
+    <p><strong>Ejemplo #1 Inicia los Threads</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">My </span><span style="color: #007700">extends </span><span style="color: #0000BB">Thread </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #FF8000">/** ... **/<br>    </span><span style="color: #007700">}<br>}<br></span><span style="color: #0000BB">$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">My</span><span style="color: #007700">();<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#thread.getcreatorid">Thread::getCreatorId</a> — Identificación</li><li><a href="#thread.getcurrentthread">Thread::getCurrentThread</a> — Identificación</li><li><a href="#thread.getcurrentthreadid">Thread::getCurrentThreadId</a> — Identificación</li><li><a href="#thread.getthreadid">Thread::getThreadId</a> — Identificación</li><li><a href="#thread.isjoined">Thread::isJoined</a> — Detección de estado</li><li><a href="#thread.isstarted">Thread::isStarted</a> — Detección de estado</li><li><a href="#thread.join">Thread::join</a> — Sincronización</li><li><a href="#thread.start">Thread::start</a> — Ejecución</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.worker" class="reference"><hr>
+
+ <h1 class="title">La clase Worker</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p>
+
+  
+  <div class="section" id="worker.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Los Threads Worker tienen un contexto persistente, por lo tanto,
+    pueden ser utilizados mediante Threads en la mayoría de los casos.
+   </p>
+   <p class="para">
+    Cuando un Worker es iniciado, el método <span class="methodname"><strong>run()</strong></span> será
+    ejecutado, pero el <span class="classname"><a href="#class.thread" class="classname">Thread</a></span> no
+    se detendrá hasta que una de las siguientes condiciones se cumpla:
+   </p>
+   <ul class="itemizedlist">
+    <li class="listitem">
+     <p class="para">el Worker está fuera de alcance (no hay referencias restantes);</p>
+    </li>
+    <li class="listitem">
+     <p class="para">el desarrollador llama a <span class="methodname"><strong>shutdown()</strong></span>;</p>
+    </li>
+    <li class="listitem">
+     <p class="para">el script muere.</p>
+    </li>
+   </ul>
+   <p class="para">
+    Esto significa que el desarrollador puede reutilizar el contexto durante
+    toda la ejecución; colocar objetos en la pila del
+    <span class="classname"><strong class="classname">Worker</strong></span> hará que el <span class="classname"><strong class="classname">Worker</strong></span>
+    ejecute el método <span class="methodname"><strong>run()</strong></span> sobre los objetos apilados.
+   </p>
+  </div>
+  
+
+  <div class="section" id="worker.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+   
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+    
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">Worker</strong>
+     </span>
+
+     <span class="ooclass">
+      <span class="modifier">extends</span>
+       <a href="#class.thread" class="classname">Thread</a>
+     </span>
+
+     <span class="oointerface"><span class="modifier">implements</span> 
+       <a href="#class.traversable" class="interfacename">Traversable</a></span><span class="oointerface">,  <a href="#class.countable" class="interfacename">Countable</a></span><span class="oointerface">,  <a href="#class.arrayaccess" class="interfacename">ArrayAccess</a></span> {</div>
+    
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#worker.collect" class="methodname">collect</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.callable" class="type Callable">Callable</a></span> <code class="parameter">$collector</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#worker.getstacked" class="methodname">getStacked</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#worker.isshutdown" class="methodname">isShutdown</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#worker.shutdown" class="methodname">shutdown</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#worker.stack" class="methodname">stack</a></span>(<span class="methodparam"><span class="type"><a href="#class.threaded" class="type Threaded">Threaded</a></span> <code class="parameter reference">&amp;$work</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#worker.unstack" class="methodname">unstack</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.getcreatorid" class="methodname">Thread::getCreatorId</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#thread.getcurrentthread" class="methodname">Thread::getCurrentThread</a></span>(): <span class="type"><a href="#class.thread" class="type Thread">Thread</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#thread.getcurrentthreadid" class="methodname">Thread::getCurrentThreadId</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.getthreadid" class="methodname">Thread::getThreadId</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.isjoined" class="methodname">Thread::isJoined</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.isstarted" class="methodname">Thread::isStarted</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.join" class="methodname">Thread::join</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.start" class="methodname">Thread::start</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$options</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+   }</div>
+   
+
+  </div>
+
+ </div>
+
+ 
+
+
+<div id="worker.collect" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Worker::collect</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 3.0.0)</p><p class="refpurpose"><span class="refname">Worker::collect</span> — <span class="dc-title">Recopila las referencias de las tareas finalizadas</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-worker.collect-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Worker::collect</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.callable" class="type Callable">Callable</a></span> <code class="parameter">$collector</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Permite al worker recopilar las referencias determinadas como migajas por el
+   collector eventualmente proporcionado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-worker.collect-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">collector</code></dt>
+    <dd>
+     <p class="para">
+      Una función de retrollamada que devuelve un booleano sobre la posibilidad de
+      recopilar la tarea o no. Solo en casos raros debería utilizarse un collector
+      personalizado.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-worker.collect-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El número de tareas restantes en la pila del worker a recopilar.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-worker.collect-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3640">
+    <p><strong>Ejemplo #1 Un ejemplo básico de <span class="methodname"><strong>Worker::collect()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$worker </span><span style="color: #007700">= new </span><span style="color: #0000BB">Worker</span><span style="color: #007700">();<br><br>echo </span><span style="color: #DD0000">"There are currently </span><span style="color: #007700">{</span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">collect</span><span style="color: #007700">()}</span><span style="color: #DD0000"> tasks on the stack to be collected\n"</span><span style="color: #007700">;<br><br>for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">15</span><span style="color: #007700">; ++</span><span style="color: #0000BB">$i</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">stack</span><span style="color: #007700">(new class extends </span><span style="color: #0000BB">Threaded </span><span style="color: #007700">{});<br>}<br><br>echo </span><span style="color: #DD0000">"There are </span><span style="color: #007700">{</span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">collect</span><span style="color: #007700">()}</span><span style="color: #DD0000"> tasks remaining on the stack to be collected\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br><br>while (</span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">collect</span><span style="color: #007700">()); </span><span style="color: #FF8000">// bloque hasta que todas las tareas estén finalizadas<br><br></span><span style="color: #007700">echo </span><span style="color: #DD0000">"There are now </span><span style="color: #007700">{</span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">collect</span><span style="color: #007700">()}</span><span style="color: #DD0000"> tasks on the stack to be collected\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">shutdown</span><span style="color: #007700">();</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">There are currently 0 tasks on the stack to be collected
+There are 15 tasks remaining on the stack to be collected
+There are now 0 tasks on the stack to be collected</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="worker.getstacked" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Worker::getStacked</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Worker::getStacked</span> — <span class="dc-title">Obtiene el tamaño de pila restante</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-worker.getstacked-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Worker::getStacked</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el número de tareas dejadas en la pila
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-worker.getstacked-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-worker.getstacked-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el número de tareas actualmente en espera de ser ejecutadas por el worker
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-worker.getstacked-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3641">
+    <p><strong>Ejemplo #1 Un ejemplo básico de <span class="classname"><strong class="classname">Worker::getStacked</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$worker </span><span style="color: #007700">= new </span><span style="color: #0000BB">Worker</span><span style="color: #007700">();<br><br>for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">5</span><span style="color: #007700">; ++</span><span style="color: #0000BB">$i</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">stack</span><span style="color: #007700">(new class extends </span><span style="color: #0000BB">Threaded </span><span style="color: #007700">{});<br>}<br><br>echo </span><span style="color: #DD0000">"Hay </span><span style="color: #007700">{</span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getStacked</span><span style="color: #007700">()}</span><span style="color: #DD0000"> tareas apiladas\n"</span><span style="color: #007700">;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Hay 5 tareas apiladas</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="worker.isshutdown" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Worker::isShutdown</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Worker::isShutdown</span> — <span class="dc-title">Detección de estado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-worker.isshutdown-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Worker::isShutdown</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Indica si el Worker ha sido detenido o no.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-worker.isshutdown-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-worker.isshutdown-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve si el Worker ha sido detenido o no.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-worker.isshutdown-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3642">
+    <p><strong>Ejemplo #1 Detecta el estado de un worker</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$worker </span><span style="color: #007700">= new </span><span style="color: #0000BB">Worker</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">isShutdown</span><span style="color: #007700">());<br><br></span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">shutdown</span><span style="color: #007700">();<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">isShutdown</span><span style="color: #007700">());</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(false)
+bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="worker.shutdown" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Worker::shutdown</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Worker::shutdown</span> — <span class="dc-title">Detener el worker</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-worker.shutdown-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Worker::shutdown</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Detiene el Worker después de ejecutar todas las tareas apiladas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-worker.shutdown-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-worker.shutdown-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-worker.shutdown-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3643">
+    <p><strong>Ejemplo #1 Apaga el worker referenciado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">Worker</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* apilar/ejecutar tareas */<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">shutdown</span><span style="color: #007700">());</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="worker.stack" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Worker::stack</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Worker::stack</span> — <span class="dc-title">Apila la tarea</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-worker.stack-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Worker::stack</strong></span>(<span class="methodparam"><span class="type"><a href="#class.threaded" class="type Threaded">Threaded</a></span> <code class="parameter reference">&amp;$work</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Añade la nueva tarea a la pila del worker referenciado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-worker.stack-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">work</code></dt>
+    <dd>
+     <p class="para">
+      Objeto <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span> a ejecutar por el worker.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-worker.stack-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El nuevo tamaño de la pila.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-worker.stack-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3644">
+    <p><strong>Ejemplo #1 Apilamiento de una tarea para ejecución en un worker</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">&lt;?</span><span style="color: #0000BB">php<br>$worker </span><span style="color: #007700">= new </span><span style="color: #0000BB">Worker</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$work </span><span style="color: #007700">= new class extends </span><span style="color: #0000BB">Threaded </span><span style="color: #007700">{};<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$worker</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">stack</span><span style="color: #007700">(</span><span style="color: #0000BB">$work</span><span style="color: #007700">));</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">int(1)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="worker.unstack" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Worker::unstack</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Worker::unstack</span> — <span class="dc-title">Desapila una tarea</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-worker.unstack-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Worker::unstack</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Elimina la primera tarea (la más antigua) de la pila.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-worker.unstack-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-worker.unstack-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El nuevo tamaño de la pila.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-worker.unstack-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>PECL pthreads 3.0.0</td>
+       <td>
+        El argumento para especificar la tarea a desapilar ha sido eliminado.
+        Ahora, solo la primera tarea en la pila es eliminada.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-worker.unstack-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3645">
+    <p><strong>Ejemplo #1 Elimina el objeto desde la cola de espera de los Workers</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$my </span><span style="color: #007700">= new </span><span style="color: #0000BB">Worker</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$work </span><span style="color: #007700">= new class extends </span><span style="color: #0000BB">Threaded </span><span style="color: #007700">{};<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">stack</span><span style="color: #007700">(</span><span style="color: #0000BB">$work</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$my</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">unstack</span><span style="color: #007700">());</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">int(1)
+int(0)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#worker.collect">Worker::collect</a> — Recopila las referencias de las tareas finalizadas</li><li><a href="#worker.getstacked">Worker::getStacked</a> — Obtiene el tamaño de pila restante</li><li><a href="#worker.isshutdown">Worker::isShutdown</a> — Detección de estado</li><li><a href="#worker.shutdown">Worker::shutdown</a> — Detener el worker</li><li><a href="#worker.stack">Worker::stack</a> — Apila la tarea</li><li><a href="#worker.unstack">Worker::unstack</a> — Desapila una tarea</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.collectable" class="reference"><hr>
+
+ <h1 class="title">La interfaz Collectable</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL pthreads &gt;= 2.0.8)</p>
+
+  <div class="section" id="collectable.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Representa un objeto de colección de datos obsoletos.
+   </p>
+  </div>
+
+
+  <div class="section" id="collectable.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+      <span class="oointerface">
+        <span class="modifier">interface</span> <strong class="interfacename">Collectable</strong></span> {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#collectable.isgarbage" class="methodname">isGarbage</a></span>(): <span class="type"><a href="#language.types.singleton" class="type true">true</a></span></div>
+
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="collectable.isgarbage" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Collectable::isGarbage</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.8)</p><p class="refpurpose"><span class="refname">Collectable::isGarbage</span> — <span class="dc-title">Determina si un objeto ha sido marcado como obsoleto</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-collectable.isgarbage-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Collectable::isGarbage</strong></span>(): <span class="type"><a href="#language.types.singleton" class="type true">true</a></span></div>
+
+  <p class="para rdfs-comment">
+   Puede ser llamado en <span class="methodname"><a href="#pool.collect" class="methodname">Pool::collect()</a></span>
+   para determinar si este objeto está obsoleto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-collectable.isgarbage-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-collectable.isgarbage-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna siempre <strong><code><a href="#constant.true">true</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-collectable.isgarbage-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+ <td>8.2.0</td>
+ <td>
+  El tipo de retorno es ahora <strong><code><a href="#constant.true">true</a></code></strong>, anteriormente era <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>.
+ </td>
+</tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-collectable.isgarbage-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="methodname"><a href="#pool.collect" class="methodname" rel="rdfs-seeAlso">Pool::collect()</a> - Recopila las referencias de las tareas completadas</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#collectable.isgarbage">Collectable::isGarbage</a> — Determina si un objeto ha sido marcado como obsoleto</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="class.pool" class="reference"><hr>
+
+ <h1 class="title">La clase Pool</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p>
+
+
+  <div class="section" id="pool.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Un Pool es un contenedor para, y controlado por, un número ajustable de Workers.
+   </p>
+   <p class="para">
+    El pooling proporciona un nivel alto de abstracción sobre la funcionalidad Worker, incluyendo la gestión de referencias en el sentido requerido por pthreads.
+   </p>
+  </div>
+
+
+  <div class="section" id="pool.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">Pool</strong>
+     </span>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Propiedades */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">protected</span>
+      <var class="varname"><a href="#pool.props.size">$<var class="varname">size</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">protected</span>
+      <var class="varname"><a href="#pool.props.class">$<var class="varname">class</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">protected</span>
+      <var class="varname"><a href="#pool.props.workers">$<var class="varname">workers</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">protected</span>
+      <var class="varname"><a href="#pool.props.ctor">$<var class="varname">ctor</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">protected</span>
+      <var class="varname"><a href="#pool.props.last">$<var class="varname">last</var></a></var>;</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#pool.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$ctor</code><span class="initializer"> = ?</span></span>)</div>
+
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#pool.collect" class="methodname">collect</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.callable" class="type Callable">Callable</a></span> <code class="parameter">$collector</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#pool.resize" class="methodname">resize</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#pool.shutdown" class="methodname">shutdown</a></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#pool.submit" class="methodname">submit</a></span>(<span class="methodparam"><span class="type"><a href="#class.threaded" class="type Threaded">Threaded</a></span> <code class="parameter">$task</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#pool.submitTo" class="methodname">submitTo</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$worker</code></span>, <span class="methodparam"><span class="type"><a href="#class.threaded" class="type Threaded">Threaded</a></span> <code class="parameter">$task</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+
+  <div class="section" id="pool.props">
+   <h2 class="title">Propiedades</h2>
+   <dl>
+    
+     <dt id="pool.props.size"><var class="varname">size</var></dt>
+     <dd>
+      <p class="para">Número máximo de Workers que este pool puede utilizar</p>
+     </dd>
+    
+    
+     <dt id="pool.props.class"><var class="varname">class</var></dt>
+     <dd>
+      <p class="para">La clase del Worker</p>
+     </dd>
+    
+    
+     <dt id="pool.props.workers"><var class="varname">workers</var></dt>
+     <dd>
+      <p class="para">referencias a los Workers</p>
+     </dd>
+    
+    
+     <dt id="pool.props.ctor"><var class="varname">ctor</var></dt>
+     <dd>
+      <p class="para">Los argumentos para el constructor de los nuevos Workers</p>
+     </dd>
+    
+    
+     <dt id="pool.props.last"><var class="varname">last</var></dt>
+     <dd>
+      <p class="para">desplazamiento en los workers del último Worker utilizado</p>
+     </dd>
+    
+   </dl>
+  </div>
+
+
+ </div>
+
+ 
+
+
+
+
+<div id="pool.collect" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Pool::collect</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Pool::collect</span> — <span class="dc-title">Recopila las referencias de las tareas completadas</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-pool.collect-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Pool::collect</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.callable" class="type Callable">Callable</a></span> <code class="parameter">$collector</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Permite al pool recopilar referencias determinadas para ser colectadas
+   por el colector dado opcionalmente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-pool.collect-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">collector</code></dt>
+    <dd>
+     <p class="para">
+      Un colector que puede ser llamado y que devuelve un valor booleano para
+      determinar si la tarea puede ser colectada o no. Solo en casos raros debe
+      utilizarse un colector personalizado.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-pool.collect-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Número de tareas restantes en el pool para ser colectadas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-pool.collect-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>PECL pthreads 3.0.0</td>
+       <td>
+        Ahora se devuelve un entero, y el argumento
+        <code class="parameter">collector</code> es ahora opcional.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-pool.collect-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3646">
+    <p><strong>Ejemplo #1 Un ejemplo básico de <span class="methodname"><strong>Pool::collect()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$pool </span><span style="color: #007700">= new </span><span style="color: #0000BB">Pool</span><span style="color: #007700">(</span><span style="color: #0000BB">4</span><span style="color: #007700">);<br><br>for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">15</span><span style="color: #007700">; ++</span><span style="color: #0000BB">$i</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">submit</span><span style="color: #007700">(new class extends </span><span style="color: #0000BB">Threaded </span><span style="color: #007700">{});<br>}<br><br>while (</span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">collect</span><span style="color: #007700">()); </span><span style="color: #FF8000">// bloquea hasta que todas las tareas hayan finalizado<br><br></span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">shutdown</span><span style="color: #007700">();</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="pool.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Pool::__construct</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Pool::__construct</span> — <span class="dc-title">Crea un nuevo Pool de Workers</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-pool.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Pool::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$ctor</code><span class="initializer"> = ?</span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Construye un nuevo pool de workers. Los pools crean sus hilos de forma perezosa,
+   lo que significa que los nuevos hilos solo se generarán cuando sean necesarios
+   para ejecutar tareas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-pool.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      El número máximo de Workers que este Pool puede crear
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">class</code></dt>
+    <dd>
+     <p class="para">
+      La clase para los nuevos Workers. Si no se proporciona ninguna clase, la clase por defecto es <span class="classname"><a href="#class.worker" class="classname">Worker</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">ctor</code></dt>
+    <dd>
+     <p class="para">
+      Un array de argumentos para pasar al constructor de los nuevos Workers
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-pool.construct-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3647">
+    <p><strong>Ejemplo #1 Creación de un Pool</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">MyWorker </span><span style="color: #007700">extends </span><span style="color: #0000BB">Worker </span><span style="color: #007700">{<br><br>    public function </span><span style="color: #0000BB">__construct</span><span style="color: #007700">(</span><span style="color: #0000BB">Something $something</span><span style="color: #007700">) {<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">something </span><span style="color: #007700">= </span><span style="color: #0000BB">$something</span><span style="color: #007700">;<br>    }<br><br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #FF8000">/** ... **/<br>    </span><span style="color: #007700">}<br>}<br><br></span><span style="color: #0000BB">$pool </span><span style="color: #007700">= new </span><span style="color: #0000BB">Pool</span><span style="color: #007700">(</span><span style="color: #0000BB">8</span><span style="color: #007700">, </span><span style="color: #0000BB">\MyWorker</span><span style="color: #007700">::class, [new </span><span style="color: #0000BB">Something</span><span style="color: #007700">()]);<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$pool</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">object(Pool)#1 (6) {
+  ["size":protected]=&gt;
+  int(8)
+  ["class":protected]=&gt;
+  string(8) "MyWorker"
+  ["workers":protected]=&gt;
+  NULL
+  ["work":protected]=&gt;
+  NULL
+  ["ctor":protected]=&gt;
+  array(1) {
+    [0]=&gt;
+    object(Something)#2 (0) {
+    }
+  }
+  ["last":protected]=&gt;
+  int(0)
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="pool.resize" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Pool::resize</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Pool::resize</span> — <span class="dc-title">Redimensiona el Pool</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-pool.resize-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Pool::resize</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Redimensiona el Pool.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-pool.resize-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      El número máximo de Workers que este Pool puede crear
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-pool.resize-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="pool.shutdown" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Pool::shutdown</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Pool::shutdown</span> — <span class="dc-title">Detiene todos los workers</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-pool.shutdown-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Pool::shutdown</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Detiene todos los workers de este Pool. Esto se bloqueará hasta que todas
+   las tareas enviadas hayan sido ejecutadas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-pool.shutdown-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-pool.shutdown-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-pool.shutdown-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3648">
+    <p><strong>Ejemplo #1 Detener un pool</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">Task </span><span style="color: #007700">extends </span><span style="color: #0000BB">Threaded<br></span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">()<br>    {<br>        </span><span style="color: #0000BB">usleep</span><span style="color: #007700">(</span><span style="color: #0000BB">500000</span><span style="color: #007700">);<br>    }<br>}<br><br></span><span style="color: #0000BB">$pool </span><span style="color: #007700">= new </span><span style="color: #0000BB">Pool</span><span style="color: #007700">(</span><span style="color: #0000BB">4</span><span style="color: #007700">);<br><br>for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">10</span><span style="color: #007700">; ++</span><span style="color: #0000BB">$i</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">submit</span><span style="color: #007700">(new </span><span style="color: #0000BB">Task</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">shutdown</span><span style="color: #007700">(); </span><span style="color: #FF8000">// se bloquea hasta que todas las tareas enviadas hayan terminado la ejecución</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="pool.submit" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Pool::submit</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Pool::submit</span> — <span class="dc-title">Envía un objeto para su ejecución</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-pool.submit-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Pool::submit</strong></span>(<span class="methodparam"><span class="type"><a href="#class.threaded" class="type Threaded">Threaded</a></span> <code class="parameter">$task</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Envía la tarea al próximo Worker del Pool
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-pool.submit-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      La tarea para su ejecución
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-pool.submit-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El identificador del Worker que ejecuta el objeto
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-pool.submit-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3649">
+    <p><strong>Ejemplo #1 Envío de tareas</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">MyWork </span><span style="color: #007700">extends </span><span style="color: #0000BB">Threaded </span><span style="color: #007700">{<br><br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #FF8000">/* ... */<br>    </span><span style="color: #007700">}<br>}<br><br>class </span><span style="color: #0000BB">MyWorker </span><span style="color: #007700">extends </span><span style="color: #0000BB">Worker </span><span style="color: #007700">{<br><br>    public function </span><span style="color: #0000BB">__construct</span><span style="color: #007700">(</span><span style="color: #0000BB">Something $something</span><span style="color: #007700">) {<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">something </span><span style="color: #007700">= </span><span style="color: #0000BB">$something</span><span style="color: #007700">;<br>    }<br><br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #FF8000">/** ... **/<br>    </span><span style="color: #007700">}<br>}<br><br></span><span style="color: #0000BB">$pool </span><span style="color: #007700">= new </span><span style="color: #0000BB">Pool</span><span style="color: #007700">(</span><span style="color: #0000BB">8</span><span style="color: #007700">, </span><span style="color: #0000BB">\MyWorker</span><span style="color: #007700">::class, [new </span><span style="color: #0000BB">Something</span><span style="color: #007700">()]);<br></span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">submit</span><span style="color: #007700">(new </span><span style="color: #0000BB">MyWork</span><span style="color: #007700">());<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$pool</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">object(Pool)#1 (6) {
+  ["size":protected]=&gt;
+  int(8)
+  ["class":protected]=&gt;
+  string(8) "MyWorker"
+  ["workers":protected]=&gt;
+  array(1) {
+    [0]=&gt;
+    object(MyWorker)#4 (1) {
+      ["something"]=&gt;
+      object(Something)#5 (0) {
+      }
+    }
+  }
+  ["work":protected]=&gt;
+  array(1) {
+    [0]=&gt;
+    object(MyWork)#3 (1) {
+      ["worker"]=&gt;
+      object(MyWorker)#5 (1) {
+        ["something"]=&gt;
+        object(Something)#6 (0) {
+        }
+      }
+    }
+  }
+  ["ctor":protected]=&gt;
+  array(1) {
+    [0]=&gt;
+    object(Something)#2 (0) {
+    }
+  }
+  ["last":protected]=&gt;
+  int(1)
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="pool.submitTo" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Pool::submitTo</h1>
+  <p class="verinfo">(PECL pthreads &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Pool::submitTo</span> — <span class="dc-title">Envía una tarea a un worker específico para su ejecución</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-pool.submitTo-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Pool::submitTo</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$worker</code></span>, <span class="methodparam"><span class="type"><a href="#class.threaded" class="type Threaded">Threaded</a></span> <code class="parameter">$task</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Envía la tarea al worker especificado en el Pool. Los workers están
+   indexados a partir de 0, y solo existirán si el pool necesita crearlos
+   (ya que los threads se generan de forma perezosa).
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-pool.submitTo-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">worker</code></dt>
+    <dd>
+     <p class="para">
+      El worker donde apilar la tarea, indexado a partir de <code class="literal">0</code>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      La tarea, para su ejecución
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-pool.submitTo-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El identificador del Worker que ha aceptado la tarea.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-pool.submitTo-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3650">
+    <p><strong>Ejemplo #1 Envío de una tarea a un worker específico</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">Task </span><span style="color: #007700">extends </span><span style="color: #0000BB">Threaded </span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">run</span><span style="color: #007700">() {<br>        </span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">Thread</span><span style="color: #007700">::</span><span style="color: #0000BB">getCurrentThreadID</span><span style="color: #007700">());<br>    }<br>}<br><br><br></span><span style="color: #0000BB">$pool </span><span style="color: #007700">= new </span><span style="color: #0000BB">Pool</span><span style="color: #007700">(</span><span style="color: #0000BB">2</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">submit</span><span style="color: #007700">(new </span><span style="color: #0000BB">Task</span><span style="color: #007700">());<br><br>for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">5</span><span style="color: #007700">; ++</span><span style="color: #0000BB">$i</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">submitTo</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">, new </span><span style="color: #0000BB">Task</span><span style="color: #007700">()); </span><span style="color: #FF8000">// apilar todas las tareas en el primer worker<br></span><span style="color: #007700">}<br><br></span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">submitTo</span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">, new </span><span style="color: #0000BB">Task</span><span style="color: #007700">()); </span><span style="color: #FF8000">// No es posible apilar la tarea en el segundo worker ya que aún no existe<br><br></span><span style="color: #0000BB">$pool</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">shutdown</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">int(4475011072)
+int(4475011072)
+int(4475011072)
+int(4475011072)
+int(4475011072)
+int(4475011072)
+
+Fatal error: Uncaught Exception: The selected worker (1) does not exist in %s:%d</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#pool.collect">Pool::collect</a> — Recopila las referencias de las tareas completadas</li><li><a href="#pool.construct">Pool::__construct</a> — Crea un nuevo Pool de Workers</li><li><a href="#pool.resize">Pool::resize</a> — Redimensiona el Pool</li><li><a href="#pool.shutdown">Pool::shutdown</a> — Detiene todos los workers</li><li><a href="#pool.submit">Pool::submit</a> — Envía un objeto para su ejecución</li><li><a href="#pool.submitTo">Pool::submitTo</a> — Envía una tarea a un worker específico para su ejecución</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="class.volatile" class="reference"><hr>
+ <h1 class="title">La clase Volatile</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL pthreads &gt;= 3.0.0)</p>
+
+
+  <div class="section" id="volatile.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    La clase <span class="classname"><strong class="classname">Volatile</strong></span> es nueva en pthreads v3. Su
+    introducción es una consecuencia de las nuevas semánticas de inmutabilidad
+    de los miembros <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span> de las clases <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span>.
+    La clase <span class="classname"><strong class="classname">Volatile</strong></span> permite la mutabilidad de sus miembros
+    <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span>, y es igualmente utilizada para almacenar
+    arrays PHP en contextos <span class="classname"><a href="#class.threaded" class="classname">Threaded</a></span>.
+   </p>
+  </div>
+
+
+  <div class="section" id="volatile.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">Volatile</strong>
+     </span>
+
+     <span class="ooclass">
+      <span class="modifier">extends</span>
+       <a href="#class.threaded" class="classname">Threaded</a>
+     </span>
+
+     <span class="oointerface"><span class="modifier">implements</span> 
+       <a href="#class.collectable" class="interfacename">Collectable</a></span><span class="oointerface">,  <a href="#class.traversable" class="interfacename">Traversable</a></span> {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#threaded.chunk" class="methodname">Threaded::chunk</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$preserve</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.count" class="methodname">Threaded::count</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.extend" class="methodname">Threaded::extend</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#thread.isrunning" class="methodname">Threaded::isRunning</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.isterminated" class="methodname">Threaded::isTerminated</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.merge" class="methodname">Threaded::merge</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$overwrite</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.notify" class="methodname">Threaded::notify</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.notifyone" class="methodname">Threaded::notifyOne</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.pop" class="methodname">Threaded::pop</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.run" class="methodname">Threaded::run</a></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.shift" class="methodname">Threaded::shift</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.synchronized" class="methodname">Threaded::synchronized</a></span>(<span class="methodparam"><span class="type"><a href="#class.closure" class="type Closure">Closure</a></span> <code class="parameter">$block</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">...$args</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#threaded.wait" class="methodname">Threaded::wait</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+  <div class="section" id="volatile.examples">
+   <h2 class="title">Ejemplos</h2>
+   <div class="example" id="volatile.example.immutable">
+    <p><strong>Ejemplo #1 Nuevas semánticas de inmutabilidad de Threaded</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">class </span><span style="color: #0000BB">Task </span><span style="color: #007700">extends </span><span style="color: #0000BB">Threaded<br></span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">__construct</span><span style="color: #007700">()<br>    {<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">data </span><span style="color: #007700">= new </span><span style="color: #0000BB">Threaded</span><span style="color: #007700">();<br><br>        </span><span style="color: #FF8000">// intenta reemplazar una propiedad Threaded de una clase Threaded (inválido)<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">data </span><span style="color: #007700">= new </span><span style="color: #0000BB">stdClass</span><span style="color: #007700">();<br>    }<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">((new </span><span style="color: #0000BB">Task</span><span style="color: #007700">())-&gt;</span><span style="color: #0000BB">data</span><span style="color: #007700">);</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+RuntimeException: Threaded members previously set to Threaded objects are immutable, cannot overwrite data in %s:%d
+</pre></div>
+    </div>
+   </div>
+   <div class="example" id="volatile.example.basic">
+    <p><strong>Ejemplo #2 Caso de uso de Volatile</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">class </span><span style="color: #0000BB">Task </span><span style="color: #007700">extends </span><span style="color: #0000BB">Volatile<br></span><span style="color: #007700">{<br>    public function </span><span style="color: #0000BB">__construct</span><span style="color: #007700">()<br>    {<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">data </span><span style="color: #007700">= new </span><span style="color: #0000BB">Threaded</span><span style="color: #007700">();<br><br>        </span><span style="color: #FF8000">// intenta reemplazar una propiedad Threaded de una clase Volatile (válido)<br>        </span><span style="color: #0000BB">$this</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">data </span><span style="color: #007700">= new </span><span style="color: #0000BB">stdClass</span><span style="color: #007700">();<br>    }<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">((new </span><span style="color: #0000BB">Task</span><span style="color: #007700">())-&gt;</span><span style="color: #0000BB">data</span><span style="color: #007700">);</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+object(stdClass)#3 (0) {
+}
+</pre></div>
+    </div>
+   </div>
+  </div>
+
+ </div>
+
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.pthreads">Introducción</a></li><li><a href="#pthreads.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#pthreads.requirements">Requerimientos</a></li><li><a href="#pthreads.installation">Instalación</a></li></ul></li><li><a href="#pthreads.constants">Constantes predefinidas</a></li><li><a href="#class.threaded">Threaded</a> — La clase Threaded<ul class="chunklist chunklist_book chunklist_children"><li><a href="#threaded.chunk">Threaded::chunk</a> — Manipulación</li><li><a href="#threaded.count">Threaded::count</a> — Manipulación</li><li><a href="#threaded.extend">Threaded::extend</a> — Manipulación durante la ejecución</li><li><a href="#thread.isrunning">Threaded::isRunning</a> — Detección de estado</li><li><a href="#threaded.isterminated">Threaded::isTerminated</a> — Detección de estado</li><li><a href="#threaded.merge">Threaded::merge</a> — Manipulación</li><li><a href="#threaded.notify">Threaded::notify</a> — Sincronización</li><li><a href="#threaded.notifyone">Threaded::notifyOne</a> — Sincronizar</li><li><a href="#threaded.pop">Threaded::pop</a> — Manipulación</li><li><a href="#threaded.run">Threaded::run</a> — Ejecución</li><li><a href="#threaded.shift">Threaded::shift</a> — Manipulación</li><li><a href="#threaded.synchronized">Threaded::synchronized</a> — Sincronización</li><li><a href="#threaded.wait">Threaded::wait</a> — Sincronización</li></ul></li><li><a href="#class.thread">Thread</a> — La clase Thread<ul class="chunklist chunklist_book chunklist_children"><li><a href="#thread.getcreatorid">Thread::getCreatorId</a> — Identificación</li><li><a href="#thread.getcurrentthread">Thread::getCurrentThread</a> — Identificación</li><li><a href="#thread.getcurrentthreadid">Thread::getCurrentThreadId</a> — Identificación</li><li><a href="#thread.getthreadid">Thread::getThreadId</a> — Identificación</li><li><a href="#thread.isjoined">Thread::isJoined</a> — Detección de estado</li><li><a href="#thread.isstarted">Thread::isStarted</a> — Detección de estado</li><li><a href="#thread.join">Thread::join</a> — Sincronización</li><li><a href="#thread.start">Thread::start</a> — Ejecución</li></ul></li><li><a href="#class.worker">Worker</a> — La clase Worker<ul class="chunklist chunklist_book chunklist_children"><li><a href="#worker.collect">Worker::collect</a> — Recopila las referencias de las tareas finalizadas</li><li><a href="#worker.getstacked">Worker::getStacked</a> — Obtiene el tamaño de pila restante</li><li><a href="#worker.isshutdown">Worker::isShutdown</a> — Detección de estado</li><li><a href="#worker.shutdown">Worker::shutdown</a> — Detener el worker</li><li><a href="#worker.stack">Worker::stack</a> — Apila la tarea</li><li><a href="#worker.unstack">Worker::unstack</a> — Desapila una tarea</li></ul></li><li><a href="#class.collectable">Collectable</a> — La interfaz Collectable<ul class="chunklist chunklist_book chunklist_children"><li><a href="#collectable.isgarbage">Collectable::isGarbage</a> — Determina si un objeto ha sido marcado como obsoleto</li></ul></li><li><a href="#class.pool">Pool</a> — La clase Pool<ul class="chunklist chunklist_book chunklist_children"><li><a href="#pool.collect">Pool::collect</a> — Recopila las referencias de las tareas completadas</li><li><a href="#pool.construct">Pool::__construct</a> — Crea un nuevo Pool de Workers</li><li><a href="#pool.resize">Pool::resize</a> — Redimensiona el Pool</li><li><a href="#pool.shutdown">Pool::shutdown</a> — Detiene todos los workers</li><li><a href="#pool.submit">Pool::submit</a> — Envía un objeto para su ejecución</li><li><a href="#pool.submitTo">Pool::submitTo</a> — Envía una tarea a un worker específico para su ejecución</li></ul></li><li><a href="#class.volatile">Volatile</a> — La clase Volatile</li></ul></div>

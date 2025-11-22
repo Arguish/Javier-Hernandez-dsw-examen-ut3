@@ -1,0 +1,749 @@
+<div id="book.hrtime" class="book"><hr>
+ 
+ <h1 class="title">Gestión del tiempo de alta resolución</h1>
+ 
+
+ <div id="intro.hrtime" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   La extensión HRTime implementa una clase StopWatch de alta resolución.
+   Utiliza la mejor de las APIs en las diferentes plataformas, que
+   proporcionará una resolución a la nanosegundo. Asimismo, es posible
+   implementar un cronómetro personalizado utilizando los ticks de bajo
+   nivel, entregados por las APIs subyacentes.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   <span class="simpara">
+    A partir de PHP 7.3.0 la función relacionada <span class="function"><a href="#function.hrtime" class="function">hrtime()</a></span> forma
+    parte del núcleo.
+   </span>
+  </p></blockquote>
+ </div>
+<hr>
+
+
+ 
+
+
+
+<div id="hrtime.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#hrtime.example.basic">Uso básico</a></li></ul>
+
+ <div id="hrtime.example.basic" class="section"><hr>
+  <h2 class="title">Uso básico</h2>
+  <p class="para">
+   El ejemplo muestra el uso básico de la clase StopWatch
+  </p>
+  <div class="example" id="example-2322">
+   <p><strong>Ejemplo #1 Medir la ejecución de varios bloques de código y obtener el total</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$c </span><span style="color: #007700">= new </span><span style="color: #0000BB">HRTime\StopWatch</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$c</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* medir la ejecución de este bloque de código */<br></span><span style="color: #007700">for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">1024</span><span style="color: #007700">*</span><span style="color: #0000BB">1024</span><span style="color: #007700">; </span><span style="color: #0000BB">$i</span><span style="color: #007700">++);<br></span><span style="color: #0000BB">$c</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">stop</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$transcurrido0 </span><span style="color: #007700">= </span><span style="color: #0000BB">$c</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getLastElapsedTime</span><span style="color: #007700">(</span><span style="color: #0000BB">HRTime\Unit</span><span style="color: #007700">::</span><span style="color: #0000BB">NANOSECOND</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* la medición no se ejecuta aquí */<br></span><span style="color: #007700">for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">1024</span><span style="color: #007700">*</span><span style="color: #0000BB">1024</span><span style="color: #007700">; </span><span style="color: #0000BB">$i</span><span style="color: #007700">++);<br><br></span><span style="color: #0000BB">$c</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">start</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* medir la ejecución de este bloque de código */<br></span><span style="color: #007700">for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">1024</span><span style="color: #007700">*</span><span style="color: #0000BB">1024</span><span style="color: #007700">; </span><span style="color: #0000BB">$i</span><span style="color: #007700">++);<br></span><span style="color: #0000BB">$c</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">stop</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$transcurrido1 </span><span style="color: #007700">= </span><span style="color: #0000BB">$c</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getLastElapsedTime</span><span style="color: #007700">(</span><span style="color: #0000BB">HRTime\Unit</span><span style="color: #007700">::</span><span style="color: #0000BB">NANOSECOND</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$total_transcurrido </span><span style="color: #007700">= </span><span style="color: #0000BB">$c</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getElapsedTime</span><span style="color: #007700">(</span><span style="color: #0000BB">HRTime\Unit</span><span style="color: #007700">::</span><span style="color: #0000BB">NANOSECOND</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+<hr>
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+
+<div id="class.hrtime-performancecounter" class="reference"><hr>
+
+ <h1 class="title">La clase HRTime\PerformanceCounter</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p>
+
+  
+  <div class="section" id="hrtime-performancecounter.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+  
+
+  <div class="section" id="hrtime-performancecounter.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+   
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+    
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">HRTime\PerformanceCounter</strong>
+     </span>
+     {</div>
+    
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+      <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#hrtime-performancecounter.getfrequency" class="methodname">getFrequency</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#hrtime-performancecounter.getticks" class="methodname">getTicks</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#hrtime-performancecounter.gettickssince" class="methodname">getTicksSince</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$start</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+   }</div>
+   
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="hrtime-performancecounter.getfrequency" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\PerformanceCounter::getFrequency</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p><p class="refpurpose"><span class="refname">HRTime\PerformanceCounter::getFrequency</span> — <span class="dc-title">Frecuencia del temporizador en ticks por segundo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-performancecounter.getfrequency-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+      <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>HRTime\PerformanceCounter::getFrequency</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se devuelve la frecuencia del temporizador en ticks por segundo. Este
+   valor es constante tras el inicio del sistema en la mayoría
+   de los sistemas operativos.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-performancecounter.getfrequency-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-performancecounter.getfrequency-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Se devuelve un <span class="type"><a href="#language.types.integer" class="type int">int</a></span> que indica la frecuencia del temporizador.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="hrtime-performancecounter.getticks" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\PerformanceCounter::getTicks</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.6.0)</p><p class="refpurpose"><span class="refname">HRTime\PerformanceCounter::getTicks</span> — <span class="dc-title">Ticks actuales desde el sistema</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-performancecounter.getticks-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>HRTime\PerformanceCounter::getTicks</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el recuento de ticks.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-performancecounter.getticks-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-performancecounter.getticks-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un <span class="type"><a href="#language.types.integer" class="type int">int</a></span> que indica el recuento de ticks.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="hrtime-performancecounter.gettickssince" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\PerformanceCounter::getTicksSince</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.6.0)</p><p class="refpurpose"><span class="refname">HRTime\PerformanceCounter::getTicksSince</span> — <span class="dc-title">Ticks transcurridos desde el valor proporcionado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-performancecounter.gettickssince-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>HRTime\PerformanceCounter::getTicksSince</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$start</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el recuento de ticks transcurridos desde el valor de inicio proporcionado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-performancecounter.gettickssince-parameters">
+  <h3 class="title">Parámetros</h3>
+   <dl>
+    
+     <dt><code class="parameter">start</code></dt>
+      <dd>
+       <p class="para">
+        Valor de ticks de inicio.
+       </p>
+      </dd>
+    
+   </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-performancecounter.gettickssince-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un <span class="type"><a href="#language.types.integer" class="type int">int</a></span> que indica el recuento de ticks.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#hrtime-performancecounter.getfrequency">HRTime\PerformanceCounter::getFrequency</a> — Frecuencia del temporizador en ticks por segundo</li><li><a href="#hrtime-performancecounter.getticks">HRTime\PerformanceCounter::getTicks</a> — Ticks actuales desde el sistema</li><li><a href="#hrtime-performancecounter.gettickssince">HRTime\PerformanceCounter::getTicksSince</a> — Ticks transcurridos desde el valor proporcionado</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.hrtime-stopwatch" class="reference"><hr>
+
+ <h1 class="title">La clase HRTime\StopWatch</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p>
+
+
+  <div class="section" id="hrtime-stopwatch.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="hrtime-stopwatch.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">HRTime\StopWatch</strong>
+     </span>
+
+     <span class="ooclass">
+      <span class="modifier">extends</span>
+       <a href="#class.hrtime-performancecounter" class="classname">HRTime\PerformanceCounter</a>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#hrtime-stopwatch.getelapsedticks" class="methodname">getElapsedTicks</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#hrtime-stopwatch.getelapsedtime" class="methodname">getElapsedTime</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$unit</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.float" class="type float">float</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#hrtime-stopwatch.getlastelapsedticks" class="methodname">getLastElapsedTicks</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#hrtime-stopwatch.getlastelapsedtime" class="methodname">getLastElapsedTime</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$unit</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.float" class="type float">float</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#hrtime-stopwatch.isrunning" class="methodname">isRunning</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#hrtime-stopwatch.start" class="methodname">start</a></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#hrtime-stopwatch.stop" class="methodname">stop</a></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#hrtime-performancecounter.getfrequency" class="methodname">HRTime\PerformanceCounter::getFrequency</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#hrtime-performancecounter.getticks" class="methodname">HRTime\PerformanceCounter::getTicks</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#hrtime-performancecounter.gettickssince" class="methodname">HRTime\PerformanceCounter::getTicksSince</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$start</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="hrtime-stopwatch.getelapsedticks" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\StopWatch::getElapsedTicks</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p><p class="refpurpose"><span class="refname">HRTime\StopWatch::getElapsedTicks</span> — <span class="dc-title">Obtiene los ticks transcurridos para todos los intervalos</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-stopwatch.getelapsedticks-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>HRTime\StopWatch::getElapsedTicks</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene los ticks transcurridos para todos los intervalos cerrados anteriores.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-stopwatch.getelapsedticks-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-stopwatch.getelapsedticks-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un <span class="type"><a href="#language.types.integer" class="type int">int</a></span> que indica los ticks transcurridos.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="hrtime-stopwatch.getelapsedtime" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\StopWatch::getElapsedTime</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p><p class="refpurpose"><span class="refname">HRTime\StopWatch::getElapsedTime</span> — <span class="dc-title">Obtiene el tiempo transcurrido para todos los intervalos</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-stopwatch.getelapsedtime-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>HRTime\StopWatch::getElapsedTime</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$unit</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.float" class="type float">float</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene el tiempo transcurrido para todos los intervalos anteriores cerrados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-stopwatch.getelapsedtime-parameters">
+  <h3 class="title">Parámetros</h3>
+   <dl>
+    
+     <dt><code class="parameter">unit</code></dt>
+      <dd>
+       <p class="para">
+        Unidad de tiempo representada por una constante HRTime\Unit. Por omisión vale HRTime\Unit::SECOND.
+       </p>
+      </dd>
+    
+   </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-stopwatch.getelapsedtime-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un <span class="type"><a href="#language.types.float" class="type float">float</a></span> que indica el tiempo transcurrido.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="hrtime-stopwatch.getlastelapsedticks" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\StopWatch::getLastElapsedTicks</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p><p class="refpurpose"><span class="refname">HRTime\StopWatch::getLastElapsedTicks</span> — <span class="dc-title">Obtiene los ticks transcurridos para el último intervalo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-stopwatch.getlastelapsedticks-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>HRTime\StopWatch::getLastElapsedTicks</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene los ticks transcurridos para el último intervalo cerrado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-stopwatch.getlastelapsedticks-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-stopwatch.getlastelapsedticks-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un <span class="type"><a href="#language.types.integer" class="type int">int</a></span> que indica los ticks transcurridos.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="hrtime-stopwatch.getlastelapsedtime" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\StopWatch::getLastElapsedTime</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p><p class="refpurpose"><span class="refname">HRTime\StopWatch::getLastElapsedTime</span> — <span class="dc-title">Obtiene el tiempo transcurrido para el último intervalo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-stopwatch.getlastelapsedtime-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>HRTime\StopWatch::getLastElapsedTime</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$unit</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.float" class="type float">float</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene el tiempo transcurrido para el último intervalo.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-stopwatch.getlastelapsedtime-parameters">
+  <h3 class="title">Parámetros</h3>
+   <dl>
+    
+     <dt><code class="parameter">unit</code></dt>
+      <dd>
+       <p class="para">
+        Unidad de tiempo representada por una constante
+        HRTime\Unit. Por omisión vale HRTime\Unit::SECOND.
+       </p>
+      </dd>
+    
+   </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-stopwatch.getlastelapsedtime-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un <span class="type"><a href="#language.types.float" class="type float">float</a></span> que indica el tiempo transcurrido.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="hrtime-stopwatch.isrunning" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\StopWatch::isRunning</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p><p class="refpurpose"><span class="refname">HRTime\StopWatch::isRunning</span> — <span class="dc-title">Comprueba si la medición del tiempo está en curso</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-stopwatch.isrunning-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>HRTime\StopWatch::isRunning</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Comprueba si la medición del tiempo ha sido iniciada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-stopwatch.isrunning-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-stopwatch.isrunning-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> que indica si la medición del tiempo está en curso.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="hrtime-stopwatch.start" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\StopWatch::start</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p><p class="refpurpose"><span class="refname">HRTime\StopWatch::start</span> — <span class="dc-title">Inicia la medición del tiempo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-stopwatch.start-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>HRTime\StopWatch::start</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Inicia la medición del tiempo. Este método no tiene ningún efecto si la medición ya ha sido iniciada. La medición continuará si ha sido detenida previamente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-stopwatch.start-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-stopwatch.start-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No devuelve ningún valor.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="hrtime-stopwatch.stop" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">HRTime\StopWatch::stop</h1>
+  <p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p><p class="refpurpose"><span class="refname">HRTime\StopWatch::stop</span> — <span class="dc-title">Detiene la medición del tiempo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-hrtime-stopwatch.stop-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>HRTime\StopWatch::stop</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Detiene la medición del tiempo para el intervalo anterior.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-hrtime-stopwatch.stop-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-hrtime-stopwatch.stop-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve void.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#hrtime-stopwatch.getelapsedticks">HRTime\StopWatch::getElapsedTicks</a> — Obtiene los ticks transcurridos para todos los intervalos</li><li><a href="#hrtime-stopwatch.getelapsedtime">HRTime\StopWatch::getElapsedTime</a> — Obtiene el tiempo transcurrido para todos los intervalos</li><li><a href="#hrtime-stopwatch.getlastelapsedticks">HRTime\StopWatch::getLastElapsedTicks</a> — Obtiene los ticks transcurridos para el último intervalo</li><li><a href="#hrtime-stopwatch.getlastelapsedtime">HRTime\StopWatch::getLastElapsedTime</a> — Obtiene el tiempo transcurrido para el último intervalo</li><li><a href="#hrtime-stopwatch.isrunning">HRTime\StopWatch::isRunning</a> — Comprueba si la medición del tiempo está en curso</li><li><a href="#hrtime-stopwatch.start">HRTime\StopWatch::start</a> — Inicia la medición del tiempo</li><li><a href="#hrtime-stopwatch.stop">HRTime\StopWatch::stop</a> — Detiene la medición del tiempo</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.hrtime-unit" class="reference"><hr>
+
+ <h1 class="title">La clase HRTime\Unit</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL hrtime &gt;= 0.4.3)</p>
+
+
+  <div class="section" id="hrtime-unit.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="hrtime-unit.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">HRTime\Unit</strong>
+     </span>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Constantes */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#hrtime-unit.constants.second"><var class="varname">SECOND</var></a></var><span class="initializer"> = 0</span>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#hrtime-unit.constants.millisecond"><var class="varname">MILLISECOND</var></a></var><span class="initializer"> = 1</span>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#hrtime-unit.constants.microsecond"><var class="varname">MICROSECOND</var></a></var><span class="initializer"> = 2</span>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#hrtime-unit.constants.nanosecond"><var class="varname">NANOSECOND</var></a></var><span class="initializer"> = 3</span>;</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    
+   }</div>
+
+
+  </div>
+
+
+  <div class="section" id="hrtime-unit.constants">
+   <h2 class="title">Constantes predefinidas</h2>
+   <dl>
+
+    
+     <dt id="hrtime-unit.constants.second"><strong><code><a href="#hrtime-unit.constants.second">HRTime\Unit::SECOND</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="hrtime-unit.constants.millisecond"><strong><code><a href="#hrtime-unit.constants.millisecond">HRTime\Unit::MILLISECOND</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="hrtime-unit.constants.microsecond"><strong><code><a href="#hrtime-unit.constants.microsecond">HRTime\Unit::MICROSECOND</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="hrtime-unit.constants.nanosecond"><strong><code><a href="#hrtime-unit.constants.nanosecond">HRTime\Unit::NANOSECOND</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+   </dl>
+  </div>
+
+
+ </div>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.hrtime">Introducción</a></li><li><a href="#hrtime.examples">Ejemplos</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#hrtime.example.basic">Uso básico</a></li></ul></li><li><a href="#class.hrtime-performancecounter">HRTime\PerformanceCounter</a> — La clase HRTime\PerformanceCounter<ul class="chunklist chunklist_book chunklist_children"><li><a href="#hrtime-performancecounter.getfrequency">HRTime\PerformanceCounter::getFrequency</a> — Frecuencia del temporizador en ticks por segundo</li><li><a href="#hrtime-performancecounter.getticks">HRTime\PerformanceCounter::getTicks</a> — Ticks actuales desde el sistema</li><li><a href="#hrtime-performancecounter.gettickssince">HRTime\PerformanceCounter::getTicksSince</a> — Ticks transcurridos desde el valor proporcionado</li></ul></li><li><a href="#class.hrtime-stopwatch">HRTime\StopWatch</a> — La clase HRTime\StopWatch<ul class="chunklist chunklist_book chunklist_children"><li><a href="#hrtime-stopwatch.getelapsedticks">HRTime\StopWatch::getElapsedTicks</a> — Obtiene los ticks transcurridos para todos los intervalos</li><li><a href="#hrtime-stopwatch.getelapsedtime">HRTime\StopWatch::getElapsedTime</a> — Obtiene el tiempo transcurrido para todos los intervalos</li><li><a href="#hrtime-stopwatch.getlastelapsedticks">HRTime\StopWatch::getLastElapsedTicks</a> — Obtiene los ticks transcurridos para el último intervalo</li><li><a href="#hrtime-stopwatch.getlastelapsedtime">HRTime\StopWatch::getLastElapsedTime</a> — Obtiene el tiempo transcurrido para el último intervalo</li><li><a href="#hrtime-stopwatch.isrunning">HRTime\StopWatch::isRunning</a> — Comprueba si la medición del tiempo está en curso</li><li><a href="#hrtime-stopwatch.start">HRTime\StopWatch::start</a> — Inicia la medición del tiempo</li><li><a href="#hrtime-stopwatch.stop">HRTime\StopWatch::stop</a> — Detiene la medición del tiempo</li></ul></li><li><a href="#class.hrtime-unit">HRTime\Unit</a> — La clase HRTime\Unit</li></ul></div>

@@ -1,0 +1,744 @@
+<div id="book.xattr" class="book"><hr>
+ 
+ <h1 class="title">xattr</h1>
+
+ 
+ <div id="intro.xattr" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   La extensión xattr permite la manipulación de los atributos extendidos de un sistema de archivos.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+<div id="xattr.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#xattr.requirements">Requerimientos</a></li><li><a href="#xattr.installation">Instalación</a></li></ul>
+
+
+ 
+ <div id="xattr.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Para utilizar xattr, se necesita tener libattr instalado. Este está
+   disponible en <a href="http://savannah.nongnu.org/projects/attr/" class="link external">» http://savannah.nongnu.org/projects/attr/</a>.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Estas funciones sólo funcionan en sistemas de archivos que soportan
+    atributos extendidos, y haya activado durante la instalación. Algunos sistemas
+    de ficheros comunes que soportan atributos extendidos son <code class="literal">ext2</code>, <code class="literal">ext3</code>,
+    <code class="literal">reiserfs</code>, <code class="literal">jfs</code>, y <code class="literal">xfs</code>.
+   </p>
+  </blockquote>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="xattr.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/xattr" class="link external">» https://pecl.php.net/package/xattr</a>.
+ </p>
+ <p class="para">
+  No hay biblioteca <abbr title="Dynamic Link Library">DLL</abbr> para esta
+        extensión <abbr title="PHP Extension and Application Repository">PECL</abbr> actualmente disponible. Consulte la sección
+<a href="#install.windows.building" class="link">Compilación en Windows</a>.
+ </p>
+</div>
+<hr>
+
+
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+<div id="xattr.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.xattr-root">
+    <strong><code><a href="#constant.xattr-root">XATTR_ROOT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Establece atributos en la raíz (segura) de espacio de nombres. Requiere privilegios de
+     administrador.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.xattr-dontfollow">
+    <strong><code><a href="#constant.xattr-dontfollow">XATTR_DONTFOLLOW</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     No sigue el enlace simbólico pero se puede operar en este.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.xattr-create">
+    <strong><code><a href="#constant.xattr-create">XATTR_CREATE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     La función falla si el atributo extendido ya existe.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.xattr-replace">
+    <strong><code><a href="#constant.xattr-replace">XATTR_REPLACE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     La función falla si el atributo extendido no existe.
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="ref.xattr" class="reference"><hr>
+ <h1 class="title">Funciones de xattr</h1>
+
+ 
+
+
+<div id="function.xattr-get" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xattr_get</h1>
+  <p class="verinfo">(PECL xattr &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">xattr_get</span> — <span class="dc-title">
+   Obtener un atributo extendido
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xattr-get-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xattr_get</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = 0</span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función obtiene el valor de un atributo extendido del archivo.
+  </p>
+  <p class="para">Los atributos extendidos tienen dos espacios de nombres
+diferentes: <code class="literal">user</code> y <code class="literal">root</code>. El espacio de nombres
+<code class="literal">user</code> está disponible para todos los usuarios mientras que el espacio de
+nombres <code class="literal">root</code> solo está disponible para los usuarios con privilegios
+<code class="literal">root</code>. xattr opera sobre el espacio de nombres <code class="literal">user</code> por
+defecto, pero esto puede ser cambiado utilizando el argumento
+<code class="parameter">flags</code>.</p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.xattr-get-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       El archivo de la cual obtenemos el atributo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">name</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del atributo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       </p><table class="doctable table">
+        <caption><strong>Banderas xattr soportadas</strong></caption>
+        
+         <tbody class="tbody">
+          <tr>
+           <td><strong><code><a href="#constant.xattr-dontfollow">XATTR_DONTFOLLOW</a></code></strong></td>
+           <td>No sigue el enlace simbólico pero se puede operar en este.</td>
+          </tr>
+
+          <tr>
+           <td><strong><code><a href="#constant.xattr-root">XATTR_ROOT</a></code></strong></td>
+           <td>
+            Establece atributos en la raíz (segura) de espacio de nombres.
+            Requiere privilegios de administrador.
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xattr-get-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un string que contiene el valor o <strong><code><a href="#constant.false">false</a></code></strong> si el atributo
+   no existe.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.xattr-get-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2442">
+    <p><strong>Ejemplo #1 Comprueba si el administrador del sistema firmó el archivo</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$file </span><span style="color: #007700">= </span><span style="color: #DD0000">'/usr/local/sbin/some_binary'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$firma </span><span style="color: #007700">= </span><span style="color: #0000BB">xattr_get</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">, </span><span style="color: #DD0000">'Root signature'</span><span style="color: #007700">, </span><span style="color: #0000BB">XATTR_ROOT</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* ... Comprobar si la $firma es válida ... */<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.xattr-get-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xattr-list" class="function" rel="rdfs-seeAlso">xattr_list()</a> - Obtener una lista de atributos extendidos</span></li>
+    <li><span class="function"><a href="#function.xattr-set" class="function" rel="rdfs-seeAlso">xattr_set()</a> - Establece un atributo extendido</span></li>
+    <li><span class="function"><a href="#function.xattr-remove" class="function" rel="rdfs-seeAlso">xattr_remove()</a> - Elimina un atributo extendido</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.xattr-list" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xattr_list</h1>
+  <p class="verinfo">(PECL xattr &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">xattr_list</span> — <span class="dc-title">
+   Obtener una lista de atributos extendidos
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xattr-list-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xattr_list</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función obtiene una lista de nombres de los atributos extendidos de un archivo.
+  </p>
+  <p class="para">Los atributos extendidos tienen dos espacios de nombres
+diferentes: <code class="literal">user</code> y <code class="literal">root</code>. El espacio de nombres
+<code class="literal">user</code> está disponible para todos los usuarios mientras que el espacio de
+nombres <code class="literal">root</code> solo está disponible para los usuarios con privilegios
+<code class="literal">root</code>. xattr opera sobre el espacio de nombres <code class="literal">user</code> por
+defecto, pero esto puede ser cambiado utilizando el argumento
+<code class="parameter">flags</code>.</p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.xattr-list-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       La ruta del archivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       </p><table class="doctable table">
+        <caption><strong>Banderas xattr soportadas</strong></caption>
+        
+         <tbody class="tbody">
+          <tr>
+           <td><strong><code><a href="#constant.xattr-dontfollow">XATTR_DONTFOLLOW</a></code></strong></td>
+           <td>No sigue el enlace simbólico pero se puede operar en este.</td>
+          </tr>
+
+          <tr>
+           <td><strong><code><a href="#constant.xattr-root">XATTR_ROOT</a></code></strong></td>
+           <td>
+            Establece atributos en la raíz (segura) de espacio de nombres.
+            Requiere privilegios de administrador.
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xattr-list-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función devuelve un array con los nombres de los atributos extendidos.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.xattr-list-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2443">
+    <p><strong>Ejemplo #1 Imprime los nombres de todos los atributos extendidos del archivo</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$file </span><span style="color: #007700">= </span><span style="color: #DD0000">'some_file'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$root_attributes </span><span style="color: #007700">= </span><span style="color: #0000BB">xattr_list</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">, </span><span style="color: #0000BB">XATTR_ROOT</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$user_attributes </span><span style="color: #007700">= </span><span style="color: #0000BB">xattr_list</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">);<br><br>echo </span><span style="color: #DD0000">"Atributos Root: \n"</span><span style="color: #007700">;<br>foreach (</span><span style="color: #0000BB">$root_attributes </span><span style="color: #007700">as </span><span style="color: #0000BB">$attr_name</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"%s\n"</span><span style="color: #007700">, </span><span style="color: #0000BB">$attr_name</span><span style="color: #007700">);<br>}<br><br>echo </span><span style="color: #DD0000">"\n Atributos usuario: \n"</span><span style="color: #007700">;<br>foreach (</span><span style="color: #0000BB">$attributes </span><span style="color: #007700">as </span><span style="color: #0000BB">$attr_name</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"%s\n"</span><span style="color: #007700">, </span><span style="color: #0000BB">$attr_name</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.xattr-list-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xattr-get" class="function" rel="rdfs-seeAlso">xattr_get()</a> - Obtener un atributo extendido</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.xattr-remove" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xattr_remove</h1>
+  <p class="verinfo">(PECL xattr &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">xattr_remove</span> — <span class="dc-title">
+   Elimina un atributo extendido
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xattr-remove-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xattr_remove</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función elimina un atributo extendido del archivo.
+  </p>
+  <p class="para">Los atributos extendidos tienen dos espacios de nombres
+diferentes: <code class="literal">user</code> y <code class="literal">root</code>. El espacio de nombres
+<code class="literal">user</code> está disponible para todos los usuarios mientras que el espacio de
+nombres <code class="literal">root</code> solo está disponible para los usuarios con privilegios
+<code class="literal">root</code>. xattr opera sobre el espacio de nombres <code class="literal">user</code> por
+defecto, pero esto puede ser cambiado utilizando el argumento
+<code class="parameter">flags</code>.</p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.xattr-remove-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       El archivo del que se elimina el atributo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">name</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del atributo a eliminar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       </p><table class="doctable table">
+        <caption><strong>Banderas xattr soportadas</strong></caption>
+        
+         <tbody class="tbody">
+          <tr>
+           <td><strong><code><a href="#constant.xattr-dontfollow">XATTR_DONTFOLLOW</a></code></strong></td>
+           <td>No sigue el enlace simbólico pero se puede operar en este.</td>
+          </tr>
+
+          <tr>
+           <td><strong><code><a href="#constant.xattr-root">XATTR_ROOT</a></code></strong></td>
+           <td>
+            Establece atributos en la raíz (segura) de espacio de nombres. Requiere privilegios de
+            administrador.
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xattr-remove-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.xattr-remove-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2444">
+    <p><strong>Ejemplo #1 Elimina todos los atributos extendidos de un archivo</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$file </span><span style="color: #007700">= </span><span style="color: #DD0000">'some_file'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$attributes </span><span style="color: #007700">= </span><span style="color: #0000BB">xattr_list</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">);<br><br>foreach (</span><span style="color: #0000BB">$attributes </span><span style="color: #007700">as </span><span style="color: #0000BB">$attr_name</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">xattr_remove</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">, </span><span style="color: #0000BB">$attr_name</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.xattr-remove-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xattr-list" class="function" rel="rdfs-seeAlso">xattr_list()</a> - Obtener una lista de atributos extendidos</span></li>
+    <li><span class="function"><a href="#function.xattr-set" class="function" rel="rdfs-seeAlso">xattr_set()</a> - Establece un atributo extendido</span></li>
+    <li><span class="function"><a href="#function.xattr-get" class="function" rel="rdfs-seeAlso">xattr_get()</a> - Obtener un atributo extendido</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.xattr-set" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xattr_set</h1>
+  <p class="verinfo">(PECL xattr &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">xattr_set</span> — <span class="dc-title">
+   Establece un atributo extendido
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xattr-set-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xattr_set</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$value</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = 0</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función establece el valor de un atributo extendido del archivo.
+  </p>
+  <p class="para">Los atributos extendidos tienen dos espacios de nombres
+diferentes: <code class="literal">user</code> y <code class="literal">root</code>. El espacio de nombres
+<code class="literal">user</code> está disponible para todos los usuarios mientras que el espacio de
+nombres <code class="literal">root</code> solo está disponible para los usuarios con privilegios
+<code class="literal">root</code>. xattr opera sobre el espacio de nombres <code class="literal">user</code> por
+defecto, pero esto puede ser cambiado utilizando el argumento
+<code class="parameter">flags</code>.</p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.xattr-set-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       El archivo en el que se establece el atributo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">name</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del atributo extendido. Este atributo se crea si no existe
+       o reemplazado si ya existe. Puede cambiar este comportamiento mediante
+       el uso de los parámetros <code class="parameter">flags</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       El valor del atributo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       </p><table class="doctable table">
+        <caption><strong>Banderas xattr soportadas</strong></caption>
+        
+         <tbody class="tbody">
+          <tr>
+           <td><strong><code><a href="#constant.xattr-create">XATTR_CREATE</a></code></strong></td>
+           <td>La función falla si el atributo extendido ya existe.</td>
+          </tr>
+
+          <tr>
+           <td><strong><code><a href="#constant.xattr-replace">XATTR_REPLACE</a></code></strong></td>
+           <td>La función falla si el atributo extendido no existe.</td>
+          </tr>
+
+          <tr>
+           <td><strong><code><a href="#constant.xattr-dontfollow">XATTR_DONTFOLLOW</a></code></strong></td>
+           <td>No sigue el enlace simbólico pero se puede operar en este.</td>
+          </tr>
+
+          <tr>
+           <td><strong><code><a href="#constant.xattr-root">XATTR_ROOT</a></code></strong></td>
+           <td>
+            Establece atributos en la raíz (segura) de espacio de nombres.
+            Requiere privilegios de administrador.
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xattr-set-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.xattr-set-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2445">
+    <p><strong>Ejemplo #1 Establece atributos extendidos en archivo <var class="filename">.wav</var></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$file </span><span style="color: #007700">= </span><span style="color: #DD0000">'my_favourite_song.wav'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">xattr_set</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">, </span><span style="color: #DD0000">'Artist'</span><span style="color: #007700">, </span><span style="color: #DD0000">'Someone'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">xattr_set</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">, </span><span style="color: #DD0000">'My ranking'</span><span style="color: #007700">, </span><span style="color: #DD0000">'Good'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">xattr_set</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">, </span><span style="color: #DD0000">'Listen count'</span><span style="color: #007700">, </span><span style="color: #DD0000">'34'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* ... other code ... */<br><br></span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"You've played this song %d times"</span><span style="color: #007700">, </span><span style="color: #0000BB">xattr_get</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">, </span><span style="color: #DD0000">'Listen count'</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.xattr-set-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xattr-get" class="function" rel="rdfs-seeAlso">xattr_get()</a> - Obtener un atributo extendido</span></li>
+    <li><span class="function"><a href="#function.xattr-remove" class="function" rel="rdfs-seeAlso">xattr_remove()</a> - Elimina un atributo extendido</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.xattr-supported" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xattr_supported</h1>
+  <p class="verinfo">(PECL xattr &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">xattr_supported</span> — <span class="dc-title">
+   Comprueba si soporta los atributos extendidos del sistema de archivos
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xattr-supported-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xattr_supported</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función comprueba si el sistema de archivos que contenía el fichero dado soporta
+   los atributos extendidos. Es necesario tener acceso de lectura al archivo.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.xattr-supported-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       La ruta del archivo de prueba.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       </p><table class="doctable table">
+        <caption><strong>Banderas xattr soportadas</strong></caption>
+        
+         <tbody class="tbody">
+          <tr>
+           <td><strong><code><a href="#constant.xattr-dontfollow">XATTR_DONTFOLLOW</a></code></strong></td>
+           <td>No sigue el enlace simbólico pero se puede operar en este.</td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xattr-supported-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función devuelve <strong><code><a href="#constant.true">true</a></code></strong> si sistema de archivo soporta los atributos extendidos,
+   <strong><code><a href="#constant.false">false</a></code></strong> si no soporta y <strong><code><a href="#constant.null">null</a></code></strong> si no se puede determinar (Por ejemplo
+   ruta incorrecta o le faltan permisos al archivo).
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.xattr-supported-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2446">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>xattr_supported()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente código comprueba si se pueden utilizar los atributos extendidos.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$file </span><span style="color: #007700">= </span><span style="color: #DD0000">'some_file'</span><span style="color: #007700">;<br><br>if (</span><span style="color: #0000BB">xattr_supported</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">)) {<br>    </span><span style="color: #FF8000">/* ... make use of some xattr_* functions ... */<br></span><span style="color: #007700">}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.xattr-supported-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xattr-get" class="function" rel="rdfs-seeAlso">xattr_get()</a> - Obtener un atributo extendido</span></li>
+    <li><span class="function"><a href="#function.xattr-list" class="function" rel="rdfs-seeAlso">xattr_list()</a> - Obtener una lista de atributos extendidos</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.xattr-get">xattr_get</a> — Obtener un atributo extendido</li><li><a href="#function.xattr-list">xattr_list</a> — Obtener una lista de atributos extendidos</li><li><a href="#function.xattr-remove">xattr_remove</a> — Elimina un atributo extendido</li><li><a href="#function.xattr-set">xattr_set</a> — Establece un atributo extendido</li><li><a href="#function.xattr-supported">xattr_supported</a> — Comprueba si soporta los atributos extendidos del sistema de archivos</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.xattr">Introducción</a></li><li><a href="#xattr.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#xattr.requirements">Requerimientos</a></li><li><a href="#xattr.installation">Instalación</a></li></ul></li><li><a href="#xattr.constants">Constantes predefinidas</a></li><li><a href="#ref.xattr">Funciones de xattr</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.xattr-get">xattr_get</a> — Obtener un atributo extendido</li><li><a href="#function.xattr-list">xattr_list</a> — Obtener una lista de atributos extendidos</li><li><a href="#function.xattr-remove">xattr_remove</a> — Elimina un atributo extendido</li><li><a href="#function.xattr-set">xattr_set</a> — Establece un atributo extendido</li><li><a href="#function.xattr-supported">xattr_supported</a> — Comprueba si soporta los atributos extendidos del sistema de archivos</li></ul></li></ul></div>

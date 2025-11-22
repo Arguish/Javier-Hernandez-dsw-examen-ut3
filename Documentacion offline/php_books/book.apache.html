@@ -1,0 +1,1285 @@
+<div id="book.apache" class="book"><hr>
+ 
+ <h1 class="title">Apache</h1>
+
+ 
+ <div id="intro.apache" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Estas funciones sólo están disponibles cuando se ejecuta PHP como módulo de Apache.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+<div id="apache.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#apache.installation">Instalación</a></li><li><a href="#apache.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ 
+ <div id="apache.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   Para instalar PHP en Apache, vea el <a href="#install" class="link">capítulo de instalación</a>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+
+<div id="apache.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="para">
+  El comportamiento del módulo de PHP de Apache está regido por los valores definidos en <var class="filename">php.ini</var>.
+  Estos valores de configuración definidos en <var class="filename">php.ini</var> pueden ser sobreescritos por la configuración del
+  <a href="#configuration.changes.apache" class="link">php_flag</a> definidos en el fichero de configuración
+  del servidor o por los ficheros <var class="filename">.htaccess</var> locales.
+ </p>
+ <div class="example" id="example-4997">
+  <p><strong>Ejemplo #1 Desactivar el intérprete de PHP en un directorio utilizando <var class="filename">.htaccess</var></strong></p>
+  <div class="example-contents"><div class="cdata"><pre>php_flag engine off</pre></div></div>
+
+ </div>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Opciones de configuración de Apache</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.engine" class="link">engine</a></td>
+      <td>"1"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.child-terminate" class="link">child_terminate</a></td>
+      <td>"0"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.last-modified" class="link">last_modified</a></td>
+      <td>"0"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.xbithack" class="link">xbithack</a></td>
+      <td>"0"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+  Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+ <p class="para">
+  </p><dl>
+   
+    <dt id="ini.engine">
+     <code class="parameter">engine</code>
+     <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Activa o desactiva la ejecución de PHP.
+      Esta directiva se puede utilizar sólo en la versión de PHP
+      como módulo de Apache. Se usa en los sitios que deseen controlar
+      la activación o desactivación del PHP en cada directorio o servidor
+      virtual. Al establecer <strong class="userinput"><code>engine off</code></strong>
+      en los lugares apropiados en el archivo <var class="filename">httpd.conf</var>, PHP puede
+      ser activado o desactivado.
+     </p>
+    </dd>
+   
+   
+    <dt id="ini.child-terminate">
+     <code class="parameter">child_terminate</code>
+     <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Especifica si los scripts PHP pueden solicitar la finalización de los procesos hijos al finalizar la petición,
+      véase también <span class="function"><a href="#function.apache-child-terminate" class="function">apache_child_terminate()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt id="ini.last-modified">
+     <code class="parameter">last_modified</code>
+     <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Envía la fecha de modificación de los scripts PHP con la cabecera 'Last-Modified:' para estas peticiones.
+     </p>
+    </dd>
+   
+   
+    <dt id="ini.xbithack">
+     <code class="parameter">xbithack</code>
+     <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Analiza los ficheros con bit de ejecución establecido para PHP, con independencia de la extensión del fichero
+     </p>
+    </dd>
+   
+  </dl>
+ 
+
+</div>
+<hr>
+
+
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+ <div id="ref.apache" class="reference"><hr>
+  <h1 class="title">Funciones de Apache</h1>
+
+ 
+
+
+
+<div id="function.apache-child-terminate" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">apache_child_terminate</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.5, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">apache_child_terminate</span> — <span class="dc-title">Termina el proceso Apache después de esta petición</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.apache-child-terminate-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>apache_child_terminate</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>apache_child_terminate()</strong></span> programa el proceso
+   Apache para que se termine una vez finalizada la petición PHP actual.
+   Esto puede servir para terminar un proceso después de un script que
+   hubiera consumido mucha memoria. En efecto, la memoria es generalmente
+   liberada de manera interna, pero no devuelta al sistema.
+  </p>
+  <p class="para">
+   Funciona con los servidores web Apache y FastCGI.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.apache-child-terminate-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.apache-child-terminate-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.apache-child-terminate-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">
+ Esta función no está implementada en las plataformas Windows.
+</span></p></blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.apache-child-terminate-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.exit" class="function" rel="rdfs-seeAlso">exit()</a> - Terminar el script en curso con un código de estado o un mensaje</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.apache-get-modules" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">apache_get_modules</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.2, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">apache_get_modules</span> — <span class="dc-title">Devuelve la lista de módulos Apache cargados</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.apache-get-modules-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>apache_get_modules</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve la lista de módulos Apache cargados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.apache-get-modules-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.apache-get-modules-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array que contiene los módulos Apache cargados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.apache-get-modules-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4998">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>apache_get_modules()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">apache_get_modules</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [0] =&gt; core
+    [1] =&gt; http_core
+    [2] =&gt; mod_so
+    [3] =&gt; sapi_apache2
+    [4] =&gt; mod_mime
+    [5] =&gt; mod_rewrite
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.apache-get-version" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">apache_get_version</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.2, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">apache_get_version</span> — <span class="dc-title">Obtiene la versión de Apache</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.apache-get-version-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>apache_get_version</strong></span>(): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene la versión de Apache.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.apache-get-version-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.apache-get-version-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la versión de Apache en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.apache-get-version-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4999">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>apache_get_version()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$version </span><span style="color: #007700">= </span><span style="color: #0000BB">apache_get_version</span><span style="color: #007700">();<br>echo </span><span style="color: #DD0000">"</span><span style="color: #0000BB">$version</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Apache/1.3.29 (Unix) PHP/4.3.4</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.apache-get-version-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.phpinfo" class="function" rel="rdfs-seeAlso">phpinfo()</a> - Muestra numerosas informaciones sobre la configuración de PHP</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.apache-getenv" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">apache_getenv</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">apache_getenv</span> — <span class="dc-title">Lee una variable de proceso Apache</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.apache-getenv-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>apache_getenv</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$variable</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$walk_to_top</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera una variable de entorno de Apache.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.apache-getenv-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">variable</code></dt>
+     <dd>
+      <p class="para">
+       La variable de entorno Apache.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">walk_to_top</code></dt>
+     <dd>
+      <p class="para">
+       Si se pasa a <strong><code><a href="#constant.true">true</a></code></strong>, se recupera la variable de nivel superior disponible
+       para todas las capas de Apache.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.apache-getenv-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El valor de la variable de entorno de Apache en caso de éxito o
+   <strong><code><a href="#constant.false">false</a></code></strong> en caso de fallo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.apache-getenv-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5000">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>apache_getenv()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     El siguiente ejemplo muestra cómo recuperar el valor de la variable
+     de entorno <var class="varname">SERVER_ADDR</var>.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$ret </span><span style="color: #007700">= </span><span style="color: #0000BB">apache_getenv</span><span style="color: #007700">(</span><span style="color: #DD0000">"SERVER_ADDR"</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$ret</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">42.24.42.240</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.apache-getenv-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.apache-setenv" class="function" rel="rdfs-seeAlso">apache_setenv()</a> - Establece una variable subprocess_env de Apache</span></li>
+    <li><span class="function"><a href="#function.getenv" class="function" rel="rdfs-seeAlso">getenv()</a> - Retorna el valor de una o todas las variables de entorno</span></li>
+    <li>
+     <a href="#language.variables.superglobals" class="link">Superglobales</a>
+    </li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.apache-lookup-uri" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">apache_lookup_uri</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">apache_lookup_uri</span> — <span class="dc-title">
+   Realiza una petición parcial para el URI especificado
+   y devuelve toda la información relacionada con el mismo
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.apache-lookup-uri-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>apache_lookup_uri</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>): <span class="type"><span class="type"><a href="#language.types.object" class="type object">object</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función realiza una petición parcial
+   para el URI especificado. Esta petición permite simplemente obtener toda la
+   información importante sobre el recurso concernido.
+  </p>
+  <p class="simpara">Esta función
+es soportada cuando PHP está instalado como módulo de Apache.
+</p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.apache-lookup-uri-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del fichero (URI) que será solicitado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.apache-lookup-uri-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un objeto con la información relativa al URI. Las propiedades del objeto son
+   las siguientes :
+  </p>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li>status</li>
+    <li>the_request</li>
+    <li>status_line</li>
+    <li>method</li>
+    <li>content_type</li>
+    <li>handler</li>
+    <li>uri</li>
+    <li>filename</li>
+    <li>path_info</li>
+    <li>args</li>
+    <li>boundary</li>
+    <li>no_cache</li>
+    <li>no_local_copy</li>
+    <li>allowed</li>
+    <li>send_bodyct</li>
+    <li>bytes_sent</li>
+    <li>byterange</li>
+    <li>clength</li>
+    <li>unparsed_uri</li>
+    <li>mtime</li>
+    <li>request_time</li>
+   </ul>
+  
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.false">false</a></code></strong> en caso de fallo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.apache-lookup-uri-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5001">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>apache_lookup_uri()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$info </span><span style="color: #007700">= </span><span style="color: #0000BB">apache_lookup_uri</span><span style="color: #007700">(</span><span style="color: #DD0000">'index.php?var=value'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">file_exists</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">filename</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">'¡El fichero existe!'</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">stdClass Object
+(
+    [status] =&gt; 200
+    [the_request] =&gt; GET /dir/file.php HTTP/1.1
+    [method] =&gt; GET
+    [mtime] =&gt; 0
+    [clength] =&gt; 0
+    [chunked] =&gt; 0
+    [content_type] =&gt; application/x-httpd-php
+    [no_cache] =&gt; 0
+    [no_local_copy] =&gt; 1
+    [unparsed_uri] =&gt; /dir/index.php?var=value
+    [uri] =&gt; /dir/index.php
+    [filename] =&gt; /home/htdocs/dir/index.php
+    [args] =&gt; var=value
+    [allowed] =&gt; 0
+    [sent_bodyct] =&gt; 0
+    [bytes_sent] =&gt; 0
+    [request_time] =&gt; 1074282764
+)
+¡El fichero existe!</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.apache-note" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">apache_note</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">apache_note</span> — <span class="dc-title">Muestra o asigna la tabla de notas de Apache</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.apache-note-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>apache_note</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$note_name</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$note_value</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función es una abstracción de los comandos <code class="literal">table_get</code> y
+   <code class="literal">table_set</code> de Apache. Edita la tabla de notas que existe durante una
+   petición. El propósito de esta tabla es permitir que los módulos de Apache se comuniquen.
+  </p>
+  <p class="para">
+   La utilidad de la función <span class="function"><strong>apache_note()</strong></span> es pasar información
+   de un módulo a otro, durante la misma petición.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.apache-note-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">note_name</code></dt>
+     <dd>
+      <p class="para">
+       El nombre de la nota.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">note_value</code></dt>
+     <dd>
+      <p class="para">
+       El valor de la nota.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.apache-note-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Si <code class="parameter">note_value</code> es omitido o <strong><code><a href="#constant.null">null</a></code></strong>, devuelve
+   el valor actual de la variable <code class="literal">note_name</code>. De lo contrario,
+   asigna a la nota <code class="literal">note_name</code>
+   el valor <code class="literal">note_value</code> y
+   devolverá el valor anterior de la variable <code class="literal">note_name</code>.
+   Si la nota no puede ser recuperada, <strong><code><a href="#constant.false">false</a></code></strong> es devuelto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.apache-note-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">note_value</code> ahora es nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.apache-note-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5002">
+    <p><strong>Ejemplo #1 Pasaje de información entre PHP y Perl</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>apache_note</span><span style="color: #007700">(</span><span style="color: #DD0000">'name'</span><span style="color: #007700">, </span><span style="color: #DD0000">'Fredrik Ekengren'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Llamada al script Perl<br></span><span style="color: #0000BB">virtual</span><span style="color: #007700">(</span><span style="color: #DD0000">"/perl/some_script.pl"</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">apache_note</span><span style="color: #007700">(</span><span style="color: #DD0000">"resultdata"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents">
+<div class="perlcode"><pre class="perlcode"># Recuperación del objeto de petición Apache
+my $r = Apache-&gt;request()-&gt;main();
+
+# Recuperación de los datos pasados
+my $name = $r-&gt;notes('name');
+
+# Procesamiento
+
+# Envío del resultado hacia PHP
+$r-&gt;notes('resultdata', $result);</pre>
+</div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-5003">
+    <p><strong>Ejemplo #2 Valores de identificación en el archivo access.log</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>apache_note</span><span style="color: #007700">(</span><span style="color: #DD0000">'sessionID'</span><span style="color: #007700">, </span><span style="color: #0000BB">session_id</span><span style="color: #007700">());<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents">
+<div class="apachecode"><pre class="apachecode"># "%{sessionID}n" puede ser utilizado en la directiva LogFormat</pre>
+</div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.apache-note-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.virtual" class="function" rel="rdfs-seeAlso">virtual()</a> - Efectúa una subpetición Apache</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.apache-request-headers" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">apache_request_headers</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">apache_request_headers</span> — <span class="dc-title">Recupera todos los encabezados HTTP de la petición</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.apache-request-headers-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>apache_request_headers</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera todos los encabezados HTTP de la petición actual.
+   Funciona con los servidores web Apache, FastCGI, CLI, y FPM.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.apache-request-headers-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.apache-request-headers-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array asociativo con todos los encabezados HTTP de la petición actual.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.apache-request-headers-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+
+      <tr>
+       <td>7.3.0</td>
+       <td>
+        Esta función se hace disponible para la API de servidor (SAPI) FPM (FastCGI Process Manager).
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.apache-request-headers-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5004">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>apache_request_headers()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$headers </span><span style="color: #007700">= </span><span style="color: #0000BB">apache_request_headers</span><span style="color: #007700">();<br><br>foreach (</span><span style="color: #0000BB">$headers </span><span style="color: #007700">as </span><span style="color: #0000BB">$header </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$value</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">"</span><span style="color: #0000BB">$header</span><span style="color: #DD0000">: </span><span style="color: #0000BB">$value</span><span style="color: #DD0000"> &lt;br /&gt;\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Accept: */*
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0
+Host: www.example.com
+Connection: Keep-Alive</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.apache-request-headers-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    También pueden obtenerse los valores de las variables <abbr title="Common Gateway Interface">CGI</abbr> comunes
+    leyéndolas en el entorno, lo cual funciona, ya sea en módulo <span class="productname">Apache</span>
+    o no. Utilice la función <span class="function"><a href="#function.phpinfo" class="function">phpinfo()</a></span> para conocer la lista de
+    <a href="#language.variables.predefined" class="link">variables de entorno</a>
+    disponibles.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.apache-request-headers-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.apache-response-headers" class="function" rel="rdfs-seeAlso">apache_response_headers()</a> - Recupera todos los encabezados de respuesta HTTP</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.apache-response-headers" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">apache_response_headers</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">apache_response_headers</span> — <span class="dc-title">Recupera todos los encabezados de respuesta HTTP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.apache-response-headers-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>apache_response_headers</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera todos los encabezados de respuesta HTTP.
+   Funciona con los servidores web Apache, FastCGI, CLI y FPM.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.apache-response-headers-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.apache-response-headers-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array de todos los encabezados de respuesta de Apache en caso de éxito.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.apache-response-headers-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5005">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>apache_response_headers()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">apache_response_headers</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [Accept-Ranges] =&gt; bytes
+    [X-Powered-By] =&gt; PHP/4.3.8
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.apache-response-headers-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.apache-request-headers" class="function" rel="rdfs-seeAlso">apache_request_headers()</a> - Recupera todos los encabezados HTTP de la petición</span></li>
+    <li><span class="function"><a href="#function.headers-sent" class="function" rel="rdfs-seeAlso">headers_sent()</a> - Indica si los encabezados HTTP ya han sido enviados</span></li>
+    <li><span class="function"><a href="#function.headers-list" class="function" rel="rdfs-seeAlso">headers_list()</a> - Devuelve la lista de los encabezados de respuesta del script actual</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.apache-setenv" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">apache_setenv</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">apache_setenv</span> — <span class="dc-title">Establece una variable subprocess_env de Apache</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.apache-setenv-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>apache_setenv</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$variable</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$walk_to_top</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>apache_setenv()</strong></span> establece el valor de la variable de entorno de Apache especificado por
+   <code class="parameter">variable</code>.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Al establecer una variable de entorno de Apache, la correspondiente variable
+    <var class="varname"><a href="#reserved.variables.server" class="classname">$_SERVER</a></var>
+    no se modifica.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.apache-setenv-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">variable</code></dt>
+     <dd>
+      <p class="para">
+       La variable de entorno que se desea establecer.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       El nuevo valor de <code class="parameter">variable</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">walk_to_top</code></dt>
+     <dd>
+      <p class="para">
+       Indica si se va a establecer la variable de nivel superior disponible para todas las capas de Apache.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.apache-setenv-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.apache-setenv-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5006">
+   <p><strong>Ejemplo #1 Estableciendo una variable de entorno de Apache usando <span class="function"><strong>apache_setenv()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>apache_setenv</span><span style="color: #007700">(</span><span style="color: #DD0000">"VARIABLE_EJEMPLO"</span><span style="color: #007700">, </span><span style="color: #DD0000">"Valor de ejemplo"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.apache-setenv-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    <span class="function"><strong>apache_setenv()</strong></span> puede ser utilizado con
+    <span class="function"><a href="#function.apache-getenv" class="function">apache_getenv()</a></span> en páginas separadas o para establecer variables para pasar Server Side Includes (.shtml)
+     que hayan sido incluidos en sprits PHP.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.apache-setenv-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.apache-getenv" class="function" rel="rdfs-seeAlso">apache_getenv()</a> - Lee una variable de proceso Apache</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.getallheaders" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">getallheaders</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">getallheaders</span> — <span class="dc-title">Recupera todos los encabezados de la petición HTTP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.getallheaders-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>getallheaders</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera todos los encabezados de la petición HTTP.
+  </p>
+  <p class="para">
+   Esta función es un alias de la función
+   <span class="function"><a href="#function.apache-request-headers" class="function">apache_request_headers()</a></span>. Consúltense la documentación de
+   <span class="function"><a href="#function.apache-request-headers" class="function">apache_request_headers()</a></span> para obtener más información sobre el funcionamiento de esta función.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.getallheaders-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.getallheaders-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array asociativo con todos los encabezados HTTP de la petición actual.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.getallheaders-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>7.3.0</td>
+       <td>
+        Esta función se hace disponible para la API servidor (SAPI) FPM (FastCGI Process Manager).
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.getallheaders-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5007">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>getallheaders()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">foreach (</span><span style="color: #0000BB">getallheaders</span><span style="color: #007700">() as </span><span style="color: #0000BB">$name </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$value</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">"</span><span style="color: #0000BB">$name</span><span style="color: #DD0000">: </span><span style="color: #0000BB">$value</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.getallheaders-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.apache-response-headers" class="function" rel="rdfs-seeAlso">apache_response_headers()</a> - Recupera todos los encabezados de respuesta HTTP</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.virtual" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">virtual</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">virtual</span> — <span class="dc-title">Efectúa una subpetición Apache</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.virtual-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>virtual</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$uri</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>virtual()</strong></span> es una función específica del
+   servidor Apache. Es similar a la directiva
+   "<code class="literal">&lt;!--#include virtual...--&gt;</code>" cuando se
+   utiliza el módulo <code class="literal">mod_include</code> de Apache.
+   Esta función efectúa una subpetición Apache.
+   Es muy útil cuando se desea analizar scripts CGI, archivos
+   <var class="filename">.shtml</var> o cualquier otro tipo de archivo a través del servidor Apache. Se debe tener en cuenta que al utilizarse con scripts CGI, estos deben generar un encabezado válido, es decir, al menos un encabezado <code class="literal">Content-Type</code>.
+  </p>
+  <p class="para">
+   Para ejecutar una subpetición, todos los búferes son detenidos y vaciados hacia el navegador, los encabezados restantes también lo son.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.virtual-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">uri</code></dt>
+     <dd>
+      <p class="para">
+       El archivo sobre el cual se ejecutará el comando virtual.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.virtual-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Ejecuta un comando virtual en caso de éxito o devuelve <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.virtual-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   Ver la función <span class="function"><a href="#function.apache-note" class="function">apache_note()</a></span> para un ejemplo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.virtual-notes">
+  <h3 class="title">Notas</h3>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    La cadena requerida puede ser pasada al archivo incluido, pero <var class="varname"><a href="#reserved.variables.get" class="classname">$_GET</a></var> es copiado desde el script padre y solo la variable <var class="varname"><a href="#reserved.variables.server" class="classname">$_SERVER['QUERY_STRING']</a></var> es transmitida al pasar la cadena requerida. La cadena requerida pasada funciona únicamente bajo Apache 2. Los archivos solicitados no son listados en los logs de acceso de Apache.
+   </p>
+  </div>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Las variables de entorno establecidas en el archivo solicitado no son visibles en el archivo llamador.
+   </p>
+  </blockquote>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta función puede ser utilizada sobre archivos PHP. Sin embargo, se recomienda utilizar <span class="function"><a href="#function.include" class="function">include</a></span> o <span class="function"><a href="#function.require" class="function">require</a></span> para archivos PHP.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.virtual-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.apache-note" class="function" rel="rdfs-seeAlso">apache_note()</a> - Muestra o asigna la tabla de notas de Apache</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+ <h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.apache-child-terminate">apache_child_terminate</a> — Termina el proceso Apache después de esta petición</li><li><a href="#function.apache-get-modules">apache_get_modules</a> — Devuelve la lista de módulos Apache cargados</li><li><a href="#function.apache-get-version">apache_get_version</a> — Obtiene la versión de Apache</li><li><a href="#function.apache-getenv">apache_getenv</a> — Lee una variable de proceso Apache</li><li><a href="#function.apache-lookup-uri">apache_lookup_uri</a> — Realiza una petición parcial para el URI especificado
+   y devuelve toda la información relacionada con el mismo</li><li><a href="#function.apache-note">apache_note</a> — Muestra o asigna la tabla de notas de Apache</li><li><a href="#function.apache-request-headers">apache_request_headers</a> — Recupera todos los encabezados HTTP de la petición</li><li><a href="#function.apache-response-headers">apache_response_headers</a> — Recupera todos los encabezados de respuesta HTTP</li><li><a href="#function.apache-setenv">apache_setenv</a> — Establece una variable subprocess_env de Apache</li><li><a href="#function.getallheaders">getallheaders</a> — Recupera todos los encabezados de la petición HTTP</li><li><a href="#function.virtual">virtual</a> — Efectúa una subpetición Apache</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.apache">Introducción</a></li><li><a href="#apache.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#apache.installation">Instalación</a></li><li><a href="#apache.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#ref.apache">Funciones de Apache</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.apache-child-terminate">apache_child_terminate</a> — Termina el proceso Apache después de esta petición</li><li><a href="#function.apache-get-modules">apache_get_modules</a> — Devuelve la lista de módulos Apache cargados</li><li><a href="#function.apache-get-version">apache_get_version</a> — Obtiene la versión de Apache</li><li><a href="#function.apache-getenv">apache_getenv</a> — Lee una variable de proceso Apache</li><li><a href="#function.apache-lookup-uri">apache_lookup_uri</a> — Realiza una petición parcial para el URI especificado
+   y devuelve toda la información relacionada con el mismo</li><li><a href="#function.apache-note">apache_note</a> — Muestra o asigna la tabla de notas de Apache</li><li><a href="#function.apache-request-headers">apache_request_headers</a> — Recupera todos los encabezados HTTP de la petición</li><li><a href="#function.apache-response-headers">apache_response_headers</a> — Recupera todos los encabezados de respuesta HTTP</li><li><a href="#function.apache-setenv">apache_setenv</a> — Establece una variable subprocess_env de Apache</li><li><a href="#function.getallheaders">getallheaders</a> — Recupera todos los encabezados de la petición HTTP</li><li><a href="#function.virtual">virtual</a> — Efectúa una subpetición Apache</li></ul></li></ul></div>

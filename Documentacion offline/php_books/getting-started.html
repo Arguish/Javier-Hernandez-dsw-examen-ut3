@@ -1,0 +1,602 @@
+<div id="getting-started" class="book"><hr>
+  <h1 class="title">Conceptos básicos</h1>
+  
+
+
+
+<div id="introduction" class="chapter"><hr>
+ <div class="info">
+  
+  <h1 class="title">¿Qué es PHP y qué puede hacer?</h1>
+
+ </div>
+ <div id="intro-whatis" class="section">
+  <div class="info"><h1 class="title">¿Qué es PHP?</h1></div>
+  <p class="para">
+   <abbr title="PHP: Hypertext Preprocessor">PHP</abbr> (oficialmente, este sigle es un acrónimo recursivo para
+   <em>PHP Hypertext Preprocessor</em>) es un lenguaje de scripts generalista
+   y Open Source, especialmente concebido para el desarrollo de aplicaciones
+   web. Puede ser integrado fácilmente al HTML.
+  </p>
+  <p class="para">
+   Bien... pero ¿qué significa esto? Un ejemplo:
+  </p>
+  <p class="para">
+   </p><div class="example" id="example-1">
+    <div class="info"><p><strong>Ejemplo #1 Ejemplo de introducción</strong></p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">&lt;!DOCTYPE html&gt;<br>&lt;html&gt;<br>&lt;head&gt;<br>&lt;title&gt;Ejemplo&lt;/title&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br><br><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #DD0000">"Hola, soy un script PHP!"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;<br></span><br>&lt;/body&gt;<br>&lt;/html&gt;</span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   En lugar de utilizar toneladas de comandos para mostrar HTML (como en
+   C o en Perl), las páginas PHP contienen fragmentos HTML con código que hace <span class="replaceable">"algo"</span> (en este caso, mostrará
+   <span class="computeroutput">"Hola, soy un script PHP!"</span>).
+   El código PHP está incluido entre
+   <a href="#language.basic-syntax.phpmode" class="link">una etiqueta de inicio
+   <code class="code">&lt;?php</code> y una etiqueta de fin <code class="code">?&gt;</code></a>
+   que permiten al servidor web pasar al <q class="quote">modo PHP</q>.
+  </p>
+  <p class="para">
+   Lo que distingue a PHP de los lenguajes de script como JavaScript,
+   es que el código se ejecuta en el servidor, generando así el HTML, que
+   será luego enviado al cliente. El cliente solo recibe el
+   resultado del script, sin ningún medio de acceso al código
+   que produjo dicho resultado. Se puede configurar el servidor web para que analice todos los ficheros HTML como ficheros PHP.
+   Así, no hay manera de distinguir las páginas que son producidas
+   dinámicamente de las páginas estáticas. Un servidor web puede incluso ser configurado
+   para procesar todos los ficheros HTML con PHP, y no hay
+   manera para los usuarios de saber que PHP está siendo utilizado.
+  </p>
+  <p class="para">
+   La gran ventaja de PHP es que es extremadamente simple para los
+   principiantes, pero ofrece funcionalidades avanzadas para los
+   expertos. No tema leer la larga lista de funcionalidades
+   PHP. Con PHP, casi todo el mundo puede comenzar rápidamente
+   y escribir scripts simples en poco tiempo.
+  </p>
+  <p class="para">
+   Aunque el desarrollo de PHP está orientado hacia la programación
+   para sitios web, se puede hacer mucho más con PHP.
+   Lea la sección <a href="#intro-whatcando" class="link">¿Qué puede hacer PHP?</a>
+   o el <a href="#tutorial" class="link">tutorial de introducción</a> para pasar directamente
+   al aprendizaje de la programación web.
+  </p>
+ </div>
+
+ <div id="intro-whatcando" class="section">
+  <h2 class="title">¿Qué puede hacer PHP?</h2>
+  <p class="para">
+   Todo. PHP está principalmente concebido para servir como
+   lenguaje de script del lado del servidor, por lo que puede hacer todo lo que cualquier otro programa CGI puede hacer, como
+   recolectar datos de formularios, generar contenido dinámico,
+   o gestionar cookies. Pero PHP puede hacer mucho más.
+  </p>
+  <p class="para">
+   Hay dos ámbitos diferentes donde PHP puede destacar.
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      Lenguaje de script del lado del servidor. Este es el uso más
+      tradicional, y también el principal objetivo de PHP.
+      Tres componentes son necesarios para explotarlo:
+      un analizador PHP (CGI o módulo del servidor), un servidor
+      web y un navegador web. Se debe ejecutar el servidor
+      web en correlación con PHP. Se puede acceder
+      al programa PHP con la ayuda del navegador web. Todo esto
+      puede funcionar en una máquina local solo para experimentar
+      la programación PHP. Vea la
+      sección <a href="#install" class="link">de instalación</a>
+      para más información.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Lenguaje de programación en línea de comandos. Un script PHP puede ser
+      ejecutado en línea de comandos,
+      sin la ayuda del servidor web y de un navegador. Solo se necesita
+      el ejecutable PHP. Este uso es ideal para los scripts que se ejecutan regularmente
+      con un <strong class="command">cron</strong> en Unix o Linux o
+      un <code class="literal">gestor de tareas</code> (en Windows). Estos scripts
+      también pueden ser utilizados para realizar operaciones en ficheros de texto. Vea la sección sobre el uso de PHP en
+      <a href="#features.commandline" class="link">línea de comandos</a>
+      para más información.
+     </span>
+    </li>
+   </ul>
+  
+  <p class="para">
+   PHP es <a href="#install" class="link">utilizable</a> en la mayoría de los sistemas
+   operativos, como Linux, muchas variantes Unix (incluyendo HP-UX,
+   Solaris y OpenBSD), Microsoft Windows, macOS, RISC OS y otros más.
+   PHP también soporta la mayoría de los servidores web actuales como
+   Apache, IIS y muchos otros. Y esto incluye todos los servidores web
+   que pueden utilizar el binario PHP FastCGI, como lighttpd
+   y nginx. PHP funciona como módulo, o como procesador CGI.
+   </p>
+  <p class="para">
+   Con PHP, los desarrolladores tienen la opción del sistema operativo y
+   del servidor web. Además, también tienen la opción de utilizar
+   la programación procedimental u orientada a objetos (OOP), o incluso una mezcla de
+   ambas.
+  </p>
+  <p class="para">
+   Con PHP, no se limita a la producción de código HTML. Las capacidades de PHP incluyen
+   la creación de tipos de ficheros ricos, como imágenes o ficheros PDF, el cifrado de datos
+   y el envío de correos electrónicos. También puede generar fácilmente cualquier texto, como JSON
+   o XML. PHP puede generar automáticamente estos ficheros y guardarlos en
+   el sistema de ficheros en lugar de imprimirlos, formando así una caché del lado del servidor para
+   contenido dinámico.
+  </p>
+  <p class="para">
+   Una de las fortalezas más significativas de PHP es que soporta
+   <a href="#refs.database" class="link">enormemente bases de datos</a>.
+   Escribir una página web que utilice una base de datos se vuelve
+   extremadamente simple, utilizando una de las extensiones específicas
+   para bases de datos (i.e., para <a href="#book.mysqli" class="link">mysql</a>),
+   o utilizando una clase de abstracción como <a href="#book.pdo" class="link">PDO</a>,
+   o una conexión a cualquier base de datos que soporte la conexión
+   estándar abierta a través de la extensión <a href="#book.uodbc" class="link">ODBC</a>.
+   Otras bases de datos pueden utilizar la extensión
+   <a href="#book.curl" class="link">cURL</a> o <a href="#book.sockets" class="link">sockets</a>
+   como CouchDB.
+  </p>
+  <p class="para">
+   PHP soporta numerosos protocolos como
+   LDAP, IMAP, SNMP, NNTP, POP3, HTTP, COM (en Windows) y
+   muchos otros. También puede abrir sockets de red,
+   e interactuar con cualquier otro protocolo. PHP soporta
+   el formato complejo WDDX, que permite la comunicación entre todos
+   los lenguajes web. En términos de interconexión, PHP también soporta
+   los objetos Java, y los utiliza de manera transparente
+   como objetos integrados.
+  </p>
+  <p class="para">
+   PHP posee funcionalidades útiles en el
+   <a href="#refs.basic.text" class="link">tratamiento de texto</a>,
+   incluyendo las expresiones regulares compatibles con Perl (<a href="#book.pcre" class="link">PCRE</a>),
+   así como un gran número de extensiones y utilidades para
+   <a href="#refs.xml" class="link">analizar y acceder a documentos XML</a>.
+   PHP estandariza todas las extensiones XML sobre la sólida base de <a href="#book.libxml" class="link">libxml2</a>,
+   y extiende el conjunto de funcionalidades añadiendo soporte para
+   <a href="#book.simplexml" class="link">SimpleXML</a>, <a href="#book.xmlreader" class="link">XMLReader</a>
+   y <a href="#book.xmlwriter" class="link">XMLWriter</a>.
+  </p>
+  <p class="para">
+   Muchas otras extensiones existen, categorizadas
+   <a href="#extensions" class="link">alfabéticamente</a> y por <a href="#funcref" class="link">categoría</a>.
+   Y finalmente, existen <a href="#install.pecl.intro" class="link">extensiones PECL</a> que pueden (o no) estar documentadas
+   en el manual PHP, como <a href="http://xdebug.org/" class="link external">» XDebug</a>.
+  </p>
+  <p class="para">
+   Esta página no es lo suficientemente grande para listar
+   todas las potentes funcionalidades de PHP. Lea la sección
+   sobre <a href="#install" class="link">la instalación de PHP</a>
+   y estudie la <a href="#funcref" class="link">lista de funciones</a>
+   para obtener más detalles sobre todas estas tecnologías.
+  </p>
+ </div>
+
+</div>
+
+<hr>
+
+
+
+
+  
+
+
+<div id="tutorial" class="chapter"><hr>
+  <h1 class="title">Una introducción a PHP</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#tutorial.firstpage">Su primera página PHP</a></li><li><a href="#tutorial.useful">Trucos prácticos</a></li><li><a href="#tutorial.forms">Utilizar un formulario</a></li><li><a href="#tutorial.whatsnext">¿Y después?</a></li></ul>
+
+
+  <p class="para">
+   En esta sección, se pretende ilustrar los principios básicos
+   de PHP en una breve introducción. Este capítulo trata únicamente
+   de la creación de páginas web dinámicas con PHP, dejando de lado
+   temporalmente las otras posibilidades de PHP. Consulte la sección
+   <a href="#intro-whatcando" class="link">¿Qué puede hacer PHP?</a> para
+   más información.
+  </p>
+  <p class="para">
+   Las páginas web que utilizan PHP se tratan como páginas HTML clásicas,
+   y se pueden crear, editar y borrar de la misma manera que normalmente se crean
+   las páginas HTML clásicas.
+  </p>
+
+  <div id="tutorial.firstpage" class="section"><hr>
+   <h2 class="title">Su primera página PHP</h2>
+   <p class="simpara">
+    Este tutorial presupone que PHP ya está instalado.
+    Las instrucciones de instalación se pueden encontrar en la
+    <a href="https://www.php.net/downloads.php" class="link external">» página de descargas</a>.
+   </p>
+   <p class="para">
+    Cree un fichero llamado <var class="filename">hola.php</var>
+    con el siguiente contenido :
+   </p>
+   <p class="para">
+    </p><div class="example" id="example-2">
+     <p><strong>Ejemplo #1 Nuestro primer script PHP : <var class="filename">hola.php</var></strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">echo </span><span style="color: #DD0000">"¡Hola Mundo!"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>
+      Usando su terminal, navegue hasta el directorio que contiene este fichero y
+      inicie un servidor de desarrollo con el siguiente comando:
+     </p></div>
+     <div class="example-contents">
+<div class="shellcode"><pre class="shellcode">php -S localhost:8000</pre>
+</div>
+     </div>
+
+     <div class="example-contents"><p>
+      Utilice su navegador para acceder al fichero utilizando la URL de su servidor web, terminando
+      por la referencia al fichero <code class="literal">/hola.php</code>.
+      De acuerdo con el comando ejecutado anteriormente, la URL será
+      <code class="literal">http://localhost:8000/hello.php</code>.
+      Si todo está correctamente configurado, este fichero será analizado por PHP
+      y se verá el mensaje "¡Hola Mundo!" en su navegador.
+     </p></div>
+     <div class="example-contents"><p>
+      PHP puede ser integrado en una página web HTML normal. Esto significa que, en su documento HTML,
+      se pueden escribir instrucciones PHP, como se demuestra en el siguiente ejemplo:
+     </p></div>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">&lt;!DOCTYPE html&gt;<br>&lt;html&gt;<br>    &lt;head&gt;<br>        &lt;title&gt;Prueba PHP&lt;/title&gt;<br>    &lt;/head&gt;<br>    &lt;body&gt;<br>        <span style="color: #0000BB">&lt;?php </span><span style="color: #007700">echo </span><span style="color: #DD0000">'&lt;p&gt;Hola mundo&lt;/p&gt;'</span><span style="color: #007700">; </span><span style="color: #0000BB">?&gt;<br></span>    &lt;/body&gt;<br>&lt;/html&gt;</span></code></div>
+     </div>
+
+     <div class="example-contents"><p>
+      Esto producirá el siguiente resultado :
+     </p></div>
+     <div class="example-contents screen">
+<div class="cdata"><pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Prueba PHP&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;p&gt;Hola mundo&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+     </div>
+    </div>
+   
+   <p class="para">
+    Este programa es extremadamente simple y no se necesita PHP
+    para crear una página web como esta. Solo muestra
+    <code class="literal">Hola mundo</code>, gracias a la función
+    <span class="function"><a href="#function.echo" class="function">echo</a></span>
+    de PHP. Note que este fichero <em>no necesita ser ejecutable</em>
+    ni nada más, en ningún caso. El servidor sabe que este fichero necesita ser interpretado
+    por PHP, porque se utiliza la extensión ".php", y el servidor está configurado para
+    pasarlos a PHP. Considere esto como una página HTML normal que contiene una serie
+    de etiquetas especiales que le permitirán realizar muchas cosas interesantes.
+   </p>
+
+   <p class="para">
+    El punto importante de este ejemplo era mostrar el formato de las
+    etiquetas especiales PHP. Hemos utilizado aquí
+    <code class="literal">&lt;?php</code> para indicar el inicio de la etiqueta PHP.
+    Luego, introdujimos los comandos PHP y cerramos las etiquetas
+    PHP con <code class="literal">?&gt;</code>. Se puede pasar del modo PHP
+    al modo HTML y viceversa, de esta manera, y a su gusto. Para más
+    información, lea la sección del manual sobre la
+    <a href="#language.basic-syntax" class="link">sintaxis básica de PHP</a>.
+   </p>
+
+   <blockquote class="note"><p><strong class="note">Nota</strong>: 
+    <strong>Una nota sobre los retornos de línea</strong><br>
+    </p><p class="para">
+     Los retornos de línea tienen un significado mínimo en HTML, sin embargo,
+     siempre es una buena idea hacer que su HTML sea lo más bonito y cercano
+     posible añadiendo retornos de línea. Un retorno de línea que sigue inmediatamente a una etiqueta de cierre PHP (<code class="literal">?&gt;</code>)
+     será eliminado por PHP. Esto puede ser realmente muy útil cuando se insertan varios bloques PHP o ficheros incluidos que contienen PHP que
+     no está destinado a mostrar nada. Al mismo tiempo, puede ser confuso. Se puede añadir un espacio después de la etiqueta de cierre
+     PHP (<code class="literal">?&gt;</code>) para forzar el espacio y un retorno de línea a mostrarse, o se puede añadir explícitamente un retorno de línea
+     en el último echo/print de su bloque PHP.
+    </p>
+   </blockquote>
+
+   <blockquote class="note"><p><strong class="note">Nota</strong>: 
+    <strong>Una nota sobre los editores de texto</strong><br>
+    </p><p class="para">
+     Existen muchos editores de texto y entornos de
+     desarrollo (IDE) que se pueden utilizar para crear, editar
+     y gestionar sus aplicaciones PHP. Una lista parcial de estas herramientas
+     se mantiene en la dirección
+     <a href="http://en.wikipedia.org/wiki/List_of_PHP_editors" class="link external">» PHP Editor's List</a>.
+     Si desea recomendar un editor en particular, visite
+     esta página y pida al webmaster que añada su editor. Tener al menos
+     un editor de texto con coloración de sintaxis es altamente recomendado.
+    </p>
+   </blockquote>
+
+   <blockquote class="note"><p><strong class="note">Nota</strong>: 
+    <strong>Una nota sobre los procesadores de texto</strong><br>
+    </p><p class="para">
+     Los procesadores de texto como StarOffice Writer, Microsoft Word y
+     Abiword son muy malas opciones para editar scripts PHP.
+     Si desea utilizar uno de ellos, a pesar de todo, para probar sus
+     scripts, debe asegurarse de que guarda los ficheros en formato
+     de texto solo (<em>plain text</em>) : de lo contrario, PHP no será capaz de leer
+     y ejecutar estos scripts.
+    </p>
+   </blockquote>
+
+   <p class="para">
+    Ahora que ha creado un script PHP que funciona, es el momento
+    de crear el mejor script PHP ! Haga una llamada a la función
+    <span class="function"><a href="#function.phpinfo" class="function">phpinfo()</a></span> y verá mucha información
+    interesante sobre su sistema y su configuración como las
+    <a href="#language.variables.predefined" class="link">variables predefinidas disponibles</a>,
+    los módulos PHP cargados así como la <a href="#configuration" class="link">configuración</a>.
+    Tómese el tiempo para revisar esta información importante.
+   </p>
+   <p class="para">
+    </p><div class="example" id="example-3">
+     <p><strong>Ejemplo #2 Recuperación de la información del sistema desde PHP</strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>phpinfo</span><span style="color: #007700">();<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+    </div>
+   
+  </div>
+<hr>
+
+
+  <div id="tutorial.useful" class="section"><hr>
+   <h2 class="title">Trucos prácticos</h2>
+   <p class="para">
+    Realicemos ahora algo más potente. Vamos
+    a verificar el tipo de navegador que el visitante de nuestro sitio utiliza.
+    Para ello, accederemos a la información que el navegador
+    del visitante nos envía, durante su petición HTTP. Esta información
+    se almacena en una <a href="#language.variables" class="link">variable</a>.
+    Las variables son fáciles de identificar, ya que todas comienzan
+    con un signo dólar. La variable que nos interesa aquí es
+    <var class="varname"><a href="#reserved.variables.server" class="classname">$_SERVER['HTTP_USER_AGENT']</a></var>.
+   </p>
+   <blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     <var class="varname"><a href="#reserved.variables.server" class="classname">$_SERVER</a></var> es una
+     variable especial de PHP, que contiene toda la información
+     relativa al servidor web. Es una variable reservada de PHP,
+     y una superglobal. Consulte las páginas del manual que tratan de las
+     <a href="#language.variables.superglobals" class="link">Auto-globales</a>
+     (también conocidas como super-globales).
+    </p>
+   </blockquote>
+   <p class="para">
+    Para mostrar esta variable, simplemente se puede hacer :
+   </p>
+   <p class="para">
+    </p><div class="example" id="example-4">
+    <p><strong>Ejemplo #1 Mostrar el contenido de una variable (elemento de array)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">echo </span><span style="color: #0000BB">$_SERVER</span><span style="color: #007700">[</span><span style="color: #DD0000">'HTTP_USER_AGENT'</span><span style="color: #007700">];<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>
+     Un resultado posible del script podría ser :
+    </p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+Mozilla/5.0 (Linux) Firefox/112.0
+</pre></div>
+    </div>
+   </div>
+   
+   <p class="para">
+    Hay muchos <a href="#language.types" class="link">tipos</a> de
+    variables disponibles en PHP. En el ejemplo anterior, hemos mostrado
+    un elemento de una variable <a href="#language.types.array" class="link">Array</a>.
+    Los arrays pueden ser muy útiles.
+   </p>
+   <p class="para">
+    <var class="varname"><a href="#reserved.variables.server" class="classname">$_SERVER</a></var> es simplemente una variable que está automáticamente
+    disponible en su script. Una lista de todas las variables que están
+    disponibles se proporciona en la sección
+    <a href="#reserved.variables" class="link">Variables reservadas</a> o también se puede obtener una lista completa leyendo la salida de la función
+    <span class="function"><a href="#function.phpinfo" class="function">phpinfo()</a></span> utilizada en el ejemplo de la sección anterior.
+   </p>
+   <p class="para">
+    Se pueden añadir varios comandos PHP en una etiqueta PHP, y crear
+    pequeños bloques de código que realizan operaciones más complejas
+    que un simple mostrado. Por ejemplo, si queremos verificar que el
+    navegador es de la familia Firefox, se puede
+    hacer esto :
+   </p>
+   <p class="para">
+    </p><div class="example" id="example-5">
+     <p><strong>Ejemplo #2 Ejemplo utilizando las
+     <a href="#language.control-structures" class="link">estructuras de control</a> y
+     las <a href="#language.functions" class="link">funciones</a></strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">if (</span><span style="color: #0000BB">str_contains</span><span style="color: #007700">(</span><span style="color: #0000BB">$_SERVER</span><span style="color: #007700">[</span><span style="color: #DD0000">'HTTP_USER_AGENT'</span><span style="color: #007700">], </span><span style="color: #DD0000">'Firefox'</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">'Está utilizando Firefox.'</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>
+      El resultado de este script, si está utilizando Firefox, será :
+     </p></div>
+     <div class="example-contents screen">
+<div class="cdata"><pre>
+Está utilizando Firefox.
+</pre></div>
+     </div>
+    </div>
+   
+   <p class="para">
+    Aquí, introducimos varios nuevos conceptos. Tenemos una
+    estructura <a href="#control-structures.if" class="link">if</a>.
+    Si está familiarizado con las sintaxis básicas del lenguaje C, esto
+    no le sorprenderá. Si no conoce lo suficiente el lenguaje C o
+    otro lenguaje cuya sintaxis sea similar a la anterior, sería mejor
+    que leyera una introducción a PHP, y asimilara
+    los primeros capítulos, o bien lea el capítulo dedicado a
+    <a href="#langref" class="link">la referencia del lenguaje</a>.
+   </p>
+   <p class="para">
+    El segundo concepto que hemos introducido es la función <span class="function"><a href="#function.str-contains" class="function">str_contains()</a></span>.
+    <span class="function"><a href="#function.str-contains" class="function">str_contains()</a></span> es una función interna de PHP, que determina
+    la presencia de una cadena dada en otra. En nuestro caso, hemos buscado la cadena <code class="literal">"Firefox"</code> en la cadena
+    <var class="varname"><a href="#reserved.variables.server" class="classname">$_SERVER['HTTP_USER_AGENT']</a></var>.
+    De lo contrario, devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+    Si devuelve <strong><code><a href="#constant.true">true</a></code></strong> la estructura <a href="#control-structures.if" class="link">if</a>
+    recibe <strong><code><a href="#constant.true">true</a></code></strong> y el código entre llaves {} se ejecuta. De lo contrario, el código no se
+    ejecuta. No dude en
+    experimentar con otros ejemplos, utilizando
+    <a href="#control-structures.if" class="link">if</a>,
+    <a href="#control-structures.else" class="link">else</a>, y otras
+    funciones como <span class="function"><a href="#function.strtoupper" class="function">strtoupper()</a></span> y
+    <span class="function"><a href="#function.strlen" class="function">strlen()</a></span>. Cada página de la documentación también contiene ejemplos. Si no está seguro del uso de estas funciones, debe leer
+    la página del manual
+    "<a href="#about.prototypes" class="link">cómo leer una definición de función</a>"
+    así como la <a href="#language.functions" class="link">sección sobre las funciones PHP</a>.
+   </p>
+   <p class="para">
+    Ahora podemos avanzar y mostrarle cómo utilizar el modo PHP,
+    en medio del código HTML :
+   </p>
+   <p class="para">
+    </p><div class="example" id="example-6">
+     <p><strong>Ejemplo #3 Pasar del modo PHP al modo HTML y viceversa</strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">if (</span><span style="color: #0000BB">str_contains</span><span style="color: #007700">(</span><span style="color: #0000BB">$_SERVER</span><span style="color: #007700">[</span><span style="color: #DD0000">'HTTP_USER_AGENT'</span><span style="color: #007700">], </span><span style="color: #DD0000">'Firefox'</span><span style="color: #007700">)) {<br></span><span style="color: #0000BB">?&gt;<br></span>&lt;h3&gt;str_contains() ha devuelto true&lt;/h3&gt;<br>&lt;p&gt;Está utilizando Firefox&lt;/p&gt;<br><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">} else {<br></span><span style="color: #0000BB">?&gt;<br></span>&lt;h3&gt;str_contains() ha devuelto false&lt;/h3&gt;<br>&lt;p&gt;No está utilizando Firefox&lt;/p&gt;<br><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>
+      Un ejemplo de resultado obtenido en este script es :
+     </p></div>
+     <div class="example-contents screen">
+<div class="cdata"><pre>
+&lt;h3&gt;str_contains() ha devuelto true&lt;/h3&gt;
+&lt;p&gt;Está utilizando Firefox&lt;/p&gt;
+</pre></div>
+     </div>
+    </div>
+   
+   <p class="para">
+    En lugar de utilizar un comando <span class="function"><a href="#function.echo" class="function">echo</a></span>, para mostrar
+    texto, se puede utilizar código HTML puro. El punto importante a tener en cuenta
+    aquí es que la lógica de programación se conserva. Solo uno de los dos
+    bloques HTML se mostrará, según el resultado de la función <span class="function"><a href="#function.str-contains" class="function">str_contains()</a></span>.
+    En otras palabras, depende de si la cadena <code class="literal">Firefox</code>
+    ha sido encontrada o no.
+   </p>
+  </div>
+<hr>
+
+
+  <div id="tutorial.forms" class="section"><hr>
+   <h2 class="title">Utilizar un formulario</h2>
+   <p class="para">
+    Uno de los puntos fuertes de PHP es su capacidad para manejar formularios.
+    El concepto básico que es importante entender es que todos los
+    campos de un formulario estarán automáticamente disponibles en el
+    script PHP de acción. Lea el capítulo del manual relativo a las
+    <a href="#language.variables.external" class="link">variables desde fuentes externas a PHP</a>
+    para más información y ejemplos sobre cómo utilizar los
+    formularios. Aquí hay un ejemplo de formulario HTML :
+   </p>
+   <p class="para">
+    </p><div class="example" id="example-7">
+     <p><strong>Ejemplo #1 Un formulario HTML simple</strong></p>
+     <div class="example-contents">
+<div class="htmlcode"><pre class="htmlcode">&lt;form action="action.php" method="post"&gt;
+   &lt;label&gt;Su nombre :&lt;/label&gt;
+   &lt;input name="nombre" id="nombre" type="text" /&gt;
+
+   &lt;label&gt;Su edad :&lt;/label&gt;
+   &lt;input name="edad" id="edad" type="number" /&gt;&lt;/p&gt;
+
+   &lt;button type="submit"&gt;Validar&lt;/button&gt;
+&lt;/form&gt;</pre>
+</div>
+     </div>
+
+    </div>
+   
+   <p class="para">
+    No hay nada especial en este formulario. Está en HTML
+    puro, sin ninguna configuración especial. Cuando el visitante
+    rellena el formulario, y hace clic en el botón OK, se llama al fichero <var class="filename">action.php</var>. En este
+    fichero, se puede escribir el siguiente script :
+   </p>
+   <p class="para">
+    </p><div class="example" id="example-8">
+     <p><strong>Ejemplo #2 Mostrar datos de un formulario</strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">Hola, <span style="color: #0000BB">&lt;?php </span><span style="color: #007700">echo </span><span style="color: #0000BB">htmlspecialchars</span><span style="color: #007700">(</span><span style="color: #0000BB">$_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'nombre'</span><span style="color: #007700">]); </span><span style="color: #0000BB">?&gt;</span>.<br>Tienes <span style="color: #0000BB">&lt;?php </span><span style="color: #007700">echo (int) </span><span style="color: #0000BB">$_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'edad'</span><span style="color: #007700">]; </span><span style="color: #0000BB">?&gt;</span> años.</span></code></div>
+     </div>
+
+     <div class="example-contents"><p>
+      Aquí está el resultado que podría obtener, según
+      los valores que haya introducido :
+     </p></div>
+     <div class="example-contents screen">
+<div class="cdata"><pre>
+Hola Juan.
+Tienes 29 años.
+</pre></div>
+     </div>
+    </div>
+   
+   <p class="para">
+    Aparte de las partes <span class="function"><a href="#function.htmlspecialchars" class="function">htmlspecialchars()</a></span> y
+    <code class="literal">(int)</code>, este script solo hace cosas evidentes.
+    <span class="function"><a href="#function.htmlspecialchars" class="function">htmlspecialchars()</a></span> se asegura de que todos los caracteres
+    especiales HTML se codifiquen correctamente para evitar inyecciones
+    de etiquetas HTML y de Javascript en sus páginas. Para la edad, dado que
+    sabemos que es un entero, se puede
+    <a href="#language.types.typecasting" class="link">convertir</a> en un
+    <span class="type"><a href="#language.types.integer" class="type int">int</a></span>. También se puede pedir a PHP que lo haga
+    automáticamente por usted utilizando la extensión
+    <a href="#ref.filter" class="link">filter</a>.
+    Las variables <var class="varname"><a href="#reserved.variables.post" class="classname">$_POST['nombre']</a></var> y
+    <var class="varname"><a href="#reserved.variables.post" class="classname">$_POST['edad']</a></var> son creadas automáticamente por PHP.
+    Un poco antes en este tutorial, hemos utilizado la variable
+    <var class="varname"><a href="#reserved.variables.server" class="classname">$_SERVER</a></var>, una superglobal. Ahora, hemos introducido otra superglobal <var class="varname"><a href="#reserved.variables.post" class="classname">$_POST</a></var>
+    que contiene todos los datos enviados por el método POST. Tenga en cuenta que
+    en nuestro formulario, hemos elegido el <em>método</em> POST.
+    Si hubiéramos utilizado el <em>método</em> GET entonces nuestro formulario
+    habría colocado esta información en la variable <var class="varname"><a href="#reserved.variables.get" class="classname">$_GET</a></var>,
+    otra superglobal. También se puede utilizar la variable
+    <var class="varname"><a href="#reserved.variables.request" class="classname">$_REQUEST</a></var>, si no desea preocuparse por el método utilizado. Contiene
+    una mezcla de los datos de GET, POST, COOKIE y FILE.
+   </p>
+  </div>
+<hr>
+
+
+  <div id="tutorial.whatsnext" class="section"><hr>
+   <h2 class="title">¿Y después?</h2>
+   <p class="para">
+    Con lo que sabe, ahora es capaz de comprender
+    lo esencial de la documentación PHP, y los diferentes scripts de ejemplo
+    disponibles en los archivos.
+   </p>
+   <p class="para">
+    Diferentes presentaciones de las capacidades de PHP están disponibles en el
+    sitio de las conferencias PHP :
+    <a href="http://talks.php.net/" class="link external">» http://talks.php.net/</a>.
+   </p>
+  </div>
+<hr>
+
+ </div>
+
+<hr>
+
+
+
+
+ <ul class="chunklist chunklist_book"><li><a href="#introduction">Introducción</a> — ¿Qué es PHP y qué puede hacer?</li><li><a href="#tutorial">Una introducción a PHP</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#tutorial.firstpage">Su primera página PHP</a></li><li><a href="#tutorial.useful">Trucos prácticos</a></li><li><a href="#tutorial.forms">Utilizar un formulario</a></li><li><a href="#tutorial.whatsnext">¿Y después?</a></li></ul></li></ul></div>

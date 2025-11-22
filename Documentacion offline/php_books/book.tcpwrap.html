@@ -1,0 +1,187 @@
+<div id="book.tcpwrap" class="book"><hr>
+ 
+ <h1 class="title">Envolturas TCP</h1>
+ 
+
+ 
+ <div id="intro.tcpwrap" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Las envolturas de TCP proporciona un mecanismo clásico de Unix que ha sido
+   diseñado para comprobar si el cliente remoto es capaz de conectarse a la dirección IP
+   dada.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+<div id="tcpwrap.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#tcpwrap.installation">Instalación</a></li></ul>
+
+
+ 
+ 
+
+
+<div id="tcpwrap.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/tcpwrap" class="link external">» https://pecl.php.net/package/tcpwrap</a>.
+ </p>
+ <p class="para">
+  No hay biblioteca <abbr title="Dynamic Link Library">DLL</abbr> para esta
+        extensión <abbr title="PHP Extension and Application Repository">PECL</abbr> actualmente disponible. Consulte la sección
+<a href="#install.windows.building" class="link">Compilación en Windows</a>.
+ </p>
+</div>
+<hr>
+
+
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+<div id="ref.tcpwrap" class="reference"><hr>
+ <h1 class="title">TCP Funciones</h1>
+
+ 
+
+
+
+
+<div id="function.tcpwrap-check" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">tcpwrap_check</h1>
+  <p class="verinfo">(PECL tcpwrap &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">tcpwrap_check</span> — <span class="dc-title">Verificación Tcpwrap</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.tcpwrap-check-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>tcpwrap_check</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$daemon</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$address</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$user</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$nodns</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>tcpwrap_check()</strong></span> consulta los ficheros <var class="filename">/etc/hosts.allow</var>
+   y <var class="filename">/etc/hosts.deny</var> para verificar si el acceso al servicio
+   <code class="parameter">daemon</code> está permitido o no para un cliente.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.tcpwrap-check-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">daemon</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del servicio.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">address</code></dt>
+     <dd>
+      <p class="para">
+       La dirección remota del cliente. Puede ser una dirección IP o un nombre de
+       dominio.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">user</code></dt>
+     <dd>
+      <p class="para">
+       Un nombre de usuario, opcional.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">nodns</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">address</code> se asemeja a un nombre de dominio,
+       DNS es utilizado para resolverlo en una dirección IP; defina
+       <code class="parameter">nodns</code> a <strong><code><a href="#constant.true">true</a></code></strong> para evitar este comportamiento.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.tcpwrap-check-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función devuelve <strong><code><a href="#constant.true">true</a></code></strong> si el acceso debe ser autorizado, <strong><code><a href="#constant.false">false</a></code></strong> en caso contrario.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.tcpwrap-check-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-4891">
+   <p><strong>Ejemplo #1 Rechazar todas las conexiones desde localhost</strong></p>
+   <div class="example-contents"><p>
+    Si su fichero <var class="filename">/etc/hosts.deny</var> contiene :
+   </p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">php: 127.0.0.1</pre>
+</div>
+   </div>
+   <div class="example-contents"><p>
+    Y su código se asemeja a :
+   </p></div>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">tcpwrap_check</span><span style="color: #007700">(</span><span style="color: #DD0000">'php'</span><span style="color: #007700">, </span><span style="color: #0000BB">$_SERVER</span><span style="color: #007700">[</span><span style="color: #DD0000">'REMOTE_ADDR'</span><span style="color: #007700">])) {<br>  die(</span><span style="color: #DD0000">'No es bienvenido aquí'</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.tcpwrap-check-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   Para más detalles, consulte la página man de hosts_access(3).
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.tcpwrap-check">tcpwrap_check</a> — Verificación Tcpwrap</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.tcpwrap">Introducción</a></li><li><a href="#tcpwrap.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#tcpwrap.installation">Instalación</a></li></ul></li><li><a href="#ref.tcpwrap">TCP Funciones</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.tcpwrap-check">tcpwrap_check</a> — Verificación Tcpwrap</li></ul></li></ul></div>

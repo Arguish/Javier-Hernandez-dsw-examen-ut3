@@ -1,0 +1,1846 @@
+<div id="book.dbase" class="book"><hr>
+ 
+ <h1 class="title">dBase</h1>
+
+ 
+ <div id="intro.dbase" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta extensión ha sido movida al módulo <a href="https://pecl.php.net/" class="link external">» PECL</a> y no será integrada en PHP a partir de PHP 5.3.0.
+   </p>
+  </blockquote>
+  <p class="para">
+   Estas funciones permiten acceder a los registros de las bases
+   de datos en formato dBase (dbf).
+  </p>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    Se recomienda no utilizar los ficheros dBase como base de datos de producción. Utilice
+    <a href="http://sqlite.org/" class="link external">» SQLite</a> o mejor opte por un verdadero
+    servidor SQL;
+    <a href="http://www.mysql.com/" class="link external">» MySQL</a> o
+    <a href="http://www.postgresql.org/" class="link external">» PostgreSQL</a>
+    son opciones comunes en PHP. El soporte dBase está presente en PHP
+    únicamente para permitir la importación y exportación de datos
+    desde y hacia su base de datos, ya que este formato de fichero
+    es habitualmente comprendido por los programas de hoja de cálculo de Windows.
+   </p>
+  </div>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    A partir de dbase 7.0.0 las bases de datos son automáticamente bloqueadas
+    via <span class="function"><a href="#function.flock" class="function">flock()</a></span>. No había soporte para el bloqueo
+    previamente, por lo que dos procesos de servidor web concurrentes modificando el mismo
+    fichero dBase probablemente habrían arruinado su base de datos. Esto puede ocurrir incluso con dbase 7.0.0+ en sistemas que implementan el bloqueo
+    a nivel de proceso con las SAPIs multithreaded.
+   </p>
+  </div>
+  <p class="para">
+   Los ficheros dBase son simples ficheros secuenciales, con un
+   número de registros fijo. Los registros son añadidos
+   al final del fichero y los registros borrados son
+   conservados hasta que se llame a la función
+   <span class="function"><a href="#function.dbase-pack" class="function">dbase_pack()</a></span>.
+  </p>
+  <p class="para">
+   Solo se soportan los ficheros dbf niveles 3 (dBASE III+) - 5 (dBASE V).
+   Los tipos de campos dBase disponibles son:
+   </p><table class="doctable table">
+    <caption><strong>Tipo de campos disponible</strong></caption>
+    
+     <thead>
+      <tr>
+       <th>Campo</th>
+       <th>Tipo dBase</th>
+       <th>Formato</th>
+       <th>Información complementaria</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td><code class="literal">M</code></td>
+       <td>Memo</td>
+       <td>n/a</td>
+       <td>Este tipo no es soportado por PHP, y será ignorado</td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">D</code></td>
+       <td>Date</td>
+       <td><code class="literal">YYYYMMDD</code></td>
+       <td>El tamaño del campo está limitado a 8</td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">T</code></td>
+       <td>DateTime</td>
+       <td><code class="literal">YYYYMMDDhhmmss.uuu</code></td>
+       <td>(FoxPro) No se realizan verificaciones de validez. Disponible a partir de dbase 7.0.0.</td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">N</code></td>
+       <td>Number</td>
+       <td>Un número</td>
+       <td>
+        Se debe declarar un tamaño y una precisión (el número de dígitos
+        después del punto decimal).
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">F</code></td>
+       <td>Float</td>
+       <td>Un número flotante</td>
+       <td>Idéntico a <code class="literal">N</code>.</td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">C</code></td>
+       <td><span class="type"><a href="#language.types.string" class="type string">string</a></span></td>
+       <td>Una cadena de caracteres</td>
+       <td>
+        Se debe declarar un tamaño. Al recuperar los
+        datos, la cadena será completada con espacios para alcanzar el
+        tamaño declarado. Las cadenas demasiado largas serán truncadas silenciosamente
+        al guardar.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">L</code></td>
+       <td><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></td>
+       <td>
+        <code class="literal">T</code> o <code class="literal">Y</code> para <strong><code><a href="#constant.true">true</a></code></strong>,
+        <code class="literal">F</code> o <code class="literal">N</code> para <strong><code><a href="#constant.false">false</a></code></strong>,
+        <code class="literal">?</code> para no inicializada.
+       </td>
+       <td>
+        A partir de dbase 7.0.0, devuelto como <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> (<strong><code><a href="#constant.true">true</a></code></strong> o <strong><code><a href="#constant.false">false</a></code></strong>),
+        o <strong><code><a href="#constant.null">null</a></code></strong> para los campos no inicializados
+        Anteriormente, devuelto como <span class="type"><a href="#language.types.integer" class="type int">int</a></span> (<code class="literal">1</code> o <code class="literal">0</code>).
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    A partir de dbase 7.0.0 los campos nullable son soportados para las bases de
+    datos <strong><code><a href="#constant.dbase-type-foxpro">DBASE_TYPE_FOXPRO</a></code></strong>. Si un campo es nullable,
+    pasar <strong><code><a href="#constant.null">null</a></code></strong> definirá el flag respectivo, y al recuperarlo
+    el valor del campo será <strong><code><a href="#constant.null">null</a></code></strong>.
+   </p>
+  </blockquote>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    No hay soporte para índices o campos memo.
+   </p>
+  </blockquote>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="dbase.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#dbase.installation">Instalación</a></li><li><a href="#dbase.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ 
+
+
+
+
+<div id="dbase.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+  <p class="para">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/dbase" class="link external">» https://pecl.php.net/package/dbase</a>.
+  </p>
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ <div id="dbase.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   A partir de dbase 7.0.0, el tipo de recurso <code class="literal">dbase</code> está definido,
+   el cual es devuelto por <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> y
+   <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="dbase.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.dbase-version">
+    <strong><code><a href="#constant.dbase-version">DBASE_VERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     La versión de la extensión
+     (Disponible a partir de dbase 7.0.0)
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.dbase-rdonly">
+    <strong><code><a href="#constant.dbase-rdonly">DBASE_RDONLY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Abre una base de datos en modo de solo lectura. Utilizado con <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span>.
+     (Disponible a partir de dbase 7.0.0)
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.dbase-rdwr">
+    <strong><code><a href="#constant.dbase-rdwr">DBASE_RDWR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Abre una base de datos en modo de lectura y escritura.
+     Utilizado con <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span>.
+     (Disponible a partir de dbase 7.0.0)
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.dbase-type-dbase">
+    <strong><code><a href="#constant.dbase-type-dbase">DBASE_TYPE_DBASE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Crea una base de datos de estilo dBASE. Utilizado con <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+     (Disponible a partir de dbase 7.0.0)
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.dbase-type-foxpro">
+    <strong><code><a href="#constant.dbase-type-foxpro">DBASE_TYPE_FOXPRO</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Crea una base de datos de estilo FoxPro. Utilizado con <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+     (Disponible a partir de dbase 7.0.0)
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="ref.dbase" class="reference"><hr>
+ <h1 class="title">Funciones dBase</h1>
+
+ <div class="partintro">
+  <div class="section" id="dbase.examples.note">
+   <h2 class="title">Ejemplos</h2>
+   <p class="para">
+    La mayoría de los ejemplos de esta documentación requieren una base de datos dBase. Se utilizará <var class="filename">/tmp/test.dbf</var>
+    que es creada en el ejemplo de la función <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+   </p>
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="function.dbase-add-record" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_add_record</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_add_record</span> — <span class="dc-title">Añade un registro en una base de datos dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-add-record-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_add_record</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$data</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dbase_add_record()</strong></span> añade los datos proporcionados en la
+   base de datos dBase especificada.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-add-record-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de base de datos, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Un array de datos indexado. El número de elementos debe ser igual
+       al número de campos en la base de datos, de lo contrario la función
+       <span class="function"><strong>dbase_add_record()</strong></span> fallará.
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        Si se utiliza <span class="function"><a href="#function.dbase-get-record" class="function">dbase_get_record()</a></span> para devolver
+        un valor para este argumento, no se olvide de reinicializar la clave nombrada
+        <code class="literal">deleted</code>.
+       </p>
+      </blockquote>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-add-record-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-add-record-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       <code class="parameter">database</code> es ahora un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+       en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-add-record-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1319">
+    <p><strong>Ejemplo #1 Inserción de un registro en una base de datos dBase</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">// Apertura en modo lectura-escritura<br></span><span style="color: #0000BB">$db </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/tmp/test.dbf'</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$db</span><span style="color: #007700">) {<br>  </span><span style="color: #0000BB">dbase_add_record</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">, array(<br>    </span><span style="color: #0000BB">date</span><span style="color: #007700">(</span><span style="color: #DD0000">'Ymd'</span><span style="color: #007700">),<br>    </span><span style="color: #DD0000">'Maxim Topolov'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'23'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'max@example.com'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'T'</span><span style="color: #007700">));<br>  </span><span style="color: #0000BB">dbase_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-add-record-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-delete-record" class="function" rel="rdfs-seeAlso">dbase_delete_record()</a> - Borra un registro en una base dBase</span></li>
+    <li><span class="function"><a href="#function.dbase-replace-record" class="function" rel="rdfs-seeAlso">dbase_replace_record()</a> - Reemplaza un registro en una base dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-close" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_close</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_close</span> — <span class="dc-title">Cierra una base dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-close-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_close</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dbase_close()</strong></span> cierra la base de datos correspondiente al
+   recurso <code class="parameter">database</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-close-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de base de datos, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-close-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-close-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       <code class="parameter">database</code> es ahora un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+       en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-close-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1320">
+    <p><strong>Ejemplo #1 Cierra un fichero de base de datos dBase</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">// Apertura en modo lectura-escritura<br></span><span style="color: #0000BB">$db </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/tmp/test.dbf'</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$db</span><span style="color: #007700">) {<br></span><span style="color: #FF8000">// Lectura de datos ..<br><br></span><span style="color: #0000BB">dbase_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-close-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-open" class="function" rel="rdfs-seeAlso">dbase_open()</a> - Abre una base dBase</span></li>
+    <li><span class="function"><a href="#function.dbase-create" class="function" rel="rdfs-seeAlso">dbase_create()</a> - Crea una base de datos dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-create" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_create</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_create</span> — <span class="dc-title">Crea una base de datos dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-create-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_create</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$path</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$fields</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$type</code><span class="initializer"> = DBASE_TYPE_DBASE</span></span>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dbase_create()</strong></span> crea una base de
+   datos dBase con la definición proporcionada.
+   Si el fichero ya existe, no se trunca.
+   <span class="function"><a href="#function.dbase-pack" class="function">dbase_pack()</a></span> puede ser llamado para forzar una troncación.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">Esta función es afectada por
+    la directiva de configuración <a href="#ini.open-basedir" class="link">open_basedir</a>.</p></blockquote>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-create-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">path</code></dt>
+     <dd>
+      <p class="para">
+       La ruta de acceso a la base de datos. Puede ser una ruta relativa o absoluta
+       al fichero donde dBase almacenará sus datos.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fields</code></dt>
+     <dd>
+      <p class="para">
+       Un array de arrays, cada array describe el formato de un campo de la
+       base de datos. Cada campo está compuesto por un nombre, un carácter
+       que indica el tipo de campo y opcionalmente, una longitud, una precisión
+       y un flag nullable.
+       Los campos soportados se enumeran en la
+       <a href="#intro.dbase" class="link">sección de introducción</a>.
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        Los nombres de los campos están limitados en longitud y no deben
+        exceder los 10 caracteres.
+       </p>
+      </blockquote>
+     </dd>
+    
+    
+     <dt><code class="parameter">type</code></dt>
+     <dd>
+      <p class="para">
+       El tipo de base de datos a crear. Puede ser
+       <strong><code><a href="#constant.dbase-type-dbase">DBASE_TYPE_DBASE</a></code></strong> o
+       <strong><code><a href="#constant.dbase-type-foxpro">DBASE_TYPE_FOXPRO</a></code></strong>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-create-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un recurso de base de datos si la base de datos
+   ha sido creada con éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-create-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       El parámetro <code class="parameter">type</code> ha sido añadido.
+      </td>
+     </tr>
+
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       <code class="parameter">dbase_identifier</code> es ahora un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+       en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-create-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1321">
+    <p><strong>Ejemplo #1 Creación de un fichero de base de datos dBase</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">// Definición de la base de datos<br></span><span style="color: #0000BB">$def </span><span style="color: #007700">= array(<br>  array(</span><span style="color: #DD0000">"date"</span><span style="color: #007700">,     </span><span style="color: #DD0000">"D"</span><span style="color: #007700">),<br>  array(</span><span style="color: #DD0000">"name"</span><span style="color: #007700">,     </span><span style="color: #DD0000">"C"</span><span style="color: #007700">,  </span><span style="color: #0000BB">50</span><span style="color: #007700">),<br>  array(</span><span style="color: #DD0000">"age"</span><span style="color: #007700">,      </span><span style="color: #DD0000">"N"</span><span style="color: #007700">,   </span><span style="color: #0000BB">3</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">),<br>  array(</span><span style="color: #DD0000">"email"</span><span style="color: #007700">,    </span><span style="color: #DD0000">"C"</span><span style="color: #007700">, </span><span style="color: #0000BB">128</span><span style="color: #007700">),<br>  array(</span><span style="color: #DD0000">"ismember"</span><span style="color: #007700">, </span><span style="color: #DD0000">"L"</span><span style="color: #007700">)<br>);<br><br></span><span style="color: #FF8000">// Creación<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">dbase_create</span><span style="color: #007700">(</span><span style="color: #DD0000">'/tmp/test.dbf'</span><span style="color: #007700">, </span><span style="color: #0000BB">$def</span><span style="color: #007700">)) {<br>  echo </span><span style="color: #DD0000">"Error, imposible crear la base de datos\n"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-create-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-open" class="function" rel="rdfs-seeAlso">dbase_open()</a> - Abre una base dBase</span></li>
+    <li><span class="function"><a href="#function.dbase-close" class="function" rel="rdfs-seeAlso">dbase_close()</a> - Cierra una base dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-delete-record" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_delete_record</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_delete_record</span> — <span class="dc-title">Borra un registro en una base dBase</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dbase-delete-record-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_delete_record</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$number</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dbase_delete_record()</strong></span> marca el registro
+   <code class="parameter">record</code> para el borrado, en la base
+   <code class="parameter">dbase_identifier</code>.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Para borrar realmente el registro de la base de datos, se debe
+    llamar a la función <span class="function"><a href="#function.dbase-pack" class="function">dbase_pack()</a></span>.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-delete-record-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de base de datos, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">number</code></dt>
+     <dd>
+      <p class="para">
+       Un entero comprendido entre 1 y el número máximo de registros en
+       la base de datos (tal como devuelto por la función
+       <span class="function"><a href="#function.dbase-numrecords" class="function">dbase_numrecords()</a></span>).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-delete-record-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-delete-record-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       <code class="parameter">database</code> es ahora un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+       en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-delete-record-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-add-record" class="function" rel="rdfs-seeAlso">dbase_add_record()</a> - Añade un registro en una base de datos dBase</span></li>
+    <li><span class="function"><a href="#function.dbase-replace-record" class="function" rel="rdfs-seeAlso">dbase_replace_record()</a> - Reemplaza un registro en una base dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-get-header-info" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_get_header_info</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_get_header_info</span> — <span class="dc-title">Recupera información de encabezado de una base de datos dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-get-header-info-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_get_header_info</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dbase_get_header_info()</strong></span> devuelve información sobre
+   la estructura de las columnas de la base de datos referenciada por el recurso
+   <code class="parameter">database</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-get-header-info-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de base de datos, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-get-header-info-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array indexado con una entrada para cada columna de la base de datos.
+   El índice del array comienza en 0.
+  </p>
+  <p class="para">
+   Cada elemento del array contiene un array asociativo que contiene la información
+   sobre las columnas, como se describe aquí:
+   </p><dl>
+    
+     <dt>name</dt>
+     <dd>
+      <span class="simpara">
+       El nombre de la columna
+      </span>
+     </dd>
+    
+    
+     <dt>type</dt>
+     <dd>
+      <span class="simpara">
+       El nombre legible del tipo de la columna (i.e. date,
+       boolean, etc.)
+       Los tipos de campos soportados están enumerados en la
+       <a href="#intro.dbase" class="link">sección de introducción</a>.
+      </span>
+     </dd>
+    
+    
+     <dt>length</dt>
+     <dd>
+      <span class="simpara">
+       El número de bytes que puede contener esta columna
+      </span>
+     </dd>
+    
+    
+     <dt>precision</dt>
+     <dd>
+      <span class="simpara">
+       El número de decimales para la columna
+      </span>
+     </dd>
+    
+    
+     <dt>format</dt>
+     <dd>
+      <span class="simpara">
+       Un formato <span class="function"><a href="#function.printf" class="function">printf()</a></span> sugerido para la columna
+      </span>
+     </dd>
+    
+    
+     <dt>offset</dt>
+     <dd>
+      <span class="simpara">
+       La posición de la columna desde el inicio de la línea
+      </span>
+     </dd>
+    
+   </dl>
+  
+  <p class="para">
+   Si la información de encabezado de la base de datos no puede ser leída, <strong><code><a href="#constant.false">false</a></code></strong> es devuelto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-get-header-info-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       <code class="parameter">database</code> es ahora un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+       en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-get-header-info-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1322">
+    <p><strong>Ejemplo #1 Muestra la información de encabezado para un fichero de base de datos dBase</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Ruta hacia el fichero dBase<br></span><span style="color: #0000BB">$db_path </span><span style="color: #007700">= </span><span style="color: #DD0000">"/tmp/test.dbf"</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">// Abre el fichero dBase<br></span><span style="color: #0000BB">$dbh </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_open</span><span style="color: #007700">(</span><span style="color: #0000BB">$db_path</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">)<br>or die(</span><span style="color: #DD0000">"¡Error! Imposible abrir el fichero dBase '</span><span style="color: #0000BB">$db_path</span><span style="color: #DD0000">'."</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Recuperación de la información de las columnas<br></span><span style="color: #0000BB">$column_info </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_get_header_info</span><span style="color: #007700">(</span><span style="color: #0000BB">$dbh</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Muestra la información<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$column_info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-get-record" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_get_record</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_get_record</span> — <span class="dc-title">Lee un registro en una base dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-get-record-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_get_record</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$number</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dbase_get_record()</strong></span> devuelve los datos del registro <code class="parameter">record</code> en un array.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-get-record-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de la base de datos, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">number</code></dt>
+     <dd>
+      <p class="para">
+       El índice del registro entre <code class="literal">1</code> y
+       <code class="literal">dbase_numrecords($dbase_identifier)</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-get-record-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array indexado con el registro. Este array incluye asimismo
+   una clave asociada llamada <code class="literal">deleted</code> que se define a 1
+   si el registro ha sido marcado para eliminación (ver
+   <span class="function"><a href="#function.dbase-delete-record" class="function">dbase_delete_record()</a></span>).
+  </p>
+  <p class="para">
+   Each field is converted to the appropriate PHP type, except:
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      Dates are left as strings.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      DateTime values are converted to strings.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Integers outside the range
+      <strong><code><a href="#constant.php-int-min">PHP_INT_MIN</a></code></strong>..<strong><code><a href="#constant.php-int-max">PHP_INT_MAX</a></code></strong> are
+      returned as strings.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Before dbase 7.0.0, booleans (<code class="literal">L</code>) were converted to <code class="literal">1</code> or
+      <code class="literal">0</code>.
+     </span>
+    </li>
+   </ul>
+  
+  <p class="para">
+   En caso de error, <span class="function"><strong>dbase_get_record()</strong></span> devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-get-record-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       <code class="parameter">database</code> es ahora un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+       en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-get-record-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-get-record-with-names" class="function" rel="rdfs-seeAlso">dbase_get_record_with_names()</a> - Lee un registro en una base dBase, en forma de array asociativo</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-get-record-with-names" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_get_record_with_names</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_get_record_with_names</span> — <span class="dc-title">
+   Lee un registro en una base dBase, en forma de array asociativo
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-get-record-with-names-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_get_record_with_names</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$number</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera un registro de una base de datos dBase como un array asociativo.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-get-record-with-names-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de base de datos, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">number</code></dt>
+     <dd>
+      <p class="para">
+       El índice del registro entre <code class="literal">1</code> y
+       <code class="literal">dbase_numrecords($dbase_identifier)</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-get-record-with-names-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El registro, en forma de array asociativo. Esto incluye
+   también una clave llamada <code class="literal">deleted</code> que se define
+   a 1 si el registro ha sido marcado para eliminación
+   (ver la función <span class="function"><a href="#function.dbase-delete-record" class="function">dbase_delete_record()</a></span>).
+   Por consiguiente, no es posible recuperar el valor de un campo llamado
+   <code class="literal">deleted</code> con esta función.
+  </p>
+  <p class="para">
+   Each field is converted to the appropriate PHP type, except:
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      Dates are left as strings.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      DateTime values are converted to strings.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Integers outside the range
+      <strong><code><a href="#constant.php-int-min">PHP_INT_MIN</a></code></strong>..<strong><code><a href="#constant.php-int-max">PHP_INT_MAX</a></code></strong> are
+      returned as strings.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Before dbase 7.0.0, booleans (<code class="literal">L</code>) were converted to <code class="literal">1</code> or
+      <code class="literal">0</code>.
+     </span>
+    </li>
+   </ul>
+  
+  <p class="para">
+   En caso de error, <span class="function"><strong>dbase_get_record_with_names()</strong></span>
+   devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-get-record-with-names-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECl dbase 7.0.0</td>
+      <td>
+       <code class="parameter">database</code> es ahora un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+       en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-get-record-with-names-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1323">
+    <p><strong>Ejemplo #1 Lista todos los miembros registrados en la base de datos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Apertura en modo solo lectura<br></span><span style="color: #0000BB">$db </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/tmp/test.dbf'</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$db</span><span style="color: #007700">) {<br>  </span><span style="color: #0000BB">$record_numbers </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_numrecords</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">);<br>  for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">1</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt;= </span><span style="color: #0000BB">$record_numbers</span><span style="color: #007700">; </span><span style="color: #0000BB">$i</span><span style="color: #007700">++) {<br>    </span><span style="color: #0000BB">$row </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_get_record_with_names</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">, </span><span style="color: #0000BB">$i</span><span style="color: #007700">);<br>    if (</span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'ismember'</span><span style="color: #007700">] == </span><span style="color: #0000BB">1</span><span style="color: #007700">) {<br>      echo </span><span style="color: #DD0000">"Miembro #</span><span style="color: #0000BB">$i</span><span style="color: #DD0000">: " </span><span style="color: #007700">. </span><span style="color: #0000BB">trim</span><span style="color: #007700">(</span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'name'</span><span style="color: #007700">]) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br>    }<br>  }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-get-record-with-names-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-get-record" class="function" rel="rdfs-seeAlso">dbase_get_record()</a> - Lee un registro en una base dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-numfields" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_numfields</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_numfields</span> — <span class="dc-title">Cuenta el número de campos de una base dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-numfields-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_numfields</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dbase_numfields()</strong></span> devuelve el número de campos (columnas)
+   de la base de datos <code class="parameter">dbase_identifier</code>.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Los campos están numerados de 0 a <code class="literal">dbase_numfields($db)-1</code>,
+    mientras que los registros están numerados de 1 a
+    <code class="literal">dbase_numrecords($db)</code>.
+   </p>
+  </blockquote>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-numfields-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de base de datos, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-numfields-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El número de campos de la base de datos, o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-numfields-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       <code class="parameter">database</code> es ahora un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+       en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-numfields-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1324">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>dbase_numfields()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$rec </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_get_record</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">, </span><span style="color: #0000BB">$recno</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$nf  </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_numfields</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">);<br>for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">$nf</span><span style="color: #007700">; </span><span style="color: #0000BB">$i</span><span style="color: #007700">++) {<br>  echo </span><span style="color: #0000BB">$rec</span><span style="color: #007700">[</span><span style="color: #0000BB">$i</span><span style="color: #007700">], </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-numfields-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-numrecords" class="function" rel="rdfs-seeAlso">dbase_numrecords()</a> - Cuenta el número de registros en una base dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-numrecords" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_numrecords</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_numrecords</span> — <span class="dc-title">Cuenta el número de registros en una base dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-numrecords-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_numrecords</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera el número de registros (filas) en la base especificada.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Los registros marcados como eliminados también se cuentan.
+   </p>
+  </blockquote>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Los números de campo están numerados de 0 a
+    <code class="literal">dbase_numfields($db)-1</code>, mientras que los números
+    de registros están numerados de 1 a
+    <code class="literal">dbase_numrecords($db)</code>.
+   </p>
+  </blockquote>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-numrecords-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso de base de datos, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-numrecords-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El número de registros en la base de datos o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-numrecords-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       El parámetro <code class="parameter">database</code> es ahora un
+       <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-numrecords-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1325">
+    <p><strong>Ejemplo #1 Lectura de todos los registros de la base de datos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">// Apertura en modo de solo lectura<br></span><span style="color: #0000BB">$db </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/tmp/test.dbf'</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$db</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$record_numbers </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_numrecords</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">);<br>    for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">1</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt;= </span><span style="color: #0000BB">$record_numbers</span><span style="color: #007700">; </span><span style="color: #0000BB">$i</span><span style="color: #007700">++) {<br>        </span><span style="color: #0000BB">$record </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_get_record</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">, </span><span style="color: #0000BB">$i</span><span style="color: #007700">);<br>        if (!</span><span style="color: #0000BB">$record</span><span style="color: #007700">[</span><span style="color: #DD0000">'deleted'</span><span style="color: #007700">]) {<br>            </span><span style="color: #FF8000">// hacer algo con el registro $record<br>        </span><span style="color: #007700">} else {<br>            </span><span style="color: #FF8000">// hacer algo con el registro eliminado $record o ignorarlo<br>        </span><span style="color: #007700">}<br>    }<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-numrecords-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-numfields" class="function" rel="rdfs-seeAlso">dbase_numfields()</a> - Cuenta el número de campos de una base dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-open" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_open</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_open</span> — <span class="dc-title">Abre una base dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-open-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_open</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$path</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$mode</code></span>): <span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dbase_open()</strong></span> abre una base de datos dBase
+   con un modo de acceso dado.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">Esta función es afectada por
+    la directiva de configuración <a href="#ini.open-basedir" class="link">open_basedir</a>.</p></blockquote>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-open-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">path</code></dt>
+     <dd>
+      <p class="para">
+       La ruta hacia la base de datos. Puede ser una ruta relativa o absoluta
+       hacia el fichero donde dBase almacenará sus datos.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       Un entero correspondiente al utilizado para la llamada al sistema
+       <strong class="command">open()</strong> (Típicamente, 0 significa solo lectura, 1
+       significa solo escritura, y 2 significa lectura y escritura).
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        No se puede abrir un fichero dBase en modo solo escritura, ya que la función
+        fallará al leer la información de encabezado y, por lo tanto, no se puede utilizar 1 como <code class="parameter">mode</code>.
+       </p>
+      </blockquote>
+      <p class="para">
+       A partir de dbase 7.0.0 <strong><code><a href="#constant.dbase-rdonly">DBASE_RDONLY</a></code></strong> y
+       <strong><code><a href="#constant.dbase-rdwr">DBASE_RDWR</a></code></strong> pueden ser utilizados, respectivamente,
+       para definir el <code class="parameter">mode</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-open-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un recurso de base de datos en caso de éxito,
+    o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-open-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       El valor devuelto es ahora un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+       en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-open-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1326">
+    <p><strong>Ejemplo #1 Apertura de un fichero de base de datos dBase</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">// Apertura en modo solo lectura<br></span><span style="color: #0000BB">$db </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/tmp/test.dbf'</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$db</span><span style="color: #007700">) {<br></span><span style="color: #FF8000">// lectura de datos ..<br><br></span><span style="color: #0000BB">dbase_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-open-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-create" class="function" rel="rdfs-seeAlso">dbase_create()</a> - Crea una base de datos dBase</span></li>
+    <li><span class="function"><a href="#function.dbase-close" class="function" rel="rdfs-seeAlso">dbase_close()</a> - Cierra una base dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-pack" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_pack</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_pack</span> — <span class="dc-title">Compacta una base dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-pack-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_pack</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dbase_pack()</strong></span> compacta la base de datos
+   <code class="parameter">dbase_identifier</code> (borrado definitivo
+   de todos los registros marcados para el borrado
+   utilizando la función <span class="function"><a href="#function.dbase-delete-record" class="function">dbase_delete_record()</a></span>).
+   Téngase en cuenta que el fichero será truncado después de una compactación exitosa
+   (a diferencia del comando PACK de dBASE III).
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-pack-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El recurso database, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-pack-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-pack-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       <code class="parameter">database</code> es ahora
+       un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-pack-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1327">
+    <p><strong>Ejemplo #1 Vacía una base de datos dBase</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">// Apertura en modo lectura-escritura<br></span><span style="color: #0000BB">$db </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/tmp/test.dbf'</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$db</span><span style="color: #007700">) {<br>  </span><span style="color: #0000BB">$record_numbers </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_numrecords</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">);<br>  for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">1</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt;= </span><span style="color: #0000BB">$record_numbers</span><span style="color: #007700">; </span><span style="color: #0000BB">$i</span><span style="color: #007700">++) {<br>    </span><span style="color: #0000BB">dbase_delete_record</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">, </span><span style="color: #0000BB">$i</span><span style="color: #007700">);<br>  }<br></span><span style="color: #FF8000">// Compacta la base de datos<br></span><span style="color: #0000BB">dbase_pack</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-pack-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-delete-record" class="function" rel="rdfs-seeAlso">dbase_delete_record()</a> - Borra un registro en una base dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dbase-replace-record" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dbase_replace_record</h1>
+  <p class="verinfo">(PHP 5 &lt; 5.3.0, dbase 5, dbase 7)</p><p class="refpurpose"><span class="refname">dbase_replace_record</span> — <span class="dc-title">Reemplaza un registro en una base dBase</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dbase-replace-record-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dbase_replace_record</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$database</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$data</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$number</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Reemplaza el registro pasado en la base de datos con los datos proporcionados.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dbase-replace-record-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de la base de datos, devuelto por
+       <span class="function"><a href="#function.dbase-open" class="function">dbase_open()</a></span> o <span class="function"><a href="#function.dbase-create" class="function">dbase_create()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Un array indexado de datos. El número de elementos debe ser igual
+       al número de campos en la base de datos, de lo contrario la función
+       <span class="function"><strong>dbase_replace_record()</strong></span> fallará.
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        Si se utiliza <span class="function"><a href="#function.dbase-get-record" class="function">dbase_get_record()</a></span> para devolver el valor
+        de este argumento, no se olvide de reinicializar la clave nombrada
+        <code class="literal">deleted</code>.
+       </p>
+      </blockquote>
+     </dd>
+    
+    
+     <dt><code class="parameter">number</code></dt>
+     <dd>
+      <p class="para">
+       Un entero entre 1 y el número total de registros en la
+       base de datos (como devuelto por la función
+       <span class="function"><a href="#function.dbase-numrecords" class="function">dbase_numrecords()</a></span>).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dbase-replace-record-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dbase-replace-record-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL dbase 7.0.0</td>
+      <td>
+       El argumento <code class="parameter">database</code> es ahora
+       una <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> en lugar de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.dbase-replace-record-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1328">
+    <p><strong>Ejemplo #1 Actualización de un registro en una base de datos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">// Apertura en modo lectura-escritura<br></span><span style="color: #0000BB">$db </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/tmp/test.dbf'</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$db</span><span style="color: #007700">) {<br>  </span><span style="color: #FF8000">// Recuperación de la antigua fila<br>  </span><span style="color: #0000BB">$row </span><span style="color: #007700">= </span><span style="color: #0000BB">dbase_get_record_with_names</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">);<br><br>  </span><span style="color: #FF8000">// Elimina la entrada borrada<br>  </span><span style="color: #007700">unset(</span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'deleted'</span><span style="color: #007700">]);<br><br>  </span><span style="color: #FF8000">// Actualización de la fecha del campo con el timestamp actual<br>  </span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'date'</span><span style="color: #007700">] = </span><span style="color: #0000BB">date</span><span style="color: #007700">(</span><span style="color: #DD0000">'Ymd'</span><span style="color: #007700">);<br><br>  </span><span style="color: #FF8000">// Reemplazar el registro<br>  </span><span style="color: #0000BB">dbase_replace_record</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">, </span><span style="color: #0000BB">$row</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">);<br>  </span><span style="color: #0000BB">dbase_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$db</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.dbase-replace-record-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Los resultados de los campos <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> son elementos de valor de tipo <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+    (<code class="literal">0</code> o <code class="literal">1</code>) cuando se recuperan mediante
+    <span class="function"><a href="#function.dbase-get-record" class="function">dbase_get_record()</a></span> o
+    <span class="function"><a href="#function.dbase-get-record-with-names" class="function">dbase_get_record_with_names()</a></span>. Si se reescriben,
+    esto hará que el valor se convierta en <code class="literal">0</code>, por lo que se deben
+    tomar precauciones para ajustar correctamente los valores.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dbase-replace-record-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dbase-add-record" class="function" rel="rdfs-seeAlso">dbase_add_record()</a> - Añade un registro en una base de datos dBase</span></li>
+    <li><span class="function"><a href="#function.dbase-delete-record" class="function" rel="rdfs-seeAlso">dbase_delete_record()</a> - Borra un registro en una base dBase</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.dbase-add-record">dbase_add_record</a> — Añade un registro en una base de datos dBase</li><li><a href="#function.dbase-close">dbase_close</a> — Cierra una base dBase</li><li><a href="#function.dbase-create">dbase_create</a> — Crea una base de datos dBase</li><li><a href="#function.dbase-delete-record">dbase_delete_record</a> — Borra un registro en una base dBase</li><li><a href="#function.dbase-get-header-info">dbase_get_header_info</a> — Recupera información de encabezado de una base de datos dBase</li><li><a href="#function.dbase-get-record">dbase_get_record</a> — Lee un registro en una base dBase</li><li><a href="#function.dbase-get-record-with-names">dbase_get_record_with_names</a> — Lee un registro en una base dBase, en forma de array asociativo</li><li><a href="#function.dbase-numfields">dbase_numfields</a> — Cuenta el número de campos de una base dBase</li><li><a href="#function.dbase-numrecords">dbase_numrecords</a> — Cuenta el número de registros en una base dBase</li><li><a href="#function.dbase-open">dbase_open</a> — Abre una base dBase</li><li><a href="#function.dbase-pack">dbase_pack</a> — Compacta una base dBase</li><li><a href="#function.dbase-replace-record">dbase_replace_record</a> — Reemplaza un registro en una base dBase</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.dbase">Introducción</a></li><li><a href="#dbase.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#dbase.installation">Instalación</a></li><li><a href="#dbase.resources">Tipos de recursos</a></li></ul></li><li><a href="#dbase.constants">Constantes predefinidas</a></li><li><a href="#ref.dbase">Funciones dBase</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.dbase-add-record">dbase_add_record</a> — Añade un registro en una base de datos dBase</li><li><a href="#function.dbase-close">dbase_close</a> — Cierra una base dBase</li><li><a href="#function.dbase-create">dbase_create</a> — Crea una base de datos dBase</li><li><a href="#function.dbase-delete-record">dbase_delete_record</a> — Borra un registro en una base dBase</li><li><a href="#function.dbase-get-header-info">dbase_get_header_info</a> — Recupera información de encabezado de una base de datos dBase</li><li><a href="#function.dbase-get-record">dbase_get_record</a> — Lee un registro en una base dBase</li><li><a href="#function.dbase-get-record-with-names">dbase_get_record_with_names</a> — Lee un registro en una base dBase, en forma de array asociativo</li><li><a href="#function.dbase-numfields">dbase_numfields</a> — Cuenta el número de campos de una base dBase</li><li><a href="#function.dbase-numrecords">dbase_numrecords</a> — Cuenta el número de registros en una base dBase</li><li><a href="#function.dbase-open">dbase_open</a> — Abre una base dBase</li><li><a href="#function.dbase-pack">dbase_pack</a> — Compacta una base dBase</li><li><a href="#function.dbase-replace-record">dbase_replace_record</a> — Reemplaza un registro en una base dBase</li></ul></li></ul></div>

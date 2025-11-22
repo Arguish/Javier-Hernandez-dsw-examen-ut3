@@ -1,0 +1,2291 @@
+<div id="book.geoip" class="book"><hr>
+ 
+ <h1 class="title">Localización geográfica de las IPs</h1>
+ 
+
+ <div id="intro.geoip" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   La extensión GeoIP permite localizar una dirección IP. La ciudad, el estado, el país,
+   la longitud, la latitud y otra información como el ISP y el tipo de conexión
+   pueden ser obtenidos gracias a GeoIP.
+  </p>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    Esta extensión no soporta las bases de datos "GeoIP2"
+    actuales de MaxMind, únicamente los ficheros de base de datos "GeoIP Legacy".
+   </p>
+  </div>
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="geoip.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#geoip.requirements">Requerimientos</a></li><li><a href="#geoip.installation">Instalación</a></li><li><a href="#geoip.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ <div id="geoip.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Esta extensión requiere la biblioteca GeoIP versión 1.4.0 o posterior.
+   La última versión puede ser obtenida en
+   <a href="http://www.maxmind.com/app/c" class="link external">» http://www.maxmind.com/app/c</a>
+   y compilada por usted mismo.
+  </p>
+  <p class="para">
+   Por omisión, solo se puede acceder a la base de datos
+   <code class="literal">Free GeoIP Country</code> o <code class="literal">GeoLite
+   City</code>. Aunque este módulo puede funcionar con otros tipos
+  de bases de datos, es necesario adquirir una licencia comercial en
+  <a href="http://www.maxmind.com/" class="link external">» Maxmind</a>.
+  </p>
+ </div>
+<hr>
+
+
+ <div id="geoip.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   Esta extensión <a href="https://pecl.php.net/" class="link external">» PECL</a> no está integrada en PHP.
+  </p>
+  <p class="para">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/geoip" class="link external">» https://pecl.php.net/package/geoip</a>.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="geoip.configuration" class="section"><hr>
+  <h2 class="title">Configuración en tiempo de ejecución</h2>
+  <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+  <p class="para">
+    </p><table class="doctable table">
+      <caption><strong>GeoIP Opciones de configuración</strong></caption>
+      
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Por defecto</th>
+            <th>Cambiable</th>
+            <th>Historial de cambios</th>
+          </tr>
+
+        </thead>
+
+        <tbody class="tbody">
+          <tr>
+            <td><a href="#ini.geoip.custom-directory" class="link">geoip.custom_directory</a></td>
+            <td>""</td>
+            <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+            <td></td>
+          </tr>
+
+        </tbody>
+      
+    </table>
+
+  
+
+  <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+  <p class="para">
+    </p><dl>
+      
+        <dt id="ini.geoip.custom-directory">
+          <code class="parameter">geoip.custom_directory</code>
+          <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+        </dt>
+        <dd>
+          <p class="para">
+            Vacío por omisión, pero puede ser utilizado para cargar una base
+            de datos diferente de la incluida en la biblioteca.
+          </p>
+        </dd>
+      
+    </dl>
+  
+</div>
+<hr>
+
+
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="geoip.constants" class="appendix"><hr> <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.geoip-country-edition">
+    <strong><code><a href="#constant.geoip-country-edition">GEOIP_COUNTRY_EDITION</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-region-edition-rev0">
+    <strong><code><a href="#constant.geoip-region-edition-rev0">GEOIP_REGION_EDITION_REV0</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-city-edition-rev0">
+    <strong><code><a href="#constant.geoip-city-edition-rev0">GEOIP_CITY_EDITION_REV0</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-org-edition">
+    <strong><code><a href="#constant.geoip-org-edition">GEOIP_ORG_EDITION</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-isp-edition">
+    <strong><code><a href="#constant.geoip-isp-edition">GEOIP_ISP_EDITION</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-city-edition-rev1">
+    <strong><code><a href="#constant.geoip-city-edition-rev1">GEOIP_CITY_EDITION_REV1</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-region-edition-rev1">
+    <strong><code><a href="#constant.geoip-region-edition-rev1">GEOIP_REGION_EDITION_REV1</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-proxy-edition">
+    <strong><code><a href="#constant.geoip-proxy-edition">GEOIP_PROXY_EDITION</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-asnum-edition">
+    <strong><code><a href="#constant.geoip-asnum-edition">GEOIP_ASNUM_EDITION</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-netspeed-edition">
+    <strong><code><a href="#constant.geoip-netspeed-edition">GEOIP_NETSPEED_EDITION</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-domain-edition">
+    <strong><code><a href="#constant.geoip-domain-edition">GEOIP_DOMAIN_EDITION</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+ </dl>
+ <p class="para">
+  Las constantes siguientes se utilizan para la velocidad de red:
+ </p>
+ <dl>
+  
+   <dt id="constant.geoip-unknown-speed">
+    <strong><code><a href="#constant.geoip-unknown-speed">GEOIP_UNKNOWN_SPEED</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara"></span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-dialup-speed">
+    <strong><code><a href="#constant.geoip-dialup-speed">GEOIP_DIALUP_SPEED</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara"></span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-cabledsl-speed">
+    <strong><code><a href="#constant.geoip-cabledsl-speed">GEOIP_CABLEDSL_SPEED</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara"></span>
+   </dd>
+  
+  
+   <dt id="constant.geoip-corporate-speed">
+    <strong><code><a href="#constant.geoip-corporate-speed">GEOIP_CORPORATE_SPEED</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara"></span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="ref.geoip" class="reference"><hr>
+ <h1 class="title">Funciones GeoIP</h1>
+ 
+
+
+
+
+<div id="function.geoip-asnum-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_asnum_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">geoip_asnum_by_name</span> — <span class="dc-title">Recupera el ASN (Autonomous System Numbers)</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-asnum-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_asnum_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_asnum_by_name()</strong></span> recupera el ASN
+   (Autonomous System Numbers) asociado con la dirección IP.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-asnum-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre de host o la dirección IP.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-asnum-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el ASN en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si la dirección no puede
+   ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-asnum-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3681">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_asnum_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo mostrará el ASN para el host www.example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$asn </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_asnum_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$asn</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'El ASN es: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$asn</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">El ASN es: AS15133 EdgeCast Networks, Inc</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-continent-code-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_continent_code_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.0.3)</p><p class="refpurpose"><span class="refname">geoip_continent_code_by_name</span> — <span class="dc-title">Lee el código de continente de una IP</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-continent-code-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_continent_code_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>geoip_continent_code_by_name()</strong></span> devuelve el código de dos letras del continente correspondiente a un nombre de host o una dirección IP.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-continent-code-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre de host o la dirección IP que se está estudiando.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-continent-code-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el código de dos letras del nombre del continente, en caso de éxito,
+   y <strong><code><a href="#constant.false">false</a></code></strong> si la dirección no ha podido ser encontrada en la base.
+  </p>
+  <table class="doctable table">
+   <caption><strong>Códigos de continente</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Código</th>
+      <th>Nombre del continente</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><code class="literal">AF</code></td>
+      <td>África</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">AN</code></td>
+      <td>Antártida</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">AS</code></td>
+      <td>Asia</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">EU</code></td>
+      <td>Europa</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">NA</code></td>
+      <td>América del Norte</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">OC</code></td>
+      <td>Oceanía</td>
+     </tr>
+
+     <tr>
+      <td><code class="literal">SA</code></td>
+      <td>América del Sur</td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-continent-code-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3682">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_continent_code_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este script mostrará el continente del host example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$continent </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_continent_code_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$continent</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Este host está situado en: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$continent</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Este host está situado en: NA</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.geoip-continent-code-by-name-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.geoip-country-code-by-name" class="function" rel="rdfs-seeAlso">geoip_country_code_by_name()</a> - Recupera las dos letras del código del país</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-country-code-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_country_code_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">geoip_country_code_by_name</span> — <span class="dc-title">Recupera las dos letras del código del país</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-country-code-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_country_code_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+    La función <span class="function"><strong>geoip_country_code_by_name()</strong></span>
+    devuelve las dos letras del código del país correspondiente al nombre del host o
+    a la dirección IP.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-country-code-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del host o la dirección IP
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-country-code-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve las dos letras del código del país ISO en caso de éxito, o
+   <strong><code><a href="#constant.false">false</a></code></strong> si la dirección no pudo ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-country-code-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3683">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_country_code_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo muestra la localización del host example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$country </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_country_code_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$country</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Localización de este host: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$country</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Localización de este host: US</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.geoip-country-code-by-name-notes">
+  <h3 class="title">Notas</h3>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    Consulte la página
+    <a href="http://www.maxmind.com/en/iso3166" class="link external">» http://www.maxmind.com/en/iso3166</a>
+    para una lista completa de los valores devueltos posibles, incluyendo
+    los códigos especiales.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.geoip-country-code-by-name-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.geoip-country-code3-by-name" class="function" rel="rdfs-seeAlso">geoip_country_code3_by_name()</a> - Recupera las tres letras del código del país</span></li>
+    <li><span class="function"><a href="#function.geoip-country-name-by-name" class="function" rel="rdfs-seeAlso">geoip_country_name_by_name()</a> - Recupera el nombre completo del país</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-country-code3-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_country_code3_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">geoip_country_code3_by_name</span> — <span class="dc-title">Recupera las tres letras del código del país</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-country-code3-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_country_code3_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_country_code3_by_name()</strong></span>
+   devuelve las tres letras del código del país correspondiente al nombre del host o
+   a la dirección IP.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-country-code3-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del host o la dirección IP
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-country-code3-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve las tres letras del código del país en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong>
+   si la dirección no pudo ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-country-code3-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3684">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_country_code3_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo muestra dónde está localizado el host example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$country </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_country_code3_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$country</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Localización de este host: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$country</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Localización de este host: USA</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.geoip-country-code3-by-name-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.geoip-country-code-by-name" class="function" rel="rdfs-seeAlso">geoip_country_code_by_name()</a> - Recupera las dos letras del código del país</span></li>
+    <li><span class="function"><a href="#function.geoip-country-name-by-name" class="function" rel="rdfs-seeAlso">geoip_country_name_by_name()</a> - Recupera el nombre completo del país</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-country-name-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_country_name_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">geoip_country_name_by_name</span> — <span class="dc-title">Recupera el nombre completo del país</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-country-name-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_country_name_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_country_name_by_name()</strong></span> devuelve
+   el nombre completo del país correspondiente al nombre del host o a la
+   dirección IP.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-country-name-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del host o la dirección IP
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-country-name-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre del país en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si la dirección
+   no pudo ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-country-name-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3685">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_country_name_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo muestra la localización del host example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$country </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_country_name_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$country</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Localización de este host: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$country</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Localización de este host: United States</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.geoip-country-name-by-name-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.geoip-country-code-by-name" class="function" rel="rdfs-seeAlso">geoip_country_code_by_name()</a> - Recupera las dos letras del código del país</span></li>
+    <li><span class="function"><a href="#function.geoip-country-code3-by-name" class="function" rel="rdfs-seeAlso">geoip_country_code3_by_name()</a> - Recupera las tres letras del código del país</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-database-info" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_database_info</h1>
+  <p class="verinfo">(PECL geoip &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">geoip_database_info</span> — <span class="dc-title">Recupera la información de la base de datos GeoIP</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-database-info-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_database_info</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$database</code><span class="initializer"> = GEOIP_COUNTRY_EDITION</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_database_info()</strong></span> devuelve
+   la versión de la base de datos GeoIP tal como se define en el fichero binario.
+  </p>
+
+  <p class="para">
+   Si esta función se llama sin argumento, devuelve la versión
+   de la <code class="literal">GeoIP Free Country Edition</code>.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-database-info-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El tipo de base de datos, como entero. Se pueden utilizar
+       <a href="#geoip.constants" class="link">diversas constantes</a> definidas
+       con esta extensión (ie: GEOIP_*_EDITION).
+      </p>
+
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-database-info-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la versión correspondiente de la base de datos, o <strong><code><a href="#constant.null">null</a></code></strong>
+   si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-database-info-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3686">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_database_info()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo muestra la información contenida en la base de datos.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">print </span><span style="color: #0000BB">geoip_database_info</span><span style="color: #007700">(</span><span style="color: #0000BB">GEOIP_COUNTRY_EDITION</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">GEO-106FREE 20060801 Build 1 Copyright (c) 2006 MaxMind LLC All Rights Reserved</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-db-avail" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_db_avail</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.0.1)</p><p class="refpurpose"><span class="refname">geoip_db_avail</span> — <span class="dc-title">Verifica si la base de datos GeoIP está disponible</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-db-avail-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_db_avail</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$database</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_db_avail()</strong></span> verifica si la base
+   de datos correspondiente está disponible y puede ser abierta en el disco.
+  </p>
+
+  <p class="para">
+   La función no indica si el fichero es una base de datos válida,
+   sino únicamente si es legible.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-db-avail-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El tipo de base de datos, en forma de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+       Se pueden utilizar diversas <a href="#geoip.constants" class="link">constantes</a>,
+       definidas con esta extensión (ie: GEOIP_*_EDITION).
+      </p>
+
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-db-avail-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si la base de datos existe, <strong><code><a href="#constant.false">false</a></code></strong> si no se encuentra,
+   o <strong><code><a href="#constant.null">null</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-db-avail-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3687">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_db_avail()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Esto mostrará la versión de la base de datos actual.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">if (</span><span style="color: #0000BB">geoip_db_avail</span><span style="color: #007700">(</span><span style="color: #0000BB">GEOIP_COUNTRY_EDITION</span><span style="color: #007700">))<br>    print </span><span style="color: #0000BB">geoip_database_info</span><span style="color: #007700">(</span><span style="color: #0000BB">GEOIP_COUNTRY_EDITION</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">GEO-106FREE 20080801 Build 1 Copyright (c) 2006 MaxMind LLC All Rights Reserved</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-db-filename" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_db_filename</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.0.1)</p><p class="refpurpose"><span class="refname">geoip_db_filename</span> — <span class="dc-title">Devuelve el nombre del fichero que contiene la base de datos GeoIP especificada</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-db-filename-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_db_filename</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$database</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_db_filename()</strong></span> devuelve el nombre
+   del fichero que contiene la base de datos GeoIP especificada.
+  </p>
+
+  <p class="para">
+   La función no indica si el fichero existe o no en el disco, sino únicamente
+   el lugar en el que la biblioteca busca la base de datos.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-db-filename-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">database</code></dt>
+     <dd>
+      <p class="para">
+       El tipo de base de datos, en forma de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>. Se pueden
+       utilizar diversas <a href="#geoip.constants" class="link">constantes</a>,
+       definidas con esta extensión (ie: GEOIP_*_EDITION).
+      </p>
+
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-db-filename-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre del fichero de la base de datos correspondiente, o
+   <strong><code><a href="#constant.null">null</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-db-filename-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3688">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_db_filename()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Esto mostrará el nombre del fichero correspondiente a la base de datos.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">print </span><span style="color: #0000BB">geoip_db_filename</span><span style="color: #007700">(</span><span style="color: #0000BB">GEOIP_COUNTRY_EDITION</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">/usr/share/GeoIP/GeoIP.dat</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-db-get-all-info" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_db_get_all_info</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.0.1)</p><p class="refpurpose"><span class="refname">geoip_db_get_all_info</span> — <span class="dc-title">Devuelve información detallada sobre todos los tipos de bases de datos GeoIP</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-db-get-all-info-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_db_get_all_info</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_db_get_all_info()</strong></span> devuelve información
+   detallada, en forma de un array multidimensional, sobre
+   todos los tipos de bases de datos GeoIP.
+  </p>
+  <p class="para">
+   Esta función está disponible incluso si no se ha instalado ninguna base de datos.
+   Simplemente listará las bases de datos como no disponibles.
+  </p>
+  <p class="para">
+   Los nombres de las diferentes claves del array asociativo devuelto son los siguientes:
+  </p>
+  <p class="para">
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"available"</code> : Booleano, indica si la base de datos está disponible (ver la función
+      <span class="function"><a href="#function.geoip-db-avail" class="function">geoip_db_avail()</a></span>)
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"description"</code> : La descripción de la base de datos
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"filename"</code> : El nombre del fichero que contiene la base de datos en el disco (ver la función
+      <span class="function"><a href="#function.geoip-db-filename" class="function">geoip_db_filename()</a></span>)
+     </span>
+    </li>
+   </ul>
+  
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-db-get-all-info-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-db-get-all-info-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array asociativo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-db-get-all-info-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3689">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_db_get_all_info()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Esto mostrará un array que contiene toda la información.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$infos </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_db_get_all_info</span><span style="color: #007700">();<br>if (</span><span style="color: #0000BB">is_array</span><span style="color: #007700">(</span><span style="color: #0000BB">$infos</span><span style="color: #007700">)) {<br>    </span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$infos</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(11) {
+  [1]=&gt;
+  array(3) {
+    ["available"]=&gt;
+    bool(true)
+    ["description"]=&gt;
+    string(21) "GeoIP Country Edition"
+    ["filename"]=&gt;
+    string(32) "/usr/share/GeoIP/GeoIP.dat"
+  }
+
+[ ... ]
+
+  [11]=&gt;
+  array(3) {
+    ["available"]=&gt;
+    bool(false)
+    ["description"]=&gt;
+    string(25) "GeoIP Domain Name Edition"
+    ["filename"]=&gt;
+    string(38) "/usr/share/GeoIP/GeoIPDomain.dat"
+  }
+}</pre>
+</div>
+    </div>
+   </div>
+  
+
+<p class="para">
+   </p><div class="example" id="example-3690">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>geoip_db_get_all_info()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Se pueden utilizar diversas constantes como claves para recuperar solo
+     partes de la información.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$infos </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_db_get_all_info</span><span style="color: #007700">();<br>if (</span><span style="color: #0000BB">$infos</span><span style="color: #007700">[</span><span style="color: #0000BB">GEOIP_COUNTRY_EDITION</span><span style="color: #007700">][</span><span style="color: #DD0000">'available'</span><span style="color: #007700">]) {<br>    echo </span><span style="color: #0000BB">$infos</span><span style="color: #007700">[</span><span style="color: #0000BB">GEOIP_COUNTRY_EDITION</span><span style="color: #007700">][</span><span style="color: #DD0000">'description'</span><span style="color: #007700">];<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">GeoIP Country Edition</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-domain-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_domain_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">geoip_domain_by_name</span> — <span class="dc-title">Recupera el segundo nivel del nombre de dominio</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-domain-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_domain_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_domain_by_name()</strong></span> devuelve el
+   segundo nivel del dominio asociado con un nombre de host o la dirección IP.
+  </p>
+  <p class="para">
+   Esta función está actualmente disponible solo para los usuarios que
+   han comprado una edición comercial de GeoIP Domain. Se emitirá una alerta
+   si no se puede encontrar la base de datos correcta.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-domain-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre de host o la dirección IP.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-domain-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre de dominio en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si la dirección
+   no puede ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-domain-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3691">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_domain_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo mostrará el dominio asociado con la IP 61.106.139.1.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$domain </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_domain_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'61.106.139.1'</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$domain</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'El dominio es: '</span><span style="color: #007700">. </span><span style="color: #0000BB">$domain</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">El dominio es: von.co.kr</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-id-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_id_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">geoip_id_by_name</span> — <span class="dc-title">Recupera el tipo de conexión a Internet</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-id-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_id_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_id_by_name()</strong></span>
+   devuelve el tipo de conexión a Internet correspondiente al nombre del host o
+   a la dirección IP.
+  </p>
+  <p class="para">
+   El valor devuelto es de tipo numérico y puede ser comparado con
+   las siguientes constantes:
+  </p>
+  <p class="para">
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      GEOIP_UNKNOWN_SPEED
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      GEOIP_DIALUP_SPEED
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      GEOIP_CABLEDSL_SPEED
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      GEOIP_CORPORATE_SPEED
+     </span>
+    </li>
+   </ul>
+  
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-id-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del host o la dirección IP cuyo tipo de conexión debe ser examinado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-id-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tipo de conexión.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-id-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3692">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_id_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo muestra el tipo de conexión del host example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$netspeed </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_id_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br><br>echo </span><span style="color: #DD0000">'La conexión es del tipo '</span><span style="color: #007700">;<br><br>switch (</span><span style="color: #0000BB">$netspeed</span><span style="color: #007700">) {<br>    case </span><span style="color: #0000BB">GEOIP_DIALUP_SPEED</span><span style="color: #007700">:<br>        echo </span><span style="color: #DD0000">'dial-up'</span><span style="color: #007700">;<br>        break;<br>    case </span><span style="color: #0000BB">GEOIP_CABLEDSL_SPEED</span><span style="color: #007700">:<br>        echo </span><span style="color: #DD0000">'cable o DSL'</span><span style="color: #007700">;<br>        break;<br>    case </span><span style="color: #0000BB">GEOIP_CORPORATE_SPEED</span><span style="color: #007700">:<br>        echo </span><span style="color: #DD0000">'corporate'</span><span style="color: #007700">;<br>        break;<br>    case </span><span style="color: #0000BB">GEOIP_UNKNOWN_SPEED</span><span style="color: #007700">:<br>    default:<br>        echo </span><span style="color: #DD0000">'desconocido'</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La conexión es del tipo corporate</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-isp-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_isp_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.0.2)</p><p class="refpurpose"><span class="refname">geoip_isp_by_name</span> — <span class="dc-title">Recupera el nombre del proveedor de servicios de Internet</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-isp-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_isp_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_isp_by_name()</strong></span> devuelve el nombre
+   del ISP al que está asignada la IP.
+  </p>
+  <p class="para">
+   Esta función está actualmente disponible solo para los usuarios que han
+   adquirido una edición comercial de GeoIP ISP. Se emitirá una advertencia
+   si la base de datos no puede ser localizada.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-isp-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del host o la dirección IP.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-isp-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre del ISP en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si la dirección
+   no puede ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-isp-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3693">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_isp_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Esto mostrará el nombre del ISP para el host example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$isp </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_isp_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$isp</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'La IP del host proviene del ISP: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$isp</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La IP del host proviene del ISP: ICANN c/o Internet Assigned Numbers Authority</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-netspeedcell-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_netspeedcell_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">geoip_netspeedcell_by_name</span> — <span class="dc-title">Recupera la velocidad de la conexión a Internet</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-netspeedcell-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_netspeedcell_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_netspeedcell_by_name()</strong></span> devolverá
+   el tipo de conexión a Internet así como su velocidad, según un
+   nombre de host o una dirección IP.
+  </p>
+  <p class="para">
+   Esta función solo está disponible al utilizar la versión
+   1.4.8 de la biblioteca GeoIP, o superiores.
+  </p>
+  <p class="para">
+   Esta función está actualmente disponible únicamente para los usuarios
+   que han comprado una edición comercial de GeoIP NetSpeedCell. Se emitirá una alerta
+   si no se puede encontrar la base de datos correcta.
+  </p>
+  <p class="para">
+   El valor devuelto será un string cuyos valores comunes son:
+  </p>
+  <p class="para">
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      Cable/DSL
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Dialup
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Cellular
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      Corporate
+     </span>
+    </li>
+   </ul>
+  
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-netspeedcell-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre de host, o la dirección IP.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-netspeedcell-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la velocidad de la conexión en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si
+   la dirección no puede ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-netspeedcell-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3694">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_netspeedcell_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo mostrará la velocidad de la conexión del host example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$netspeed </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_netspeedcell_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$netspeed</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'El tipo de conexión es: '</span><span style="color: #007700">. </span><span style="color: #0000BB">$netspeed</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">El tipo de conexión es: Corporate</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-org-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_org_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">geoip_org_by_name</span> — <span class="dc-title">Recupera el nombre de la organización</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-org-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_org_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_org_by_name()</strong></span> devuelve
+   el nombre de la organización a la que se asigna la dirección IP.
+  </p>
+  <p class="para">
+   Esta función está actualmente disponible únicamente para los usuarios
+   que han adquirido una licencia comercial <code class="literal">GeoIP Organization</code>,
+   <code class="literal">ISP</code> o <code class="literal">AS Edition</code>.
+   Se emitirá una alerta si la base de datos no puede ser encontrada.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-org-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del host o la dirección IP
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-org-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre de la organización en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong>
+   si la dirección no pudo ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-org-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3695">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_org_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo muestra el nombre de la organización para el host example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$org </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_org_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$org</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Nombre de la organización : ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$org</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Nombre de la organización : ICANN c/o Internet Assigned Numbers Authority</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.geoip-record-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_record_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">geoip_record_by_name</span> — <span class="dc-title">Recupera la información registrada correspondiente al nombre del host o a la dirección IP, encontrada en la base de datos GeoIP</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-record-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_record_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_record_by_name()</strong></span> devuelve
+   la información registrada correspondiente al nombre del host o
+   a la dirección IP.
+  </p>
+  <p class="para">
+   Esta función está disponible para las bases de datos <code class="literal">GeoLite City Edition</code> y
+   la versión comercial <code class="literal">GeoIP City Edition</code>.
+   Se emitirá una alerta si la base de datos no ha podido ser encontrada.
+  </p>
+  <p class="para">
+   Los nombres de las diferentes claves del array asociativo devuelto son los siguientes:
+  </p>
+  <p class="para">
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"continent_code"</code> : Código del continente en 2 letras (disponible desde
+      la versión 1.0.4 con libgeoip 1.4.3 o superior)
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"country_code"</code> : Las dos letras del código del país (Véase
+      <span class="function"><a href="#function.geoip-country-code-by-name" class="function">geoip_country_code_by_name()</a></span>)
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"country_code3"</code> : Código del país en 3 letras (Véase la función
+      <span class="function"><a href="#function.geoip-country-code3-by-name" class="function">geoip_country_code3_by_name()</a></span>)
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"country_name"</code> : Nombre del país (Véase la función
+      <span class="function"><a href="#function.geoip-country-name-by-name" class="function">geoip_country_name_by_name()</a></span>)
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"region"</code> : El código de la región (ej: CA para California)
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"city"</code> : La ciudad.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"postal_code"</code> : El código postal, FSA o Zip.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"latitude"</code> : La latitud como <span class="type"><a href="#language.types.float" class="type float">float</a></span> firmado.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"longitude"</code> : La longitud como <span class="type"><a href="#language.types.float" class="type float">float</a></span> firmado.
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"dma_code"</code> : Código de la zona de mercado (Solo para EE.UU.
+      y Canadá)
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      <code class="literal">"area_code"</code> : El código PSTN (ej: 212)
+     </span>
+    </li>
+   </ul>
+  
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-record-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del host o la dirección IP
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-record-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array asociativo en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si la dirección
+   no ha podido ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.geoip-record-by-name-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>PECL geoip 1.0.4</td>
+       <td>
+        Adición de continent_code con la biblioteca GeoIP 1.4.3 o superior únicamente
+       </td>
+      </tr>
+
+      <tr>
+       <td>PECL geoip 1.0.3</td>
+       <td>
+        Adición de country_code3 y de country_name
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-record-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3696">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_record_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo muestra el array que contiene el registro del host
+     example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$record </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_record_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$record</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$record</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [continent_code] =&gt; NA
+    [country_code] =&gt; US
+    [country_code3] =&gt; USA
+    [country_name] =&gt; United States
+    [region] =&gt; CA
+    [city] =&gt; Marina Del Rey
+    [postal_code] =&gt;
+    [latitude] =&gt; 33.9776992798
+    [longitude] =&gt; -118.435096741
+    [dma_code] =&gt; 803
+    [area_code] =&gt; 310
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-region-by-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_region_by_name</h1>
+  <p class="verinfo">(PECL geoip &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">geoip_region_by_name</span> — <span class="dc-title">Recupera el código del país y la región</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-region-by-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_region_by_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_region_by_name()</strong></span> devuelve
+   el país y la región correspondientes al nombre del host o a la dirección IP.
+  </p>
+  <p class="para">
+   Esta función está actualmente disponible únicamente para los usuarios
+   que han adquirido una licencia comercial <code class="literal">GeoIP Region Edition</code>. Se emitirá una alerta
+   si la base de datos no ha podido ser encontrada.
+  </p>
+  <p class="para">
+   Los nombres de las diferentes claves del array devuelto son los siguientes:
+  </p>
+  <p class="para">
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">
+      "country_code" : Las dos letras del código del país (Ver la función
+      <span class="function"><a href="#function.geoip-country-code-by-name" class="function">geoip_country_code_by_name()</a></span>)
+     </span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">
+      "region" : El código de la región (ej: CA para California)
+     </span>
+    </li>
+   </ul>
+  
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-region-by-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del host o la dirección IP
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-region-by-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array asociativo en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si la dirección
+   no ha podido ser encontrada en la base de datos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-region-by-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3697">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_region_by_name()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo muestra el array que contiene el código del país y la región
+     del host example.com.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$region </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_region_by_name</span><span style="color: #007700">(</span><span style="color: #DD0000">'www.example.com'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$region</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$region</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [country_code] =&gt; US
+    [region] =&gt; CA
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-region-name-by-code" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_region_name_by_code</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.0.4)</p><p class="refpurpose"><span class="refname">geoip_region_name_by_code</span> — <span class="dc-title">Devuelve el nombre de la región para un país y un código de región</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-region-name-by-code-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_region_name_by_code</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$country_code</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$region_code</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>geoip_region_name_by_code()</strong></span> devuelve el nombre de la región correspondiente
+   a un par país y región.
+  </p>
+  <p class="para">
+   En los Estados Unidos de América, la región corresponde a la abreviatura de dos letras
+   del estado. En Canadá, esta región corresponde a la abreviatura de la provincia o del
+   territorio, tal como lo asigna Correos de Canadá.
+  </p>
+  <p class="para">
+   Para el resto del mundo, GeoIP utiliza los códigos FIPS 10-4 para representar las regiones.
+   Se puede verificar el sitio <a href="http://www.maxmind.com/app/fips10_4" class="link external">» http://www.maxmind.com/app/fips10_4</a>
+   para obtener una lista detallada de los códigos FIPS 10-4.
+  </p>
+  <p class="para">
+   Esta función está siempre disponible si se utiliza la versión 1.4.1 o superior de la biblioteca GeoIP. Los datos se obtienen directamente de la biblioteca GeoIP y no de una tabla de referencia.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-region-name-by-code-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">country_code</code></dt>
+     <dd>
+      <p class="para">
+       El código del país, en dos letras (véase
+       <span class="function"><a href="#function.geoip-country-code-by-name" class="function">geoip_country_code_by_name()</a></span>)
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">region_code</code></dt>
+     <dd>
+      <p class="para">
+       El código de la región en dos letras (véase
+       <span class="function"><a href="#function.geoip-region-by-name" class="function">geoip_region_by_name()</a></span>)
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-region-name-by-code-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre de la región en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si el país, la región o la combinación
+   de ambos no se encuentra.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-region-name-by-code-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3698">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_region_name_by_code()</strong></span> para EE.UU. y Canadá</strong></p>
+    <div class="example-contents"><p>
+     Este script mostrará el nombre de la región para la región QC en CA.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$region </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_region_name_by_code</span><span style="color: #007700">(</span><span style="color: #DD0000">'CA'</span><span style="color: #007700">, </span><span style="color: #DD0000">'QC'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$region</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Nombre de la región CA/QC: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$region</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Nombre de la región CA/QC: Quebec</pre>
+</div>
+    </div>
+   </div>
+   <div class="example" id="example-3699">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>geoip_region_name_by_code()</strong></span> utilizando los códigos FIPS</strong></p>
+    <div class="example-contents"><p>
+     Este script mostrará el nombre de la región para la región 01 en JP (Japón).
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$region </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_region_name_by_code</span><span style="color: #007700">(</span><span style="color: #DD0000">'JP'</span><span style="color: #007700">, </span><span style="color: #DD0000">'01'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$region</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Nombre de la región JP/01: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$region</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Nombre de la región JP/01: Aichi</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-setup-custom-directory" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_setup_custom_directory</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">geoip_setup_custom_directory</span> — <span class="dc-title">Define un directorio personalizado para la base de datos GeoIP</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-setup-custom-directory-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_setup_custom_directory</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$path</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>geoip_setup_custom_directory()</strong></span>
+   modificará el directorio por omisión de la base de datos GeoIP.
+   Esto es equivalente a modificar la opción de configuración
+   <a href="#ini.geoip.custom-directory" class="link">geoip.custom_directory</a>.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-setup-custom-directory-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">path</code></dt>
+     <dd>
+      <p class="para">
+       La ruta de acceso completa donde se encuentra la base de datos GeoIP en el disco.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-setup-custom-directory-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-setup-custom-directory-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3700">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_setup_custom_directory()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo modificará la ruta de acceso por omisión hacia la base de datos GeoIP.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>geoip_setup_custom_directory</span><span style="color: #007700">(</span><span style="color: #DD0000">'/un/otro/ruta'</span><span style="color: #007700">);<br><br>print </span><span style="color: #0000BB">geoip_db_filename</span><span style="color: #007700">(</span><span style="color: #0000BB">GEOIP_COUNTRY_EDITION</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">/un/otro/ruta/GeoIP.dat</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.geoip-time-zone-by-country-and-region" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">geoip_time_zone_by_country_and_region</h1>
+  <p class="verinfo">(PECL geoip &gt;= 1.0.4)</p><p class="refpurpose"><span class="refname">geoip_time_zone_by_country_and_region</span> — <span class="dc-title">Devuelve la zona horaria de ciertos países y regiones del mundo</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.geoip-time-zone-by-country-and-region-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>geoip_time_zone_by_country_and_region</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$country_code</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$region_code</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>geoip_time_zone_by_country_and_region()</strong></span> devuelve la zona horaria
+   correspondiente a un país y una región.
+  </p>
+  <p class="para">
+   En los Estados Unidos de América, la región corresponde a la abreviatura de dos letras
+   del estado. En Canadá, esta región corresponde a la abreviatura de la provincia o del
+   territorio, tal como lo asigna Correos de Canadá.
+  </p>
+  <p class="para">
+   Para el resto del mundo, GeoIP utiliza los códigos FIPS 10-4 para representar las regiones.
+   Se puede verificar el sitio <a href="http://www.maxmind.com/app/fips10_4" class="link external">» http://www.maxmind.com/app/fips10_4</a>
+   para una lista detallada de los códigos FIPS 10-4.
+  </p>
+  <p class="para">
+   Esta función está siempre disponible si se utiliza GeoIP Library
+   versión 1.4.1 o más reciente. Los datos provienen directamente de GeoIP
+   Library y no de una tabla de referencia.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.geoip-time-zone-by-country-and-region-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">country_code</code></dt>
+     <dd>
+      <p class="para">
+       El código del país, en dos letras (véase
+       <span class="function"><a href="#function.geoip-country-code-by-name" class="function">geoip_country_code_by_name()</a></span>)
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">region_code</code></dt>
+     <dd>
+      <p class="para">
+       El código de región en dos letras (véase
+       <span class="function"><a href="#function.geoip-region-by-name" class="function">geoip_region_by_name()</a></span>)
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.geoip-time-zone-by-country-and-region-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la zona horaria en caso de éxito, y <strong><code><a href="#constant.false">false</a></code></strong> si el país,
+   la región o la combinación de ambos no se encuentra.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.geoip-time-zone-by-country-and-region-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3701">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>geoip_time_zone_by_country_and_region()</strong></span> para EE.UU. y Canadá</strong></p>
+    <div class="example-contents"><p>
+     Este script mostrará la zona horaria de Quebec, Canadá.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$timezone </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_time_zone_by_country_and_region</span><span style="color: #007700">(</span><span style="color: #DD0000">'CA'</span><span style="color: #007700">, </span><span style="color: #DD0000">'QC'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$timezone</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Zona horaria de CA/QC : ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$timezone</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Zona horaria de CA/QC : America/Montreal</pre>
+</div>
+    </div>
+   </div>
+   <div class="example" id="example-3702">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>geoip_time_zone_by_country_and_region()</strong></span> y los códigos FIPS</strong></p>
+    <div class="example-contents"><p>
+     Este script mostrará la zona horaria de Japón, región 01 (Aichi).
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$timezone </span><span style="color: #007700">= </span><span style="color: #0000BB">geoip_time_zone_by_country_and_region</span><span style="color: #007700">(</span><span style="color: #DD0000">'JP'</span><span style="color: #007700">, </span><span style="color: #DD0000">'01'</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$timezone</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Zona horaria de JP/01 : ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$timezone</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Zona horaria de JP/01 : Asia/Tokyo</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.geoip-asnum-by-name">geoip_asnum_by_name</a> — Recupera el ASN (Autonomous System Numbers)</li><li><a href="#function.geoip-continent-code-by-name">geoip_continent_code_by_name</a> — Lee el código de continente de una IP</li><li><a href="#function.geoip-country-code-by-name">geoip_country_code_by_name</a> — Recupera las dos letras del código del país</li><li><a href="#function.geoip-country-code3-by-name">geoip_country_code3_by_name</a> — Recupera las tres letras del código del país</li><li><a href="#function.geoip-country-name-by-name">geoip_country_name_by_name</a> — Recupera el nombre completo del país</li><li><a href="#function.geoip-database-info">geoip_database_info</a> — Recupera la información de la base de datos GeoIP</li><li><a href="#function.geoip-db-avail">geoip_db_avail</a> — Verifica si la base de datos GeoIP está disponible</li><li><a href="#function.geoip-db-filename">geoip_db_filename</a> — Devuelve el nombre del fichero que contiene la base de datos GeoIP especificada</li><li><a href="#function.geoip-db-get-all-info">geoip_db_get_all_info</a> — Devuelve información detallada sobre todos los tipos de bases de datos GeoIP</li><li><a href="#function.geoip-domain-by-name">geoip_domain_by_name</a> — Recupera el segundo nivel del nombre de dominio</li><li><a href="#function.geoip-id-by-name">geoip_id_by_name</a> — Recupera el tipo de conexión a Internet</li><li><a href="#function.geoip-isp-by-name">geoip_isp_by_name</a> — Recupera el nombre del proveedor de servicios de Internet</li><li><a href="#function.geoip-netspeedcell-by-name">geoip_netspeedcell_by_name</a> — Recupera la velocidad de la conexión a Internet</li><li><a href="#function.geoip-org-by-name">geoip_org_by_name</a> — Recupera el nombre de la organización</li><li><a href="#function.geoip-record-by-name">geoip_record_by_name</a> — Recupera la información registrada correspondiente al nombre del host o a la dirección IP, encontrada en la base de datos GeoIP</li><li><a href="#function.geoip-region-by-name">geoip_region_by_name</a> — Recupera el código del país y la región</li><li><a href="#function.geoip-region-name-by-code">geoip_region_name_by_code</a> — Devuelve el nombre de la región para un país y un código de región</li><li><a href="#function.geoip-setup-custom-directory">geoip_setup_custom_directory</a> — Define un directorio personalizado para la base de datos GeoIP</li><li><a href="#function.geoip-time-zone-by-country-and-region">geoip_time_zone_by_country_and_region</a> — Devuelve la zona horaria de ciertos países y regiones del mundo</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.geoip">Introducción</a></li><li><a href="#geoip.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#geoip.requirements">Requerimientos</a></li><li><a href="#geoip.installation">Instalación</a></li><li><a href="#geoip.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#geoip.constants">Constantes predefinidas</a></li><li><a href="#ref.geoip">Funciones GeoIP</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.geoip-asnum-by-name">geoip_asnum_by_name</a> — Recupera el ASN (Autonomous System Numbers)</li><li><a href="#function.geoip-continent-code-by-name">geoip_continent_code_by_name</a> — Lee el código de continente de una IP</li><li><a href="#function.geoip-country-code-by-name">geoip_country_code_by_name</a> — Recupera las dos letras del código del país</li><li><a href="#function.geoip-country-code3-by-name">geoip_country_code3_by_name</a> — Recupera las tres letras del código del país</li><li><a href="#function.geoip-country-name-by-name">geoip_country_name_by_name</a> — Recupera el nombre completo del país</li><li><a href="#function.geoip-database-info">geoip_database_info</a> — Recupera la información de la base de datos GeoIP</li><li><a href="#function.geoip-db-avail">geoip_db_avail</a> — Verifica si la base de datos GeoIP está disponible</li><li><a href="#function.geoip-db-filename">geoip_db_filename</a> — Devuelve el nombre del fichero que contiene la base de datos GeoIP especificada</li><li><a href="#function.geoip-db-get-all-info">geoip_db_get_all_info</a> — Devuelve información detallada sobre todos los tipos de bases de datos GeoIP</li><li><a href="#function.geoip-domain-by-name">geoip_domain_by_name</a> — Recupera el segundo nivel del nombre de dominio</li><li><a href="#function.geoip-id-by-name">geoip_id_by_name</a> — Recupera el tipo de conexión a Internet</li><li><a href="#function.geoip-isp-by-name">geoip_isp_by_name</a> — Recupera el nombre del proveedor de servicios de Internet</li><li><a href="#function.geoip-netspeedcell-by-name">geoip_netspeedcell_by_name</a> — Recupera la velocidad de la conexión a Internet</li><li><a href="#function.geoip-org-by-name">geoip_org_by_name</a> — Recupera el nombre de la organización</li><li><a href="#function.geoip-record-by-name">geoip_record_by_name</a> — Recupera la información registrada correspondiente al nombre del host o a la dirección IP, encontrada en la base de datos GeoIP</li><li><a href="#function.geoip-region-by-name">geoip_region_by_name</a> — Recupera el código del país y la región</li><li><a href="#function.geoip-region-name-by-code">geoip_region_name_by_code</a> — Devuelve el nombre de la región para un país y un código de región</li><li><a href="#function.geoip-setup-custom-directory">geoip_setup_custom_directory</a> — Define un directorio personalizado para la base de datos GeoIP</li><li><a href="#function.geoip-time-zone-by-country-and-region">geoip_time_zone_by_country_and_region</a> — Devuelve la zona horaria de ciertos países y regiones del mundo</li></ul></li></ul></div>

@@ -1,0 +1,646 @@
+<div id="book.expect" class="book"><hr>
+ 
+ <h1 class="title">Expect</h1>
+
+ 
+ <div id="intro.expect" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Esta extensión permite interactuar con procesos mediante PTY. Se recomienda
+   tener en cuenta la <a href="#wrappers.expect" class="link">envoltura <code class="literal">expect://</code>
+   </a> junto con las <a href="#ref.filesystem" class="link">funciones del sistema
+   de ficheros</a>, lo cual ofrece una interfaz más sencilla e intuitiva.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+<div id="expect.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#expect.requirements">Requerimientos</a></li><li><a href="#expect.installation">Instalación</a></li><li><a href="#expect.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#expect.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ <div id="expect.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Este módulo utiliza las funciones de la biblioteca <a href="http://expect.nist.gov/" class="link external">» expect</a>.
+   Se necesita la versión de libexpect &gt;= 5.43.0.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+
+<div id="expect.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Esta extensión <a href="https://pecl.php.net/" class="link external">» PECL</a> no está integrada en PHP.
+  Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/expect" class="link external">» https://pecl.php.net/package/expect</a>.
+ </p>
+ <p class="para">
+  Para poder utilizar estas funciones, se debe compilar PHP con soporte para expect
+  utilizando la opción de configuración
+  <strong class="option configure">--with-expect[=DIR]</strong>.
+ </p>
+ <p class="para">
+  Los usuarios de Windows deben habilitar <var class="filename">php_expect.dll</var> dentro
+  del fichero <var class="filename">php.ini</var> para poder utilizar estas funciones.
+  No hay biblioteca <abbr title="Dynamic Link Library">DLL</abbr> para esta
+        extensión <abbr title="PHP Extension and Application Repository">PECL</abbr> actualmente disponible. Consulte la sección
+<a href="#install.windows.building" class="link">Compilación en Windows</a>.
+ </p>
+</div>
+<hr>
+
+
+
+
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="expect.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  La extensión Expect se configura mediante opciones del
+  <a href="#configuration.file" class="link">fichero de configuración</a> <var class="filename">php.ini</var>.
+  </p><table class="doctable table">
+   <caption><strong>Opciones de configuración de Expect</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.expect.timeout" class="link">expect.timeout</a></td>
+      <td>"10"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.expect.loguser" class="link">expect.loguser</a></td>
+      <td>"1"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.expect.logfile" class="link">expect.logfile</a></td>
+      <td>""</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.expect.match-max" class="link">expect.match_max</a></td>
+      <td>""</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+  Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+ <p class="para">
+  </p><dl>
+   
+    <dt id="ini.expect.timeout">
+     <code class="parameter">expect.timeout</code>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Tiempo de espera de datos, al usar la función
+      <span class="function"><a href="#function.expect-expectl" class="function">expect_expectl()</a></span>.
+     </p>
+     <p class="para">
+      El valor en "-1" deshabilita el tiempo de espera.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       El valor en "0" provoca que <span class="function"><a href="#function.expect-expectl" class="function">expect_expectl()</a></span>
+       devuelva el control inmediatamente.
+      </p>
+     </blockquote>
+    </dd>
+   
+
+   
+    <dt id="ini.expect.loguser">
+     <code class="parameter">expect.loguser</code>
+     <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Indica si Expect debe enviar alguna salida del proceso creado a la salida estándar.
+      Dado que normalmente los programas interactivos imprimen en pantalla los datos de entrada,
+      esto sería suficiente para poder mostrar los dos lados de la conversación.
+     </p>
+    </dd>
+   
+
+   
+    <dt id="ini.expect.logfile">
+     <code class="parameter">expect.logfile</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Nombre del fichero en el que se escribirá la salida del proceso creado.
+      Si no existiera, se crearía.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si se establece un valor, se escribe la salida independientemente del
+       valor de <a href="#ini.expect.loguser" class="link">expect.loguser</a>.
+      </p>
+     </blockquote>
+    </dd>
+   
+
+   
+    <dt id="ini.expect.match-max">
+     <code class="parameter">expect.match_max</code>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Cambia el tamaño predeterminado (2000 bytes) del buffer utilizado para que coincida
+      con los asteriscos en el patrón.
+     </p>
+    </dd>
+   
+
+  </dl>
+ 
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ <div id="expect.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   <span class="function"><a href="#function.expect-popen" class="function">expect_popen()</a></span> devuelve el flujo del PTY usado por
+   <span class="function"><a href="#function.expect-expectl" class="function">expect_expectl()</a></span>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+<div id="expect.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.exp-glob">
+    <strong><code><a href="#constant.exp-glob">EXP_GLOB</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Indica que el patrón es del tipo glob (tipo Unix).
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.exp-exact">
+    <strong><code><a href="#constant.exp-exact">EXP_EXACT</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Indica que el patrón es una cadena exacta.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.exp-regexp">
+    <strong><code><a href="#constant.exp-regexp">EXP_REGEXP</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Indica que el patrón es un texto de tipo expresión regular.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.exp-eof">
+    <strong><code><a href="#constant.exp-eof">EXP_EOF</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Valor, devuelto por <span class="function"><a href="#function.expect-expectl" class="function">expect_expectl()</a></span>, cada vez que
+     se alcanza EOF (fin del fichero).
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.exp-timeout">
+    <strong><code><a href="#constant.exp-timeout">EXP_TIMEOUT</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Valor, devuelto por <span class="function"><a href="#function.expect-expectl" class="function">expect_expectl()</a></span> pasados unos determinados
+     segundos, con el valor especificado en <a href="#ini.expect.timeout" class="link">expect.timeout</a>
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.exp-fullbuffer">
+    <strong><code><a href="#constant.exp-fullbuffer">EXP_FULLBUFFER</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Valor, devuelto por <span class="function"><a href="#function.expect-expectl" class="function">expect_expectl()</a></span> si no coincidiera
+     ningún patrón.
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="expect.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#expect.examples-usage">Ejemplos de uso de Expect</a></li></ul>
+
+ <div id="expect.examples-usage" class="section"><hr>
+  <h2 class="title">Ejemplos de uso de Expect</h2>
+  <div class="example" id="example-3566">
+   <p><strong>Ejemplo #1 Ejemplo de uso de Expect</strong></p>
+   <div class="example-contents"><p>
+    Este ejemplo conecta a un host remoto mediante SSH, y muestra el tiempo
+    que lleva en funcionamiento dicho host con uptime.
+   </p></div>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>ini_set</span><span style="color: #007700">(</span><span style="color: #DD0000">"expect.loguser"</span><span style="color: #007700">, </span><span style="color: #DD0000">"Off"</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$stream </span><span style="color: #007700">= </span><span style="color: #0000BB">fopen</span><span style="color: #007700">(</span><span style="color: #DD0000">"expect://ssh root@remotehost uptime"</span><span style="color: #007700">, </span><span style="color: #DD0000">"r"</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$cases </span><span style="color: #007700">= array (<br>    array (</span><span style="color: #0000BB">0 </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"password:"</span><span style="color: #007700">, </span><span style="color: #0000BB">1 </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">PASSWORD</span><span style="color: #007700">)<br>);<br><br>switch (</span><span style="color: #0000BB">expect_expectl </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #0000BB">$cases</span><span style="color: #007700">)) {<br>    case </span><span style="color: #0000BB">PASSWORD</span><span style="color: #007700">:<br>        </span><span style="color: #0000BB">fwrite </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"password\n"</span><span style="color: #007700">);<br>        break;<br><br>    default:<br>        die (</span><span style="color: #DD0000">"Error al tratar de conectar con el host remoto\n"</span><span style="color: #007700">);<br>}<br><br>while (</span><span style="color: #0000BB">$line </span><span style="color: #007700">= </span><span style="color: #0000BB">fgets</span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">)) {<br>      print </span><span style="color: #0000BB">$line</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">fclose </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+
+  <p class="para">
+   El siguiente ejemplo conecta con un host remoto, determina si el SO instalado
+   es de 32 o de 64 bits, y finalmente actualiza el paquete que corresponda.
+  </p>
+  <div class="example" id="example-3567">
+   <p><strong>Ejemplo #2 Otro ejemplo de uso de Expect</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>ini_set</span><span style="color: #007700">(</span><span style="color: #DD0000">"expect.timeout"</span><span style="color: #007700">, -</span><span style="color: #0000BB">1</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ini_set</span><span style="color: #007700">(</span><span style="color: #DD0000">"expect.loguser"</span><span style="color: #007700">, </span><span style="color: #DD0000">"Off"</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$stream </span><span style="color: #007700">= </span><span style="color: #0000BB">expect_popen</span><span style="color: #007700">(</span><span style="color: #DD0000">"ssh root@remotehost"</span><span style="color: #007700">);<br><br>while (</span><span style="color: #0000BB">true</span><span style="color: #007700">) {<br>    switch (</span><span style="color: #0000BB">expect_expectl </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, array (<br>            array (</span><span style="color: #DD0000">"password:"</span><span style="color: #007700">, </span><span style="color: #0000BB">PASSWORD</span><span style="color: #007700">), </span><span style="color: #FF8000">// SSH pide contraseña<br>            </span><span style="color: #007700">array (</span><span style="color: #DD0000">"yes/no)?"</span><span style="color: #007700">, </span><span style="color: #0000BB">YESNO</span><span style="color: #007700">), </span><span style="color: #FF8000">// SSH pide si almacenar o no el host<br>            </span><span style="color: #007700">array (</span><span style="color: #DD0000">"~$ "</span><span style="color: #007700">, </span><span style="color: #0000BB">SHELL</span><span style="color: #007700">, </span><span style="color: #0000BB">EXP_EXACT</span><span style="color: #007700">), </span><span style="color: #FF8000">// ¡Hemos conectado!<br>    </span><span style="color: #007700">))) {<br>        case </span><span style="color: #0000BB">PASSWORD</span><span style="color: #007700">:<br>            </span><span style="color: #0000BB">fwrite </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"secret\n"</span><span style="color: #007700">);<br>            break;<br><br>        case </span><span style="color: #0000BB">YESNO</span><span style="color: #007700">:<br>            </span><span style="color: #0000BB">fwrite </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"yes\n"</span><span style="color: #007700">);<br>            break;<br><br>        case </span><span style="color: #0000BB">SHELL</span><span style="color: #007700">:<br>            </span><span style="color: #0000BB">fwrite </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"uname -a\n"</span><span style="color: #007700">);<br>            while (</span><span style="color: #0000BB">true</span><span style="color: #007700">) {<br>                    switch (</span><span style="color: #0000BB">expect_expectl </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, array (<br>                            array (</span><span style="color: #DD0000">"~$ "</span><span style="color: #007700">, </span><span style="color: #0000BB">SHELL</span><span style="color: #007700">, </span><span style="color: #0000BB">EXP_EXACT</span><span style="color: #007700">), </span><span style="color: #FF8000">// ¡Hemos conectado!<br>                            </span><span style="color: #007700">array (</span><span style="color: #DD0000">"^Linux.*$"</span><span style="color: #007700">, </span><span style="color: #0000BB">UNAME</span><span style="color: #007700">, </span><span style="color: #0000BB">EXP_REGEXP</span><span style="color: #007700">), </span><span style="color: #FF8000">// salida de uname -a<br>                    </span><span style="color: #007700">), </span><span style="color: #0000BB">$match</span><span style="color: #007700">)) {<br>                        case </span><span style="color: #0000BB">UNAME</span><span style="color: #007700">:<br>                            </span><span style="color: #0000BB">$uname </span><span style="color: #007700">.= </span><span style="color: #0000BB">$match</span><span style="color: #007700">[</span><span style="color: #0000BB">0</span><span style="color: #007700">];<br>                            break;<br><br>                        case </span><span style="color: #0000BB">SHELL</span><span style="color: #007700">:<br>                            </span><span style="color: #FF8000">// Run update:<br>                            </span><span style="color: #007700">if (</span><span style="color: #0000BB">strstr </span><span style="color: #007700">(</span><span style="color: #0000BB">$uname</span><span style="color: #007700">, </span><span style="color: #DD0000">"x86_64"</span><span style="color: #007700">)) {<br>                                    </span><span style="color: #0000BB">fwrite </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"rpm -Uhv http://mirrorsite/somepath/some_64bit.rpm\n"</span><span style="color: #007700">);<br>                            } else {<br>                                    </span><span style="color: #0000BB">fwrite </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"rpm -Uhv http://mirrorsite/somepath/some_32bit.rpm\n"</span><span style="color: #007700">);<br>                            }<br>                            </span><span style="color: #0000BB">fwrite </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"exit\n"</span><span style="color: #007700">);<br>                            break </span><span style="color: #0000BB">2</span><span style="color: #007700">;<br><br>                        case </span><span style="color: #0000BB">EXP_TIMEOUT</span><span style="color: #007700">:<br>                        case </span><span style="color: #0000BB">EXP_EOF</span><span style="color: #007700">:<br>                            break </span><span style="color: #0000BB">2</span><span style="color: #007700">;<br><br>                        default:<br>                            die (</span><span style="color: #DD0000">"Ha ocurrido un error\n"</span><span style="color: #007700">);<br>                    }<br>            }<br>            break </span><span style="color: #0000BB">2</span><span style="color: #007700">;<br><br>        case </span><span style="color: #0000BB">EXP_TIMEOUT</span><span style="color: #007700">:<br>        case </span><span style="color: #0000BB">EXP_EOF</span><span style="color: #007700">:<br>            break </span><span style="color: #0000BB">2</span><span style="color: #007700">;<br><br>        default:<br>            die (</span><span style="color: #DD0000">"Ha ocurrido un error\n"</span><span style="color: #007700">);<br>    }<br>}<br><br></span><span style="color: #0000BB">fclose </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+<hr>
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+ <div id="ref.expect" class="reference"><hr>
+  <h1 class="title">Funciones de Expect</h1>
+
+
+
+<div id="function.expect-expectl" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">expect_expectl</h1>
+  <p class="verinfo">(PECL expect &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">expect_expectl</span> — <span class="dc-title">Espera a que la salida de un proceso coincida con un patrón,
+   se supere un determinado periodo de tiempo, o se alcance un <abbr title="End Of File">EOF</abbr>
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.expect-expectl-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>expect_expectl</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$expect</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$cases</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter reference">&amp;$match</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Espera a que la salida de un proceso coincida con un patrón, se supere un determinado
+   periodo de tiempo, o se alcance un <abbr title="End Of File">EOF</abbr>.
+  </p>
+  <p class="para">
+   Si se proporciona el parámetro <code class="parameter">match</code>, se le asignará el resultado de la
+   búsqueda. La cadena que coincide se encuentra en <code class="parameter">match[0]</code>.
+   Las subcadenas que coincidan (de acuerdo a los paréntesis) con el patrón original se encuentran
+   en <code class="parameter">match[1]</code>, <code class="parameter">match[2]</code>, y así
+   hasta <code class="parameter">match[9]</code> (límite establecido por libexpect).
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.expect-expectl-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">expect</code></dt>
+     <dd>
+      <p class="para">
+       Flujo de Expect, abierto anteriormente con
+       <span class="function"><a href="#function.expect-popen" class="function">expect_popen()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">cases</code></dt>
+     <dd>
+      <p class="para">
+       Matriz con casos de expect. Cada caso será un array indexado, tal
+       como se describe en la siguiente tabla:
+       </p><table class="doctable table">
+        <caption><strong>Array de Caso de Expect</strong></caption>
+        
+         <thead>
+          <tr>
+           <th>Clave de índice</th>
+           <th>Tipo de valor</th>
+           <th>Descripción</th>
+           <th>Es Obligatorio</th>
+           <th>Valor por omisión</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td>0</td>
+           <td>string</td>
+           <td>patrón, que buscará coincidencias en la salida del flujo</td>
+           <td>sí</td>
+           <td class="empty"> </td>
+          </tr>
+
+          <tr>
+           <td>1</td>
+           <td>mixto</td>
+           <td>valor, que devolverá esta función, si coincidiera el patrón</td>
+           <td>sí</td>
+           <td class="empty"> </td>
+          </tr>
+
+          <tr>
+           <td>2</td>
+           <td>integer</td>
+           <td>
+            tipo de patrón, de entre:
+            <a href="#constant.exp-glob" class="link"><strong><code><a href="#constant.exp-glob">EXP_GLOB</a></code></strong></a>,
+            <a href="#constant.exp-exact" class="link"><strong><code><a href="#constant.exp-exact">EXP_EXACT</a></code></strong></a>
+            o
+            <a href="#constant.exp-regexp" class="link"><strong><code><a href="#constant.exp-regexp">EXP_REGEXP</a></code></strong></a>
+           </td>
+           <td>no</td>
+           <td><a href="#constant.exp-glob" class="link"><strong><code><a href="#constant.exp-glob">EXP_GLOB</a></code></strong></a></td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.expect-expectl-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve valores asociados con el patrón que coincida.
+  </p>
+  <p class="para">
+   En caso de error esta función devuelve:
+   <a href="#constant.exp-eof" class="link"><strong><code><a href="#constant.exp-eof">EXP_EOF</a></code></strong></a>,
+   <a href="#constant.exp-timeout" class="link"><strong><code><a href="#constant.exp-timeout">EXP_TIMEOUT</a></code></strong></a>
+   o
+   <a href="#constant.exp-fullbuffer" class="link"><strong><code><a href="#constant.exp-fullbuffer">EXP_FULLBUFFER</a></code></strong></a>
+  </p>
+ </div>
+
+ <div class="refsect1 changelog" id="refsect1-function.expect-expectl-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>PECL expect 0.2.1</td>
+       <td>
+        Antes de la versión 0.2.1, en el parámetro <code class="parameter">match</code> se devolvía el string que
+        coincidiera, no un array de substrings coincidentes.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.expect-expectl-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3568">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>expect_expectl()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Copias de los archivos de host remoto:<br></span><span style="color: #0000BB">ini_set</span><span style="color: #007700">(</span><span style="color: #DD0000">"expect.timeout"</span><span style="color: #007700">, </span><span style="color: #0000BB">30</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$stream </span><span style="color: #007700">= </span><span style="color: #0000BB">fopen</span><span style="color: #007700">(</span><span style="color: #DD0000">"expect://scp user@remotehost:/var/log/messages /home/user/messages.txt"</span><span style="color: #007700">, </span><span style="color: #DD0000">"r"</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$cases </span><span style="color: #007700">= array(<br>    </span><span style="color: #FF8000">// array(patrón, valor que se devolverá si el patrón es encontrado)<br>    </span><span style="color: #007700">array(</span><span style="color: #DD0000">"password:"</span><span style="color: #007700">, </span><span style="color: #DD0000">"asked for password"</span><span style="color: #007700">),<br>    array(</span><span style="color: #DD0000">"yes/no)?"</span><span style="color: #007700">,  </span><span style="color: #DD0000">"asked for yes/no"</span><span style="color: #007700">)<br>);<br><br>while (</span><span style="color: #0000BB">true</span><span style="color: #007700">) {<br>    switch (</span><span style="color: #0000BB">expect_expectl</span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #0000BB">$cases</span><span style="color: #007700">)) {<br>        case </span><span style="color: #DD0000">"asked for password"</span><span style="color: #007700">:<br>            </span><span style="color: #0000BB">fwrite</span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"my password\n"</span><span style="color: #007700">);<br>            break;<br>        case </span><span style="color: #DD0000">"asked for yes/no"</span><span style="color: #007700">:<br>            </span><span style="color: #0000BB">fwrite</span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"yes\n"</span><span style="color: #007700">);<br>            break;<br>        case </span><span style="color: #0000BB">EXP_TIMEOUT</span><span style="color: #007700">:<br>        case </span><span style="color: #0000BB">EXP_EOF</span><span style="color: #007700">:<br>            break </span><span style="color: #0000BB">2</span><span style="color: #007700">; </span><span style="color: #FF8000">// break tanto la sentencia switch y el bucle while<br>        </span><span style="color: #007700">default:<br>            die(</span><span style="color: #DD0000">"Error has occurred!"</span><span style="color: #007700">);<br>    }<br>}<br><br></span><span style="color: #0000BB">fclose</span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.expect-expectl-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.expect-popen" class="function" rel="rdfs-seeAlso">expect_popen()</a> - Ejecuta comandos por la shell Bourne, y abre el flujo PTY
+   al proceso</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.expect-popen" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">expect_popen</h1>
+  <p class="verinfo">(PECL expect &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">expect_popen</span> — <span class="dc-title">Ejecuta comandos por la shell Bourne, y abre el flujo PTY
+   al proceso</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.expect-popen-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>expect_popen</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$command</code></span>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   Ejecuta comandos por la shell Bourne, y abre el flujo PTY al proceso.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.expect-popen-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">command</code></dt>
+     <dd>
+      <p class="para">
+       Comando a ejecutar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.expect-popen-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un flujo PTY abierto al <code class="literal">stdio</code>,
+   <code class="literal">stdout</code>, y <code class="literal">stderr</code> del prceso.
+  </p>
+  <p class="para">
+   En caso de error, devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.expect-popen-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3569">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>expect_popen()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Entrar en el repositorio CVS de PHP.net<br></span><span style="color: #0000BB">$stream </span><span style="color: #007700">= </span><span style="color: #0000BB">expect_popen </span><span style="color: #007700">(</span><span style="color: #DD0000">"cvs -d :pserver:anonymous@cvs.php.net:/repository login"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">sleep </span><span style="color: #007700">(</span><span style="color: #0000BB">3</span><span style="color: #007700">);<br></span><span style="color: #0000BB">fwrite </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">, </span><span style="color: #DD0000">"phpfi\n"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">fclose </span><span style="color: #007700">(</span><span style="color: #0000BB">$stream</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.expect-popen-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.popen" class="function" rel="rdfs-seeAlso">popen()</a> - Crea un puntero de archivo de proceso</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+ <h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.expect-expectl">expect_expectl</a> — Espera a que la salida de un proceso coincida con un patrón,
+   se supere un determinado periodo de tiempo, o se alcance un EOF</li><li><a href="#function.expect-popen">expect_popen</a> — Ejecuta comandos por la shell Bourne, y abre el flujo PTY
+   al proceso</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.expect">Introducción</a></li><li><a href="#expect.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#expect.requirements">Requerimientos</a></li><li><a href="#expect.installation">Instalación</a></li><li><a href="#expect.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#expect.resources">Tipos de recursos</a></li></ul></li><li><a href="#expect.constants">Constantes predefinidas</a></li><li><a href="#expect.examples">Ejemplos</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#expect.examples-usage">Ejemplos de uso de Expect</a></li></ul></li><li><a href="#ref.expect">Funciones de Expect</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.expect-expectl">expect_expectl</a> — Espera a que la salida de un proceso coincida con un patrón,
+   se supere un determinado periodo de tiempo, o se alcance un EOF</li><li><a href="#function.expect-popen">expect_popen</a> — Ejecuta comandos por la shell Bourne, y abre el flujo PTY
+   al proceso</li></ul></li></ul></div>

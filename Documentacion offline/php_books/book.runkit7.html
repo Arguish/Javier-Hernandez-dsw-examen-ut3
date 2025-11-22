@@ -1,0 +1,2012 @@
+<div id="book.runkit7" class="book"><hr>
+ 
+ <h1 class="title">runkit7</h1>
+ 
+
+ <div id="intro.runkit7" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="simpara">
+   La extensión runkit7 proporciona medios para modificar las constantes,
+   las funciones definidas por el usuario y las clases definidas por el usuario.
+   Asimismo, proporciona variables superglobales personalizadas.
+  </p>
+
+  <p class="simpara">
+   Este paquete es un fork del
+   paquete <a href="https://pecl.php.net/package/runkit" class="link external">» runkit</a> que proporciona soporte para PHP 7.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+<div id="runkit7.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#runkit7.requirements">Requerimientos</a></li><li><a href="#runkit7.installation">Instalación</a></li><li><a href="#runkit7.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ <div id="runkit7.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   <em>Modificar constantes, funciones, clases y métodos</em>
+   así como las <em>superglobales personalizadas</em>
+   funciona con todas las versiones de PHP 7. No se requieren
+   exigencias especiales.
+  </p>
+ </div>
+<hr>
+
+
+ <div id="runkit7.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   Esta extensión <a href="https://pecl.php.net/" class="link external">» PECL</a> no está integrada en PHP.
+  </p>
+  <p class="para">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/runkit7" class="link external">» https://pecl.php.net/package/runkit7</a>.
+  </p>
+  <p class="para">
+   Los binarios Windows
+        (los archivos <abbr title="Dynamic Link Library">DLL</abbr>)
+        para esta extensión <abbr title="PHP Extension and Application Repository">PECL</abbr> están disponibles en el sitio web PECL.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="runkit7.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Opciones de Configuración de Runkit</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.runkit7.superglobal" class="link">runkit.superglobal</a></td>
+      <td>""</td>
+      <td><strong><code><a href="#constant.ini-perdir">INI_PERDIR</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.runkit7.internal-override" class="link">runkit.internal_override</a></td>
+      <td>"0"</td>
+      <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+  Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+
+
+<p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+<p class="para">
+ </p><dl>
+  
+   <dt id="ini.runkit7.superglobal">
+    <code class="parameter">runkit.superglobal</code>
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   </dt>
+   <dd>
+    <span class="simpara">
+     Una lista separada por comas de nombres de variables que van a ser tratadas como superglobales.
+     Este valor debería estar establecido a través del archivo php.ini, pero puede funcionar
+     en contextos de configuración por directorio dependiendo de su SAPI.
+    </span>
+    <div class="example" id="example-691">
+     <p><strong>Ejemplo #1 Superglobales personalizadas con runkit.superglobal=_FOO,_BAR en php.ini</strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">function </span><span style="color: #0000BB">mostrar_valores</span><span style="color: #007700">() {<br>  echo </span><span style="color: #DD0000">"Foo es </span><span style="color: #0000BB">$_FOO</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>  echo </span><span style="color: #DD0000">"Bar es </span><span style="color: #0000BB">$_BAR</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>  echo </span><span style="color: #DD0000">"Baz es </span><span style="color: #0000BB">$_BAZ</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">$_FOO </span><span style="color: #007700">= </span><span style="color: #DD0000">'foo'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$_BAR </span><span style="color: #007700">= </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$_BAZ </span><span style="color: #007700">= </span><span style="color: #DD0000">'baz'</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">/* Muestra foo y bar, pero no baz */<br></span><span style="color: #0000BB">mostrar_valores</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+    </div>
+   </dd>
+  
+
+  
+   <dt id="ini.runkit7.internal-override">
+    <code class="parameter">runkit.internal_override</code>
+    <span class="type"><a href="#language.types.boolean" class="type boolean">boolean</a></span>
+   </dt>
+   <dd>
+    <span class="simpara">
+     Habilita la capacidad de modificar/renombrar/eliminar funciones internas.
+    </span>
+   </dd>
+  
+
+ </dl>
+ 
+</div>
+<hr>
+
+
+
+
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="runkit7.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <p class="para">
+  </p><dl>
+   
+    <dt id="constant.runkit7-import-functions">
+     <strong><code><a href="#constant.runkit7-import-functions">RUNKIT7_IMPORT_FUNCTIONS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+    <span class="simpara">
+     El flag <span class="function"><a href="#function.runkit7-import" class="function">runkit7_import()</a></span> indica
+     que las funciones normales deben ser importadas del
+     archivo especificado.
+    </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-import-class-methods">
+     <strong><code><a href="#constant.runkit7-import-class-methods">RUNKIT7_IMPORT_CLASS_METHODS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     El flag <span class="function"><a href="#function.runkit7-import" class="function">runkit7_import()</a></span> indica
+     que los métodos de clase deben ser importados del
+     archivo especificado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-import-class-consts">
+     <strong><code><a href="#constant.runkit7-import-class-consts">RUNKIT7_IMPORT_CLASS_CONSTS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     El flag <span class="function"><a href="#function.runkit7-import" class="function">runkit7_import()</a></span> indica
+     que las constantes de clase deben ser importadas del
+     archivo especificado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-import-class-props">
+     <strong><code><a href="#constant.runkit7-import-class-props">RUNKIT7_IMPORT_CLASS_PROPS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     El flag <span class="function"><a href="#function.runkit7-import" class="function">runkit7_import()</a></span> indica
+     que las propiedades de clase estándar deben ser importadas
+     del archivo especificado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-import-class-static-props">
+     <strong><code><a href="#constant.runkit7-import-class-static-props">RUNKIT7_IMPORT_CLASS_STATIC_PROPS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     El flag <span class="function"><a href="#function.runkit7-import" class="function">runkit7_import()</a></span> indica
+     que las propiedades estáticas de clase deben ser importadas
+     del archivo especificado. Disponible a partir de Runkit 1.0.1.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-import-classes">
+     <strong><code><a href="#constant.runkit7-import-classes">RUNKIT7_IMPORT_CLASSES</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     El flag <span class="function"><a href="#function.runkit7-import" class="function">runkit7_import()</a></span> representa
+     un OU a nivel de bits de las constantes <strong><code><a href="#constant.runkit7-import-class-methods">RUNKIT7_IMPORT_CLASS_<span class="replaceable">*</span></a></code></strong>.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-import-override">
+     <strong><code><a href="#constant.runkit7-import-override">RUNKIT7_IMPORT_OVERRIDE</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     El flag <span class="function"><a href="#function.runkit7-import" class="function">runkit7_import()</a></span> indica que
+     si alguna de las funciones, métodos, constantes o propiedades
+     importados ya existen, deben ser sobrescritos por las nuevas definiciones. Si este flag no está definido,
+     entonces todas las definiciones importadas que ya existan
+     serán ignoradas.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-acc-return-reference">
+     <strong><code><a href="#constant.runkit7-acc-return-reference">RUNKIT7_ACC_RETURN_REFERENCE</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Incluir este flag para hacer que la función o método creado o redefinido devuelva una referencia.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-acc-public">
+     <strong><code><a href="#constant.runkit7-acc-public">RUNKIT7_ACC_PUBLIC</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      El flag para <span class="function"><a href="#function.runkit7-method-add" class="function">runkit7_method_add()</a></span> y <span class="function"><a href="#function.runkit7-method-redefine" class="function">runkit7_method_redefine()</a></span> para hacer que el método sea público.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-acc-protected">
+     <strong><code><a href="#constant.runkit7-acc-protected">RUNKIT7_ACC_PROTECTED</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      El flag para <span class="function"><a href="#function.runkit7-method-add" class="function">runkit7_method_add()</a></span> y <span class="function"><a href="#function.runkit7-method-redefine" class="function">runkit7_method_redefine()</a></span> para hacer que el método sea protegido.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-acc-private">
+     <strong><code><a href="#constant.runkit7-acc-private">RUNKIT7_ACC_PRIVATE</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      El flag para <span class="function"><a href="#function.runkit7-method-add" class="function">runkit7_method_add()</a></span> y <span class="function"><a href="#function.runkit7-method-redefine" class="function">runkit7_method_redefine()</a></span> para hacer que el método sea privado.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-acc-static">
+     <strong><code><a href="#constant.runkit7-acc-static">RUNKIT7_ACC_STATIC</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     El flag para <span class="function"><a href="#function.runkit7-method-add" class="function">runkit7_method_add()</a></span> y <span class="function"><a href="#function.runkit7-method-redefine" class="function">runkit7_method_redefine()</a></span> para hacer que el método sea estático.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-feature-manipulation">
+     <strong><code><a href="#constant.runkit7-feature-manipulation">RUNKIT7_FEATURE_MANIPULATION</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Igual a 1 si la manipulación en tiempo de ejecución está activada, y 0 en caso contrario.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-feature-superglobals">
+     <strong><code><a href="#constant.runkit7-feature-superglobals">RUNKIT7_FEATURE_SUPERGLOBALS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Igual a 1 si las superglobales personalizadas están activadas, y 0 en caso contrario.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.runkit7-feature-sandbox">
+     <strong><code><a href="#constant.runkit7-feature-sandbox">RUNKIT7_FEATURE_SANDBOX</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Siempre 0, es impracticable implementar la funcionalidad de entorno de pruebas en php 7.
+     </span>
+    </dd>
+   
+  </dl>
+ 
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="ref.runkit7" class="reference"><hr>
+ <h1 class="title">Funciones de runkit7</h1>
+
+ 
+
+
+<div id="function.runkit7-constant-add" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_constant_add</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_constant_add</span> — <span class="dc-title">
+   Similar a define(), pero permite definir constantes en las definiciones de clase también
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-constant-add-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_constant_add</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$constant_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$newVisibility</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-constant-add-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">constant_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre de la constante a declarar. Puede ser un string para indicar una constante global,
+       o <code class="literal">classname::constname</code> para indicar una constante de clase.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">value</code></dt>
+    <dd>
+     <p class="para">
+       NULL, Bool, Long, Double, String, Array, o Resource a almacenar en la nueva constante.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">newVisibility</code></dt>
+    <dd>
+     <p class="para">
+      La visibilidad de la constante, para las constantes de clase. Público por omisión.
+      Una de las constantes <strong><code><a href="#constant.runkit7-acc-return-reference">RUNKIT7_ACC_<span class="replaceable">*</span></a></code></strong>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-constant-add-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-constant-add-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.define" class="function" rel="rdfs-seeAlso">define()</a> - Define una constante</span></li>
+    <li><span class="function"><a href="#function.runkit7-constant-redefine" class="function" rel="rdfs-seeAlso">runkit7_constant_redefine()</a> - Redefine una constante ya definida</span></li>
+    <li><span class="function"><a href="#function.runkit7-constant-remove" class="function" rel="rdfs-seeAlso">runkit7_constant_remove()</a> - Elimina una constante ya definida</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-constant-redefine" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_constant_redefine</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_constant_redefine</span> — <span class="dc-title">Redefine una constante ya definida</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-constant-redefine-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_constant_redefine</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$constant_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$new_visibility</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-constant-redefine-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">constant_name</code></dt>
+    <dd>
+     <p class="para">
+       La constante a redefinir. Puede ser el nombre de una constante global,
+       o <code class="literal">classname::constname</code> indicando una constante de clase.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">value</code></dt>
+    <dd>
+     <p class="para">
+       El valor a asignar a la constante.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">new_visibility</code></dt>
+    <dd>
+     <p class="para">
+      La nueva visibilidad de la constante, para constantes de clase.
+      Por omisión, permanece sin cambios.
+      Una de las constantes <strong><code><a href="#constant.runkit7-acc-return-reference">RUNKIT7_ACC_<span class="replaceable">*</span></a></code></strong>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-constant-redefine-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-constant-redefine-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-constant-add" class="function" rel="rdfs-seeAlso">runkit7_constant_add()</a> - Similar a define(), pero permite definir constantes en las definiciones de clase también</span></li>
+    <li><span class="function"><a href="#function.runkit7-constant-remove" class="function" rel="rdfs-seeAlso">runkit7_constant_remove()</a> - Elimina una constante ya definida</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-constant-remove" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_constant_remove</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_constant_remove</span> — <span class="dc-title">
+   Elimina una constante ya definida
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-constant-remove-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_constant_remove</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$constant_name</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-constant-remove-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">constant_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre de la constante a eliminar. Puede ser el nombre de una constante global,
+       o <code class="literal">classname::constname</code> indicando una constante de clase.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-constant-remove-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-constant-remove-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.define" class="function" rel="rdfs-seeAlso">define()</a> - Define una constante</span></li>
+    <li><span class="function"><a href="#function.runkit7-constant-add" class="function" rel="rdfs-seeAlso">runkit7_constant_add()</a> - Similar a define(), pero permite definir constantes en las definiciones de clase también</span></li>
+    <li><span class="function"><a href="#function.runkit7-constant-redefine" class="function" rel="rdfs-seeAlso">runkit7_constant_redefine()</a> - Redefine una constante ya definida</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-function-add" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_function_add</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_function_add</span> — <span class="dc-title">
+   Añade una nueva función, similar a <span class="function"><a href="#function.create-function" class="function">create_function()</a></span>
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-function-add-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_function_add</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$function_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$argument_list</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$code</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$return_by_reference</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$doc_comment</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$return_type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$is_strict</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>runkit7_function_add</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$function_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#class.closure" class="type Closure">Closure</a></span> <code class="parameter">$closure</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$doc_comment</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$return_type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$is_strict</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-function-add-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">function_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre de la función a crear
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">argument_list</code></dt>
+    <dd>
+     <p class="para">
+      La lista de argumentos separados por comas
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">code</code></dt>
+    <dd>
+     <p class="para">
+      El código que compone la función
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">closure</code></dt>
+    <dd>
+     <p class="para">
+      Una <span class="classname"><a href="#class.closure" class="classname">closure</a></span> que define la función
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">return_by_reference</code></dt>
+    <dd>
+     <p class="para">
+      Si la función debe devolver por referencia
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">doc_comment</code></dt>
+    <dd>
+     <p class="para">
+      El comentario de documentación de la función
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">return_type</code></dt>
+    <dd>
+     <p class="para">
+      El tipo de retorno de la función
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">is_strict</code></dt>
+    <dd>
+     <p class="para">
+      Si la función debe comportarse como si fuera declarada en un archivo con <code class="literal">strict_types=1</code>
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-function-add-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.runkit7-function-add-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-692">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>runkit7_function_add()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>runkit7_function_add</span><span style="color: #007700">(</span><span style="color: #DD0000">'testme'</span><span style="color: #007700">,</span><span style="color: #DD0000">'$a,$b'</span><span style="color: #007700">,</span><span style="color: #DD0000">'echo "The value of a is $a\n"; echo "The value of b is $b\n";'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">testme</span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">,</span><span style="color: #0000BB">2</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">The value of a is 1
+The value of b is 2</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-function-add-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.create-function" class="function" rel="rdfs-seeAlso">create_function()</a> - Crea una función anónima</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-redefine" class="function" rel="rdfs-seeAlso">runkit7_function_redefine()</a> - Sustituye una definición de función por una nueva implementación</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-copy" class="function" rel="rdfs-seeAlso">runkit7_function_copy()</a> - Copia una función hacia un nuevo nombre de función</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-rename" class="function" rel="rdfs-seeAlso">runkit7_function_rename()</a> - Cambiar un nombre de función</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-remove" class="function" rel="rdfs-seeAlso">runkit7_function_remove()</a> - Elimina una definición de función</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-add" class="function" rel="rdfs-seeAlso">runkit7_method_add()</a> - Añade dinámicamente un nuevo método a una clase dada</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-function-copy" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_function_copy</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_function_copy</span> — <span class="dc-title">
+   Copia una función hacia un nuevo nombre de función
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-function-copy-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_function_copy</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$source_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$target_name</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-function-copy-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">source_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre de la función existente
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">target_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre de la nueva función hacia la cual copiar la definición
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-function-copy-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.runkit7-function-copy-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-693">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>runkit7_function_copy()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">function </span><span style="color: #0000BB">original</span><span style="color: #007700">() {<br>  echo </span><span style="color: #DD0000">"In a function\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">runkit7_function_copy</span><span style="color: #007700">(</span><span style="color: #DD0000">'original'</span><span style="color: #007700">,</span><span style="color: #DD0000">'duplicate'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">original</span><span style="color: #007700">();<br></span><span style="color: #0000BB">duplicate</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">In a function
+In a function</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-function-copy-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-function-add" class="function" rel="rdfs-seeAlso">runkit7_function_add()</a> - Añade una nueva función, similar a create_function</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-redefine" class="function" rel="rdfs-seeAlso">runkit7_function_redefine()</a> - Sustituye una definición de función por una nueva implementación</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-rename" class="function" rel="rdfs-seeAlso">runkit7_function_rename()</a> - Cambiar un nombre de función</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-remove" class="function" rel="rdfs-seeAlso">runkit7_function_remove()</a> - Elimina una definición de función</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-function-redefine" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_function_redefine</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_function_redefine</span> — <span class="dc-title">
+   Sustituye una definición de función por una nueva implementación
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-function-redefine-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_function_redefine</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$function_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$argument_list</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$code</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$return_by_reference</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$doc_comment</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$return_type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$is_strict</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>runkit7_function_redefine</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$function_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#class.closure" class="type Closure">Closure</a></span> <code class="parameter">$closure</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$doc_comment</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$return_type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$is_strict</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">Por defecto, solo
+    las funciones definidas por el usuario pueden ser eliminadas,
+    renombradas o modificadas. Para sobreescribir funciones internas, se
+    debe activar la configuración <code class="literal">runkit.internal_override</code>
+    en el archivo <var class="filename">php.ini</var> del sistema entero.</span></p></blockquote>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-function-redefine-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">function_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre de la función a redefinir
+     </p>
+    </dd>
+   
+    
+     <dt><code class="parameter">argument_list</code></dt>
+     <dd>
+      <p class="para">
+       La nueva lista de argumentos a aceptar por la función
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">code</code></dt>
+     <dd>
+      <p class="para">
+       El código de la nueva implementación
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">closure</code></dt>
+     <dd>
+      <p class="para">
+       Una <span class="classname"><a href="#class.closure" class="classname">closure</a></span> que define la función
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">return_by_reference</code></dt>
+     <dd>
+      <p class="para">
+       Si la función debe devolver por referencia
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">doc_comment</code></dt>
+     <dd>
+      <p class="para">
+       El comentario de documentación de la función
+      </p>
+     </dd>
+    
+   
+    <dt><code class="parameter">return_type</code></dt>
+    <dd>
+     <p class="para">
+      El tipo de retorno de la función
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">is_strict</code></dt>
+    <dd>
+     <p class="para">
+      Si la función se comporta como si estuviera declarada en un fichero con <code class="literal">strict_types=1</code>
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-function-redefine-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.runkit7-function-redefine-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-694">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>runkit7_function_redefine()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">function </span><span style="color: #0000BB">testme</span><span style="color: #007700">() {<br>  echo </span><span style="color: #DD0000">"Original Testme Implementation\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">testme</span><span style="color: #007700">();<br></span><span style="color: #0000BB">runkit7_function_redefine</span><span style="color: #007700">(</span><span style="color: #DD0000">'testme'</span><span style="color: #007700">,</span><span style="color: #DD0000">''</span><span style="color: #007700">,</span><span style="color: #DD0000">'echo "New Testme Implementation\n";'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">testme</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Original Testme Implementation
+New Testme Implementation</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-function-redefine-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-function-add" class="function" rel="rdfs-seeAlso">runkit7_function_add()</a> - Añade una nueva función, similar a create_function</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-copy" class="function" rel="rdfs-seeAlso">runkit7_function_copy()</a> - Copia una función hacia un nuevo nombre de función</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-rename" class="function" rel="rdfs-seeAlso">runkit7_function_rename()</a> - Cambiar un nombre de función</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-remove" class="function" rel="rdfs-seeAlso">runkit7_function_remove()</a> - Elimina una definición de función</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-redefine" class="function" rel="rdfs-seeAlso">runkit7_method_redefine()</a> - Cambiar dinámicamente el código del método dado</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-function-remove" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_function_remove</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_function_remove</span> — <span class="dc-title">
+   Elimina una definición de función
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-function-remove-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_function_remove</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$function_name</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">Por defecto, solo
+    las funciones definidas por el usuario pueden ser eliminadas,
+    renombradas o modificadas. Para sobreescribir funciones internas, se
+    debe activar la configuración <code class="literal">runkit.internal_override</code>
+    en el archivo <var class="filename">php.ini</var> del sistema entero.</span></p></blockquote>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-function-remove-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">function_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre de la función a eliminar
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-function-remove-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-function-remove-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-function-add" class="function" rel="rdfs-seeAlso">runkit7_function_add()</a> - Añade una nueva función, similar a create_function</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-copy" class="function" rel="rdfs-seeAlso">runkit7_function_copy()</a> - Copia una función hacia un nuevo nombre de función</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-redefine" class="function" rel="rdfs-seeAlso">runkit7_function_redefine()</a> - Sustituye una definición de función por una nueva implementación</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-rename" class="function" rel="rdfs-seeAlso">runkit7_function_rename()</a> - Cambiar un nombre de función</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-function-rename" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_function_rename</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_function_rename</span> — <span class="dc-title">
+   Cambiar un nombre de función
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-function-rename-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_function_rename</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$source_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$target_name</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">Por defecto, solo
+    las funciones definidas por el usuario pueden ser eliminadas,
+    renombradas o modificadas. Para sobreescribir funciones internas, se
+    debe activar la configuración <code class="literal">runkit.internal_override</code>
+    en el archivo <var class="filename">php.ini</var> del sistema entero.</span></p></blockquote>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-function-rename-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">source_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre de la función existente
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">target_name</code></dt>
+    <dd>
+     <p class="para">
+       El nuevo nombre de la función
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-function-rename-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-function-rename-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-function-add" class="function" rel="rdfs-seeAlso">runkit7_function_add()</a> - Añade una nueva función, similar a create_function</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-copy" class="function" rel="rdfs-seeAlso">runkit7_function_copy()</a> - Copia una función hacia un nuevo nombre de función</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-redefine" class="function" rel="rdfs-seeAlso">runkit7_function_redefine()</a> - Sustituye una definición de función por una nueva implementación</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-remove" class="function" rel="rdfs-seeAlso">runkit7_function_remove()</a> - Elimina una definición de función</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-import" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_import</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_import</span> — <span class="dc-title">
+   Realiza la importación de un fichero PHP importando las definiciones de funciones y clases, sobrescribiéndolas si es necesario
+  </span></p>
+
+ </div>
+
+ <div id="function.runkit7-import-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="simpara">Esta característica ha sido <em>eliminada</em> en PECL runkit7 4.0.0.</p>
+  </div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-import-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_import</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Similar a <span class="function"><a href="#function.include" class="function">include</a></span>. Sin embargo, todo código que se encuentre
+   fuera de una función o clase es simplemente ignorado.
+   Además, en función del valor de <code class="parameter">flags</code>,
+   toda función o clase ya existente en el entorno de ejecución actual
+   puede ser automáticamente sobrescrita por sus nuevas definiciones.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-import-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">filename</code></dt>
+    <dd>
+     <p class="para">
+       El nombre del fichero a partir del cual importar las definiciones de funciones y clases
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">flags</code></dt>
+    <dd>
+     <p class="para">
+       Una operación a nivel de bits de la familia de constantes
+       <a href="#runkit7.constants" class="link"><code class="literal">RUNKIT7_IMPORT_*</code></a>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-import-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-method-add" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_method_add</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_method_add</span> — <span class="dc-title">Añade dinámicamente un nuevo método a una clase dada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-method-add-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_method_add</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$method_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$argument_list</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$code</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = RUNKIT7_ACC_PUBLIC</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$doc_comment</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$return_type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$is_strict</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>runkit7_method_add</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$method_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#class.closure" class="type Closure">Closure</a></span> <code class="parameter">$closure</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = RUNKIT7_ACC_PUBLIC</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$doc_comment</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$return_type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$is_strict</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-method-add-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">class_name</code></dt>
+    <dd>
+     <p class="para">
+       La clase a la cual se añadirá este método
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">method_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre del método a añadir
+     </p>
+    </dd>
+   
+    
+     <dt><code class="parameter">argument_list</code></dt>
+     <dd>
+      <p class="para">
+       La lista de argumentos separados por comas para el nuevo método
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">code</code></dt>
+     <dd>
+      <p class="para">
+       El código a evaluar cuando <code class="parameter">method_name</code>
+       es llamado
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">closure</code></dt>
+     <dd>
+      <p class="para">
+       Una <span class="classname"><a href="#class.closure" class="classname">closure</a></span> que define el método.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       El tipo de método a crear, puede ser
+       <strong><code><a href="#constant.runkit7-acc-public">RUNKIT7_ACC_PUBLIC</a></code></strong>,
+       <strong><code><a href="#constant.runkit7-acc-protected">RUNKIT7_ACC_PROTECTED</a></code></strong> o
+       <strong><code><a href="#constant.runkit7-acc-private">RUNKIT7_ACC_PRIVATE</a></code></strong> opcionalmente combinado mediante una operación bit a bit OU con
+       <strong><code><a href="#constant.runkit7-acc-static">RUNKIT7_ACC_STATIC</a></code></strong>
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">doc_comment</code></dt>
+     <dd>
+      <p class="para">
+       El comentario de documentación del método.
+      </p>
+     </dd>
+    
+   
+    <dt><code class="parameter">return_type</code></dt>
+    <dd>
+     <p class="para">
+      El tipo de retorno del método.
+
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">is_strict</code></dt>
+    <dd>
+     <p class="para">
+      Si el método se comporta como si fuera declarado en un fichero con <code class="literal">strict_types=1</code>
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-method-add-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.runkit7-method-add-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-695">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>runkit7_method_add()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">Example </span><span style="color: #007700">{<br>    function </span><span style="color: #0000BB">foo</span><span style="color: #007700">() {<br>        echo </span><span style="color: #DD0000">"foo!\n"</span><span style="color: #007700">;<br>    }<br>}<br><br></span><span style="color: #FF8000">// Crear un objeto Example<br></span><span style="color: #0000BB">$e </span><span style="color: #007700">= new </span><span style="color: #0000BB">Example</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">// Añadir un nuevo método público<br></span><span style="color: #0000BB">runkit7_method_add</span><span style="color: #007700">(<br>    </span><span style="color: #DD0000">'Example'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'add'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'$num1, $num2'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'return $num1 + $num2;'</span><span style="color: #007700">,<br>    </span><span style="color: #0000BB">RUNKIT7_ACC_PUBLIC<br></span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Sumar 12 + 4<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">add</span><span style="color: #007700">(</span><span style="color: #0000BB">12</span><span style="color: #007700">, </span><span style="color: #0000BB">4</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">16</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-method-add-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-method-copy" class="function" rel="rdfs-seeAlso">runkit7_method_copy()</a> - Copia un método de una clase a otra</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-redefine" class="function" rel="rdfs-seeAlso">runkit7_method_redefine()</a> - Cambiar dinámicamente el código del método dado</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-remove" class="function" rel="rdfs-seeAlso">runkit7_method_remove()</a> - Elimina dinámicamente el método especificado</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-rename" class="function" rel="rdfs-seeAlso">runkit7_method_rename()</a> - Cambiar dinámicamente el nombre del método dado</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-add" class="function" rel="rdfs-seeAlso">runkit7_function_add()</a> - Añade una nueva función, similar a create_function</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-method-copy" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_method_copy</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_method_copy</span> — <span class="dc-title">Copia un método de una clase a otra</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-method-copy-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_method_copy</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination_class</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination_method_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$source_class</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$source_method_name</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-method-copy-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">destination_class</code></dt>
+    <dd>
+     <p class="para">
+       La clase de destino para el método copiado
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">destination_method_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre del método de destino
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">source_class</code></dt>
+    <dd>
+     <p class="para">
+       La clase fuente del método a copiar
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">source_method_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre del método a copiar de la clase fuente. Si este argumento es
+       omitido, se asume el valor de <code class="parameter">destination_method_name</code>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-method-copy-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.runkit7-method-copy-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-696">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>runkit7_method_copy()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">Foo </span><span style="color: #007700">{<br>    function </span><span style="color: #0000BB">example</span><span style="color: #007700">() {<br>        return </span><span style="color: #DD0000">"foo!\n"</span><span style="color: #007700">;<br>    }<br>}<br><br>class </span><span style="color: #0000BB">Bar </span><span style="color: #007700">{<br>    </span><span style="color: #FF8000">// sin métodos inicialmente<br></span><span style="color: #007700">}<br><br></span><span style="color: #FF8000">// copia el example() de la clase Foo a la clase Bar, como baz()<br></span><span style="color: #0000BB">runkit7_method_copy</span><span style="color: #007700">(</span><span style="color: #DD0000">'Bar'</span><span style="color: #007700">, </span><span style="color: #DD0000">'baz'</span><span style="color: #007700">, </span><span style="color: #DD0000">'Foo'</span><span style="color: #007700">, </span><span style="color: #DD0000">'example'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// muestra la función copiada<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">Bar</span><span style="color: #007700">::</span><span style="color: #0000BB">baz</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">foo!</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-method-copy-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-method-add" class="function" rel="rdfs-seeAlso">runkit7_method_add()</a> - Añade dinámicamente un nuevo método a una clase dada</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-redefine" class="function" rel="rdfs-seeAlso">runkit7_method_redefine()</a> - Cambiar dinámicamente el código del método dado</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-remove" class="function" rel="rdfs-seeAlso">runkit7_method_remove()</a> - Elimina dinámicamente el método especificado</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-rename" class="function" rel="rdfs-seeAlso">runkit7_method_rename()</a> - Cambiar dinámicamente el nombre del método dado</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-copy" class="function" rel="rdfs-seeAlso">runkit7_function_copy()</a> - Copia una función hacia un nuevo nombre de función</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-method-redefine" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_method_redefine</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_method_redefine</span> — <span class="dc-title">Cambiar dinámicamente el código del método dado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-method-redefine-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_method_redefine</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$method_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$argument_list</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$code</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = RUNKIT7_ACC_PUBLIC</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$doc_comment</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$return_type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$is_strict</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>runkit7_method_redefine</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$method_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#class.closure" class="type Closure">Closure</a></span> <code class="parameter">$closure</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = RUNKIT7_ACC_PUBLIC</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$doc_comment</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$return_type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$is_strict</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-method-redefine-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">class_name</code></dt>
+    <dd>
+     <p class="para">
+       La clase en la que redefinir el método
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">method_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre del método a redefinir
+     </p>
+    </dd>
+   
+    
+     <dt><code class="parameter">argument_list</code></dt>
+     <dd>
+      <p class="para">
+       La lista de argumentos separados por comas para el método redefinido
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">code</code></dt>
+     <dd>
+      <p class="para">
+       El nuevo código a evaluar cuando <code class="parameter">method_name</code>
+       es llamado
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">closure</code></dt>
+     <dd>
+      <p class="para">
+       Una <span class="classname"><a href="#class.closure" class="classname">closure</a></span> que define el método.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       El método redefinido puede ser
+       <strong><code><a href="#constant.runkit7-acc-public">RUNKIT7_ACC_PUBLIC</a></code></strong>,
+       <strong><code><a href="#constant.runkit7-acc-protected">RUNKIT7_ACC_PROTECTED</a></code></strong> o
+       <strong><code><a href="#constant.runkit7-acc-private">RUNKIT7_ACC_PRIVATE</a></code></strong> opcionalmente combinado mediante una operación bit a bit OU con
+       <strong><code><a href="#constant.runkit7-acc-static">RUNKIT7_ACC_STATIC</a></code></strong>
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">doc_comment</code></dt>
+     <dd>
+      <p class="para">
+       El comentario de documentación del método.
+      </p>
+     </dd>
+    
+   
+    <dt><code class="parameter">return_type</code></dt>
+    <dd>
+     <p class="para">
+      El tipo de retorno del método.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">is_strict</code></dt>
+    <dd>
+     <p class="para">
+      Si el método se comporta como si fuera declarado en un archivo con <code class="literal">strict_types=1</code>
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-method-redefine-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.runkit7-method-redefine-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-697">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>runkit7_method_redefine()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">Example </span><span style="color: #007700">{<br>    function </span><span style="color: #0000BB">foo</span><span style="color: #007700">() {<br>        return </span><span style="color: #DD0000">"foo!\n"</span><span style="color: #007700">;<br>    }<br>}<br><br></span><span style="color: #FF8000">// crear un objeto Example<br></span><span style="color: #0000BB">$e </span><span style="color: #007700">= new </span><span style="color: #0000BB">Example</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">// muestra Example::foo() (antes de la redefinición)<br></span><span style="color: #007700">echo </span><span style="color: #DD0000">"Before: " </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">foo</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">// Redefine el método 'foo'<br></span><span style="color: #0000BB">runkit7_method_redefine</span><span style="color: #007700">(<br>    </span><span style="color: #DD0000">'Example'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'foo'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">''</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'return "bar!\n";'</span><span style="color: #007700">,<br>    </span><span style="color: #0000BB">RUNKIT7_ACC_PUBLIC<br></span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// muestra Example::foo() (después de la redefinición)<br></span><span style="color: #007700">echo </span><span style="color: #DD0000">"After: " </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">foo</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Before: foo!
+After: bar!</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-method-redefine-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-method-add" class="function" rel="rdfs-seeAlso">runkit7_method_add()</a> - Añade dinámicamente un nuevo método a una clase dada</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-copy" class="function" rel="rdfs-seeAlso">runkit7_method_copy()</a> - Copia un método de una clase a otra</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-remove" class="function" rel="rdfs-seeAlso">runkit7_method_remove()</a> - Elimina dinámicamente el método especificado</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-rename" class="function" rel="rdfs-seeAlso">runkit7_method_rename()</a> - Cambiar dinámicamente el nombre del método dado</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-redefine" class="function" rel="rdfs-seeAlso">runkit7_function_redefine()</a> - Sustituye una definición de función por una nueva implementación</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-method-remove" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_method_remove</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_method_remove</span> — <span class="dc-title">Elimina dinámicamente el método especificado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-method-remove-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_method_remove</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$method_name</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">Esta función
+    no puede ser utilizada para manipular el método en curso de utilización (o encadenado).</span>
+</p></blockquote>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-method-remove-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">class_name</code></dt>
+    <dd>
+     <p class="para">
+       La clase de la cual eliminar el método
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">method_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre del método a eliminar
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-method-remove-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.runkit7-method-remove-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-698">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>runkit7_method_remove()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">Example </span><span style="color: #007700">{<br>    function </span><span style="color: #0000BB">foo</span><span style="color: #007700">() {<br>        return </span><span style="color: #DD0000">"foo!\n"</span><span style="color: #007700">;<br>    }<br><br>    function </span><span style="color: #0000BB">bar</span><span style="color: #007700">() {<br>        return </span><span style="color: #DD0000">"bar!\n"</span><span style="color: #007700">;<br>    }<br>}<br><br></span><span style="color: #FF8000">// Elimina el método 'foo'<br></span><span style="color: #0000BB">runkit7_method_remove</span><span style="color: #007700">(<br>    </span><span style="color: #DD0000">'Example'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'foo'<br></span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">implode</span><span style="color: #007700">(</span><span style="color: #DD0000">' '</span><span style="color: #007700">, </span><span style="color: #0000BB">get_class_methods</span><span style="color: #007700">(</span><span style="color: #DD0000">'Example'</span><span style="color: #007700">));<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bar</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-method-remove-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-method-add" class="function" rel="rdfs-seeAlso">runkit7_method_add()</a> - Añade dinámicamente un nuevo método a una clase dada</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-copy" class="function" rel="rdfs-seeAlso">runkit7_method_copy()</a> - Copia un método de una clase a otra</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-redefine" class="function" rel="rdfs-seeAlso">runkit7_method_redefine()</a> - Cambiar dinámicamente el código del método dado</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-rename" class="function" rel="rdfs-seeAlso">runkit7_method_rename()</a> - Cambiar dinámicamente el nombre del método dado</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-remove" class="function" rel="rdfs-seeAlso">runkit7_function_remove()</a> - Elimina una definición de función</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-method-rename" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_method_rename</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_method_rename</span> — <span class="dc-title">Cambiar dinámicamente el nombre del método dado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-method-rename-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_method_rename</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$source_method_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$target_method_name</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">Esta función
+    no puede ser utilizada para manipular el método en curso de utilización (o encadenado).</span>
+</p></blockquote>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-method-rename-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">class_name</code></dt>
+    <dd>
+     <p class="para">
+       La clase en la que renombrar el método
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">source_method_name</code></dt>
+    <dd>
+     <p class="para">
+       El nombre del método a renombrar
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">target_method_name</code></dt>
+    <dd>
+     <p class="para">
+       El nuevo nombre a dar al método renombrado
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-method-rename-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.runkit7-method-rename-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-699">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>runkit7_method_rename()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">class </span><span style="color: #0000BB">Example </span><span style="color: #007700">{<br>    function </span><span style="color: #0000BB">foo</span><span style="color: #007700">() {<br>        return </span><span style="color: #DD0000">"foo!\n"</span><span style="color: #007700">;<br>    }<br>}<br><br></span><span style="color: #FF8000">// Renombrar el método 'foo' a 'bar'<br></span><span style="color: #0000BB">runkit7_method_rename</span><span style="color: #007700">(<br>    </span><span style="color: #DD0000">'Example'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'foo'</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'bar'<br></span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Mostrar la función renombrada<br></span><span style="color: #007700">echo (new </span><span style="color: #0000BB">Example</span><span style="color: #007700">)-&gt;</span><span style="color: #0000BB">bar</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">foo!</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-method-rename-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.runkit7-method-add" class="function" rel="rdfs-seeAlso">runkit7_method_add()</a> - Añade dinámicamente un nuevo método a una clase dada</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-copy" class="function" rel="rdfs-seeAlso">runkit7_method_copy()</a> - Copia un método de una clase a otra</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-redefine" class="function" rel="rdfs-seeAlso">runkit7_method_redefine()</a> - Cambiar dinámicamente el código del método dado</span></li>
+    <li><span class="function"><a href="#function.runkit7-method-remove" class="function" rel="rdfs-seeAlso">runkit7_method_remove()</a> - Elimina dinámicamente el método especificado</span></li>
+    <li><span class="function"><a href="#function.runkit7-function-rename" class="function" rel="rdfs-seeAlso">runkit7_function_rename()</a> - Cambiar un nombre de función</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-object-id" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_object_id</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_object_id</span> — <span class="dc-title">
+   Devuelve el identificador de objeto para un objeto dado
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-object-id-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_object_id</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.object" class="type object">object</a></span> <code class="parameter">$obj</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función es equivalente a <span class="function"><a href="#function.spl-object-id" class="function">spl_object_id()</a></span>.
+  </p>
+  <p class="para">
+   Esta función devuelve un identificador único para el objeto. El identificador
+   de objeto es único durante la vida del objeto. Una vez destruido el objeto,
+   su identificador puede ser reutilizado para otros objetos. Este comportamiento
+   es similar a <span class="function"><a href="#function.spl-object-hash" class="function">spl_object_hash()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-object-id-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">obj</code></dt>
+    <dd>
+     <p class="para">
+      Un objeto cualquiera.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-object-id-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un identificador entero que es único para cada objeto actualmente existente
+   y siempre es el mismo para cada objeto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.runkit7-object-id-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Cuando un objeto es destruido, su identificador puede ser reutilizado para otros objetos.
+   </p>
+  </blockquote>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-object-id-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.spl-object-id" class="function" rel="rdfs-seeAlso">spl_object_id()</a> - Devuelve el gestor de objeto entero para un objeto dado</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-superglobals" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_superglobals</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_superglobals</span> — <span class="dc-title">
+   Devuelve un array indexado numéricamente de las superglobales registradas
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-superglobals-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_superglobals</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-superglobals-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-superglobals-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array indexado numéricamente de las superglobales registradas.
+   Es decir, _GET, _POST, _REQUEST, _COOKIE, _SESSION, _SERVER, _ENV, _FILES
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-superglobals-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><a href="#language.variables.scope" class="link">Ámbito de las variables</a></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.runkit7-zval-inspect" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">runkit7_zval_inspect</h1>
+  <p class="verinfo">(PECL runkit7 &gt;= Unknown)</p><p class="refpurpose"><span class="refname">runkit7_zval_inspect</span> — <span class="dc-title">Proporciona información sobre el valor pasado con los tipos de datos, los conteos de referencia, etc</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.runkit7-zval-inspect-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>runkit7_zval_inspect</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$value</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.runkit7-zval-inspect-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">value</code></dt>
+    <dd>
+     <p class="para">
+      El valor para el cual se devuelve la representación
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.runkit7-zval-inspect-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El array devuelto por esta función contiene los siguientes elementos:
+   </p><ul class="simplelist">
+    <li><code class="literal">address</code></li>
+    <li><code class="literal">refcount</code> (opcional)</li>
+    <li><code class="literal">is_ref</code> (opcional)</li>
+    <li><code class="literal">type</code></li>
+   </ul>
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.runkit7-zval-inspect-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-700">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>runkit7_zval_inspect()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$var </span><span style="color: #007700">= new </span><span style="color: #0000BB">DateTime</span><span style="color: #007700">();<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">runkit7_zval_inspect</span><span style="color: #007700">(</span><span style="color: #0000BB">$var</span><span style="color: #007700">));<br><br></span><span style="color: #0000BB">$var </span><span style="color: #007700">= </span><span style="color: #0000BB">1</span><span style="color: #007700">;<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">runkit7_zval_inspect</span><span style="color: #007700">(</span><span style="color: #0000BB">$var</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(4) {
+  ["address"]=&gt;
+  string(14) "0x7f45ab21b1e0"
+  ["refcount"]=&gt;
+  int(2)
+  ["is_ref"]=&gt;
+  bool(false)
+  ["type"]=&gt;
+  int(8)
+}
+
+array(2) {
+  ["address"]=&gt;
+  string(14) "0x7f45ab21b1e0"
+  ["type"]=&gt;
+  int(4)
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.runkit7-zval-inspect-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><a href="#language.references" class="link">References Explained</a></li>
+    <li><a href="http://derickrethans.nl/php_references_article.php" class="link external">» References Explained (by Derick Rethans)</a></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.runkit7-constant-add">runkit7_constant_add</a> — Similar a define(), pero permite definir constantes en las definiciones de clase también</li><li><a href="#function.runkit7-constant-redefine">runkit7_constant_redefine</a> — Redefine una constante ya definida</li><li><a href="#function.runkit7-constant-remove">runkit7_constant_remove</a> — Elimina una constante ya definida</li><li><a href="#function.runkit7-function-add">runkit7_function_add</a> — Añade una nueva función, similar a create_function</li><li><a href="#function.runkit7-function-copy">runkit7_function_copy</a> — Copia una función hacia un nuevo nombre de función</li><li><a href="#function.runkit7-function-redefine">runkit7_function_redefine</a> — Sustituye una definición de función por una nueva implementación</li><li><a href="#function.runkit7-function-remove">runkit7_function_remove</a> — Elimina una definición de función</li><li><a href="#function.runkit7-function-rename">runkit7_function_rename</a> — Cambiar un nombre de función</li><li><a href="#function.runkit7-import">runkit7_import</a> — Realiza la importación de un fichero PHP importando las definiciones de funciones y clases, sobrescribiéndolas si es necesario</li><li><a href="#function.runkit7-method-add">runkit7_method_add</a> — Añade dinámicamente un nuevo método a una clase dada</li><li><a href="#function.runkit7-method-copy">runkit7_method_copy</a> — Copia un método de una clase a otra</li><li><a href="#function.runkit7-method-redefine">runkit7_method_redefine</a> — Cambiar dinámicamente el código del método dado</li><li><a href="#function.runkit7-method-remove">runkit7_method_remove</a> — Elimina dinámicamente el método especificado</li><li><a href="#function.runkit7-method-rename">runkit7_method_rename</a> — Cambiar dinámicamente el nombre del método dado</li><li><a href="#function.runkit7-object-id">runkit7_object_id</a> — Devuelve el identificador de objeto para un objeto dado</li><li><a href="#function.runkit7-superglobals">runkit7_superglobals</a> — Devuelve un array indexado numéricamente de las superglobales registradas</li><li><a href="#function.runkit7-zval-inspect">runkit7_zval_inspect</a> — Proporciona información sobre el valor pasado con los tipos de datos, los conteos de referencia, etc</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.runkit7">Introducción</a></li><li><a href="#runkit7.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#runkit7.requirements">Requerimientos</a></li><li><a href="#runkit7.installation">Instalación</a></li><li><a href="#runkit7.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#runkit7.constants">Constantes predefinidas</a></li><li><a href="#ref.runkit7">Funciones de runkit7</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.runkit7-constant-add">runkit7_constant_add</a> — Similar a define(), pero permite definir constantes en las definiciones de clase también</li><li><a href="#function.runkit7-constant-redefine">runkit7_constant_redefine</a> — Redefine una constante ya definida</li><li><a href="#function.runkit7-constant-remove">runkit7_constant_remove</a> — Elimina una constante ya definida</li><li><a href="#function.runkit7-function-add">runkit7_function_add</a> — Añade una nueva función, similar a create_function</li><li><a href="#function.runkit7-function-copy">runkit7_function_copy</a> — Copia una función hacia un nuevo nombre de función</li><li><a href="#function.runkit7-function-redefine">runkit7_function_redefine</a> — Sustituye una definición de función por una nueva implementación</li><li><a href="#function.runkit7-function-remove">runkit7_function_remove</a> — Elimina una definición de función</li><li><a href="#function.runkit7-function-rename">runkit7_function_rename</a> — Cambiar un nombre de función</li><li><a href="#function.runkit7-import">runkit7_import</a> — Realiza la importación de un fichero PHP importando las definiciones de funciones y clases, sobrescribiéndolas si es necesario</li><li><a href="#function.runkit7-method-add">runkit7_method_add</a> — Añade dinámicamente un nuevo método a una clase dada</li><li><a href="#function.runkit7-method-copy">runkit7_method_copy</a> — Copia un método de una clase a otra</li><li><a href="#function.runkit7-method-redefine">runkit7_method_redefine</a> — Cambiar dinámicamente el código del método dado</li><li><a href="#function.runkit7-method-remove">runkit7_method_remove</a> — Elimina dinámicamente el método especificado</li><li><a href="#function.runkit7-method-rename">runkit7_method_rename</a> — Cambiar dinámicamente el nombre del método dado</li><li><a href="#function.runkit7-object-id">runkit7_object_id</a> — Devuelve el identificador de objeto para un objeto dado</li><li><a href="#function.runkit7-superglobals">runkit7_superglobals</a> — Devuelve un array indexado numéricamente de las superglobales registradas</li><li><a href="#function.runkit7-zval-inspect">runkit7_zval_inspect</a> — Proporciona información sobre el valor pasado con los tipos de datos, los conteos de referencia, etc</li></ul></li></ul></div>

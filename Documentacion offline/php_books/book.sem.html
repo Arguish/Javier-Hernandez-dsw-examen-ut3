@@ -1,0 +1,2674 @@
+<div id="book.sem" class="book"><hr>
+ 
+ <h1 class="title">Sémaphore, Memoria Compartida e IPC (Comunicación Inter-Proceso)</h1>
+ 
+
+ 
+ <div id="intro.sem" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Estos módulos proporcionan una interfaz para las funciones de tipo System V IPC.
+   Esto incluye los semáforos, la memoria compartida y el sistema de
+   comunicación inter-proceso (IPC).
+  </p>
+  <p class="para">
+   Los semáforos pueden ser utilizados para proporcionar acceso exclusivo
+   a ciertos recursos de la máquina, o para limitar el
+   número de procesos que utilizan al mismo tiempo un recurso.
+  </p>
+  <p class="para">
+   Estos módulos proporcionan también un sistema de memoria compartida,
+   que utiliza la memoria compartida System V.
+   Esta memoria compartida permite acceder a variables globales.
+   Los diferentes demonios httpd e incluso otros programas (tales como Perl,
+   C, ...) permiten un intercambio de datos globales. No se olvide que la memoria compartida
+   no está protegida contra el acceso simultáneo.
+   Será necesario utilizar los semáforos para asegurar la sincronización.
+   </p><table class="doctable table">
+    <caption><strong>Límites de la memoria compartida bajo Unix OS</strong></caption>
+    
+     <tbody class="tbody">
+      <tr>
+       <td>SHMMAX</td>
+       <td>
+        Tamaño máximo de memoria compartida,
+        por omisión, 131072 bytes.
+       </td>
+      </tr>
+
+      <tr>
+       <td>SHMMIN</td>
+       <td>
+        Tamaño mínimo de memoria compartida,
+        por omisión, 1 byte.
+       </td>
+      </tr>
+
+      <tr>
+       <td>SHMMNI</td>
+       <td>
+        Número máximo de segmentos de memoria compartida,
+        por omisión 100.
+       </td>
+      </tr>
+
+      <tr>
+       <td>SHMSEG</td>
+       <td>
+        Tamaño máximo de memoria compartida por proceso,
+        por omisión 6.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+  <p class="para">
+   Estas funciones permiten enviar y recibir mensajes de/para otros procesos.
+   Ofrecen una interfaz simple y eficiente para intercambiar datos entre procesos,
+   sin necesidad de utilizar otro socket UNIX.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   <span class="simpara">
+    Solamente las funciones de memoria compartida y <span class="function"><a href="#function.ftok" class="function">ftok()</a></span>
+    están disponibles en Windows. Ni los semáforos, ni las funciones de mensaje
+    inter-proceso son soportadas en esta plataforma.
+   </span>
+  </p></blockquote>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="sem.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#sem.installation">Instalación</a></li><li><a href="#sem.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#sem.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ 
+
+
+<div id="sem.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Por defecto, el soporte para estas funciones no está disponible.
+  Para habilitar el soporte del semáforo de System V compile PHP con la opción
+  <strong class="option configure">--enable-sysvsem</strong>.
+  Para habilitar el soporte de la memoria compartida de System V compile PHP con la opción
+  <strong class="option configure">--enable-sysvshm</strong>.
+  Para habilitar el soporte de mensajes de System V compile PHP con la opción
+  <strong class="option configure">--enable-sysvmsg</strong>.
+ </p>
+</div>
+<hr>
+
+
+
+
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="sem.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Opciones de Configuración del Semáforo</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+    <tr>
+     <td><a href="#ini.sysvshm.init-mem" class="link">sysvshm.init_mem</a></td>
+     <td>10000</td>
+     <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+     <td class="empty"> </td>
+    </tr>
+
+   </tbody>
+  
+ </table>
+
+
+ Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+ <p class="para">
+  </p><dl>
+
+   
+    <dt id="ini.sysvshm.init-mem">
+     <code class="parameter">sysvshm.init_mem</code>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Un tamaño predeterminado del segmento de memoria compartida.
+     </p>
+    </dd>
+   
+
+  </dl>
+ 
+
+</div>
+<hr>
+
+
+
+
+
+ 
+
+ 
+ <div id="sem.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+
+  <p class="para">
+   Antes de PHP 8.0.0, esta extensión definía los tipos de recursos
+   <code class="literal">sysvmsg queue</code> (System V Message Queue),
+   <code class="literal">sysvsem</code> (System V Semaphore) y
+   <code class="literal">sysvshm</code> (System V Shared Memory).
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="sem.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.msg-ipc-nowait">
+    <strong><code><a href="#constant.msg-ipc-nowait">MSG_IPC_NOWAIT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.msg-eagain">
+    <strong><code><a href="#constant.msg-eagain">MSG_EAGAIN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.msg-enomsg">
+    <strong><code><a href="#constant.msg-enomsg">MSG_ENOMSG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.msg-noerror">
+    <strong><code><a href="#constant.msg-noerror">MSG_NOERROR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.msg-except">
+    <strong><code><a href="#constant.msg-except">MSG_EXCEPT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="ref.sem" class="reference"><hr>
+ <h1 class="title">Funciones de Semáforo</h1>
+
+ 
+
+
+
+<div id="function.ftok" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ftok</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ftok</span> — <span class="dc-title">Convierte una ruta y un identificador de proyecto en una clave System V IPC</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ftok-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ftok</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$project_id</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Convierte el argumento <code class="parameter">filename</code>
+   de un fichero existente, y el identificador de proyecto
+   <code class="parameter">proj</code>, en un entero <code class="literal">integer</code> para ser utilizado
+   con la función <span class="function"><a href="#function.shmop-open" class="function">shmop_open()</a></span> y otras funciones
+   System V IPC.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ftok-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       Ruta hacia un fichero accesible.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">project_id</code></dt>
+     <dd>
+      <p class="para">
+       Identificador del proyecto. Debe ser un solo carácter.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ftok-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   En caso de éxito, el valor devuelto será el valor de la clave creada,
+   de lo contrario, se devolverá <code class="literal">-1</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ftok-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shmop-open" class="function" rel="rdfs-seeAlso">shmop_open()</a> - Crea o abre un bloque de memoria compartida</span></li>
+    <li><span class="function"><a href="#function.sem-get" class="function" rel="rdfs-seeAlso">sem_get()</a> - Retorna un identificador de semáforo</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.msg-get-queue" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">msg_get_queue</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">msg_get_queue</span> — <span class="dc-title">Crea o se adhiere a una cola de mensajes</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.msg-get-queue-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>msg_get_queue</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$permissions</code><span class="initializer"> = 0666</span></span>): <span class="type"><span class="type"><a href="#class.sysvmessagequeue" class="type SysvMessageQueue">SysvMessageQueue</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>msg_get_queue()</strong></span> devuelve un recurso que puede
+   ser utilizado con las colas de mensajes System V y la
+   clave <code class="parameter">key</code>. La primera llamada a la función va a crear
+   la cola de mensajes, con los permisos opcionales de <code class="parameter">permissions</code>.
+   Una segunda llamada a <span class="function"><strong>msg_get_queue()</strong></span> con
+   la misma clave <code class="parameter">key</code> devolverá otro recurso de cola de mensajes, pero los dos identificadores conducen a
+   la misma cola de mensajes.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.msg-get-queue-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       Identificador numérico de la cola de mensajes.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">permissions</code></dt>
+     <dd>
+      <p class="para">
+       Permisos en la cola. Por omisión, vale 0666. Si la cola de
+       mensajes ya existe, el argumento <code class="parameter">permissions</code>
+       será ignorado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.msg-get-queue-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un recurso que puede ser utilizado para acceder a la cola de
+   mensajes System V.
+   Devuelve una instancia de <span class="classname"><a href="#class.sysvmessagequeue" class="classname">SysvMessageQueue</a></span> que puede
+   ser utilizada para acceder a la cola de mensajes System V,
+    o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.msg-get-queue-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        En caso de éxito, esta función devuelve una instancia de
+        <span class="classname"><a href="#class.sysvmessagequeue" class="classname">SysvMessageQueue</a></span> ahora; anteriormente, se devolvía
+        un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.msg-get-queue-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.msg-remove-queue" class="function" rel="rdfs-seeAlso">msg_remove_queue()</a> - Destruye una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-receive" class="function" rel="rdfs-seeAlso">msg_receive()</a> - Recibe un mensaje desde una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-send" class="function" rel="rdfs-seeAlso">msg_send()</a> - Envía un mensaje a una cola</span></li>
+    <li><span class="function"><a href="#function.msg-stat-queue" class="function" rel="rdfs-seeAlso">msg_stat_queue()</a> - Devuelve información sobre la cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-set-queue" class="function" rel="rdfs-seeAlso">msg_set_queue()</a> - Modifica información en la cola de mensajes</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.msg-queue-exists" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">msg_queue_exists</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.3.0, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">msg_queue_exists</span> — <span class="dc-title">Verificar si una cola de mensajes existe</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.msg-queue-exists-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>msg_queue_exists</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$key</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si la clave dada por el parámetro <code class="parameter">key</code> de la cola de mensajes existe.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.msg-queue-exists-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave de la cola.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.msg-queue-exists-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.msg-queue-exists-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.msg-remove-queue" class="function" rel="rdfs-seeAlso">msg_remove_queue()</a> - Destruye una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-receive" class="function" rel="rdfs-seeAlso">msg_receive()</a> - Recibe un mensaje desde una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-stat-queue" class="function" rel="rdfs-seeAlso">msg_stat_queue()</a> - Devuelve información sobre la cola de mensajes</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.msg-receive" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">msg_receive</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">msg_receive</span> — <span class="dc-title">Recibe un mensaje desde una cola de mensajes</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.msg-receive-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>msg_receive</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.sysvmessagequeue" class="type SysvMessageQueue">SysvMessageQueue</a></span> <code class="parameter">$queue</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$desired_message_type</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$received_message_type</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$max_message_size</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter reference">&amp;$message</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$unserialize</code><span class="initializer"> = <strong><code><a href="#constant.true">true</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = 0</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$error_code</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>msg_receive()</strong></span> recibe el primer mensaje de la
+   cola <code class="parameter">queue</code>, cuyo tipo está especificado por
+   <code class="parameter">desired_message_type</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.msg-receive-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">queue</code></dt>
+     <dd>
+      <p class="para">
+       Descriptor de recurso de cola de mensajes
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">desired_message_type</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">desired_message_type</code> vale 0, se devuelve el primer mensaje
+       de la cola. Si <code class="parameter">desired_message_type</code> vale
+       más que 0, entonces se devolverá el primer mensaje de ese tipo.
+       Si <code class="parameter">desired_message_type</code> vale menos que 0, se devolverá el primer
+       mensaje de la cola cuyo tipo sea inferior o igual al valor absoluto
+       de <code class="parameter">desired_message_type</code>. Si no hay mensajes
+       que cumplan los criterios, el script esperará a que llegue un mensaje
+       de ese tipo a la cola. Este bloqueo puede evitarse especificando la opción
+       <strong><code><a href="#constant.msg-ipc-nowait">MSG_IPC_NOWAIT</a></code></strong> en el parámetro
+       <code class="parameter">flags</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">received_message_type</code></dt>
+     <dd>
+      <p class="para">
+       El tipo de mensaje recibido se almacenará en este parámetro.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">max_message_size</code></dt>
+     <dd>
+      <p class="para">
+       El tamaño máximo de mensaje se establece mediante
+       <code class="parameter">max_message_size</code>; si el mensaje de la cola es más grande
+       que este tamaño, la función fallará (a menos que se utilice una opción
+       <code class="parameter">flags</code>, descrita a continuación).
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">message</code></dt>
+     <dd>
+      <p class="para">
+       El mensaje recibido se almacenará en el parámetro <code class="parameter">message</code>,
+       a menos que haya habido errores al recibir el mensaje.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">unserialize</code></dt>
+     <dd>
+      <p class="para">
+       Cuando esto es cierto, el mensaje se trata como si hubiera sido serializado
+       con el mismo mecanismo que el módulo de sesión. El mensaje será entonces
+       deserializado y devuelto al script. Esto permitirá recibir fácilmente
+       arrays u objetos complejos en su script, enviados por otros scripts PHP,
+       o, si se utiliza WDDX, desde cualquier fuente compatible con WDDX.
+      </p>
+      <p class="para">
+       Si <code class="parameter">unserialize</code> vale <strong><code><a href="#constant.false">false</a></code></strong>,
+       el mensaje se devolverá intacto, sin modificar los valores binarios.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro <code class="parameter">flags</code> permite pasar opciones
+       para configurar las llamadas msgrcv. Por omisión, vale 0, pero se pueden
+       especificar una o varias opciones combinándolas con el operador OR.
+       </p><table class="doctable table">
+        <caption><strong>Opciones de la función <span class="function"><strong>msg_receive()</strong></span></strong></caption>
+        
+         <tbody class="tbody">
+          <tr>
+           <td><strong><code><a href="#constant.msg-ipc-nowait">MSG_IPC_NOWAIT</a></code></strong></td>
+           <td>Si no hay mensajes del tipo
+            <code class="parameter">desired_message_type</code>, se devuelve inmediatamente
+            y no se espera. La función fallará y devolverá un entero
+            correspondiente a <strong><code><a href="#constant.msg-enomsg">MSG_ENOMSG</a></code></strong>.
+           </td>
+          </tr>
+
+          <tr>
+           <td><strong><code><a href="#constant.msg-except">MSG_EXCEPT</a></code></strong></td>
+           <td>Al utilizar esta opción en combinación con
+           un tipo <code class="parameter">desired_message_type</code> superior a 0, la
+           función leerá el primer mensaje que no sea
+           del tipo solicitado por <code class="parameter">desired_message_type</code>.</td>
+          </tr>
+
+          <tr>
+           <td><strong><code><a href="#constant.msg-noerror">MSG_NOERROR</a></code></strong></td>
+           <td>
+            Si el mensaje es más grande que <code class="parameter">max_message_size</code>,
+            esta opción truncará el mensaje al tamaño de
+            <code class="parameter">max_message_size</code> y no reportará errores.
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">errorcode</code></dt>
+     <dd>
+      <p class="para">
+       Si la función falla, el parámetro opcional
+       <code class="parameter">error_code</code> se establecerá al valor
+       de la variable del sistema errno.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.msg-receive-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+  <p class="para">
+   Al recibir un mensaje con éxito, la cola se actualiza
+   de la siguiente manera: <code class="literal">msg_lrpid</code> toma el valor del identificador
+   de proceso del proceso llamante, <code class="literal">msg_qnum</code> se decrementa en
+   1 y <code class="literal">msg_rtime</code> toma la fecha y hora actuales.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.msg-receive-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">queue</code> ahora espera una <span class="classname"><a href="#class.sysvmessagequeue" class="classname">SysvMessageQueue</a></span>;
+        anteriormente, se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.msg-receive-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.msg-remove-queue" class="function" rel="rdfs-seeAlso">msg_remove_queue()</a> - Destruye una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-send" class="function" rel="rdfs-seeAlso">msg_send()</a> - Envía un mensaje a una cola</span></li>
+    <li><span class="function"><a href="#function.msg-stat-queue" class="function" rel="rdfs-seeAlso">msg_stat_queue()</a> - Devuelve información sobre la cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-set-queue" class="function" rel="rdfs-seeAlso">msg_set_queue()</a> - Modifica información en la cola de mensajes</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.msg-remove-queue" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">msg_remove_queue</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">msg_remove_queue</span> — <span class="dc-title">Destruye una cola de mensajes</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.msg-remove-queue-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>msg_remove_queue</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvmessagequeue" class="type SysvMessageQueue">SysvMessageQueue</a></span> <code class="parameter">$queue</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>msg_remove_queue()</strong></span> destruye la cola de mensajes
+   identificada por <code class="parameter">queue</code>. Únicamente debe utilizarse esta
+   función cuando todos los procesos hayan finalizado su trabajo en la
+   cola de mensajes, y se desee liberar los recursos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.msg-remove-queue-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">queue</code></dt>
+     <dd>
+      <p class="para">
+       La cola de mensajes
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.msg-remove-queue-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.msg-remove-queue-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">queue</code> ahora requiere una <span class="classname"><a href="#class.sysvmessagequeue" class="classname">SysvMessageQueue</a></span>;
+        anteriormente se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.msg-remove-queue-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.msg-get-queue" class="function" rel="rdfs-seeAlso">msg_get_queue()</a> - Crea o se adhiere a una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-receive" class="function" rel="rdfs-seeAlso">msg_receive()</a> - Recibe un mensaje desde una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-stat-queue" class="function" rel="rdfs-seeAlso">msg_stat_queue()</a> - Devuelve información sobre la cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-set-queue" class="function" rel="rdfs-seeAlso">msg_set_queue()</a> - Modifica información en la cola de mensajes</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.msg-send" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">msg_send</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">msg_send</span> — <span class="dc-title">Envía un mensaje a una cola</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.msg-send-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>msg_send</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.sysvmessagequeue" class="type SysvMessageQueue">SysvMessageQueue</a></span> <code class="parameter">$queue</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$message_type</code></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.float" class="type float">float</a></span>|<span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></span> <code class="parameter">$message</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$serialize</code><span class="initializer"> = <strong><code><a href="#constant.true">true</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$blocking</code><span class="initializer"> = <strong><code><a href="#constant.true">true</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$error_code</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>msg_send()</strong></span> envía el mensaje <code class="parameter">message</code>
+   de tipo <code class="parameter">message_type</code> (que DEBE ser mayor que 0)
+   a la cola de mensajes identificada por <code class="parameter">queue</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.msg-send-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">queue</code></dt>
+     <dd>
+      <p class="para">
+       La cola de mensajes
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">message_type</code></dt>
+     <dd>
+      <p class="para">
+       El tipo del mensaje (DEBE ser mayor que 0)
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">message</code></dt>
+     <dd>
+      <p class="para">
+       El cuerpo del mensaje
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        Si <code class="parameter">serialize</code> está definido como <strong><code><a href="#constant.false">false</a></code></strong>, DEBE ser del tipo: <span class="type"><a href="#language.types.string" class="type string">string</a></span>, <span class="type"><a href="#language.types.integer" class="type int">int</a></span>, <span class="type"><a href="#language.types.float" class="type float">float</a></span> o <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>.
+        En otros casos se emitirá un aviso.
+       </p>
+      </blockquote>
+     </dd>
+    
+    
+     <dt><code class="parameter">serialize</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro opcional <code class="parameter">serialize</code> controla el
+       método de envío del mensaje <code class="parameter">message</code>. <code class="parameter">serialize</code>
+       tiene por omisión el valor <strong><code><a href="#constant.true">true</a></code></strong> lo que significa que el mensaje <code class="parameter">message</code>
+       será serializado utilizando el mismo mecanismo que el utilizado
+       por las sesiones, antes de ser enviado a la cola de mensajes. Esto permite
+       enviar arrays y objetos complejos a otros scripts PHP, o bien, si se utiliza
+       la extensión WDDX, intercambiar mensajes con clientes compatibles WDDX.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">blocking</code></dt>
+     <dd>
+      <p class="para">
+       Si el mensaje es demasiado grande para ser almacenado por la cola, su
+       script esperará hasta que otro proceso lea de la
+       cola un mensaje, y libere suficiente espacio para su mensaje. Este es
+       el modo bloqueante: puede evitar este modo utilizando el
+       parámetro <code class="parameter">blocking</code> con el valor <strong><code><a href="#constant.false">false</a></code></strong>:
+       en este caso, <span class="function"><strong>msg_send()</strong></span> retornará inmediatamente
+       <strong><code><a href="#constant.false">false</a></code></strong> si el mensaje es demasiado grande para la cola. Asignará entonces
+       al parámetro <code class="parameter">error_code</code> el valor de
+       <strong><code><a href="#constant.msg-eagain">MSG_EAGAIN</a></code></strong>,
+       indicando que debería intentar enviar su mensaje de nuevo, un poco más tarde.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">error_code</code></dt>
+     <dd>
+      <p class="para">
+       Si la función falla, el código de error opcional será definido con el valor de
+       la variable del sistema errno.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.msg-send-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+  <p class="para">
+   Al enviar con éxito un mensaje, la cola se actualiza
+   de la siguiente manera: <code class="literal">msg_lrpid</code> toma el valor del identificador
+   de proceso del proceso llamante, <code class="literal">msg_qnum</code> se incrementa en
+   1 y <code class="literal">msg_rtime</code> toma la fecha y hora actual.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.msg-send-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">queue</code> ahora espera una <span class="classname"><a href="#class.sysvmessagequeue" class="classname">SysvMessageQueue</a></span>;
+        anteriormente, se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.msg-send-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.msg-remove-queue" class="function" rel="rdfs-seeAlso">msg_remove_queue()</a> - Destruye una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-receive" class="function" rel="rdfs-seeAlso">msg_receive()</a> - Recibe un mensaje desde una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-stat-queue" class="function" rel="rdfs-seeAlso">msg_stat_queue()</a> - Devuelve información sobre la cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-set-queue" class="function" rel="rdfs-seeAlso">msg_set_queue()</a> - Modifica información en la cola de mensajes</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.msg-set-queue" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">msg_set_queue</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">msg_set_queue</span> — <span class="dc-title">Modifica información en la cola de mensajes</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.msg-set-queue-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>msg_set_queue</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvmessagequeue" class="type SysvMessageQueue">SysvMessageQueue</a></span> <code class="parameter">$queue</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$data</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>msg_set_queue()</strong></span> permite modificar ciertos valores
+   como msg_perm.uid, msg_perm.gid, msg_perm.mode y msg_qbytes, que son
+   campos de la estructura que alberga la cola de mensajes.
+  </p>
+  <p class="para">
+   Modificar la estructura de datos requiere que PHP funcione
+   con el mismo usuario que aquel que creó la cola, que
+   posee la cola (como se determina por los campos msg_perm.xxx), o
+   que funcione con los derechos de superusuario.
+   Los derechos de superusuario son necesarios para asignar a
+   msg_qbytes valores superiores a los límites del sistema.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.msg-set-queue-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">queue</code></dt>
+     <dd>
+      <p class="para">
+       La cola de mensajes
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Deben especificarse los valores deseados definiendo
+       el valor de las claves que se quieren recuperar en el array
+       <code class="parameter">data</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.msg-set-queue-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.msg-set-queue-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">queue</code> ahora espera una <span class="classname"><a href="#class.sysvmessagequeue" class="classname">SysvMessageQueue</a></span>;
+        anteriormente, se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.msg-set-queue-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.msg-remove-queue" class="function" rel="rdfs-seeAlso">msg_remove_queue()</a> - Destruye una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-receive" class="function" rel="rdfs-seeAlso">msg_receive()</a> - Recibe un mensaje desde una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-stat-queue" class="function" rel="rdfs-seeAlso">msg_stat_queue()</a> - Devuelve información sobre la cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-get-queue" class="function" rel="rdfs-seeAlso">msg_get_queue()</a> - Crea o se adhiere a una cola de mensajes</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.msg-stat-queue" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">msg_stat_queue</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">msg_stat_queue</span> — <span class="dc-title">Devuelve información sobre la cola de mensajes</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.msg-stat-queue-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>msg_stat_queue</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvmessagequeue" class="type SysvMessageQueue">SysvMessageQueue</a></span> <code class="parameter">$queue</code></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>msg_stat_queue()</strong></span> devuelve información sobre la cola de mensajes
+   identificada por <code class="parameter">queue</code>. Es una función práctica
+   para conocer el proceso que emitió el mensaje que acaba de
+   ser recibido.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.msg-stat-queue-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">queue</code></dt>
+     <dd>
+      <p class="para">
+       La cola de mensajes
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.msg-stat-queue-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El valor devuelto por la función es un array cuyos
+   índices y valores son los siguientes :
+   </p><table class="doctable table">
+    <caption><strong>Estructura de respuesta de <span class="function"><strong>msg_stat_queue()</strong></span></strong></caption>
+    
+     <tbody class="tbody">
+      <tr>
+       <td><code class="literal">msg_perm.uid</code></td>
+       <td>
+        El uid del propietario de la cola.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">msg_perm.gid</code></td>
+       <td>
+        El gid del propietario de la cola.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">msg_perm.mode</code></td>
+       <td>
+        El modo de acceso a la cola.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">msg_stime</code></td>
+       <td>
+        La hora del último mensaje enviado a la cola.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">msg_rtime</code></td>
+       <td>
+        La hora del último mensaje emitido por la cola.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">msg_ctime</code></td>
+       <td>
+        La hora de modificación de la cola.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">msg_qnum</code></td>
+       <td>
+        El número de mensajes en espera en la cola.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">msg_qbytes</code></td>
+       <td>
+        El número máximo de bytes autorizados en un mensaje de la
+        cola de espera. En Linux, este valor puede ser leído y modificado
+        a través del archivo <var class="filename">/proc/sys/kernel/msgmnb</var>.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">msg_lspid</code></td>
+       <td>
+        El pid del proceso que envió el último mensaje a la cola.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">msg_lrpid</code></td>
+       <td>
+        El pid del proceso que recibió el último mensaje de la cola.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.msg-stat-queue-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">queue</code> ahora espera una <span class="classname"><a href="#class.sysvmessagequeue" class="classname">SysvMessageQueue</a></span>;
+        anteriormente, se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.msg-stat-queue-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.msg-remove-queue" class="function" rel="rdfs-seeAlso">msg_remove_queue()</a> - Destruye una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-receive" class="function" rel="rdfs-seeAlso">msg_receive()</a> - Recibe un mensaje desde una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-get-queue" class="function" rel="rdfs-seeAlso">msg_get_queue()</a> - Crea o se adhiere a una cola de mensajes</span></li>
+    <li><span class="function"><a href="#function.msg-set-queue" class="function" rel="rdfs-seeAlso">msg_set_queue()</a> - Modifica información en la cola de mensajes</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.sem-acquire" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">sem_acquire</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">sem_acquire</span> — <span class="dc-title">Reserva un semáforo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.sem-acquire-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>sem_acquire</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvsemaphore" class="type SysvSemaphore">SysvSemaphore</a></span> <code class="parameter">$semaphore</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$non_blocking</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>sem_acquire()</strong></span> se bloquea por omisión
+   (si es necesario) hasta que el semáforo pueda ser reservado.
+   Un proceso que intenta reservar un semáforo que ya ha
+   reservado quedará en espera indefinida, si esta adquisición excede
+   el número máximo de adquisiciones simultáneas (max_acquire).
+  </p>
+  <p class="para">
+   Al final de un script, todos los semáforos reservados
+   pero no liberados explícitamente, serán liberados
+   automáticamente, y se generará una advertencia.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.sem-acquire-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">semaphore</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">semaphore</code> es un recurso de
+       semáforo, obtenido de la función <span class="function"><a href="#function.sem-get" class="function">sem_get()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">non_blocking</code></dt>
+     <dd>
+      <p class="para">
+       Especifica si el proceso no debe esperar la adquisición del semáforo.
+       Si es <strong><code><a href="#constant.true">true</a></code></strong>, la llamada devolverá
+       <strong><code><a href="#constant.false">false</a></code></strong> inmediatamente si un semáforo no puede ser
+       adquirido inmediatamente.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.sem-acquire-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.sem-acquire-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">semaphore</code> ahora espera una <span class="classname"><a href="#class.sysvsemaphore" class="classname">SysvSemaphore</a></span>;
+        anteriormente, se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.sem-acquire-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.sem-get" class="function" rel="rdfs-seeAlso">sem_get()</a> - Retorna un identificador de semáforo</span></li>
+    <li><span class="function"><a href="#function.sem-release" class="function" rel="rdfs-seeAlso">sem_release()</a> - Libera un semáforo</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.sem-get" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">sem_get</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">sem_get</span> — <span class="dc-title">Retorna un identificador de semáforo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.sem-get-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>sem_get</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$max_acquire</code><span class="initializer"> = 1</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$permissions</code><span class="initializer"> = 0666</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$auto_release</code><span class="initializer"> = <strong><code><a href="#constant.true">true</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#class.sysvsemaphore" class="type SysvSemaphore">SysvSemaphore</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>sem_get()</strong></span> retorna un identificador que podrá
+   ser utilizado para acceder a un semáforo System V.
+  </p>
+  <p class="para">
+   Una segunda llamada a <span class="function"><strong>sem_get()</strong></span>
+   con la misma clave retornará un identificador
+   diferente, pero ambos identificadores permitirán
+   acceder al mismo semáforo.
+  </p>
+  <p class="para">
+   Si <code class="parameter">key</code> es <code class="literal">0</code>, un nuevo semáforo
+   privado se crea para cada llamada a <span class="function"><strong>sem_get()</strong></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.sem-get-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">max_acquire</code></dt>
+     <dd>
+      <p class="para">
+       El número de procesos que pueden reservar simultáneamente el semáforo
+       se especifica en el argumento <code class="parameter">max_acquire</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">permissions</code></dt>
+     <dd>
+      <p class="para">
+       Los permisos del semáforo.
+       Actualmente, este valor solo se aplica
+       si el proceso es el único proceso actualmente
+       adjunto al semáforo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">auto_release</code></dt>
+     <dd>
+      <p class="para">
+       El argumento opcional <code class="parameter">auto_release</code> especifica
+       si el semáforo debe ser liberado automáticamente al cerrar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.sem-get-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna un recurso de semáforo en caso de éxito, y <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.sem-get-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        En caso de éxito, esta función retorna una instancia de
+        <span class="classname"><a href="#class.sysvsemaphore" class="classname">SysvSemaphore</a></span> ahora; anteriormente; un
+        <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> era retornado.
+       </td>
+      </tr>
+
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        El tipo de <code class="parameter">auto_release</code> ha sido modificado de
+        <span class="type"><a href="#language.types.integer" class="type int">int</a></span> a <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.sem-get-notes">
+  <h3 class="title">Notas</h3>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="simpara">
+    Al utilizar la función <span class="function"><strong>sem_get()</strong></span> para acceder a
+    un semáforo creado fuera de PHP, tenga en cuenta que el semáforo debe haber
+    sido creado como un conjunto de 3 semáforos (por ejemplo, especificando 3 como
+    argumento <code class="literal">nsems</code> durante la llamada a la función C
+    <code class="literal">semget()</code>), de lo contrario, PHP no será capaz de acceder a este
+    semáforo.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.sem-get-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.sem-acquire" class="function" rel="rdfs-seeAlso">sem_acquire()</a> - Reserva un semáforo</span></li>
+    <li><span class="function"><a href="#function.sem-release" class="function" rel="rdfs-seeAlso">sem_release()</a> - Libera un semáforo</span></li>
+    <li><span class="function"><a href="#function.ftok" class="function" rel="rdfs-seeAlso">ftok()</a> - Convierte una ruta y un identificador de proyecto en una clave System V IPC</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.sem-release" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">sem_release</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">sem_release</span> — <span class="dc-title">Libera un semáforo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.sem-release-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>sem_release</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvsemaphore" class="type SysvSemaphore">SysvSemaphore</a></span> <code class="parameter">$semaphore</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>sem_release()</strong></span> libera el semáforo
+   <code class="parameter">sem_identifier</code>, si ha sido reservado por el
+   proceso actual, de lo contrario genera un error.
+  </p>
+  <p class="para">
+   Tras liberar el semáforo, <span class="function"><a href="#function.sem-acquire" class="function">sem_acquire()</a></span>
+   puede ser llamado para reservarlo nuevamente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.sem-release-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">semaphore</code></dt>
+     <dd>
+      <p class="para">
+       Un semáforo, tal como
+       devuelto por la función <span class="function"><a href="#function.sem-get" class="function">sem_get()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.sem-release-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.sem-release-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">semaphore</code> ahora espera una <span class="classname"><a href="#class.sysvsemaphore" class="classname">SysvSemaphore</a></span>;
+        anteriormente, se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.sem-release-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.sem-get" class="function" rel="rdfs-seeAlso">sem_get()</a> - Retorna un identificador de semáforo</span></li>
+    <li><span class="function"><a href="#function.sem-acquire" class="function" rel="rdfs-seeAlso">sem_acquire()</a> - Reserva un semáforo</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.sem-remove" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">sem_remove</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">sem_remove</span> — <span class="dc-title">Destruye un semáforo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.sem-remove-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>sem_remove</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvsemaphore" class="type SysvSemaphore">SysvSemaphore</a></span> <code class="parameter">$semaphore</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>sem_remove()</strong></span> elimina el semáforo dado.
+  </p>
+  <p class="para">
+   Tras la eliminación del semáforo, ya no es utilizable.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.sem-remove-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">semaphore</code></dt>
+     <dd>
+      <p class="para">
+       Un semáforo, tal como es devuelto
+       por la función <span class="function"><a href="#function.sem-get" class="function">sem_get()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.sem-remove-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.sem-remove-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">semaphore</code> ahora espera una <span class="classname"><a href="#class.sysvsemaphore" class="classname">SysvSemaphore</a></span>;
+        anteriormente, se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.sem-remove-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.sem-get" class="function" rel="rdfs-seeAlso">sem_get()</a> - Retorna un identificador de semáforo</span></li>
+    <li><span class="function"><a href="#function.sem-release" class="function" rel="rdfs-seeAlso">sem_release()</a> - Libera un semáforo</span></li>
+    <li><span class="function"><a href="#function.sem-acquire" class="function" rel="rdfs-seeAlso">sem_acquire()</a> - Reserva un semáforo</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shm-attach" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shm_attach</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shm_attach</span> — <span class="dc-title">Crea o abre un segmento de memoria compartida</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.shm-attach-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shm_attach</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.integer" class="type int">int</a></span></span> <code class="parameter">$size</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$permissions</code><span class="initializer"> = 0666</span></span>): <span class="type"><span class="type"><a href="#class.sysvsharedmemory" class="type SysvSharedMemory">SysvSharedMemory</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shm_attach()</strong></span> devuelve una instancia que
+   permitirá acceder a la memoria compartida de tipo System V.
+   En la primera llamada, la memoria será
+   creada, con el tamaño <code class="parameter">size</code>
+   y con los permisos <code class="parameter">permissions</code>
+  </p>
+  <p class="para">
+   En las llamadas siguientes con la misma clave
+   <code class="parameter">key</code>, <span class="function"><strong>shm_attach()</strong></span>
+   devolverá una nueva instancia, pero esta instancia
+   accederá siempre a la misma porción de
+   memoria compartida. En este caso, <code class="parameter">size</code>
+   y <code class="parameter">permissions</code> serán ignorados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.shm-attach-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador numérico de la memoria compartida
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">size</code></dt>
+     <dd>
+      <p class="para">
+       El tamaño de la memoria. Si no se proporciona, por defecto
+       valdrá el valor de <code class="literal">sysvshm.init_mem</code> del fichero
+       <var class="filename">php.ini</var>, de lo contrario 10000 bytes.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">permissions</code></dt>
+     <dd>
+      <p class="para">
+       Los permisos (opcionales). Por defecto, valen 0666.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shm-attach-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una instancia de <span class="classname"><a href="#class.sysvsharedmemory" class="classname">SysvSharedMemory</a></span> en caso de éxito,  o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shm-attach-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       En caso de éxito, esta función devuelve una instancia de
+       <span class="classname"><a href="#class.sysvsharedmemory" class="classname">SysvSharedMemory</a></span> ahora; anteriormente; un
+       <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> era devuelto.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">size</code> es ahora nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.shm-attach-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shm-detach" class="function" rel="rdfs-seeAlso">shm_detach()</a> - Libera un segmento de memoria compartida</span></li>
+    <li><span class="function"><a href="#function.ftok" class="function" rel="rdfs-seeAlso">ftok()</a> - Convierte una ruta y un identificador de proyecto en una clave System V IPC</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shm-detach" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shm_detach</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shm_detach</span> — <span class="dc-title">Libera un segmento de memoria compartida</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.shm-detach-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shm_detach</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvsharedmemory" class="type SysvSharedMemory">SysvSharedMemory</a></span> <code class="parameter">$shm</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shm_detach()</strong></span> libera el segmento de
+   memoria compartida identificado por
+   <code class="parameter">shm</code> y creado por
+   <span class="function"><a href="#function.shm-attach" class="function">shm_attach()</a></span>. No se olvide que esta memoria
+   compartida sigue existiendo en Unix, y que los
+   datos siguen siendo accesibles.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.shm-detach-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shm</code></dt>
+     <dd>
+      <p class="para">
+       Un segmento de memoria compartida obtenido desde <span class="function"><a href="#function.shm-attach" class="function">shm_attach()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shm-detach-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shm-detach-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">shm</code> ahora requiere una instancia de <span class="classname"><a href="#class.sysvsharedmemory" class="classname">SysvSharedMemory</a></span>
+        en lugar de un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.shm-detach-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shm-attach" class="function" rel="rdfs-seeAlso">shm_attach()</a> - Crea o abre un segmento de memoria compartida</span></li>
+    <li><span class="function"><a href="#function.shm-remove" class="function" rel="rdfs-seeAlso">shm_remove()</a> - Elimina un segmento de memoria compartida bajo Unix</span></li>
+    <li><span class="function"><a href="#function.shm-remove-var" class="function" rel="rdfs-seeAlso">shm_remove_var()</a> - Elimina una variable de la memoria compartida</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shm-get-var" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shm_get_var</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shm_get_var</span> — <span class="dc-title">Lee una variable en la memoria compartida</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.shm-get-var-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shm_get_var</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvsharedmemory" class="type SysvSharedMemory">SysvSharedMemory</a></span> <code class="parameter">$shm</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$key</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shm_get_var()</strong></span> devuelve la variable
+   identificada por <code class="parameter">variable_key</code>, en
+   el segmento de memoria compartida identificado por <code class="parameter">shm_identifier</code>.
+   La variable siempre está presente en la memoria
+   compartida.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.shm-get-var-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shm</code></dt>
+     <dd>
+      <p class="para">
+       Un segmento de memoria compartida obtenido desde <span class="function"><a href="#function.shm-attach" class="function">shm_attach()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave de la variable.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shm-get-var-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la variable correspondiente a la clave dada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shm-get-var-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">shm</code> ahora requiere una instancia de <span class="classname"><a href="#class.sysvsharedmemory" class="classname">SysvSharedMemory</a></span>
+        en lugar de un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.shm-get-var-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shm-has-var" class="function" rel="rdfs-seeAlso">shm_has_var()</a> - Verifica si una variable existe en memoria compartida</span></li>
+    <li><span class="function"><a href="#function.shm-put-var" class="function" rel="rdfs-seeAlso">shm_put_var()</a> - Inserta o modifica una variable en la memoria compartida</span></li>
+   </ul>
+   
+  </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shm-has-var" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shm_has_var</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.3.0, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shm_has_var</span> — <span class="dc-title">Verifica si una variable existe en memoria compartida</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.shm-has-var-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shm_has_var</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvsharedmemory" class="type SysvSharedMemory">SysvSharedMemory</a></span> <code class="parameter">$shm</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$key</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si una variable existe en memoria compartida.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.shm-has-var-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shm</code></dt>
+     <dd>
+      <p class="para">
+       Un segmento de memoria compartida obtenido desde <span class="function"><a href="#function.shm-attach" class="function">shm_attach()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       El nombre de la variable.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shm-has-var-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si la variable existe, y <strong><code><a href="#constant.false">false</a></code></strong> en caso contrario.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shm-has-var-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">shm</code> ahora requiere una instancia de <span class="classname"><a href="#class.sysvsharedmemory" class="classname">SysvSharedMemory</a></span>;
+        anteriormente se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.shm-has-var-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shm-get-var" class="function" rel="rdfs-seeAlso">shm_get_var()</a> - Lee una variable en la memoria compartida</span></li>
+    <li><span class="function"><a href="#function.shm-put-var" class="function" rel="rdfs-seeAlso">shm_put_var()</a> - Inserta o modifica una variable en la memoria compartida</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shm-put-var" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shm_put_var</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shm_put_var</span> — <span class="dc-title">Inserta o modifica una variable en la memoria compartida</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.shm-put-var-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shm_put_var</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvsharedmemory" class="type SysvSharedMemory">SysvSharedMemory</a></span> <code class="parameter">$shm</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shm_put_var()</strong></span> inserta o modifica la
+   variable <code class="parameter">value</code> con la clave
+   <code class="parameter">key</code> en el segmento de
+   memoria <code class="parameter">shm</code>.
+  </p>
+  <p class="para">
+   Se emitirán alertas (nivel <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong>)
+   si <code class="parameter">shm</code> no es un segmento de
+   memoria tipo System V válido, o si no hay suficiente memoria para
+   la solicitud.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.shm-put-var-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shm</code></dt>
+     <dd>
+      <p class="para">
+       Un segmento de memoria compartida obtenido desde <span class="function"><a href="#function.shm-attach" class="function">shm_attach()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave de la variable.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       La variable. Todos los <a href="#language.types" class="link">tipos de variables</a>
+       soportados por la función <span class="function"><a href="#function.serialize" class="function">serialize()</a></span> pueden ser
+       utilizados: esto significa que todos los tipos, excepto los recursos y algunos
+       objetos internos, pueden ser serializados.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shm-put-var-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shm-put-var-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">shm</code> ahora requiere una instancia de <span class="classname"><a href="#class.sysvsharedmemory" class="classname">SysvSharedMemory</a></span>;
+        anteriormente, se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.shm-put-var-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shm-get-var" class="function" rel="rdfs-seeAlso">shm_get_var()</a> - Lee una variable en la memoria compartida</span></li>
+    <li><span class="function"><a href="#function.shm-has-var" class="function" rel="rdfs-seeAlso">shm_has_var()</a> - Verifica si una variable existe en memoria compartida</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shm-remove" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shm_remove</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shm_remove</span> — <span class="dc-title">Elimina un segmento de memoria compartida bajo Unix</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.shm-remove-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shm_remove</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvsharedmemory" class="type SysvSharedMemory">SysvSharedMemory</a></span> <code class="parameter">$shm</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>shm_remove()</strong></span> elimina el segmento de memoria
+   compartida <code class="parameter">shm</code>.
+   Todos los datos serán eliminados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.shm-remove-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shm</code></dt>
+     <dd>
+      <p class="para">
+       Un segmento de memoria compartida obtenido desde <span class="function"><a href="#function.shm-attach" class="function">shm_attach()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shm-remove-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shm-remove-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">shm</code> ahora requiere una instancia de <span class="classname"><a href="#class.sysvsharedmemory" class="classname">SysvSharedMemory</a></span>;
+        anteriormente se esperaba un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.shm-remove-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shm-remove-var" class="function" rel="rdfs-seeAlso">shm_remove_var()</a> - Elimina una variable de la memoria compartida</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.shm-remove-var" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">shm_remove_var</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">shm_remove_var</span> — <span class="dc-title">Elimina una variable de la memoria compartida</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.shm-remove-var-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>shm_remove_var</strong></span>(<span class="methodparam"><span class="type"><a href="#class.sysvsharedmemory" class="type SysvSharedMemory">SysvSharedMemory</a></span> <code class="parameter">$shm</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$key</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Elimina la variable <code class="parameter">key</code> de la memoria
+   compartida <code class="parameter">shm</code>
+   y libera la memoria.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.shm-remove-var-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">shm</code></dt>
+     <dd>
+      <p class="para">
+       Un segmento de memoria compartida obtenido desde <span class="function"><a href="#function.shm-attach" class="function">shm_attach()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave de la variable.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.shm-remove-var-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.shm-remove-var-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">shm</code> ahora requiere una instancia de <span class="classname"><a href="#class.sysvsharedmemory" class="classname">SysvSharedMemory</a></span>
+        en lugar de un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.shm-remove-var-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.shm-remove" class="function" rel="rdfs-seeAlso">shm_remove()</a> - Elimina un segmento de memoria compartida bajo Unix</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.ftok">ftok</a> — Convierte una ruta y un identificador de proyecto en una clave System V IPC</li><li><a href="#function.msg-get-queue">msg_get_queue</a> — Crea o se adhiere a una cola de mensajes</li><li><a href="#function.msg-queue-exists">msg_queue_exists</a> — Verificar si una cola de mensajes existe</li><li><a href="#function.msg-receive">msg_receive</a> — Recibe un mensaje desde una cola de mensajes</li><li><a href="#function.msg-remove-queue">msg_remove_queue</a> — Destruye una cola de mensajes</li><li><a href="#function.msg-send">msg_send</a> — Envía un mensaje a una cola</li><li><a href="#function.msg-set-queue">msg_set_queue</a> — Modifica información en la cola de mensajes</li><li><a href="#function.msg-stat-queue">msg_stat_queue</a> — Devuelve información sobre la cola de mensajes</li><li><a href="#function.sem-acquire">sem_acquire</a> — Reserva un semáforo</li><li><a href="#function.sem-get">sem_get</a> — Retorna un identificador de semáforo</li><li><a href="#function.sem-release">sem_release</a> — Libera un semáforo</li><li><a href="#function.sem-remove">sem_remove</a> — Destruye un semáforo</li><li><a href="#function.shm-attach">shm_attach</a> — Crea o abre un segmento de memoria compartida</li><li><a href="#function.shm-detach">shm_detach</a> — Libera un segmento de memoria compartida</li><li><a href="#function.shm-get-var">shm_get_var</a> — Lee una variable en la memoria compartida</li><li><a href="#function.shm-has-var">shm_has_var</a> — Verifica si una variable existe en memoria compartida</li><li><a href="#function.shm-put-var">shm_put_var</a> — Inserta o modifica una variable en la memoria compartida</li><li><a href="#function.shm-remove">shm_remove</a> — Elimina un segmento de memoria compartida bajo Unix</li><li><a href="#function.shm-remove-var">shm_remove_var</a> — Elimina una variable de la memoria compartida</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="class.sysvmessagequeue" class="reference"><hr>
+ <h1 class="title">La clase SysvMessageQueue</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 8)</p>
+
+  
+  <div class="section" id="sysvmessagequeue.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Una clase completamente opaca que reemplaza el <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+    <code class="literal">sysvmsg queue</code> a partir de PHP 8.0.0.
+   </p>
+  </div>
+  
+
+  <div class="section" id="sysvmessagequeue.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+   
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">SysvMessageQueue</strong></strong>
+     {</div>
+   }</div>
+   
+
+  </div>
+
+ </div>
+
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="class.sysvsemaphore" class="reference"><hr>
+ <h1 class="title">La clase SysvSemaphore</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 8)</p>
+
+  
+  <div class="section" id="sysvsemaphore.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Una clase completamente opaca que reemplaza el <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+    <code class="literal">sysvsem</code> a partir de PHP 8.0.0.
+   </p>
+  </div>
+  
+
+  <div class="section" id="sysvsemaphore.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+   
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">SysvSemaphore</strong></strong>
+     {</div>
+   }</div>
+   
+
+  </div>
+
+ </div>
+
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="class.sysvsharedmemory" class="reference"><hr>
+ <h1 class="title">La clase SysvSharedMemory</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 8)</p>
+
+  
+  <div class="section" id="sysvsharedmemory.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Una clase completamente opaca que reemplaza el <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+    <code class="literal">sysvshm</code> a partir de PHP 8.0.0.
+   </p>
+  </div>
+  
+
+  <div class="section" id="sysvsharedmemory.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+   
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">SysvSharedMemory</strong></strong>
+     {</div>
+   }</div>
+   
+
+  </div>
+
+ </div>
+
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.sem">Introducción</a></li><li><a href="#sem.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#sem.installation">Instalación</a></li><li><a href="#sem.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#sem.resources">Tipos de recursos</a></li></ul></li><li><a href="#sem.constants">Constantes predefinidas</a></li><li><a href="#ref.sem">Funciones de Semáforo</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.ftok">ftok</a> — Convierte una ruta y un identificador de proyecto en una clave System V IPC</li><li><a href="#function.msg-get-queue">msg_get_queue</a> — Crea o se adhiere a una cola de mensajes</li><li><a href="#function.msg-queue-exists">msg_queue_exists</a> — Verificar si una cola de mensajes existe</li><li><a href="#function.msg-receive">msg_receive</a> — Recibe un mensaje desde una cola de mensajes</li><li><a href="#function.msg-remove-queue">msg_remove_queue</a> — Destruye una cola de mensajes</li><li><a href="#function.msg-send">msg_send</a> — Envía un mensaje a una cola</li><li><a href="#function.msg-set-queue">msg_set_queue</a> — Modifica información en la cola de mensajes</li><li><a href="#function.msg-stat-queue">msg_stat_queue</a> — Devuelve información sobre la cola de mensajes</li><li><a href="#function.sem-acquire">sem_acquire</a> — Reserva un semáforo</li><li><a href="#function.sem-get">sem_get</a> — Retorna un identificador de semáforo</li><li><a href="#function.sem-release">sem_release</a> — Libera un semáforo</li><li><a href="#function.sem-remove">sem_remove</a> — Destruye un semáforo</li><li><a href="#function.shm-attach">shm_attach</a> — Crea o abre un segmento de memoria compartida</li><li><a href="#function.shm-detach">shm_detach</a> — Libera un segmento de memoria compartida</li><li><a href="#function.shm-get-var">shm_get_var</a> — Lee una variable en la memoria compartida</li><li><a href="#function.shm-has-var">shm_has_var</a> — Verifica si una variable existe en memoria compartida</li><li><a href="#function.shm-put-var">shm_put_var</a> — Inserta o modifica una variable en la memoria compartida</li><li><a href="#function.shm-remove">shm_remove</a> — Elimina un segmento de memoria compartida bajo Unix</li><li><a href="#function.shm-remove-var">shm_remove_var</a> — Elimina una variable de la memoria compartida</li></ul></li><li><a href="#class.sysvmessagequeue">SysvMessageQueue</a> — La clase SysvMessageQueue</li><li><a href="#class.sysvsemaphore">SysvSemaphore</a> — La clase SysvSemaphore</li><li><a href="#class.sysvsharedmemory">SysvSharedMemory</a> — La clase SysvSharedMemory</li></ul></div>

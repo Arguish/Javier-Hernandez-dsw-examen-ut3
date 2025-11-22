@@ -1,0 +1,2080 @@
+<div id="book.sync" class="book"><hr>
+ 
+ <h1 class="title">Sync</h1>
+ 
+
+ <div id="intro.sync" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   La extensión <code class="literal">sync</code> introduce la sincronización de objetos cross-plataforma en PHP.
+   Los Mutex nombrados o no, los semáforos, los eventos, los objetos de
+   lectura-escritura y la memoria compartida se beneficiarán de una sincronización a nivel del sistema operativo tanto en
+   los sistemas POSIX (i.e. Linux) como en los sistemas Windows.
+  </p>
+  <p class="para">
+   Una limpieza automática de los objetos que han obtenido una sincronización
+   se realiza al desmontar la extensión. Esto significa que si PHP termina prematuramente
+   un script (i.e. el script excede su tiempo máximo de ejecución), los objetos
+   no se dejarán en un estado desconocido. La única excepción a este mecanismo
+   es si PHP mismo se bloquea (i.e. un desbordamiento de buffer interno).
+  </p>
+  <p class="para">
+   La sincronización de los objetos no nombrados no tiene utilidad fuera de un
+   escenario multihilo. Los objetos no nombrados son más útiles en conjunción
+   con la extensión PECL pthreads.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Los objetos nombrados requieren atención adicional para ser utilizados
+    en todos los sistemas. Si un objeto se instancia con un conjunto específico de
+    parámetros, siempre debe ser instanciado con estos parámetros o el objeto
+    probablemente terminará en un estado no consistente hasta el próximo
+    reinicio o hasta que un administrador los limpie.
+   </p>
+  </blockquote>
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="sync.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#sync.requirements">Requerimientos</a></li><li><a href="#sync.installation">Instalación</a></li></ul>
+
+
+ <div id="sync.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Un sistema con soporte POSIX de memoria compartida (shm_open()) o funcionando bajo Windows.
+  </p>
+ </div>
+<hr>
+
+
+ <div id="sync.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/sync" class="link external">» https://pecl.php.net/package/sync</a>.
+  </p>
+ </div>
+<hr>
+
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.syncmutex" class="reference"><hr>
+
+ <h1 class="title">La clase SyncMutex</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL sync &gt;= 1.0.0)</p>
+
+
+  <div class="section" id="syncmutex.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Una implementación multiplataforma, nativa de los objetos Mutex nombrados o no nombrados.
+   </p>
+   <p class="para">
+    Un Mutex es un objeto de exclusión mutua que restringe el acceso a un recurso compartido
+    (i.e. un fichero) a una sola instancia. Los Mutex contables adquieren el mutex una
+    sola vez y, internamente, rastrean el número de veces que el mutex es bloqueado.
+    El Mutex es desbloqueado tan pronto como sale del ámbito o es desbloqueado el
+    mismo número de veces que ha sido bloqueado.
+   </p>
+  </div>
+
+
+  <div class="section" id="syncmutex.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">SyncMutex</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#syncmutex.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code><span class="initializer"> = ?</span></span>)</div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncmutex.lock" class="methodname">lock</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncmutex.unlock" class="methodname">unlock</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$all</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="syncmutex.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncMutex::__construct</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncMutex::__construct</span> — <span class="dc-title">Construye un nuevo objeto SyncMutex</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncmutex.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncMutex::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code><span class="initializer"> = ?</span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Construye un objeto contable nombrado o no.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncmutex.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">name</code></dt>
+    <dd>
+     <p class="para">
+      El nombre del mutex si se trata de un objeto mutex nombrado.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si el nombre ya existe, debe ser capaz de ser abierto por el usuario
+       actual ejecutando el proceso, o bien se lanzará una excepción
+       con el mensaje de error correspondiente.
+      </p>
+     </blockquote>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncmutex.construct-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El nuevo objeto <span class="classname"><a href="#class.syncmutex" class="classname">SyncMutex</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-syncmutex.construct-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Se lanza una excepción si el mutex no puede
+   ser creado o abierto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncmutex.construct-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3660">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncMutex::__construct()</strong></span>
+    y un mutex nombrado con un tiempo de espera máximo para el bloqueo</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$mutex </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncMutex</span><span style="color: #007700">(</span><span style="color: #DD0000">"UniqueName"</span><span style="color: #007700">);<br><br>if (!</span><span style="color: #0000BB">$mutex</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">lock</span><span style="color: #007700">(</span><span style="color: #0000BB">3000</span><span style="color: #007700">))<br>{<br>    echo </span><span style="color: #DD0000">"Imposible bloquear el mutex."</span><span style="color: #007700">;<br><br>    exit();<br>}<br><br></span><span style="color: #FF8000">/* ... */<br><br></span><span style="color: #0000BB">$mutex</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">unlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+  <div class="example" id="example-3661">
+   <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>SyncMutex::__construct()</strong></span>
+    y un mutex no nombrado</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$mutex </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncMutex</span><span style="color: #007700">();<br><br></span><span style="color: #0000BB">$mutex</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">lock</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">/* ... */<br><br></span><span style="color: #0000BB">$mutex</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">unlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncmutex.construct-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncmutex.lock" class="methodname" rel="rdfs-seeAlso">SyncMutex::lock()</a> - Obtiene un bloqueo exclusivo</span></li>
+   <li><span class="methodname"><a href="#syncmutex.unlock" class="methodname" rel="rdfs-seeAlso">SyncMutex::unlock()</a> - Desbloquea el mutex</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncmutex.lock" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncMutex::lock</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncMutex::lock</span> — <span class="dc-title">Obtiene un bloqueo exclusivo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncmutex.lock-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncMutex::lock</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene un bloqueo exclusivo sobre un objeto <span class="classname"><a href="#class.syncmutex" class="classname">SyncMutex</a></span>.
+   Si el bloqueo ya está adquirido, entonces este método incrementará el contador interno.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncmutex.lock-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">wait</code></dt>
+    <dd>
+     <p class="para">
+      El número de milisegundos a esperar para la obtención del bloqueo exclusivo.
+      Un valor de -1 significa que se espera indefinidamente.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncmutex.lock-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncmutex.lock-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3662">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncMutex::lock()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$mutex </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncMutex</span><span style="color: #007700">(</span><span style="color: #DD0000">"UniqueName"</span><span style="color: #007700">);<br><br>if (!</span><span style="color: #0000BB">$mutex</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">lock</span><span style="color: #007700">(</span><span style="color: #0000BB">3000</span><span style="color: #007700">))<br>{<br>    echo </span><span style="color: #DD0000">"Imposible bloquear el mutex."</span><span style="color: #007700">;<br><br>    exit();<br>}<br><br></span><span style="color: #FF8000">/* ... */<br><br></span><span style="color: #0000BB">$mutex</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">unlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncmutex.lock-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncmutex.unlock" class="methodname" rel="rdfs-seeAlso">SyncMutex::unlock()</a> - Desbloquea el mutex</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncmutex.unlock" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncMutex::unlock</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncMutex::unlock</span> — <span class="dc-title">Desbloquea el mutex</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncmutex.unlock-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncMutex::unlock</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$all</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Decrementa el contador interno de un objeto <span class="classname"><a href="#class.syncmutex" class="classname">SyncMutex</a></span>.
+   Cuando el contador interno llega a cero, el bloqueo actual
+   del objeto se libera.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncmutex.unlock-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">all</code></dt>
+    <dd>
+     <p class="para">
+      Especifica si se debe o no establecer el contador interno a cero
+      y, por lo tanto, liberar el bloqueo.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncmutex.unlock-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncmutex.unlock-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3663">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncMutex::unlock()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$mutex </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncMutex</span><span style="color: #007700">(</span><span style="color: #DD0000">"UniqueName"</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$mutex</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">lock</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">/* ... */<br><br></span><span style="color: #0000BB">$mutex</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">unlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncmutex.unlock-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncmutex.lock" class="methodname" rel="rdfs-seeAlso">SyncMutex::lock()</a> - Obtiene un bloqueo exclusivo</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#syncmutex.construct">SyncMutex::__construct</a> — Construye un nuevo objeto SyncMutex</li><li><a href="#syncmutex.lock">SyncMutex::lock</a> — Obtiene un bloqueo exclusivo</li><li><a href="#syncmutex.unlock">SyncMutex::unlock</a> — Desbloquea el mutex</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.syncsemaphore" class="reference"><hr>
+
+ <h1 class="title">La clase SyncSemaphore</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL sync &gt;= 1.0.0)</p>
+
+
+  <div class="section" id="syncsemaphore.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Una implementación multiplataforma, nativa de los objetos Sémaphore nombrados o no nombrados.
+   </p>
+   <p class="para">
+    Un sémaphore restringe el acceso a un recurso limitado a un número limitado
+    de instancias. Los sémaphores difieren de los mutexes en el sentido de que permiten
+    a más de una instancia acceder a un recurso al mismo tiempo, mientras que el mutex
+    solo permite una instancia a la vez.
+   </p>
+  </div>
+
+
+  <div class="section" id="syncsemaphore.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">SyncSemaphore</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#syncsemaphore.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$initialval</code><span class="initializer"> = 1</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$autounlock</code><span class="initializer"> = <strong><code><a href="#constant.true">true</a></code></strong></span></span>)</div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncsemaphore.lock" class="methodname">lock</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncsemaphore.unlock" class="methodname">unlock</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$prevcount</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="syncsemaphore.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncSemaphore::__construct</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncSemaphore::__construct</span> — <span class="dc-title">Construye un nuevo objeto SyncSemaphore</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncsemaphore.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncSemaphore::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$initialval</code><span class="initializer"> = 1</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$autounlock</code><span class="initializer"> = <strong><code><a href="#constant.true">true</a></code></strong></span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Construye un semáforo con nombre o sin nombre.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncsemaphore.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">name</code></dt>
+    <dd>
+     <p class="para">
+      El nombre del semáforo si tiene nombre.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si el nombre ya existe, el objeto debe poder ser abierto por el usuario
+       actual que ejecuta el proceso, o se emitirá una excepción con el mensaje de error.
+      </p>
+     </blockquote>
+    </dd>
+   
+   
+    <dt><code class="parameter">initialval</code></dt>
+    <dd>
+     <p class="para">
+      El valor inicial del semáforo. Este será el número de bloqueos que pueden
+      ser obtenidos.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">autounlock</code></dt>
+    <dd>
+     <p class="para">
+      Especifica si se debe desbloquear automáticamente el semáforo al final del script PHP.
+     </p>
+     <div class="warning"><strong class="warning">Advertencia</strong>
+      <p class="para">
+       Si el objeto es un semáforo con nombre cuyo autounlock es <strong><code><a href="#constant.false">false</a></code></strong>, el objeto está bloqueado, y el script PHP termina antes de que el objeto sea desbloqueado, entonces el semáforo subyacente terminará en un estado no consistente.
+      </p>
+     </div>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncsemaphore.construct-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El nuevo objeto <span class="classname"><a href="#class.syncsemaphore" class="classname">SyncSemaphore</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-syncsemaphore.construct-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Se emitirá una excepción si el semáforo no puede ser creado o abierto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncsemaphore.construct-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3664">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncSemaphore::__construct()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$semaphore </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncSemaphore</span><span style="color: #007700">(</span><span style="color: #DD0000">"LimitedResource_2clients"</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br><br>if (!</span><span style="color: #0000BB">$semaphore</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">lock</span><span style="color: #007700">(</span><span style="color: #0000BB">3000</span><span style="color: #007700">))<br>{<br>    echo </span><span style="color: #DD0000">"Imposible bloquear el semáforo."</span><span style="color: #007700">;<br><br>    exit();<br>}<br><br></span><span style="color: #FF8000">/* ... */<br><br></span><span style="color: #0000BB">$semaphore</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">unlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncsemaphore.construct-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncsemaphore.lock" class="methodname" rel="rdfs-seeAlso">SyncSemaphore::lock()</a> - Disminuye el contador del objeto SyncSemaphore o espera</span></li>
+   <li><span class="methodname"><a href="#syncsemaphore.unlock" class="methodname" rel="rdfs-seeAlso">SyncSemaphore::unlock()</a> - Incrementa el contador del objeto SyncSemaphore</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncsemaphore.lock" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncSemaphore::lock</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncSemaphore::lock</span> — <span class="dc-title">Disminuye el contador del objeto SyncSemaphore o espera</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncsemaphore.lock-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncSemaphore::lock</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Disminuye el contador del objeto <span class="classname"><a href="#class.syncsemaphore" class="classname">SyncSemaphore</a></span> o espera hasta que el semáforo
+   tenga un valor diferente de cero.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncsemaphore.lock-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">wait</code></dt>
+    <dd>
+     <p class="para">
+      El número de milisegundos a esperar por el semáforo.
+      Un valor de -1 significa que se espera indefinidamente.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncsemaphore.lock-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncsemaphore.lock-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3665">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncSemaphore::lock()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$semaphore </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncSemaphore</span><span style="color: #007700">(</span><span style="color: #DD0000">"LimitedResource_2clients"</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br><br>if (!</span><span style="color: #0000BB">$semaphore</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">lock</span><span style="color: #007700">(</span><span style="color: #0000BB">3000</span><span style="color: #007700">))<br>{<br>    echo </span><span style="color: #DD0000">"Imposible desbloquear el semáforo."</span><span style="color: #007700">;<br><br>    exit();<br>}<br><br></span><span style="color: #FF8000">/* ... */<br><br></span><span style="color: #0000BB">$semaphore</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">unlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncsemaphore.lock-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncsemaphore.unlock" class="methodname" rel="rdfs-seeAlso">SyncSemaphore::unlock()</a> - Incrementa el contador del objeto SyncSemaphore</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncsemaphore.unlock" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncSemaphore::unlock</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncSemaphore::unlock</span> — <span class="dc-title">Incrementa el contador del objeto SyncSemaphore</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncsemaphore.unlock-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncSemaphore::unlock</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$prevcount</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Incrementa el contador del objeto <span class="classname"><a href="#class.syncsemaphore" class="classname">SyncSemaphore</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncsemaphore.unlock-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">prevcount</code></dt>
+    <dd>
+     <p class="para">
+      Devuelve el contador anterior del semáforo.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncsemaphore.unlock-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncsemaphore.unlock-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3666">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncSemaphore::unlock()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$semaphore </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncSemaphore</span><span style="color: #007700">(</span><span style="color: #DD0000">"LimitedResource_2clients"</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br><br>if (!</span><span style="color: #0000BB">$semaphore</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">lock</span><span style="color: #007700">(</span><span style="color: #0000BB">3000</span><span style="color: #007700">))<br>{<br>    echo </span><span style="color: #DD0000">"Imposible desbloquear el semáforo."</span><span style="color: #007700">;<br><br>    exit();<br>}<br><br></span><span style="color: #FF8000">/* ... */<br><br></span><span style="color: #0000BB">$semaphore</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">unlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncsemaphore.unlock-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncsemaphore.lock" class="methodname" rel="rdfs-seeAlso">SyncSemaphore::lock()</a> - Disminuye el contador del objeto SyncSemaphore o espera</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#syncsemaphore.construct">SyncSemaphore::__construct</a> — Construye un nuevo objeto SyncSemaphore</li><li><a href="#syncsemaphore.lock">SyncSemaphore::lock</a> — Disminuye el contador del objeto SyncSemaphore o espera</li><li><a href="#syncsemaphore.unlock">SyncSemaphore::unlock</a> — Incrementa el contador del objeto SyncSemaphore</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.syncevent" class="reference"><hr>
+
+ <h1 class="title">La clase SyncEvent</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL sync &gt;= 1.0.0)</p>
+
+
+  <div class="section" id="syncevent.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Una implementación multiplataforma nativa de objetos de eventos nombrados o sin nombre.
+    Se soportan tanto los objetos de eventos automáticos como manuales.
+   </p>
+   <p class="para">
+    Un objeto de evento espera, sin cola, que los objetos sean lanzados/definidos.
+    Una instancia espera en el objeto de evento mientras otra lanza/define el evento.
+    Los objetos de eventos son útiles a lo largo de un proceso largo (i.e. verificar si una descarga de datos debe ser analizada).
+   </p>
+  </div>
+
+
+  <div class="section" id="syncevent.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">SyncEvent</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#syncevent.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$manual</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$prefire</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>)</div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncevent.fire" class="methodname">fire</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncevent.reset" class="methodname">reset</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncevent.wait" class="methodname">wait</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="syncevent.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncEvent::__construct</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncEvent::__construct</span> — <span class="dc-title">Construye un nuevo objeto SyncEvent</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncevent.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncEvent::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$manual</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$prefire</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Construye un objeto de evento nombrado o no.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncevent.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">name</code></dt>
+    <dd>
+     <p class="para">
+      El nombre del evento si es un objeto de evento nombrado.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si el nombre ya existe, debe ser posible abrirlo con el usuario
+       actual que ejecuta el proceso, o se lanzará una excepción
+       con el contenido del mensaje de error.
+      </p>
+     </blockquote>
+    </dd>
+   
+   
+    <dt><code class="parameter">manual</code></dt>
+    <dd>
+     <p class="para">
+      Especifica si el objeto de evento debe ser reinicializado manualmente o no.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       La reinicialización manual de los objetos de eventos permite la
+       puesta en espera de los procesos hasta que el objeto sea reinicializado.
+      </p>
+     </blockquote>
+    </dd>
+   
+   
+    <dt><code class="parameter">prefire</code></dt>
+    <dd>
+     <p class="para">
+      Especifica si se debe o no pre-enviar (la señal)
+      al objeto de evento.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Solo tiene impacto si la llamada al proceso/hilo
+       es el primero en crear el objeto.
+      </p>
+     </blockquote>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncevent.construct-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El nuevo objeto <span class="classname"><a href="#class.syncevent" class="classname">SyncEvent</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-syncevent.construct-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Se lanza una excepción si el objeto de evento
+   no puede ser creado o abierto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncevent.construct-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3667">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncEvent::__construct()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// En una aplicación web:<br></span><span style="color: #0000BB">$event </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncEvent</span><span style="color: #007700">(</span><span style="color: #DD0000">"GetAppReport"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$event</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">fire</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">// En un cron:<br></span><span style="color: #0000BB">$event </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncEvent</span><span style="color: #007700">(</span><span style="color: #DD0000">"GetAppReport"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$event</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-syncevent.construct-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>PECL sync 1.1.0</td>
+       <td>
+        <p class="para">
+         Adición del parámetro <code class="parameter">prefire</code>.
+        </p>
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncevent.construct-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncevent.fire" class="methodname" rel="rdfs-seeAlso">SyncEvent::fire()</a> - Lanza/define el evento</span></li>
+   <li><span class="methodname"><a href="#syncevent.reset" class="methodname" rel="rdfs-seeAlso">SyncEvent::reset()</a> - Reinicializa manualmente un evento</span></li>
+   <li><span class="methodname"><a href="#syncevent.wait" class="methodname" rel="rdfs-seeAlso">SyncEvent::wait()</a> - Espera a que el objeto SyncEvent sea lanzado</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncevent.fire" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncEvent::fire</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncEvent::fire</span> — <span class="dc-title">Lanza/define el evento</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncevent.fire-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncEvent::fire</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Lanza/define un objeto <span class="classname"><a href="#class.syncevent" class="classname">SyncEvent</a></span>. Mantiene varios hilos en espera
+   si el objeto de evento ha sido creado con un valor manual a <strong><code><a href="#constant.true">true</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncevent.fire-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncevent.fire-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncevent.fire-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3668">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncEvent::fire()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// En una aplicación web:<br></span><span style="color: #0000BB">$event </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncEvent</span><span style="color: #007700">(</span><span style="color: #DD0000">"GetAppReport"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$event</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">fire</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">// En un cron:<br></span><span style="color: #0000BB">$event </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncEvent</span><span style="color: #007700">(</span><span style="color: #DD0000">"GetAppReport"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$event</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncevent.fire-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncevent.reset" class="methodname" rel="rdfs-seeAlso">SyncEvent::reset()</a> - Reinicializa manualmente un evento</span></li>
+   <li><span class="methodname"><a href="#syncevent.wait" class="methodname" rel="rdfs-seeAlso">SyncEvent::wait()</a> - Espera a que el objeto SyncEvent sea lanzado</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncevent.reset" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncEvent::reset</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncEvent::reset</span> — <span class="dc-title">Reinicializa manualmente un evento</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncevent.reset-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncEvent::reset</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Reinicializa un objeto <span class="classname"><a href="#class.syncevent" class="classname">SyncEvent</a></span> que ha sido lanzado/definido. Solo válido para
+   los objetos de evento manuales.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncevent.reset-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncevent.reset-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncevent.reset-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3669">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncEvent::reset()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// En una aplicación web:<br></span><span style="color: #0000BB">$event </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncEvent</span><span style="color: #007700">(</span><span style="color: #DD0000">"DemoApplication"</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$event</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">// En un cron:<br></span><span style="color: #0000BB">$event </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncEvent</span><span style="color: #007700">(</span><span style="color: #DD0000">"DemoApplication"</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$event</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">reset</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* ... Realizar algunas tareas de mantenimiento ... */<br></span><span style="color: #0000BB">$event</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">fire</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncevent.reset-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncevent.fire" class="methodname" rel="rdfs-seeAlso">SyncEvent::fire()</a> - Lanza/define el evento</span></li>
+   <li><span class="methodname"><strong>SyncEvent::reset()</strong></span></li>
+   <li><span class="methodname"><a href="#syncevent.wait" class="methodname" rel="rdfs-seeAlso">SyncEvent::wait()</a> - Espera a que el objeto SyncEvent sea lanzado</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncevent.wait" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncEvent::wait</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncEvent::wait</span> — <span class="dc-title">Espera a que el objeto SyncEvent sea lanzado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncevent.wait-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncEvent::wait</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Espera a que el objeto <span class="classname"><a href="#class.syncevent" class="classname">SyncEvent</a></span> sea lanzado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncevent.wait-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">wait</code></dt>
+    <dd>
+     <p class="para">
+      El número de milisegundos a esperar a que el evento sea lanzado.
+      Un valor de -1 significa que se espera indefinidamente.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncevent.wait-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncevent.wait-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3670">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncEvent::wait()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// En una aplicación web:<br></span><span style="color: #0000BB">$event </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncEvent</span><span style="color: #007700">(</span><span style="color: #DD0000">"GetAppReport"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$event</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">fire</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">// En un cron:<br></span><span style="color: #0000BB">$event </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncEvent</span><span style="color: #007700">(</span><span style="color: #DD0000">"GetAppReport"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$event</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">wait</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncevent.wait-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncevent.fire" class="methodname" rel="rdfs-seeAlso">SyncEvent::fire()</a> - Lanza/define el evento</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#syncevent.construct">SyncEvent::__construct</a> — Construye un nuevo objeto SyncEvent</li><li><a href="#syncevent.fire">SyncEvent::fire</a> — Lanza/define el evento</li><li><a href="#syncevent.reset">SyncEvent::reset</a> — Reinicializa manualmente un evento</li><li><a href="#syncevent.wait">SyncEvent::wait</a> — Espera a que el objeto SyncEvent sea lanzado</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.syncreaderwriter" class="reference"><hr>
+
+ <h1 class="title">La clase SyncReaderWriter</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL sync &gt;= 1.0.0)</p>
+
+
+  <div class="section" id="syncreaderwriter.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Una implementación multiplataforma, nativa de los objetos de lectura-escritura nombrados o no.
+   </p>
+   <p class="para">
+    Un objeto de lectura-escritura permite múltiples lecturas o una escritura para acceder a un recurso. Es una solución eficiente para gestionar los recursos donde el acceso es originalmente de solo lectura, pero un acceso de escritura es ocasionalmente necesario.
+   </p>
+  </div>
+
+
+  <div class="section" id="syncreaderwriter.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">SyncReaderWriter</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#syncreaderwriter.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$autounlock</code><span class="initializer"> = 1</span></span>)</div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncreaderwriter.readlock" class="methodname">readlock</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncreaderwriter.readunlock" class="methodname">readunlock</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncreaderwriter.writelock" class="methodname">writelock</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncreaderwriter.writeunlock" class="methodname">writeunlock</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+<div id="syncreaderwriter.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncReaderWriter::__construct</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncReaderWriter::__construct</span> — <span class="dc-title">Construye un nuevo objeto SyncReaderWriter</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncreaderwriter.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncReaderWriter::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$autounlock</code><span class="initializer"> = 1</span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Construye un objeto de lectura/escritura nombrado o no.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncreaderwriter.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">name</code></dt>
+    <dd>
+     <p class="para">
+      El nombre del objeto si está nombrado.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si el nombre ya existe, el objeto debe poder ser abierto con el usuario
+       actual que ejecuta el proceso, o se emitirá una excepción conteniendo
+       el mensaje de error.
+      </p>
+     </blockquote>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      <span class="simpara">
+       En Windows, <code class="parameter">name</code> no debe contener barras invertidas.
+      </span>
+     </p></blockquote>
+    </dd>
+   
+   
+    <dt><code class="parameter">autounlock</code></dt>
+    <dd>
+     <p class="para">
+      Especifica si se debe desbloquear automáticamente el objeto al final del
+      script PHP.
+     </p>
+     <div class="warning"><strong class="warning">Advertencia</strong>
+      <p class="para">
+       Si el objeto es un objeto de lectura/escritura con el autounlock en <strong><code><a href="#constant.false">false</a></code></strong>,
+       el objeto está bloqueado en lectura o en escritura, y el script PHP
+       terminará antes del desbloqueo del objeto, y por lo tanto, el objeto
+       subyacente terminará en un estado no consistente.
+      </p>
+     </div>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncreaderwriter.construct-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El nuevo objeto <span class="classname"><a href="#class.syncreaderwriter" class="classname">SyncReaderWriter</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-syncreaderwriter.construct-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Se emite una excepción si el objeto de
+   lectura/escritura no puede ser creado o abierto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncreaderwriter.construct-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3671">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncReaderWriter::__construct()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$readwrite </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncReaderWriter</span><span style="color: #007700">(</span><span style="color: #DD0000">"FileCacheLock"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">readlock</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">readunlock</span><span style="color: #007700">();<br><br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">writelock</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">writeunlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncreaderwriter.construct-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncreaderwriter.readlock" class="methodname" rel="rdfs-seeAlso">SyncReaderWriter::readlock()</a> - Obtiene un bloqueo de lectura</span></li>
+   <li><span class="methodname"><a href="#syncreaderwriter.readunlock" class="methodname" rel="rdfs-seeAlso">SyncReaderWriter::readunlock()</a> - Libera un bloqueo de lectura</span></li>
+   <li><span class="methodname"><a href="#syncreaderwriter.writelock" class="methodname" rel="rdfs-seeAlso">SyncReaderWriter::writelock()</a> - Espera un bloqueo de escritura exclusivo</span></li>
+   <li><span class="methodname"><a href="#syncreaderwriter.writeunlock" class="methodname" rel="rdfs-seeAlso">SyncReaderWriter::writeunlock()</a> - Libera un bloqueo de escritura</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncreaderwriter.readlock" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncReaderWriter::readlock</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncReaderWriter::readlock</span> — <span class="dc-title">Obtiene un bloqueo de lectura</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncreaderwriter.readlock-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncReaderWriter::readlock</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene un bloqueo de lectura en un objeto <span class="classname"><a href="#class.syncreaderwriter" class="classname">SyncReaderWriter</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncreaderwriter.readlock-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">wait</code></dt>
+    <dd>
+     <p class="para">
+      El número de milisegundos de espera para obtener un bloqueo. Un valor de -1 significa
+      que se espera indefinidamente.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncreaderwriter.readlock-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncreaderwriter.readlock-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3672">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncReaderWriter::readlock()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$readwrite </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncReaderWriter</span><span style="color: #007700">(</span><span style="color: #DD0000">"FileCacheLock"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">readlock</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">readunlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncreaderwriter.readlock-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncreaderwriter.readunlock" class="methodname" rel="rdfs-seeAlso">SyncReaderWriter::readunlock()</a> - Libera un bloqueo de lectura</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncreaderwriter.readunlock" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncReaderWriter::readunlock</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncReaderWriter::readunlock</span> — <span class="dc-title">Libera un bloqueo de lectura</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncreaderwriter.readunlock-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncReaderWriter::readunlock</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Libera un bloqueo de lectura sobre un objeto <span class="classname"><a href="#class.syncreaderwriter" class="classname">SyncReaderWriter</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncreaderwriter.readunlock-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncreaderwriter.readunlock-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncreaderwriter.readunlock-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3673">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncReaderWriter::readunlock()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$readwrite </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncReaderWriter</span><span style="color: #007700">(</span><span style="color: #DD0000">"FileCacheLock"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">readlock</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">readunlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncreaderwriter.readunlock-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncreaderwriter.readlock" class="methodname" rel="rdfs-seeAlso">SyncReaderWriter::readlock()</a> - Obtiene un bloqueo de lectura</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncreaderwriter.writelock" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncReaderWriter::writelock</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncReaderWriter::writelock</span> — <span class="dc-title">Espera un bloqueo de escritura exclusivo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncreaderwriter.writelock-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncReaderWriter::writelock</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$wait</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene un bloqueo de escritura exclusivo sobre un objeto <span class="classname"><a href="#class.syncreaderwriter" class="classname">SyncReaderWriter</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncreaderwriter.writelock-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">wait</code></dt>
+    <dd>
+     <p class="para">
+      El número de milisegundos para esperar el bloqueo.
+      Un valor de -1 significa que se espera indefinidamente.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncreaderwriter.writelock-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncreaderwriter.writelock-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3674">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncReaderWriter::writelock()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$readwrite </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncReaderWriter</span><span style="color: #007700">(</span><span style="color: #DD0000">"FileCacheLock"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">writelock</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">writeunlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncreaderwriter.writelock-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncreaderwriter.writeunlock" class="methodname" rel="rdfs-seeAlso">SyncReaderWriter::writeunlock()</a> - Libera un bloqueo de escritura</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="syncreaderwriter.writeunlock" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncReaderWriter::writeunlock</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">SyncReaderWriter::writeunlock</span> — <span class="dc-title">Libera un bloqueo de escritura</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncreaderwriter.writeunlock-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncReaderWriter::writeunlock</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Libera un bloqueo de escritura en un objeto <span class="classname"><a href="#class.syncreaderwriter" class="classname">SyncReaderWriter</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncreaderwriter.writeunlock-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncreaderwriter.writeunlock-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncreaderwriter.writeunlock-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3675">
+   <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>SyncReaderWriter::writeunlock()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$readwrite </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncReaderWriter</span><span style="color: #007700">(</span><span style="color: #DD0000">"FileCacheLock"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">writelock</span><span style="color: #007700">();<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">$readwrite</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">writeunlock</span><span style="color: #007700">();<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncreaderwriter.writeunlock-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncreaderwriter.writelock" class="methodname" rel="rdfs-seeAlso">SyncReaderWriter::writelock()</a> - Espera un bloqueo de escritura exclusivo</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#syncreaderwriter.construct">SyncReaderWriter::__construct</a> — Construye un nuevo objeto SyncReaderWriter</li><li><a href="#syncreaderwriter.readlock">SyncReaderWriter::readlock</a> — Obtiene un bloqueo de lectura</li><li><a href="#syncreaderwriter.readunlock">SyncReaderWriter::readunlock</a> — Libera un bloqueo de lectura</li><li><a href="#syncreaderwriter.writelock">SyncReaderWriter::writelock</a> — Espera un bloqueo de escritura exclusivo</li><li><a href="#syncreaderwriter.writeunlock">SyncReaderWriter::writeunlock</a> — Libera un bloqueo de escritura</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="class.syncsharedmemory" class="reference"><hr>
+ <h1 class="title">La clase SyncSharedMemory</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL sync &gt;= 1.1.0)</p>
+
+
+  <div class="section" id="syncsharedmemory.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Una implementación nativa, coherente y multiplataforma de objetos de memoria compartida nombrada.
+   </p>
+   <p class="para">
+    La memoria compartida permite a dos procesos distintos comunicarse sin necesidad de
+    tuberías o sockets complejos. Existen varias implementaciones de memoria compartida
+    basadas en enteros para PHP. La memoria compartida nombrada es una alternativa.
+   </p>
+   <p class="para">
+    Los objetos de sincronización (por ejemplo, SyncMutex) son siempre necesarios para proteger la mayoría
+    de los usos de la memoria compartida.
+   </p>
+  </div>
+
+
+  <div class="section" id="syncsharedmemory.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">SyncSharedMemory</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#syncsharedmemory.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>)</div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncsharedmemory.first" class="methodname">first</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncsharedmemory.read" class="methodname">read</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$start</code><span class="initializer"> = 0</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$length</code><span class="initializer"> = ?</span></span>)</div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncsharedmemory.size" class="methodname">size</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#syncsharedmemory.write" class="methodname">write</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$start</code><span class="initializer"> = 0</span></span>)</div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+<div id="syncsharedmemory.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncSharedMemory::__construct</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">SyncSharedMemory::__construct</span> — <span class="dc-title">Construye un nuevo objeto SyncSharedMemory</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncsharedmemory.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncSharedMemory::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>)</div>
+
+  <p class="para rdfs-comment">
+   Construye un objeto de memoria compartida con nombre.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncsharedmemory.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">name</code></dt>
+    <dd>
+     <p class="para">
+      El nombre del objeto de memoria compartida.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si el nombre ya existe, debe poder ser abierto por el usuario actual
+       que el proceso está en ejecución o se lanzará una excepción con un mensaje de error
+       sin significado.
+      </p>
+     </blockquote>
+    </dd>
+   
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      El tamaño, en bytes, de la memoria compartida a reservar.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       La cantidad de memoria no puede ser redimensionada posteriormente. Solicite suficiente almacenamiento de antemano.
+      </p>
+     </blockquote>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncsharedmemory.construct-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El nuevo objeto <span class="classname"><a href="#class.syncsharedmemory" class="classname">SyncSharedMemory</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-syncsharedmemory.construct-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Se lanza una excepción si el objeto de memoria compartida no puede ser creado o abierto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncsharedmemory.construct-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3676">
+   <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>SyncSharedMemory::__construct()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Probablemente se deberá proteger la memoria compartida con otros objetos de sincronización.<br>// La memoria compartida desaparece cuando la última referencia a ella desaparece.<br></span><span style="color: #0000BB">$mem </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncSharedMemory</span><span style="color: #007700">(</span><span style="color: #DD0000">"AppReportName"</span><span style="color: #007700">, </span><span style="color: #0000BB">1024</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">first</span><span style="color: #007700">())<br>{<br>    </span><span style="color: #FF8000">// Realizar el trabajo de inicialización la primera vez aquí.<br></span><span style="color: #007700">}<br><br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">write</span><span style="color: #007700">(</span><span style="color: #0000BB">json_encode</span><span style="color: #007700">(array(</span><span style="color: #DD0000">"name" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"my_report.txt"</span><span style="color: #007700">)));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncsharedmemory.construct-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncsharedmemory.first" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::first()</a> - Verifica si el objeto es la primera instancia en todo el sistema de la memoria compartida nombrada</span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.size" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::size()</a> - Devuelve el tamaño de la memoria compartida nombrada</span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.write" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::write()</a> - Copia los datos en la memoria compartida nombrada</span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.read" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::read()</a> - Copia de datos de la memoria compartida nombrada</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="syncsharedmemory.first" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncSharedMemory::first</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">SyncSharedMemory::first</span> — <span class="dc-title">Verifica si el objeto es la primera instancia en todo el sistema de la memoria compartida nombrada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncsharedmemory.first-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncSharedMemory::first</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera el estado de primera instancia del objeto <span class="classname"><a href="#class.syncsharedmemory" class="classname">SyncSharedMemory</a></span> en todo el sistema.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncsharedmemory.first-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncsharedmemory.first-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncsharedmemory.first-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3677">
+   <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>SyncSharedMemory::first()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$mem </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncSharedMemory</span><span style="color: #007700">(</span><span style="color: #DD0000">"AppReportName"</span><span style="color: #007700">, </span><span style="color: #0000BB">1024</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">first</span><span style="color: #007700">())<br>{<br>    </span><span style="color: #FF8000">// Realizar el trabajo de inicialización la primera vez aquí.<br></span><span style="color: #007700">}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">first</span><span style="color: #007700">());<br><br></span><span style="color: #0000BB">$mem2 </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncSharedMemory</span><span style="color: #007700">(</span><span style="color: #DD0000">"AppReportName"</span><span style="color: #007700">, </span><span style="color: #0000BB">1024</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$mem2</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">first</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)
+bool(false)</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncsharedmemory.first-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncsharedmemory.write" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::write()</a> - Copia los datos en la memoria compartida nombrada</span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.read" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::read()</a> - Copia de datos de la memoria compartida nombrada</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="syncsharedmemory.read" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncSharedMemory::read</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">SyncSharedMemory::read</span> — <span class="dc-title">Copia de datos de la memoria compartida nombrada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncsharedmemory.read-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncSharedMemory::read</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$start</code><span class="initializer"> = 0</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$length</code><span class="initializer"> = ?</span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Copia de datos de la memoria compartida nombrada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncsharedmemory.read-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">start</code></dt>
+    <dd>
+     <p class="para">
+      El inicio/desplazamiento, en bytes, para comenzar la lectura.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si el valor es negativo, la posición de inicio comenzará en el número especificado
+       de bytes desde el final del segmento de memoria compartida.
+      </p>
+     </blockquote>
+    </dd>
+   
+   
+    <dt><code class="parameter">length</code></dt>
+    <dd>
+     <p class="para">
+      El número de bytes a leer.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si no se especifica, la lectura se detendrá al final del segmento de memoria compartida.
+      </p>
+      <p class="para">
+       Si el valor es negativo, la lectura se detendrá en el número especificado de bytes
+       desde el final del segmento de memoria compartida.
+      </p>
+     </blockquote>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncsharedmemory.read-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un string que contiene los datos leídos de la memoria compartida.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncsharedmemory.read-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3678">
+   <p><strong>Ejemplo #1 Ejemplo de <span class="function"><a href="#syncsharedmemory.construct" class="function">SyncSharedMemory::__construct()</a></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Probablemente se deberá proteger la memoria compartida con otros objetos de sincronización.<br>// La memoria compartida desaparece cuando la última referencia a ella desaparece.<br></span><span style="color: #0000BB">$mem </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncSharedMemory</span><span style="color: #007700">(</span><span style="color: #DD0000">"AppReportName"</span><span style="color: #007700">, </span><span style="color: #0000BB">1024</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">first</span><span style="color: #007700">())<br>{<br>    </span><span style="color: #FF8000">// Realizar el trabajo de inicialización la primera vez aquí.<br></span><span style="color: #007700">}<br><br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">write</span><span style="color: #007700">(</span><span style="color: #DD0000">"report.txt"</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">read</span><span style="color: #007700">(</span><span style="color: #0000BB">3</span><span style="color: #007700">, -</span><span style="color: #0000BB">4</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$result</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">string(3) "ort"</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncsharedmemory.read-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncsharedmemory.construct" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::__construct()</a> - Construye un nuevo objeto SyncSharedMemory</span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.first" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::first()</a> - Verifica si el objeto es la primera instancia en todo el sistema de la memoria compartida nombrada</span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.write" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::write()</a> - Copia los datos en la memoria compartida nombrada</span></li>
+   <li><span class="methodname"><strong>SyncSharedMemory::read()</strong></span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="syncsharedmemory.size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncSharedMemory::size</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">SyncSharedMemory::size</span> — <span class="dc-title">Devuelve el tamaño de la memoria compartida nombrada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncsharedmemory.size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncSharedMemory::size</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera el tamaño de la memoria compartida de un objeto <span class="classname"><a href="#class.syncsharedmemory" class="classname">SyncSharedMemory</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncsharedmemory.size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncsharedmemory.size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un integer que contiene el tamaño de la memoria compartida. Este será el mismo tamaño que se pasó al constructor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncsharedmemory.size-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3679">
+   <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>SyncSharedMemory::size()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$mem </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncSharedMemory</span><span style="color: #007700">(</span><span style="color: #DD0000">"AppReportName"</span><span style="color: #007700">, </span><span style="color: #0000BB">1024</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">size</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">int(1024)</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncsharedmemory.size-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncsharedmemory.construct" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::__construct()</a> - Construye un nuevo objeto SyncSharedMemory</span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.write" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::write()</a> - Copia los datos en la memoria compartida nombrada</span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.read" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::read()</a> - Copia de datos de la memoria compartida nombrada</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="syncsharedmemory.write" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">SyncSharedMemory::write</h1>
+  <p class="verinfo">(PECL sync &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">SyncSharedMemory::write</span> — <span class="dc-title">Copia los datos en la memoria compartida nombrada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-syncsharedmemory.write-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>SyncSharedMemory::write</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$start</code><span class="initializer"> = 0</span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Copia los datos en la memoria compartida nombrada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-syncsharedmemory.write-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">string</code></dt>
+    <dd>
+     <p class="para">
+      Los datos a escribir en la memoria compartida.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si el tamaño de los datos excede el tamaño de la memoria compartida, el número
+       de bytes escritos devueltos será inferior a la longitud de la entrada.
+      </p>
+     </blockquote>
+    </dd>
+   
+   
+    <dt><code class="parameter">start</code></dt>
+    <dd>
+     <p class="para">
+      El inicio/desplazamiento, en bytes, para comenzar la escritura.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si el valor es negativo, la posición de inicio comenzará en el número especificado
+       de bytes desde el final del segmento de memoria compartida.
+      </p>
+     </blockquote>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-syncsharedmemory.write-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un integer que contiene el número de bytes escritos en la memoria compartida.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-syncsharedmemory.write-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3680">
+   <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>SyncSharedMemory::write()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Probablemente se deberá proteger la memoria compartida con otros objetos de sincronización.<br>// La memoria compartida desaparece cuando la última referencia a ella desaparece.<br></span><span style="color: #0000BB">$mem </span><span style="color: #007700">= new </span><span style="color: #0000BB">SyncSharedMemory</span><span style="color: #007700">(</span><span style="color: #DD0000">"AppReportName"</span><span style="color: #007700">, </span><span style="color: #0000BB">1024</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">first</span><span style="color: #007700">())<br>{<br>    </span><span style="color: #FF8000">// Realizar el trabajo de inicialización la primera vez aquí.<br></span><span style="color: #007700">}<br><br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">write</span><span style="color: #007700">(</span><span style="color: #DD0000">"report.txt"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$result</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">$mem</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">write</span><span style="color: #007700">(</span><span style="color: #DD0000">"report.txt"</span><span style="color: #007700">, -</span><span style="color: #0000BB">3</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$result</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">int(10)
+int(3)</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-syncsharedmemory.write-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="methodname"><a href="#syncsharedmemory.construct" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::__construct()</a> - Construye un nuevo objeto SyncSharedMemory</span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.first" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::first()</a> - Verifica si el objeto es la primera instancia en todo el sistema de la memoria compartida nombrada</span></li>
+   <li><span class="methodname"><strong>SyncSharedMemory::write()</strong></span></li>
+   <li><span class="methodname"><a href="#syncsharedmemory.read" class="methodname" rel="rdfs-seeAlso">SyncSharedMemory::read()</a> - Copia de datos de la memoria compartida nombrada</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#syncsharedmemory.construct">SyncSharedMemory::__construct</a> — Construye un nuevo objeto SyncSharedMemory</li><li><a href="#syncsharedmemory.first">SyncSharedMemory::first</a> — Verifica si el objeto es la primera instancia en todo el sistema de la memoria compartida nombrada</li><li><a href="#syncsharedmemory.read">SyncSharedMemory::read</a> — Copia de datos de la memoria compartida nombrada</li><li><a href="#syncsharedmemory.size">SyncSharedMemory::size</a> — Devuelve el tamaño de la memoria compartida nombrada</li><li><a href="#syncsharedmemory.write">SyncSharedMemory::write</a> — Copia los datos en la memoria compartida nombrada</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.sync">Introducción</a></li><li><a href="#sync.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#sync.requirements">Requerimientos</a></li><li><a href="#sync.installation">Instalación</a></li></ul></li><li><a href="#class.syncmutex">SyncMutex</a> — La clase SyncMutex<ul class="chunklist chunklist_book chunklist_children"><li><a href="#syncmutex.construct">SyncMutex::__construct</a> — Construye un nuevo objeto SyncMutex</li><li><a href="#syncmutex.lock">SyncMutex::lock</a> — Obtiene un bloqueo exclusivo</li><li><a href="#syncmutex.unlock">SyncMutex::unlock</a> — Desbloquea el mutex</li></ul></li><li><a href="#class.syncsemaphore">SyncSemaphore</a> — La clase SyncSemaphore<ul class="chunklist chunklist_book chunklist_children"><li><a href="#syncsemaphore.construct">SyncSemaphore::__construct</a> — Construye un nuevo objeto SyncSemaphore</li><li><a href="#syncsemaphore.lock">SyncSemaphore::lock</a> — Disminuye el contador del objeto SyncSemaphore o espera</li><li><a href="#syncsemaphore.unlock">SyncSemaphore::unlock</a> — Incrementa el contador del objeto SyncSemaphore</li></ul></li><li><a href="#class.syncevent">SyncEvent</a> — La clase SyncEvent<ul class="chunklist chunklist_book chunklist_children"><li><a href="#syncevent.construct">SyncEvent::__construct</a> — Construye un nuevo objeto SyncEvent</li><li><a href="#syncevent.fire">SyncEvent::fire</a> — Lanza/define el evento</li><li><a href="#syncevent.reset">SyncEvent::reset</a> — Reinicializa manualmente un evento</li><li><a href="#syncevent.wait">SyncEvent::wait</a> — Espera a que el objeto SyncEvent sea lanzado</li></ul></li><li><a href="#class.syncreaderwriter">SyncReaderWriter</a> — La clase SyncReaderWriter<ul class="chunklist chunklist_book chunklist_children"><li><a href="#syncreaderwriter.construct">SyncReaderWriter::__construct</a> — Construye un nuevo objeto SyncReaderWriter</li><li><a href="#syncreaderwriter.readlock">SyncReaderWriter::readlock</a> — Obtiene un bloqueo de lectura</li><li><a href="#syncreaderwriter.readunlock">SyncReaderWriter::readunlock</a> — Libera un bloqueo de lectura</li><li><a href="#syncreaderwriter.writelock">SyncReaderWriter::writelock</a> — Espera un bloqueo de escritura exclusivo</li><li><a href="#syncreaderwriter.writeunlock">SyncReaderWriter::writeunlock</a> — Libera un bloqueo de escritura</li></ul></li><li><a href="#class.syncsharedmemory">SyncSharedMemory</a> — La clase SyncSharedMemory<ul class="chunklist chunklist_book chunklist_children"><li><a href="#syncsharedmemory.construct">SyncSharedMemory::__construct</a> — Construye un nuevo objeto SyncSharedMemory</li><li><a href="#syncsharedmemory.first">SyncSharedMemory::first</a> — Verifica si el objeto es la primera instancia en todo el sistema de la memoria compartida nombrada</li><li><a href="#syncsharedmemory.read">SyncSharedMemory::read</a> — Copia de datos de la memoria compartida nombrada</li><li><a href="#syncsharedmemory.size">SyncSharedMemory::size</a> — Devuelve el tamaño de la memoria compartida nombrada</li><li><a href="#syncsharedmemory.write">SyncSharedMemory::write</a> — Copia los datos en la memoria compartida nombrada</li></ul></li></ul></div>

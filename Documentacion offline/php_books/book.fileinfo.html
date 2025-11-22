@@ -1,0 +1,1145 @@
+<div id="book.fileinfo" class="book"><hr>
+ 
+ <h1 class="title">Información de un fichero</h1>
+ 
+
+ 
+ <div id="intro.fileinfo" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Las funciones en este módulo tratan de averiguar el tipo de
+   contenido y la codificación de un fichero buscando ciertas
+   secuencias de bytes <em>mágicas</em> en una posición específica
+   del mismo. Aunque no es una estrategia "a prueba de balas",
+   la heurística empleada realiza un trabajo realmente bueno.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+<div id="fileinfo.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#fileinfo.installation">Instalación</a></li><li><a href="#fileinfo.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ 
+
+
+
+<div id="fileinfo.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Esta extensión está activada por omisión.
+ </p>
+ <p class="para">
+  Los usuarios de Windows deben incluir la biblioteca <abbr title="Dynamic Link Library">DLL</abbr>
+  proporcionada <var class="filename">php_fileinfo.dll</var> en su <var class="filename">php.ini</var> para activar
+  esta extensión.
+ </p>
+ <p class="para">
+  La biblioteca libmagic se proporciona con PHP, pero incluye cambios específicos para PHP. Un parche de libmagic denominado <var class="filename">libmagic.patch</var> se mantiene y puede ser encontrado en el código fuente de la extensión fileinfo de PHP.
+ </p>
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ <div id="fileinfo.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   Antes de PHP 8.1.0, se utilizaba un recurso en la extensión Fileinfo: un descriptor
+   mágico de base de datos devuelto por <span class="function"><a href="#function.finfo-open" class="function">finfo_open()</a></span>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="fileinfo.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.fileinfo-none">
+    <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     No se realiza ningún tratamiento especial.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-symlink">
+    <strong><code><a href="#constant.fileinfo-symlink">FILEINFO_SYMLINK</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Sigue los enlaces simbólicos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-mime-type">
+    <strong><code><a href="#constant.fileinfo-mime-type">FILEINFO_MIME_TYPE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Devuelve el tipo MIME.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-mime-encoding">
+    <strong><code><a href="#constant.fileinfo-mime-encoding">FILEINFO_MIME_ENCODING</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Devuelve la codificación MIME del fichero.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-mime">
+    <strong><code><a href="#constant.fileinfo-mime">FILEINFO_MIME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Devuelve el tipo MIME y la codificación MIME, tal como se describe en la RFC 2045.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-compress">
+    <strong><code><a href="#constant.fileinfo-compress">FILEINFO_COMPRESS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Descomprime los ficheros comprimidos.
+    </span>
+    <span class="simpara">
+     Desactivado debido a las consecuencias en la seguridad de los hilos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-devices">
+    <strong><code><a href="#constant.fileinfo-devices">FILEINFO_DEVICES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Examina los contenidos de los bloques o dispositivos especiales de caracteres.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-continue">
+    <strong><code><a href="#constant.fileinfo-continue">FILEINFO_CONTINUE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Devuelve todos los datos encontrados, no solo el primero.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-preserve-atime">
+    <strong><code><a href="#constant.fileinfo-preserve-atime">FILEINFO_PRESERVE_ATIME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Si es posible, conserva el tiempo de acceso al fichero original.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-raw">
+    <strong><code><a href="#constant.fileinfo-raw">FILEINFO_RAW</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     No traduce los caracteres no imprimibles a representación octal
+     <code class="literal">\ooo</code>.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-extension">
+    <strong><code><a href="#constant.fileinfo-extension">FILEINFO_EXTENSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Devuelve la extensión de fichero apropiada para un tipo MIME detectado
+     en el fichero.
+    </span>
+    <span class="simpara">
+     Para los tipos que generalmente tienen múltiples extensiones de fichero, tales
+     como las imágenes <code class="literal">JPEG</code>, el valor devuelto es varias
+     extensiones separadas por una barra oblicua, por ejemplo:
+     <code class="literal">"jpeg/jpg/jpe/jfif"</code>. Para los tipos desconocidos no
+     disponibles en la base de datos <var class="filename">magic.mime</var>, el
+     valor devuelto es <code class="literal">"???"</code>.
+    </span>
+    <span class="simpara">
+     Disponible a partir de PHP 7.2.0.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fileinfo-apple">
+    <strong><code><a href="#constant.fileinfo-apple">FILEINFO_APPLE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Devuelve el creador y tipo de Apple.
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+ 
+
+
+
+<div id="ref.fileinfo" class="reference"><hr>
+ <h1 class="title">Funciones de Fileinfo</h1>
+
+ 
+
+
+<div id="function.finfo-buffer" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">finfo_buffer</h1>
+  <h1 class="refname">finfo::buffer</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">finfo_buffer</span> -- <span class="refname">finfo::buffer</span> — <span class="dc-title">Devuelve información acerca de un string de buffer</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.finfo-buffer-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo procedimental</p>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>finfo_buffer</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.finfo" class="type finfo">finfo</a></span> <code class="parameter">$finfo</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">Estilo orientado a objetos</p>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#finfo.buffer" class="methodname">finfo::buffer</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+
+  <p class="para rdfs-comment">
+   Esta función se utiliza para obtener información acerca de
+   datos binarios en un string.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.finfo-buffer-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">finfo</code></dt>
+     <dd>
+      <p class="para">Una instancia <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span>, retornada por <span class="function"><a href="#function.finfo-open" class="function">finfo_open()</a></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       Contenido de un fichero a ser verificado.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       Una o una unión de varias <a href="#fileinfo.constants" class="link">constantes Fileinfo</a>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.finfo-buffer-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una descripción textual del argumento
+   <code class="parameter">string</code> o <strong><code><a href="#constant.false">false</a></code></strong> si ha ocurrido un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.finfo-buffer-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.1.0</td>
+ <td>
+  El parámetro <code class="parameter">finfo</code> ahora espera una instancia de
+  <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span> ; anteriormente, una <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> era esperado.
+ </td>
+</tr>
+
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">context</code> ahora es nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.finfo-buffer-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2337">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>finfo_buffer()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$finfo </span><span style="color: #007700">= new </span><span style="color: #0000BB">finfo</span><span style="color: #007700">(</span><span style="color: #0000BB">FILEINFO_MIME</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$finfo</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">buffer</span><span style="color: #007700">(</span><span style="color: #0000BB">$_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"script"</span><span style="color: #007700">]) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">application/x-sh; charset=us-ascii</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.finfo-buffer-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.finfo-file" class="function" rel="rdfs-seeAlso">finfo_file()</a> - Devuelve información acerca de un fichero</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.finfo-close" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">finfo_close</h1>
+  <p class="verinfo">(PHP &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">finfo_close</span> — <span class="dc-title">Cierra una instancia finfo</span></p>
+
+ </div>
+ <div id="function.finfo-close-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">Esta función está
+<em>OBSOLETA</em> a partir de PHP 8.5.0. Depender de esta función
+está altamente desaconsejado.</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.finfo-close-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="attribute"><a href="class.deprecated.html">#[\Deprecated]</a> </span><br>
+   <span class="methodname"><strong>finfo_close</strong></span>(<span class="methodparam"><span class="type"><a href="#class.finfo" class="type finfo">finfo</a></span> <code class="parameter">$finfo</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   Esta función cierra la instancia abierta por <span class="function"><a href="#function.finfo-open" class="function">finfo_open()</a></span>.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.finfo-close-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">finfo</code></dt>
+     <dd>
+      <p class="para">Una instancia <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span>, retornada por <span class="function"><a href="#function.finfo-open" class="function">finfo_open()</a></span>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.finfo-close-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.finfo-close-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.1.0</td>
+ <td>
+  El parámetro <code class="parameter">finfo</code> ahora espera una instancia de
+  <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span> ; anteriormente, una <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> era esperado.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.finfo-file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">finfo_file</h1>
+  <h1 class="refname">finfo::file</h1>
+  <p class="verinfo">(PHP &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">finfo_file</span> -- <span class="refname">finfo::file</span> — <span class="dc-title">Devuelve información acerca de un fichero</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.finfo-file-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo procedimental</p>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>finfo_file</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.finfo" class="type finfo">finfo</a></span> <code class="parameter">$finfo</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">Estilo orientado a objetos</p>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#finfo.file" class="methodname">finfo::file</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+
+  <p class="para rdfs-comment">
+   Esta función se utiliza para obtener información acerca de un
+   fichero.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.finfo-file-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">finfo</code></dt>
+     <dd>
+      <p class="para">Una instancia <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span>, retornada por <span class="function"><a href="#function.finfo-open" class="function">finfo_open()</a></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       Nombre de un fichero a verificar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       Una o una unión de varias <a href="#fileinfo.constants" class="link">constantes Fileinfo</a>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">context</code></dt>
+     <dd>
+      <p class="para">
+       Para una descripción de <code class="literal">contexts</code>, consúltese
+       <a href="#ref.stream" class="xref">Funciones de Flujos</a>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.finfo-file-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una descripción textual del contenido del argumento
+   <code class="parameter">filename</code> o <strong><code><a href="#constant.false">false</a></code></strong> si ha ocurrido un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.finfo-file-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.1.0</td>
+ <td>
+  El parámetro <code class="parameter">finfo</code> ahora espera una instancia de
+  <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span> ; anteriormente, una <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> era esperado.
+ </td>
+</tr>
+
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">context</code> ahora es nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.finfo-file-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2338">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>finfo_file()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$finfo </span><span style="color: #007700">= </span><span style="color: #0000BB">finfo_open</span><span style="color: #007700">(</span><span style="color: #0000BB">FILEINFO_MIME_TYPE</span><span style="color: #007700">); </span><span style="color: #FF8000">// Devuelve el tipo mime también llamado extensión mimetype<br></span><span style="color: #007700">foreach (</span><span style="color: #0000BB">glob</span><span style="color: #007700">(</span><span style="color: #DD0000">"*"</span><span style="color: #007700">) as </span><span style="color: #0000BB">$filename</span><span style="color: #007700">) {<br>    echo </span><span style="color: #0000BB">finfo_file</span><span style="color: #007700">(</span><span style="color: #0000BB">$finfo</span><span style="color: #007700">, </span><span style="color: #0000BB">$filename</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">finfo_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$finfo</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">text/html
+image/gif
+application/vnd.ms-excel</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.finfo-file-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.finfo-buffer" class="function" rel="rdfs-seeAlso">finfo_buffer()</a> - Devuelve información acerca de un string de buffer</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.finfo-open" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">finfo_open</h1>
+  <h1 class="refname">finfo::__construct</h1>
+  <p class="verinfo">(PHP &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">finfo_open</span> -- <span class="refname">finfo::__construct</span> — <span class="dc-title">Crea una nueva instancia finfo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.finfo-open-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo procedimental</p>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>finfo_open</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$magic_database</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#class.finfo" class="type finfo">finfo</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">Estilo orientado a objetos (constructor):</p>
+  <div class="constructorsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#finfo.construct" class="methodname">finfo::__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$magic_database</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Esta función abre una base de datos mágica y devuelve su instancia.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.finfo-open-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       Una o una unión de varias <a href="#fileinfo.constants" class="link">constantes Fileinfo</a>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">magic_database</code></dt>
+     <dd>
+      <p class="para">
+       Nombre de fichero de una base de datos mágica, normalmente algo
+       como <var class="filename">/path/to/magic.mime</var>. Si no se especifica, se utiliza
+       la variable de entorno <code class="literal">MAGIC</code>.
+       Si la variable de entorno no está definida, se utilizará la base de datos mágica
+       integrada en PHP.
+      </p>
+      <p class="para">
+       Pasar <strong><code><a href="#constant.null">null</a></code></strong> o un <span class="type"><a href="#language.types.string" class="type string">string</a></span> vacío equivale a
+       utilizar el valor por omisión.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.finfo-open-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   (Únicamente en modo procedimental)
+   Devuelve una instancia de <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span> en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.finfo-open-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.1.0</td>
+      <td>
+       Ahora devuelve una instancia de <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span> ;
+       anteriormente, se esperaba una <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.3</td>
+      <td>
+       <code class="parameter">magic_database</code> ahora es nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.finfo-open-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-2339">
+   <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$finfo </span><span style="color: #007700">= new </span><span style="color: #0000BB">finfo</span><span style="color: #007700">(</span><span style="color: #0000BB">FILEINFO_MIME</span><span style="color: #007700">, </span><span style="color: #DD0000">"/usr/share/misc/magic"</span><span style="color: #007700">); </span><span style="color: #FF8000">// Devuelve el tipo mime<br><br>/* Obtiene el mime-type de un fichero específico */<br></span><span style="color: #0000BB">$filename </span><span style="color: #007700">= </span><span style="color: #DD0000">"/usr/local/something.txt"</span><span style="color: #007700">;<br>echo </span><span style="color: #0000BB">$finfo</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">file</span><span style="color: #007700">(</span><span style="color: #0000BB">$filename</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+  <div class="example" id="example-2340">
+   <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$finfo </span><span style="color: #007700">= </span><span style="color: #0000BB">finfo_open</span><span style="color: #007700">(</span><span style="color: #0000BB">FILEINFO_MIME</span><span style="color: #007700">, </span><span style="color: #DD0000">"/usr/share/misc/magic"</span><span style="color: #007700">); </span><span style="color: #FF8000">// Devuelve el tipo mime<br><br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$finfo</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">"Fallo al abrir la base de datos fileinfo"</span><span style="color: #007700">;<br>    exit();<br>}<br><br></span><span style="color: #FF8000">/* Obtiene el mime-type de un fichero específico */<br></span><span style="color: #0000BB">$filename </span><span style="color: #007700">= </span><span style="color: #DD0000">"/usr/local/something.txt"</span><span style="color: #007700">;<br>echo </span><span style="color: #0000BB">finfo_file</span><span style="color: #007700">(</span><span style="color: #0000BB">$finfo</span><span style="color: #007700">, </span><span style="color: #0000BB">$filename</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Cierre de la conexión */<br></span><span style="color: #0000BB">finfo_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$finfo</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+  <p class="para">El ejemplo anterior mostrará:</p>
+  <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">text/plain; charset=us-ascii</pre>
+</div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.finfo-open-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Generalmente, el uso de la base de datos mágica integrada (dejando
+    las variables de entorno <code class="parameter">magic_database</code> y <code class="literal">MAGIC</code>
+    no definidas) es la mejor solución a menos que se necesite
+    una base de datos mágica específica.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.finfo-open-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.finfo-close" class="function" rel="rdfs-seeAlso">finfo_close()</a> - Cierra una instancia finfo</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.finfo-set-flags" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">finfo_set_flags</h1>
+  <h1 class="refname">finfo::set_flags</h1>
+  <p class="verinfo">(PHP &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">finfo_set_flags</span> -- <span class="refname">finfo::set_flags</span> — <span class="dc-title">Establece opciones de configuración de libmagic</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.finfo-set-flags-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo procedimental</p>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>finfo_set_flags</strong></span>(<span class="methodparam"><span class="type"><a href="#class.finfo" class="type finfo">finfo</a></span> <code class="parameter">$finfo</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><a href="#language.types.singleton" class="type true">true</a></span></div>
+
+  <p class="para rdfs-comment">Estilo orientado a objetos</p>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#finfo.set-flags" class="methodname">finfo::set_flags</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><a href="#language.types.singleton" class="type true">true</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   Esta función establece diversas opciones de Fileinfo. Las opciones pueden ser
+   también establecidas directamente en <span class="function"><a href="#function.finfo-open" class="function">finfo_open()</a></span> o por
+   otras funciones Fileinfo.
+  </p>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.finfo-set-flags-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">finfo</code></dt>
+     <dd>
+      <p class="para">Una instancia <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span>, retornada por <span class="function"><a href="#function.finfo-open" class="function">finfo_open()</a></span>.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       Una o una unión de varias <a href="#fileinfo.constants" class="link">constantes Fileinfo</a>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.finfo-set-flags-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna siempre <strong><code><a href="#constant.true">true</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.finfo-set-flags-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.1.0</td>
+ <td>
+  El parámetro <code class="parameter">finfo</code> ahora espera una instancia de
+  <span class="classname"><a href="#class.finfo" class="classname">finfo</a></span> ; anteriormente, una <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> era esperado.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.mime-content-type" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mime_content_type</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">mime_content_type</span> — <span class="dc-title">Detecta el tipo de contenido de un fichero</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mime-content-type-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mime_content_type</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$filename</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el contenido MIME de un fichero utilizando las informaciones
+   desde el fichero <var class="filename">magic.mime</var>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mime-content-type-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       Ruta hacia el fichero a probar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mime-content-type-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tipo de contenido en formato MIME, como
+   <code class="literal">text/plain</code> o <code class="literal">application/octet-stream</code>,
+    o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.mime-content-type-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+En caso de fallo, se emitirá una advertencia de tipo <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong>.
+</p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mime-content-type-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2341">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mime_content_type()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">mime_content_type</span><span style="color: #007700">(</span><span style="color: #DD0000">'php.gif'</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #0000BB">mime_content_type</span><span style="color: #007700">(</span><span style="color: #DD0000">'test.php'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">image/gif
+text/plain</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mime-content-type-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.finfo-file" class="function" rel="rdfs-seeAlso">finfo_file()</a> - Devuelve información acerca de un fichero</span></li>
+    <li><span class="function"><a href="#function.finfo-buffer" class="function" rel="rdfs-seeAlso">finfo_buffer()</a> - Devuelve información acerca de un string de buffer</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.finfo-buffer">finfo_buffer</a> — Devuelve información acerca de un string de buffer</li><li><a href="#function.finfo-close">finfo_close</a> — Cierra una instancia finfo</li><li><a href="#function.finfo-file">finfo_file</a> — Devuelve información acerca de un fichero</li><li><a href="#function.finfo-open">finfo_open</a> — Crea una nueva instancia finfo</li><li><a href="#function.finfo-set-flags">finfo_set_flags</a> — Establece opciones de configuración de libmagic</li><li><a href="#function.mime-content-type">mime_content_type</a> — Detecta el tipo de contenido de un fichero</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+<div id="class.finfo" class="reference"><hr>
+
+ <h1 class="title">La clase finfo</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 5 &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p>
+
+
+  <div class="section" id="finfo.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Esta clase proporciona una interfaz orientada a objetos para las funciones fileinfo.
+   </p>
+  </div>
+
+
+  <div class="section" id="finfo.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">finfo</strong></strong>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#finfo.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$magic_database</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>)</div>
+
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#finfo.buffer" class="methodname">buffer</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#finfo.file" class="methodname">file</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#finfo.set-flags" class="methodname">set_flags</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><a href="#language.types.singleton" class="type true">true</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+<div id="finfo.buffer" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">finfo::buffer</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">finfo::buffer</span> — <span class="dc-title">Alias de <a href="#function.finfo-buffer" class="link">finfo_buffer()</a></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-finfo.buffer-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>finfo::buffer</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función es un alias de:  <a href="#function.finfo-buffer" class="link">finfo_buffer()</a>
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="finfo.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">finfo::__construct</h1>
+  <p class="verinfo">(PHP &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">finfo::__construct</span> — <span class="dc-title">Alias de <span class="function"><a href="#function.finfo-open" class="function">finfo_open()</a></span></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-finfo.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>finfo::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$magic_database</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Esta función es un alias de:  <span class="function"><a href="#function.finfo-open" class="function">finfo_open()</a></span>
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-finfo.construct-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.3</td>
+      <td>
+       <code class="parameter">magic_database</code> es ahora nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="finfo.file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">finfo::file</h1>
+  <p class="verinfo">(PHP &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">finfo::file</span> — <span class="dc-title">Alias de <a href="#function.finfo-file" class="link">finfo_file()</a></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-finfo.file-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>finfo::file</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.fileinfo-none">FILEINFO_NONE</a></code></strong></span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></span> <code class="parameter">$context</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función es un alias de:  <a href="#function.finfo-file" class="link">finfo_file()</a>
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="finfo.set-flags" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">finfo::set_flags</h1>
+  <p class="verinfo">(PHP &gt;= 5.3.0, PHP 7, PHP 8, PECL fileinfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">finfo::set_flags</span> — <span class="dc-title">Alias de <a href="#function.finfo-set-flags" class="link">finfo_set_flags()</a></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-finfo.set-flags-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>finfo::set_flags</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>): <span class="type"><a href="#language.types.singleton" class="type true">true</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función es un alias de:  <a href="#function.finfo-set-flags" class="link">finfo_set_flags()</a>
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#finfo.buffer">finfo::buffer</a> — Alias de finfo_buffer()</li><li><a href="#finfo.construct">finfo::__construct</a> — Alias de finfo_open</li><li><a href="#finfo.file">finfo::file</a> — Alias de finfo_file()</li><li><a href="#finfo.set-flags">finfo::set_flags</a> — Alias de finfo_set_flags()</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.fileinfo">Introducción</a></li><li><a href="#fileinfo.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#fileinfo.installation">Instalación</a></li><li><a href="#fileinfo.resources">Tipos de recursos</a></li></ul></li><li><a href="#fileinfo.constants">Constantes predefinidas</a></li><li><a href="#ref.fileinfo">Funciones de Fileinfo</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.finfo-buffer">finfo_buffer</a> — Devuelve información acerca de un string de buffer</li><li><a href="#function.finfo-close">finfo_close</a> — Cierra una instancia finfo</li><li><a href="#function.finfo-file">finfo_file</a> — Devuelve información acerca de un fichero</li><li><a href="#function.finfo-open">finfo_open</a> — Crea una nueva instancia finfo</li><li><a href="#function.finfo-set-flags">finfo_set_flags</a> — Establece opciones de configuración de libmagic</li><li><a href="#function.mime-content-type">mime_content_type</a> — Detecta el tipo de contenido de un fichero</li></ul></li><li><a href="#class.finfo">finfo</a> — La clase finfo<ul class="chunklist chunklist_book chunklist_children"><li><a href="#finfo.buffer">finfo::buffer</a> — Alias de finfo_buffer()</li><li><a href="#finfo.construct">finfo::__construct</a> — Alias de finfo_open</li><li><a href="#finfo.file">finfo::file</a> — Alias de finfo_file()</li><li><a href="#finfo.set-flags">finfo::set_flags</a> — Alias de finfo_set_flags()</li></ul></li></ul></div>

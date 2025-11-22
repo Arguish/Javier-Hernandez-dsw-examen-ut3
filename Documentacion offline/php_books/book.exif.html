@@ -1,0 +1,1208 @@
+<div id="book.exif" class="book"><hr>
+ 
+ <h1 class="title">Información Exif</h1>
+ 
+
+ 
+ <div id="intro.exif" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Con la extensión exif, se puede trabajar con los datos meta de las imágenes. Por ejemplo, las funciones exif deben ser utilizadas para leer los datos meta de las imágenes tomadas por cámaras digitales, almacenados en el encabezado. Estos datos están comúnmente presentes en las imágenes <abbr title="Joint Photographic Experts Group">JPEG</abbr> y <abbr title="Tagged Image File Format">TIFF</abbr>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="exif.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#exif.requirements">Requerimientos</a></li><li><a href="#exif.installation">Instalación</a></li><li><a href="#exif.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ 
+ <div id="exif.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   PHP debe ser compilado con la opción
+   <code class="literal">--enable-exif</code>. Para activar el soporte de etiquetas EXIF multibyte, la extensión
+   <a href="#ref.mbstring" class="link">mbstring</a> debe ser activada durante la compilación con <code class="literal">--enable-mbstring</code>. PHP no requiere ninguna biblioteca adicional para el funcionamiento del módulo exif.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+<div id="exif.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Para habilitar el soporte para exif configure PHP con
+  <strong class="option configure">--enable-exif</strong>
+ </p>
+ <p class="para">
+  Los usuarios de Windows deben habilitar las DLL <var class="filename">php_mbstring.dll</var>
+  y <var class="filename">php_exif.dll</var> en <var class="filename">php.ini</var>. La DLL
+  <var class="filename">php_mbstring.dll</var> debe cargarse
+  <em>antes</em> que la DLL <var class="filename">php_exif.dll</var>, así que
+  ajuste su <var class="filename">php.ini</var> como corresponde.
+ </p>
+</div>
+<hr>
+
+
+
+
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="exif.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  Exif soporta automáticamente la conversión de codificaciones de caracteres
+  Unicode y JIS de comentarios de usuario cuando el módulo
+  <a href="#ref.mbstring" class="link">mbstring</a>
+  está disponible. Ésto se realiza primero decodificando el comentario
+  utilizando el conjunto de caracteres especificado. El resultado después es codificado
+  con otro conjunto de caracteres que debería de coincidir con su
+  salida <code class="literal">HTTP</code>.
+  </p><table class="doctable table">
+   <caption><strong>Opciones de configuración de Exif</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.exif.encode-unicode" class="link">exif.encode_unicode</a></td>
+      <td>"ISO-8859-15"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.exif.decode-unicode-motorola" class="link">exif.decode_unicode_motorola</a></td>
+      <td>"UCS-2BE"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.exif.decode-unicode-intel" class="link">exif.decode_unicode_intel</a></td>
+      <td>"UCS-2LE"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.exif.encode-jis" class="link">exif.encode_jis</a></td>
+      <td>""</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.exif.decode-jis-motorola" class="link">exif.decode_jis_motorola</a></td>
+      <td>"JIS"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.exif.decode-jis-intel" class="link">exif.decode_jis_intel</a></td>
+      <td>"JIS"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td class="empty"> </td>
+     </tr>
+
+    </tbody>
+  
+  </table>
+
+  Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+ <p class="para">
+  </p><dl>
+   
+    <dt id="ini.exif.encode-unicode">
+     <code class="parameter">exif.encode_unicode</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      <code class="literal">exif.encode_unicode</code> define el
+      conjunto de caracteres UNICODE de los comentarios de usuario que se están tratando.
+      Por defecto es ISO-8859-15 lo que debería funcionar para
+      la mayoría de los países no asiáticos. La configuración puede estar vacía
+      o debe ser una codificacion soportada por mbstring. Si
+      está vacía se usa la codificación interna actual de
+      mbstring.
+     </p>
+    </dd>
+   
+   
+    <dt id="ini.exif.decode-unicode-motorola">
+     <code class="parameter">exif.decode_unicode_motorola</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       <code class="literal">exif.decode_unicode_motorola</code> define
+       el conjunto de caracteres interno de la imagen para comentarios
+       de usuario codificados con Unicode si la imagen está con el orden de byte de motorola (big-endian).
+       Esta configuración no puede estar vacía pero puede especificar una lista
+       de codificaciones soportadas por mbstring. El valor por defecto es UCS-2BE.
+      </p>
+     </dd>
+   
+   
+    <dt id="ini.exif.decode-unicode-intel">
+     <code class="parameter">exif.decode_unicode_intel</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       <code class="literal">exif.decode_unicode_intel</code> define
+       el conjunto de caracteres interno de la imagen para comentarios
+       de usuario codificados con Unicode si la imagen está con el orden de byte de intel (little-endian).
+       Esta configuración no puede estar vacía pero puede especificar una lista
+       de codificaciones soportadas por mbstring. El valor por defecto es UCS-2LE.
+      </p>
+     </dd>
+   
+   
+    <dt id="ini.exif.encode-jis">
+     <code class="parameter">exif.encode_jis</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       <code class="literal">exif.encode_jis</code> define el
+       conjunto de caracteres JIS de los comentarios de usuario que se están tratando.
+       Por defecto está vacía lo que fuerza a las
+       funciones a usar la codificación interna actual de
+       mbstring.
+      </p>
+     </dd>
+   
+   
+    <dt id="ini.exif.decode-jis-motorola">
+     <code class="parameter">exif.decode_jis_motorola</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       <code class="literal">exif.decode_jis_motorola</code> define
+       el conjunto de caracteres interno de la imagen para los comentarios de usuario
+       codificados con JIS si la imagen está con el orden de byte de motorola (big-endian).
+       Esta configuración no puede estar vacía pero puede especificar una lista
+       de codificaciones soportadas por mbstring. El valor por defecto es JIS.
+      </p>
+     </dd>
+   
+   
+    <dt id="ini.exif.decode-jis-intel">
+     <code class="parameter">exif.decode_jis_intel</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       <code class="literal">exif.decode_jis_intel</code> define
+       el conjunto de caracteres interno de la imagen para los comentarios de usuario
+       codificados con JIS si la imagen está con el orden de byte de intel (little-endian).
+       Esta configuración no puede estar vacía pero puede especificar una lista
+       de codificaciones soportadas por mbstring. El valor por defecto es JIS.
+      </p>
+     </dd>
+   
+  </dl>
+ 
+</div>
+<hr>
+
+
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="exif.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <p class="para">
+  </p><dl>
+   
+    <dt id="constant.exif-use-mbstring">
+     <strong><code><a href="#constant.exif-use-mbstring">EXIF_USE_MBSTRING</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Esta constante tiene el valor <code class="literal">1</code> si
+      <a href="#ref.mbstring" class="link">mbstring</a> está activado, de lo contrario
+      su valor es <code class="literal">0</code>.
+     </span>
+    </dd>
+   
+  </dl>
+ 
+ <p class="para">
+  La función <span class="function"><a href="#function.exif-imagetype" class="function">exif_imagetype()</a></span> lista varias constantes
+  relacionadas.
+ </p>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="ref.exif" class="reference"><hr>
+ <h1 class="title">Funciones de Exif</h1>
+
+ 
+
+
+
+ <div id="function.exif-imagetype" class="refentry"><hr>
+  <div class="refnamediv">
+   <h1 class="refname">exif_imagetype</h1>
+   <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">exif_imagetype</span> — <span class="dc-title">Determina el tipo de una imagen</span></p>
+
+  </div>
+  <div class="refsect1 description" id="refsect1-function.exif-imagetype-description">
+   <h3 class="title">Descripción</h3>
+   <div class="methodsynopsis dc-description">
+    <span class="methodname"><strong>exif_imagetype</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+   <p class="para rdfs-comment">
+    <span class="function"><strong>exif_imagetype()</strong></span> lee los primeros octetos del fichero de imagen
+    <code class="parameter">filename</code>, y verifica su firma.
+   </p>
+   <p class="para">
+    <span class="function"><strong>exif_imagetype()</strong></span> puede ser utilizada para evitar las llamadas
+    a las otras funciones <a href="#ref.exif" class="link">exif</a> para los formatos de ficheros que
+    no son soportados, o en conjunción con
+    <var class="varname"><a href="#reserved.variables.server" class="classname">$_SERVER['HTTP_ACCEPT']</a></var> para verificar
+    si el usuario podrá ver esta imagen en su navegador.
+   </p>
+  </div>
+
+  <div class="refsect1 parameters" id="refsect1-function.exif-imagetype-parameters">
+   <h3 class="title">Parámetros</h3>
+   <p class="para">
+    </p><dl>
+     
+      <dt><code class="parameter">filename</code></dt>
+      <dd>
+       <span class="simpara">
+        La imagen a verificar.
+       </span>
+      </dd>
+     
+    </dl>
+   
+  </div>
+
+  <div class="refsect1 returnvalues" id="refsect1-function.exif-imagetype-returnvalues">
+   <h3 class="title">Valores devueltos</h3>
+   <p class="para">
+    Cuando se encuentra un valor válido, se devuelve la constante apropiada, y de lo contrario, <strong><code><a href="#constant.false">false</a></code></strong>. El valor devuelto es el mismo
+    que la función <span class="function"><a href="#function.getimagesize" class="function">getimagesize()</a></span> en el índice 2, pero
+    esta función es mucho más rápida.
+   </p>
+
+   <p class="para">
+    Las constantes siguientes están definidas y representan los valores
+    posibles de retorno de la función <span class="function"><strong>exif_imagetype()</strong></span> :
+    </p><table class="doctable table">
+     <caption><strong>Constantes de tipo de imágenes</strong></caption>
+     
+      <thead>
+       <tr>
+        <th>Valor</th>
+        <th>Constante</th>
+       </tr>
+
+      </thead>
+
+      <tbody class="tbody">
+       <tr>
+        <td>1</td>
+        <td><strong><code><a href="#constant.imagetype-gif">IMAGETYPE_GIF</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>2</td>
+        <td><strong><code><a href="#constant.imagetype-jpeg">IMAGETYPE_JPEG</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>3</td>
+        <td><strong><code><a href="#constant.imagetype-png">IMAGETYPE_PNG</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>4</td>
+        <td><strong><code><a href="#constant.imagetype-swf">IMAGETYPE_SWF</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>5</td>
+        <td><strong><code><a href="#constant.imagetype-psd">IMAGETYPE_PSD</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>6</td>
+        <td><strong><code><a href="#constant.imagetype-bmp">IMAGETYPE_BMP</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>7</td>
+        <td><strong><code><a href="#constant.imagetype-tiff-ii">IMAGETYPE_TIFF_II</a></code></strong> (orden de octetos de Intel)</td>
+       </tr>
+
+       <tr>
+        <td>8</td>
+        <td>
+         <strong><code><a href="#constant.imagetype-tiff-mm">IMAGETYPE_TIFF_MM</a></code></strong> (orden de octetos Motorola)
+        </td>
+       </tr>
+
+       <tr>
+        <td>9</td>
+        <td><strong><code><a href="#constant.imagetype-jpc">IMAGETYPE_JPC</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>10</td>
+        <td><strong><code><a href="#constant.imagetype-jp2">IMAGETYPE_JP2</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>11</td>
+        <td><strong><code><a href="#constant.imagetype-jpx">IMAGETYPE_JPX</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>12</td>
+        <td><strong><code><a href="#constant.imagetype-jb2">IMAGETYPE_JB2</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>13</td>
+        <td><strong><code><a href="#constant.imagetype-swc">IMAGETYPE_SWC</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>14</td>
+        <td><strong><code><a href="#constant.imagetype-iff">IMAGETYPE_IFF</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>15</td>
+        <td><strong><code><a href="#constant.imagetype-wbmp">IMAGETYPE_WBMP</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>16</td>
+        <td><strong><code><a href="#constant.imagetype-xbm">IMAGETYPE_XBM</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>17</td>
+        <td><strong><code><a href="#constant.imagetype-ico">IMAGETYPE_ICO</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>18</td>
+        <td><strong><code><a href="#constant.imagetype-webp">IMAGETYPE_WEBP</a></code></strong></td>
+       </tr>
+
+       <tr>
+        <td>19</td>
+        <td><strong><code><a href="#constant.imagetype-avif">IMAGETYPE_AVIF</a></code></strong></td>
+       </tr>
+
+      </tbody>
+     
+    </table>
+
+   
+
+   <blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     La función <span class="function"><strong>exif_imagetype()</strong></span> emitirá una alerta de
+     nivel <strong><code><a href="#constant.e-notice">E_NOTICE</a></code></strong> y devolverá <strong><code><a href="#constant.false">false</a></code></strong> si no es
+     capaz de leer suficientes octetos desde el fichero para determinar
+     el tipo de imagen.
+     
+    </p>
+   </blockquote>
+  </div>
+
+
+  <div class="refsect1 changelog" id="refsect1-function.exif-imagetype-changelog">
+   <h3 class="title">Historial de cambios</h3>
+   <p class="para">
+    </p><table class="doctable informaltable">
+     
+      <thead>
+       <tr>
+        <th>Versión</th>
+        <th>Descripción</th>
+       </tr>
+
+      </thead>
+
+      <tbody class="tbody">
+       <tr>
+        <td>7.1.0</td>
+        <td>
+         Añadida la compatibilidad con WebP.
+        </td>
+       </tr>
+
+       <tr>
+        <td>8.1.0</td>
+        <td>
+         Añadida la compatibilidad con AVIF.
+        </td>
+       </tr>
+
+      </tbody>
+     
+    </table>
+
+   
+  </div>
+
+
+  <div class="refsect1 examples" id="refsect1-function.exif-imagetype-examples">
+   <h3 class="title">Ejemplos</h3>
+   <p class="para">
+    </p><div class="example" id="example-2822">
+     <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>exif_imagetype()</strong></span></strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">if (</span><span style="color: #0000BB">exif_imagetype</span><span style="color: #007700">(</span><span style="color: #DD0000">'image.gif'</span><span style="color: #007700">) != </span><span style="color: #0000BB">IMAGETYPE_GIF</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Esta imagen no es un gif'</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+    </div>
+   
+  </div>
+
+  <div class="refsect1 seealso" id="refsect1-function.exif-imagetype-seealso">
+   <h3 class="title">Ver también</h3>
+   <p class="para">
+    </p><ul class="simplelist">
+     <li><span class="function"><a href="#function.image-type-to-mime-type" class="function" rel="rdfs-seeAlso">image_type_to_mime_type()</a> - Lee el Mime-Type de un tipo de imagen</span></li>
+     <li><span class="function"><a href="#function.getimagesize" class="function" rel="rdfs-seeAlso">getimagesize()</a> - Devuelve el tamaño de una imagen</span></li>
+    </ul>
+   
+  </div>
+
+ </div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.exif-read-data" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">exif_read_data</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">exif_read_data</span> — <span class="dc-title">Lee los encabezados <abbr title="Exchangeable Image File ">EXIF</abbr> en las imágenes</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.exif-read-data-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>exif_read_data</strong></span>(<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$file</code></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$required_sections</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$as_arrays</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$read_thumbnail</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>exif_read_data()</strong></span> lee los encabezados <abbr title="Exchangeable Image File ">EXIF</abbr>
+   de las imágenes.
+   Con esta función, se pueden leer los datos meta generados por las cámaras
+   digitales.
+  </p>
+  <p class="para">
+   Los encabezados <abbr title="Exchangeable Image File ">EXIF</abbr> tienden a estar presentes en las imágenes
+   JPEG/TIFF generadas por las cámaras digitales, pero desafortunadamente,
+   cada cámara digital tiene una idea diferente de cómo
+   sus imágenes deben ser marcadas, por lo que no siempre se puede contar
+   con un encabezado EXIF específico, aunque esté presente.
+  </p>
+  <p class="para">
+   Los parámetros <code class="literal">Height</code> y <code class="literal">Width</code>
+   se calculan de la misma manera que para la función <span class="function"><a href="#function.getimagesize" class="function">getimagesize()</a></span>,
+   por lo que sus valores no formarán parte de ningún encabezado devuelto. De igual manera, el índice
+   <code class="literal">html</code> es la representación textual de la altura/ancho
+   utilizada en una etiqueta de imagen <abbr title="Hyper Text Markup Language">HTML</abbr> clásica.
+  </p>
+  <p class="para">
+   Cuando un encabezado EXIF contiene una nota de Copyright, este encabezado
+   puede contener a su vez dos valores. Como esta solución es inconsistente con los estándares EXIF 2.10, la sección <code class="literal">COMPUTED</code>
+   devolverá los dos encabezados, <code class="literal">Copyright.Photographer</code>
+   y <code class="literal">Copyright.Editor</code>, mientras que las secciones <code class="literal">IFD0</code>
+   contienen el array de bytes con caracteres NULL para separar las dos entradas;
+   o bien, solo la primera entrada si el tipo de datos era incorrecto
+   (comportamiento por defecto de EXIF). La sección <code class="literal">COMPUTED</code> también
+   contendrá una entrada <code class="literal">Copyright</code>, que será ya sea la cadena original
+   de copyright, o una lista de valores separados por comas de
+   fotos y copyright del autor.
+  </p>
+  <p class="para">
+   La etiqueta <code class="literal">UserComment</code> presenta el mismo problema que la etiqueta Copyright.
+   Puede almacenar dos valores: primero, el juego de caracteres utilizado, luego
+   el valor en sí. Si es así, la sección <code class="literal">IFD</code> contendrá solo
+   el juego de caracteres, o un array de bytes. La sección <code class="literal">COMPUTED</code>
+   almacenará las dos entradas <code class="literal">UserCommentEncoding</code> y
+  <code class="literal">UserComment</code>. El índice <code class="literal">UserComment</code>
+  está disponible en ambos casos, y es preferible usarlo, en lugar del valor de la sección <code class="literal">IFD0</code>.
+  </p>
+  <p class="para">
+   <span class="function"><strong>exif_read_data()</strong></span> valida los datos de las etiquetas EXIF de acuerdo
+   con la especificación EXIF (<a href="http://exif.org/Exif2-2.PDF" class="link external">» http://exif.org/Exif2-2.PDF</a>, página 20).
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.exif-read-data-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">file</code></dt>
+     <dd>
+      <p class="para">
+       La ubicación del archivo de imagen. Puede ser ya sea una ruta de acceso
+       al archivo (los wrappers de flujo también son soportados como
+       de costumbre), o un flujo <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">required_sections</code></dt>
+     <dd>
+      <p class="para">
+       Lista de valores separados por comas
+       de las secciones que deben presentarse en el array de resultado.
+       Si ninguna de las secciones solicitadas se encuentra, el valor devuelto
+       es <strong><code><a href="#constant.false">false</a></code></strong>.
+       </p><table class="doctable informaltable">
+        
+         <tbody class="tbody">
+          <tr>
+           <td>FILE</td>
+           <td>FileName (nombre del archivo), FileSize (tamaño del archivo),
+           FileDateTime (fecha de modificación del archivo), SectionsFound (secciones encontradas)</td>
+          </tr>
+
+          <tr>
+           <td>COMPUTED</td>
+           <td>
+            Atributo Html, ancho, altura, color o blanco y negro y más si está disponible.
+            El ancho y la altura se calculan de la misma manera que la función
+            <span class="function"><a href="#function.getimagesize" class="function">getimagesize()</a></span>, por lo que sus valores nunca
+            deberían diferir. De igual manera, el índice
+           <code class="literal">html</code> es la representación textual de la altura/ancho
+           utilizada en una etiqueta de imagen <abbr title="Hyper Text Markup Language">HTML</abbr> clásica.
+           </td>
+          </tr>
+
+          <tr>
+           <td>ANY_TAG</td>
+           <td>
+            Toda la información concerniente a esta etiqueta, como
+            <code class="literal">IFD0</code>, <code class="literal">EXIF</code>, ...
+           </td>
+          </tr>
+
+          <tr>
+           <td>IFD0</td>
+           <td>
+            Todas las etiquetas <code class="literal">IFD0</code>.
+            En imágenes normales, contienen las
+            dimensiones de la imagen, etc.
+           </td>
+          </tr>
+
+          <tr>
+           <td>THUMBNAIL</td>
+           <td>
+            Un archivo que contiene una miniatura, si hay un segundo <code class="literal">IFD</code>.
+            Toda la información etiquetada sobre esta miniatura
+            será almacenada en esta sección.
+           </td>
+          </tr>
+
+          <tr>
+           <td>COMMENT</td>
+           <td>Encabezado de comentario de las imágenes JPEG.</td>
+          </tr>
+
+          <tr>
+           <td>EXIF</td>
+           <td>
+            La sección EXIF es una subsección de la sección <code class="literal">IFD0</code>. Ella
+            contiene información más detallada sobre las imágenes. La mayoría
+            de estos índices están relacionados con las cámaras digitales.
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">as_arrays</code></dt>
+      <dd>
+      <p class="para">
+       Especifica si cada sección debe convertirse en un array o no.
+       Las <code class="parameter">required_sections</code>  <code class="literal">COMPUTED</code>,
+       <code class="literal">THUMBNAIL</code> y <code class="literal">COMMENT</code> siempre serán
+       convertidas en arrays, ya que contienen nombres que podrían entrar en conflicto.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">read_thumbnail</code></dt>
+     <dd>
+      <p class="para">
+       Cuando se define como <strong><code><a href="#constant.true">true</a></code></strong>, la miniatura misma es leída. De lo contrario,
+       solo se leen los datos contenidos en el archivo.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.exif-read-data-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array asociativo donde los índices son los nombres de los encabezados y los valores
+   son los valores asociados a estos encabezados. Si no se puede devolver ningún dato,
+   <span class="function"><strong>exif_read_data()</strong></span> devolverá <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.exif-read-data-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Pueden generarse errores de nivel <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong> y/o <strong><code><a href="#constant.e-notice">E_NOTICE</a></code></strong>
+   para etiquetas no soportadas u otras condiciones de error potencial, pero la función intenta leer toda la información comprensible.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.exif-read-data-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">required_sections</code> ahora es nullable.
+       </td>
+      </tr>
+
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        <p class="para">
+         Se ha añadido el soporte para los siguientes formatos EXIF:
+         </p><ul class="simplelist">
+          <li>Samsung</li>
+          <li>DJI</li>
+          <li>Panasonic</li>
+          <li>Sony</li>
+          <li>Pentax</li>
+          <li>Minolta</li>
+          <li>Sigma/Foveon</li>
+          <li>AGFA</li>
+          <li>Kyocera</li>
+          <li>Ricoh</li>
+          <li>Epson</li>
+         </ul>
+        
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.exif-read-data-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2823">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>exif_read_data()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #DD0000">"test1.jpg:&lt;br /&gt;\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$exif </span><span style="color: #007700">= </span><span style="color: #0000BB">exif_read_data</span><span style="color: #007700">(</span><span style="color: #DD0000">'tests/test1.jpg'</span><span style="color: #007700">, </span><span style="color: #DD0000">'IFD0'</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$exif</span><span style="color: #007700">===</span><span style="color: #0000BB">false </span><span style="color: #007700">? </span><span style="color: #DD0000">"No se encontraron encabezados de datos.&lt;br /&gt;\n" </span><span style="color: #007700">: </span><span style="color: #DD0000">"La imagen contiene encabezados&lt;br /&gt;\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$exif </span><span style="color: #007700">= </span><span style="color: #0000BB">exif_read_data</span><span style="color: #007700">(</span><span style="color: #DD0000">'tests/test2.jpg'</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">"test2.jpg:&lt;br /&gt;\n"</span><span style="color: #007700">;<br>foreach (</span><span style="color: #0000BB">$exif </span><span style="color: #007700">as </span><span style="color: #0000BB">$key </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$section</span><span style="color: #007700">) {<br>    foreach (</span><span style="color: #0000BB">$section </span><span style="color: #007700">as </span><span style="color: #0000BB">$name </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$val</span><span style="color: #007700">) {<br>        echo </span><span style="color: #DD0000">"</span><span style="color: #0000BB">$key</span><span style="color: #DD0000">.</span><span style="color: #0000BB">$name</span><span style="color: #DD0000">: </span><span style="color: #0000BB">$val</span><span style="color: #DD0000">&lt;br /&gt;\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>
+     La primera llamada falla porque la imagen no tiene encabezado de información.
+    </p></div>
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">test1.jpg:
+No se encontraron encabezados de datos.
+test2.jpg:
+FILE.FileName: test2.jpg
+FILE.FileDateTime: 1017666176
+FILE.FileSize: 1240
+FILE.FileType: 2
+FILE.SectionsFound: ANY_TAG, IFD0, THUMBNAIL, COMMENT
+COMPUTED.html: width="1" height="1"
+COMPUTED.Height: 1
+COMPUTED.Width: 1
+COMPUTED.IsColor: 1
+COMPUTED.ByteOrderMotorola: 1
+COMPUTED.UserComment: Exif test image.
+COMPUTED.UserCommentEncoding: ASCII
+COMPUTED.Copyright: Photo (c) M.Boerger, Edited by M.Boerger.
+COMPUTED.Copyright.Photographer: Photo (c) M.Boerger
+COMPUTED.Copyright.Editor: Edited by M.Boerger.
+IFD0.Copyright: Photo (c) M.Boerger
+IFD0.UserComment: ASCII
+THUMBNAIL.JPEGInterchangeFormat: 134
+THUMBNAIL.JPEGInterchangeFormatLength: 523
+COMMENT.0: Comment #1.
+COMMENT.1: Comment #2.
+COMMENT.2: Comment #3end
+THUMBNAIL.JPEGInterchangeFormat: 134
+THUMBNAIL.Thumbnail.Height: 1
+THUMBNAIL.Thumbnail.Height: 1</pre>
+</div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-2824">
+    <p><strong>Ejemplo #2 <span class="function"><strong>exif_read_data()</strong></span> con flujos disponibles desde PHP 7.2.0</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Abrir el archivo, esto debería ser en modo binario<br></span><span style="color: #0000BB">$fp </span><span style="color: #007700">= </span><span style="color: #0000BB">fopen</span><span style="color: #007700">(</span><span style="color: #DD0000">'/path/to/image.jpg'</span><span style="color: #007700">, </span><span style="color: #DD0000">'rb'</span><span style="color: #007700">);<br><br>if (!</span><span style="color: #0000BB">$fp</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Error: No se pudo abrir la imagen para lectura'</span><span style="color: #007700">;<br>    exit;<br>}<br><br></span><span style="color: #FF8000">// Intentar leer los encabezados EXIF<br></span><span style="color: #0000BB">$headers </span><span style="color: #007700">= </span><span style="color: #0000BB">exif_read_data</span><span style="color: #007700">(</span><span style="color: #0000BB">$fp</span><span style="color: #007700">);<br><br>if (!</span><span style="color: #0000BB">$headers</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">'Error: No se pudieron leer los encabezados exif'</span><span style="color: #007700">;<br>    exit;<br>}<br><br></span><span style="color: #FF8000">// Mostrar los encabezados 'COMPUTED'<br></span><span style="color: #007700">echo </span><span style="color: #DD0000">'EXIF Headers:' </span><span style="color: #007700">. </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br><br>foreach (</span><span style="color: #0000BB">$headers</span><span style="color: #007700">[</span><span style="color: #DD0000">'COMPUTED'</span><span style="color: #007700">] as </span><span style="color: #0000BB">$header </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$value</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">' %s =&gt; %s%s'</span><span style="color: #007700">, </span><span style="color: #0000BB">$header</span><span style="color: #007700">, </span><span style="color: #0000BB">$value</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">EXIF Headers:
+ Height =&gt; 576
+ Width =&gt; 1024
+ IsColor =&gt; 1
+ ByteOrderMotorola =&gt; 0
+ ApertureFNumber =&gt; f/5.6
+ UserComment =&gt;
+ UserCommentEncoding =&gt; UNDEFINED
+ Copyright =&gt; Denis
+ Thumbnail.FileType =&gt; 2
+ Thumbnail.MimeType =&gt; image/jpeg</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.exif-read-data-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Si <a href="#ref.mbstring" class="link">mbstring</a> está activado, EXIF intentará
+    tratar el Unicode y elegir un juego de caracteres como se especifica por
+    <a href="#ini.exif.decode-unicode-motorola" class="link">exif.decode_unicode_motorola</a> y
+    <a href="#ini.exif.decode-unicode-intel" class="link">exif.decode_unicode_intel</a>.
+    La extensión EXIF no intentará determinar el codificado por sí misma, y es
+    responsabilidad del usuario especificar correctamente el codificado a usar
+    para el decodificado definiendo una de las dos directivas INI antes
+    de llamar a <span class="function"><strong>exif_read_data()</strong></span>.
+   </p>
+  </blockquote>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Si el parámetro <code class="parameter">file</code> se usa para pasar un
+    flujo a la función, entonces el flujo debe ser reposicionable. Tenga en cuenta que la
+    posición del puntero de un archivo no se modifica después del retorno de
+    esta función.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.exif-read-data-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.exif-thumbnail" class="function" rel="rdfs-seeAlso">exif_thumbnail()</a> - Recupera la miniatura de una imagen</span></li>
+    <li><span class="function"><a href="#function.getimagesize" class="function" rel="rdfs-seeAlso">getimagesize()</a> - Devuelve el tamaño de una imagen</span></li>
+    <li><a href="#wrappers" class="xref">Protocolos y Envolturas soportados</a></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.exif-tagname" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">exif_tagname</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">exif_tagname</span> — <span class="dc-title">Obtener el nombre de la cabecera de un índice</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.exif-tagname-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>exif_tagname</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$index</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.exif-tagname-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">index</code></dt>
+     <dd>
+      <p class="para">
+       La etiqueta ID correspondiente a la etiqueta Name que examinará.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.exif-tagname-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre de la cabecera, o <strong><code><a href="#constant.false">false</a></code></strong> si <code class="parameter">index</code> no está
+   definido con un identificador de etiqueta EXIF.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.exif-tagname-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2825">
+    <p><strong>Ejemplo #1 Ejemplo <span class="function"><strong>exif_tagname()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #DD0000">"256: "</span><span style="color: #007700">.</span><span style="color: #0000BB">exif_tagname</span><span style="color: #007700">(</span><span style="color: #0000BB">256</span><span style="color: #007700">).</span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"257: "</span><span style="color: #007700">.</span><span style="color: #0000BB">exif_tagname</span><span style="color: #007700">(</span><span style="color: #0000BB">257</span><span style="color: #007700">).</span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">256: ImageWidth
+257: ImageLength</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.exif-tagname-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.exif-imagetype" class="function" rel="rdfs-seeAlso">exif_imagetype()</a> - Determina el tipo de una imagen</span></li>
+    <li><a href="http://exif.org/Exif2-2.PDF" class="link external">» Especificación EXIF</a></li>
+    <li><a href="http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/EXIF.html" class="link external">» Etiquetas EXIF</a></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.exif-thumbnail" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">exif_thumbnail</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">exif_thumbnail</span> — <span class="dc-title">Recupera la miniatura de una imagen</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.exif-thumbnail-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>exif_thumbnail</strong></span>(<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$file</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$width</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$height</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$image_type</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>exif_thumbnail()</strong></span> lee la miniatura de la imagen.
+  </p>
+  <p class="para">
+   Si se desea mostrar miniaturas con esta función, debe enviarse el tipo MIME adecuado con la función <span class="function"><a href="#function.header" class="function">header()</a></span>.
+  </p>
+  <p class="para">
+   Es posible que la función <span class="function"><strong>exif_thumbnail()</strong></span>
+   no logre crear la imagen pero pueda determinar su tamaño. En este caso, la función
+   devuelve <strong><code><a href="#constant.false">false</a></code></strong> pero los parámetros <code class="parameter">width</code> y
+   <code class="parameter">height</code> están definidos.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.exif-thumbnail-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">file</code></dt>
+     <dd>
+      <p class="para">
+       Ubicación del fichero de imagen. Puede tratarse de una ruta de acceso
+       al fichero o de un flujo <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">width</code></dt>
+     <dd>
+      <p class="para">
+       El ancho devuelto de la miniatura devuelta.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">height</code></dt>
+     <dd>
+      <p class="para">
+       La altura devuelta de la miniatura devuelta.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">image_type</code></dt>
+     <dd>
+      <p class="para">
+       El tipo de imagen devuelto de la miniatura devuelta. Puede ser
+       <abbr title="Tagged Image File Format">TIFF</abbr> o <abbr title="Joint Photographic Experts Group">JPEG</abbr>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.exif-thumbnail-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la miniatura integrada o <strong><code><a href="#constant.false">false</a></code></strong> si la imagen no contiene
+   miniatura.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.exif-thumbnail-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        El parámetro <code class="parameter">file</code> soporta ficheros
+        locales o recursos de flujo.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.exif-thumbnail-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2826">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>exif_thumbnail()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">if (</span><span style="color: #0000BB">array_key_exists</span><span style="color: #007700">(</span><span style="color: #DD0000">'file'</span><span style="color: #007700">, </span><span style="color: #0000BB">$_REQUEST</span><span style="color: #007700">)) {<br>    </span><span style="color: #0000BB">$image </span><span style="color: #007700">= </span><span style="color: #0000BB">exif_thumbnail</span><span style="color: #007700">(</span><span style="color: #0000BB">$_REQUEST</span><span style="color: #007700">[</span><span style="color: #DD0000">'file'</span><span style="color: #007700">], </span><span style="color: #0000BB">$width</span><span style="color: #007700">, </span><span style="color: #0000BB">$height</span><span style="color: #007700">, </span><span style="color: #0000BB">$type</span><span style="color: #007700">);<br>} else {<br>    </span><span style="color: #0000BB">$image </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">;<br>}<br>if (</span><span style="color: #0000BB">$image</span><span style="color: #007700">!==</span><span style="color: #0000BB">false</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">header</span><span style="color: #007700">(</span><span style="color: #DD0000">'Content-type: ' </span><span style="color: #007700">.</span><span style="color: #0000BB">image_type_to_mime_type</span><span style="color: #007700">(</span><span style="color: #0000BB">$type</span><span style="color: #007700">));<br>    echo </span><span style="color: #0000BB">$image</span><span style="color: #007700">;<br>    exit;<br>} else {<br>    </span><span style="color: #FF8000">// no hay miniatura disponible, tratamiento del error aquí<br>    </span><span style="color: #007700">echo </span><span style="color: #DD0000">'No thumbnail available'</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.exif-thumbnail-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Si el parámetro <code class="parameter">file</code> se utiliza para pasar un
+    flujo a la función, entonces el flujo debe ser reposicionable. Tenga en cuenta que la
+    posición del puntero de un fichero no se modifica después del retorno
+    de esta función.
+   </p>
+  </blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.exif-thumbnail-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.exif-read-data" class="function" rel="rdfs-seeAlso">exif_read_data()</a> - Lee los encabezados EXIF en las imágenes</span></li>
+    <li><span class="function"><a href="#function.image-type-to-mime-type" class="function" rel="rdfs-seeAlso">image_type_to_mime_type()</a> - Lee el Mime-Type de un tipo de imagen</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.read-exif-data" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">read_exif_data</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.1, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">read_exif_data</span> — <span class="dc-title">Alias de <span class="function"><a href="#function.exif-read-data" class="function">exif_read_data()</a></span></span></p>
+
+ </div>
+
+ <div id="function.read-exif-data-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">Este alias está
+<em>OBSOLETO</em> en PHP 7.2.0, y <em>ELIMINADO</em> a partir de PHP 8.0.0.</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.read-exif-data-description">
+  <h3 class="title">Descripción</h3>
+  <p class="simpara">
+   Esta función es un alias de: 
+   <span class="function"><a href="#function.exif-read-data" class="function">exif_read_data()</a></span>.
+  </p>
+ </div>
+
+ <div class="refsect1 changelog" id="refsect1-function.read-exif-data-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>7.2.0</td>
+       <td>
+        Este alias de función ha sido deprecado.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.exif-imagetype">exif_imagetype</a> — Determina el tipo de una imagen</li><li><a href="#function.exif-read-data">exif_read_data</a> — Lee los encabezados EXIF en las imágenes</li><li><a href="#function.exif-tagname">exif_tagname</a> — Obtener el nombre de la cabecera de un índice</li><li><a href="#function.exif-thumbnail">exif_thumbnail</a> — Recupera la miniatura de una imagen</li><li><a href="#function.read-exif-data">read_exif_data</a> — Alias de exif_read_data</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.exif">Introducción</a></li><li><a href="#exif.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#exif.requirements">Requerimientos</a></li><li><a href="#exif.installation">Instalación</a></li><li><a href="#exif.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#exif.constants">Constantes predefinidas</a></li><li><a href="#ref.exif">Funciones de Exif</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.exif-imagetype">exif_imagetype</a> — Determina el tipo de una imagen</li><li><a href="#function.exif-read-data">exif_read_data</a> — Lee los encabezados EXIF en las imágenes</li><li><a href="#function.exif-tagname">exif_tagname</a> — Obtener el nombre de la cabecera de un índice</li><li><a href="#function.exif-thumbnail">exif_thumbnail</a> — Recupera la miniatura de una imagen</li><li><a href="#function.read-exif-data">read_exif_data</a> — Alias de exif_read_data</li></ul></li></ul></div>

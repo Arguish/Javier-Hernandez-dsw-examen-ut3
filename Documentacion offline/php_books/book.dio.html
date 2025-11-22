@@ -1,0 +1,1375 @@
+<div id="book.dio" class="book"><hr>
+ 
+ <h1 class="title">Direct IO</h1>
+
+ 
+ <div id="intro.dio" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   PHP soporta las funciones Direct IO, tal como se describe en
+   el estándar Posix (Sección 6) para realizar funciones
+   I/O de bajo nivel en comparación con las funciones
+   C-Language stream I/O (<span class="function"><a href="#function.fopen" class="function">fopen()</a></span>,
+   <span class="function"><a href="#function.fread" class="function">fread()</a></span>,..). El uso de las funciones
+   DIO debe considerarse únicamente cuando se requiere un control directo
+   de un dispositivo. En todos los demás casos,
+   las funciones estándar del <a href="#book.filesystem" class="link">sistema
+   de archivos</a> son más adecuadas.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="dio.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#dio.installation">Instalación</a></li><li><a href="#dio.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ 
+
+
+
+<div id="dio.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+ Esta extensión <a href="https://pecl.php.net/" class="link external">» PECL</a> no está integrada en PHP.
+ </p>
+ <p class="para">
+ Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+ <a href="https://pecl.php.net/package/dio" class="link external">» https://pecl.php.net/package/dio</a>.
+</p>
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ <div id="dio.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   Un tipo de recurso es definido por esta extensión:
+   un puntero de fichero, retornado por la función
+   <span class="function"><a href="#function.dio-open" class="function">dio_open()</a></span>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="dio.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.f-dupfd">
+    <strong><code><a href="#constant.f-dupfd">F_DUPFD</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-getfd">
+    <strong><code><a href="#constant.f-getfd">F_GETFD</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-getfl">
+    <strong><code><a href="#constant.f-getfl">F_GETFL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-getlk">
+    <strong><code><a href="#constant.f-getlk">F_GETLK</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-getown">
+    <strong><code><a href="#constant.f-getown">F_GETOWN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-rdlck">
+    <strong><code><a href="#constant.f-rdlck">F_RDLCK</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-setfl">
+    <strong><code><a href="#constant.f-setfl">F_SETFL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-setlk">
+    <strong><code><a href="#constant.f-setlk">F_SETLK</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-setlkw">
+    <strong><code><a href="#constant.f-setlkw">F_SETLKW</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-setown">
+    <strong><code><a href="#constant.f-setown">F_SETOWN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-unlck">
+    <strong><code><a href="#constant.f-unlck">F_UNLCK</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.f-wrlck">
+    <strong><code><a href="#constant.f-wrlck">F_WRLCK</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-append">
+    <strong><code><a href="#constant.o-append">O_APPEND</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-async">
+    <strong><code><a href="#constant.o-async">O_ASYNC</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-creat">
+    <strong><code><a href="#constant.o-creat">O_CREAT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-excl">
+    <strong><code><a href="#constant.o-excl">O_EXCL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-ndelay">
+    <strong><code><a href="#constant.o-ndelay">O_NDELAY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-noctty">
+    <strong><code><a href="#constant.o-noctty">O_NOCTTY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-nonblock">
+    <strong><code><a href="#constant.o-nonblock">O_NONBLOCK</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-rdonly">
+    <strong><code><a href="#constant.o-rdonly">O_RDONLY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-rdwr">
+    <strong><code><a href="#constant.o-rdwr">O_RDWR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-sync">
+    <strong><code><a href="#constant.o-sync">O_SYNC</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-trunc">
+    <strong><code><a href="#constant.o-trunc">O_TRUNC</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.o-wronly">
+    <strong><code><a href="#constant.o-wronly">O_WRONLY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-irgrp">
+    <strong><code><a href="#constant.s-irgrp">S_IRGRP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-iroth">
+    <strong><code><a href="#constant.s-iroth">S_IROTH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-irusr">
+    <strong><code><a href="#constant.s-irusr">S_IRUSR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-irwxg">
+    <strong><code><a href="#constant.s-irwxg">S_IRWXG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-irwxo">
+    <strong><code><a href="#constant.s-irwxo">S_IRWXO</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-irwxu">
+    <strong><code><a href="#constant.s-irwxu">S_IRWXU</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-iwgrp">
+    <strong><code><a href="#constant.s-iwgrp">S_IWGRP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-iwoth">
+    <strong><code><a href="#constant.s-iwoth">S_IWOTH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-iwusr">
+    <strong><code><a href="#constant.s-iwusr">S_IWUSR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-ixgrp">
+    <strong><code><a href="#constant.s-ixgrp">S_IXGRP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-ixoth">
+    <strong><code><a href="#constant.s-ixoth">S_IXOTH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+  
+   <dt id="constant.s-ixusr">
+    <strong><code><a href="#constant.s-ixusr">S_IXUSR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para"></p>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="ref.dio" class="reference"><hr>
+ <h1 class="title">Funciones de Direct IO</h1>
+
+ 
+
+
+<div id="function.dio-close" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dio_close</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5 &lt; 5.1.0)</p><p class="refpurpose"><span class="refname">dio_close</span> — <span class="dc-title">Cierra el descriptor de fichero fd</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dio-close-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dio_close</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fd</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>dio_close()</strong></span> cierra el descriptor de fichero
+   <code class="parameter">fd</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dio-close-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fd</code></dt>
+     <dd>
+      <p class="para">
+       Descriptor de fichero devuelto por <span class="function"><a href="#function.dio-open" class="function">dio_open()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dio-close-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.dio-close-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2323">
+    <p><strong>Ejemplo #1 Cerrando un descriptor de fichero</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$fd </span><span style="color: #007700">= </span><span style="color: #0000BB">dio_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/dev/ttyS0'</span><span style="color: #007700">, </span><span style="color: #0000BB">O_RDWR</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">dio_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dio-close-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dio-open" class="function" rel="rdfs-seeAlso">dio_open()</a> - Abre (crea si fuera necesario) un fichero a un nivel más bajo que el permitido por
+   flujos de entrada y salida de las bibliotecas en C</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dio-fcntl" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dio_fcntl</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5 &lt; 5.1.0)</p><p class="refpurpose"><span class="refname">dio_fcntl</span> — <span class="dc-title">Lleva a cabo la función fcntl de la biblioteca C en el fichero fd</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dio-fcntl-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dio_fcntl</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fd</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$cmd</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$args</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>dio_fcntl()</strong></span> realiza la operación
+   especificada por <code class="parameter">cmd</code> sobre el descriptor de
+   fichero <code class="parameter">fd</code>. Algunos comandos requieren que se
+   proporcionen parámetros adicionales en <code class="parameter">args</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dio-fcntl-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fd</code></dt>
+     <dd>
+      <p class="para">
+       Descriptor de fichero devuelto por <span class="function"><a href="#function.dio-open" class="function">dio_open()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">cmd</code></dt>
+     <dd>
+      <p class="para">
+       Puede ser una de las siguientes operaciones:
+       </p><ul class="itemizedlist">
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.f-setlk">F_SETLK</a></code></strong> - Se asigna o quita el bloqueo. Si está bloqueado
+          por otro proceso, <span class="function"><strong>dio_fcntl()</strong></span> devuelve
+          -1.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.f-setlkw">F_SETLKW</a></code></strong> - como <strong><code><a href="#constant.f-setlk">F_SETLK</a></code></strong>,
+          pero en caso de que esté bloqueado por otro proceso,
+          <span class="function"><strong>dio_fcntl()</strong></span> espera a que éste se libere.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.f-getlk">F_GETLK</a></code></strong> - <span class="function"><strong>dio_fcntl()</strong></span>
+          devuelve un array asociativo (como se describe a continuación) si algún proceso
+          previene el bloqueo. Si no hubiera impedimento, se asignará la
+          clave "type" a <strong><code><a href="#constant.f-unlck">F_UNLCK</a></code></strong>.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.f-dupfd">F_DUPFD</a></code></strong> - encuentra el número de descriptor más
+          bajo disponible que sea igual o superior a <code class="parameter">args</code>
+          y lo devuelve.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.f-setfl">F_SETFL</a></code></strong> - Establece al descriptor de fichero las
+          banderas especificadas en <code class="parameter">args</code>, de entre
+          <strong><code><a href="#constant.o-append">O_APPEND</a></code></strong>, <strong><code><a href="#constant.o-nonblock">O_NONBLOCK</a></code></strong> o
+          <strong><code><a href="#constant.o-async">O_ASYNC</a></code></strong>. Para usar <strong><code><a href="#constant.o-async">O_ASYNC</a></code></strong>
+          debe usarse la extensión <a href="#ref.pcntl" class="link">PCNTL</a>.
+         </p>
+        </li>
+       </ul>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">args</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">args</code> es un array asociativo, cuando
+       <code class="parameter">cmd</code> sea <strong><code><a href="#constant.f-setlk">F_SETLK</a></code></strong> o
+       <strong><code><a href="#constant.f-setllw">F_SETLLW</a></code></strong>, con las siguientes claves:
+       </p><ul class="itemizedlist">
+        <li class="listitem">
+         <p class="para">
+          <code class="literal">start</code> - posición donde comienza el bloqueo
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <code class="literal">length</code> - tamaño del area bloqueada. Cero significa hasta
+          el final del fichero
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <code class="literal">whence</code> - Desde dónde se contabiliza l_start: puede ser
+          <strong><code><a href="#constant.seek-set">SEEK_SET</a></code></strong>,
+          <strong><code><a href="#constant.seek-end">SEEK_END</a></code></strong> y <strong><code><a href="#constant.seek-cur">SEEK_CUR</a></code></strong>
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <code class="literal">type</code> - tipo de bloqueo: puede ser
+          <strong><code><a href="#constant.f-rdlck">F_RDLCK</a></code></strong> (bloqueo de lectura),
+          <strong><code><a href="#constant.f-wrlck">F_WRLCK</a></code></strong> (bloqueo de escritura) o
+          <strong><code><a href="#constant.f-unlck">F_UNLCK</a></code></strong> (desbloqueo)
+         </p>
+        </li>
+       </ul>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dio-fcntl-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el resultado de la llamada a C.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.dio-fcntl-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2324">
+    <p><strong>Ejemplo #1 Bloqueando y desbloqueando</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$fd </span><span style="color: #007700">= </span><span style="color: #0000BB">dio_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/dev/ttyS0'</span><span style="color: #007700">, </span><span style="color: #0000BB">O_RDWR</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">dio_fcntl</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">, </span><span style="color: #0000BB">F_SETLK</span><span style="color: #007700">, Array(</span><span style="color: #DD0000">"type"</span><span style="color: #007700">=&gt;</span><span style="color: #0000BB">F_WRLCK</span><span style="color: #007700">)) == -</span><span style="color: #0000BB">1</span><span style="color: #007700">) {<br>   </span><span style="color: #FF8000">// parece el descriptor de fichero está bloqueado<br>   </span><span style="color: #007700">echo </span><span style="color: #DD0000">"No se puede desbloquear. Pertenece a algún otro proceso."</span><span style="color: #007700">;<br>} else {<br>   echo </span><span style="color: #DD0000">"Bloqueo/desbloqueo con éxito"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">dio_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.dio-fcntl-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">
+ Esta función no está implementada en las plataformas Windows.
+</span></p></blockquote>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dio-open" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dio_open</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5 &lt; 5.1.0)</p><p class="refpurpose"><span class="refname">dio_open</span> — <span class="dc-title">
+   Abre (crea si fuera necesario) un fichero a un nivel más bajo que el permitido por
+   flujos de entrada y salida de las bibliotecas en C
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dio-open-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dio_open</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$mode</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dio_open()</strong></span> abre un fichero y devuelve su descriptor
+   de fichero.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dio-open-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       Ruta del fichero a abrir.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro <code class="parameter">flags</code> es una máscara OR de bits
+       compuesta a partir de las siguientes banderas. Estos valores
+       <em>tienen</em> que incluir alguno de entre
+       <strong><code><a href="#constant.o-rdonly">O_RDONLY</a></code></strong>, <strong><code><a href="#constant.o-wronly">O_WRONLY</a></code></strong>,
+       o <strong><code><a href="#constant.o-rdwr">O_RDWR</a></code></strong>. Además, podría incluir cualquier
+       combinación del resto de banderas de la lista.
+       </p><ul class="itemizedlist">
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.o-rdonly">O_RDONLY</a></code></strong> - abre el fichero con acceso de lectura.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.o-wronly">O_WRONLY</a></code></strong> - abre el fichero con acceso de escritura.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.o-rdwr">O_RDWR</a></code></strong> - abre el fichero con acceso de lectura y
+          de escritura.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.o-creat">O_CREAT</a></code></strong> - crea el fichero, si no existiera
+          ya.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.o-excl">O_EXCL</a></code></strong> - si tanto <strong><code><a href="#constant.o-creat">O_CREAT</a></code></strong>
+          como <strong><code><a href="#constant.o-excl">O_EXCL</a></code></strong> están habilitados, y el fichero
+          existe, <span class="function"><strong>dio_open()</strong></span> fallará.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.o-trunc">O_TRUNC</a></code></strong> - si el fichero existe, y está abierto
+          con sólo escritura, se truncará a cero.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.o-append">O_APPEND</a></code></strong> - las operaciones de escritura añaden los
+          datos al final del fichero.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.o-nonblock">O_NONBLOCK</a></code></strong> - asigna el modo no bloqueante.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.o-noctty">O_NOCTTY</a></code></strong> - previene que el SO asigne al fichero
+          abierto como el terminal controlador del proceso cuando se abra
+          un fichero de dispositivo TTY.
+         </p>
+        </li>
+       </ul>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">flags</code> contiene
+       <strong><code><a href="#constant.o-creat">O_CREAT</a></code></strong>, <code class="parameter">mode</code> establecerá
+       los permisos del ficher (permisos
+       de creación). <code class="parameter">mode</code> es necesario para un correcto
+       funcionamiento cuando <strong><code><a href="#constant.o-creat">O_CREAT</a></code></strong> se especifica en
+       <code class="parameter">flags</code>, y se ignorará en cualquier otro caso.
+      </p>
+      <p class="para">
+       Los permisos que realmente se asignan al fichero creado se verán
+       afectados por el <em>umask</em> del proceso, como
+       suele suceder.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dio-open-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Descriptor de fichero o <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.dio-open-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-2325">
+   <p><strong>Ejemplo #1 Abrir un descriptor de fichero</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$fd </span><span style="color: #007700">= </span><span style="color: #0000BB">dio_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/dev/ttyS0'</span><span style="color: #007700">, </span><span style="color: #0000BB">O_RDWR </span><span style="color: #007700">| </span><span style="color: #0000BB">O_NOCTTY </span><span style="color: #007700">| </span><span style="color: #0000BB">O_NONBLOCK</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">dio_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dio-open-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dio-close" class="function" rel="rdfs-seeAlso">dio_close()</a> - Cierra el descriptor de fichero fd</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.dio-read" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dio_read</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5 &lt; 5.1.0)</p><p class="refpurpose"><span class="refname">dio_read</span> — <span class="dc-title">Leer bytes de un descriptor de fichero</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dio-read-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dio_read</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fd</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$len</code><span class="initializer"> = 1024</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   La función <span class="function"><strong>dio_read()</strong></span> lee y devuelve
+   <code class="parameter">len</code> bytes de fichero con descriptor
+   <code class="parameter">fd</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dio-read-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fd</code></dt>
+     <dd>
+      <p class="para">
+       El fichero descriptor devuelto por<span class="function"><a href="#function.dio-open" class="function">dio_open()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">len</code></dt>
+     <dd>
+      <p class="para">
+       El número de bytes a leer. Si no se especifica la lectura
+       es de  bloques de 1K
+       <span class="function"><strong>dio_read()</strong></span>
+      </p>
+      </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dio-read-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   La bytes leídos desde <code class="parameter">fd</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dio-read-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dio-write" class="function" rel="rdfs-seeAlso">dio_write()</a> - Escribe datos en el descriptor de fichero con un truncado opcional</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.dio-seek" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dio_seek</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5 &lt; 5.1.0)</p><p class="refpurpose"><span class="refname">dio_seek</span> — <span class="dc-title">Salta a una posición del descriptor de fichero desde donde proceda</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dio-seek-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dio_seek</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fd</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$pos</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$whence</code><span class="initializer"> = SEEK_SET</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dio_seek()</strong></span> se usa para cambiar la posición del fichero
+   del descriptor de fichero proporcionado.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dio-seek-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fd</code></dt>
+     <dd>
+      <p class="para">
+       Descriptor de fichero devuelto por <span class="function"><a href="#function.dio-open" class="function">dio_open()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">pos</code></dt>
+     <dd>
+      <p class="para">
+       Nueva posición.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">whence</code></dt>
+     <dd>
+      <p class="para">
+       Indica cómo interpretar la posición <code class="parameter">pos</code>:
+       </p><ul class="itemizedlist">
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.seek-set">SEEK_SET</a></code></strong> (por omisión) - indica que
+          <code class="parameter">pos</code> se contabiliza a partir del comienzo
+          del fichero.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.seek-cur">SEEK_CUR</a></code></strong> - indica que
+          <code class="parameter">pos</code> se contabiliza a partir de la posición
+          actual del fichero. Este valor puede ser positivo o negativo.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          <strong><code><a href="#constant.seek-end">SEEK_END</a></code></strong> - Indica que
+          <code class="parameter">pos</code> contabiliza caracteres a partir del final
+          del fichero. Un valor negativo especifica una posición perteneciente al
+          contenido del fichero; un valor positivo especifica una posición que
+          supera el final. Si éste fuera el caso, y se escribieran datos, se
+          rellenaría el fichero con ceros hasta alcanzar la posición que
+          proceda.
+         </p>
+        </li>
+       </ul>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dio-seek-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.dio-seek-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2326">
+    <p><strong>Ejemplo #1 Posicionamiento de un fichero</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$fd </span><span style="color: #007700">= </span><span style="color: #0000BB">dio_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/dev/ttyS0'</span><span style="color: #007700">, </span><span style="color: #0000BB">O_RDWR</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">dio_seek</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">, </span><span style="color: #0000BB">10</span><span style="color: #007700">, </span><span style="color: #0000BB">SEEK_SET</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// la posición está a 10 caracteres del comienzo<br><br></span><span style="color: #0000BB">dio_seek</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">, -</span><span style="color: #0000BB">2</span><span style="color: #007700">, </span><span style="color: #0000BB">SEEK_CUR</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// la posición está a 8 caracteres del comienzo<br><br></span><span style="color: #0000BB">dio_seek</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">, -</span><span style="color: #0000BB">5</span><span style="color: #007700">, </span><span style="color: #0000BB">SEEK_END</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// la posición está a 5 caracteres del final<br><br></span><span style="color: #0000BB">dio_seek</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">, </span><span style="color: #0000BB">10</span><span style="color: #007700">, </span><span style="color: #0000BB">SEEK_END</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// la posición supera ahora 10 caracteres del final del fichero.<br>// Los 10 caracteres intermedios entre el final y la posición actual<br>// se rellenan con ceros.<br><br></span><span style="color: #0000BB">dio_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.dio-stat" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dio_stat</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5 &lt; 5.1.0)</p><p class="refpurpose"><span class="refname">dio_stat</span> — <span class="dc-title">
+   Consulta información de estado del descriptor de fichero fd
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dio-stat-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dio_stat</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fd</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dio_stat()</strong></span> devuelve información sobre el descriptor de
+   fichero proporcionado.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dio-stat-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fd</code></dt>
+     <dd>
+      <p class="para">
+       Descriptor de fichero devuelto por <span class="function"><a href="#function.dio-open" class="function">dio_open()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dio-stat-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array asociativo con las siguientes claves:
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <p class="para">
+      "device" - dispositivo
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "inode" - nodo-i
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "mode" - modo
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "nlink" - número de enlaces duros
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "uid" - id de usuario
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "gid" - id de grupo
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "device_type" - tipo de dispositivo (si es un nodo-i de dispositivo)
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "size" - tamaño total en bytes
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "blocksize" - tamaño de bloque
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "blocks" - número de bloques asignados
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "atime" - fecha de último acceso
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "mtime" - fecha de última modificación
+     </p>
+    </li>
+    <li class="listitem">
+     <p class="para">
+      "ctime" - fecha de último cambio
+     </p>
+    </li>
+   </ul>
+   En caso de error, <span class="function"><strong>dio_stat()</strong></span> devuelve <strong><code><a href="#constant.null">null</a></code></strong>.
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.dio-tcsetattr" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dio_tcsetattr</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.1.0)</p><p class="refpurpose"><span class="refname">dio_tcsetattr</span> — <span class="dc-title">
+   Establece los atributos de terminal y la velocidad de transmisión para un puerto serie
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dio-tcsetattr-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dio_tcsetattr</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fd</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dio_tcsetattr()</strong></span> establece los atributos de terminal y la velocidad de
+   transmisión del <code class="parameter">fd</code> abierto.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dio-tcsetattr-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fd</code></dt>
+     <dd>
+      <p class="para">
+       El descriptor de fichero devuelto por <span class="function"><a href="#function.dio-open" class="function">dio_open()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">options</code></dt>
+     <dd>
+      <p class="para">
+       Las opciones disponibles actualmente son:
+       </p><ul class="itemizedlist">
+        <li class="listitem">
+         <p class="para">
+          'baud' - velocidad de transmisión del puerto - puede ser 38400,19200,9600,4800,2400,1800,
+          1200,600,300,200,150,134,110,75 o 50, el valor por omisión es 9600.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          'bits' - bits de datos - puede ser 8,7,6 o 5. El valor por omisión es 8.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          'stop' - bits de parada - puede ser 1 o 2. El valor por omisión es 1.
+         </p>
+        </li>
+        <li class="listitem">
+         <p class="para">
+          'parity' - puede ser 0,1 o 2. El valor por omisión es 0.
+         </p>
+        </li>
+       </ul>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dio-tcsetattr-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.dio-tcsetattr-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-2327">
+   <p><strong>Ejemplo #1 Establecer la velocidad de transmisión en un puerto serie</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$fd </span><span style="color: #007700">= </span><span style="color: #0000BB">dio_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'/dev/ttyS0'</span><span style="color: #007700">, </span><span style="color: #0000BB">O_RDWR </span><span style="color: #007700">| </span><span style="color: #0000BB">O_NOCTTY </span><span style="color: #007700">| </span><span style="color: #0000BB">O_NONBLOCK</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">dio_fcntl</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">, </span><span style="color: #0000BB">F_SETFL</span><span style="color: #007700">, </span><span style="color: #0000BB">O_SYNC</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">dio_tcsetattr</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">, array(<br>    </span><span style="color: #DD0000">'baud' </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">9600</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'bits' </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">8</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'stop'  </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">1</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'parity' </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">0<br></span><span style="color: #007700">));<br><br>while (</span><span style="color: #0000BB">true</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$data </span><span style="color: #007700">= </span><span style="color: #0000BB">dio_read</span><span style="color: #007700">(</span><span style="color: #0000BB">$fd</span><span style="color: #007700">, </span><span style="color: #0000BB">256</span><span style="color: #007700">);<br>    if (</span><span style="color: #0000BB">$data </span><span style="color: #007700">!== </span><span style="color: #0000BB">null </span><span style="color: #007700">&amp;&amp; </span><span style="color: #0000BB">$date </span><span style="color: #007700">!== </span><span style="color: #DD0000">''</span><span style="color: #007700">) {<br>        echo </span><span style="color: #0000BB">$data</span><span style="color: #007700">;<br>    }<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.dio-tcsetattr-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">
+ Esta función no está implementada en las plataformas Windows.
+</span></p></blockquote>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.dio-truncate" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dio_truncate</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5 &lt; 5.1.0)</p><p class="refpurpose"><span class="refname">dio_truncate</span> — <span class="dc-title">
+   Trunca un descriptor de fichero fd a un determinado número de bytes
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dio-truncate-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dio_truncate</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fd</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$offset</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dio_truncate()</strong></span> trunca un fichero a, como mucho, un tamaño de
+   <code class="parameter">offset</code> bytes.
+  </p>
+  <p class="para">
+   Si el fichero excediera este tamaño, el contenido extra se
+   perdería. Si fuera inferior en tamaño, no se especifica si el fichero
+   se mantiene sin cambios o si se completa. En este último caso, la parte
+   completada se haría con ceros.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dio-truncate-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fd</code></dt>
+     <dd>
+      <p class="para">
+       Descriptor de fichero devuelto por <span class="function"><a href="#function.dio-open" class="function">dio_open()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">offset</code></dt>
+     <dd>
+      <p class="para">
+       Tamaño en bytes.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dio-truncate-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.dio-truncate-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">
+ Esta función no está implementada en las plataformas Windows.
+</span></p></blockquote>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.dio-write" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dio_write</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.2.0, PHP 5 &lt; 5.1.0)</p><p class="refpurpose"><span class="refname">dio_write</span> — <span class="dc-title">
+   Escribe datos en el descriptor de fichero con un truncado opcional
+  </span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dio-write-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dio_write</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fd</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$len</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dio_write()</strong></span> escriba hasta <code class="parameter">len</code>
+   bytes de <code class="parameter">data</code> al fichero <code class="parameter">fd</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dio-write-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fd</code></dt>
+     <dd>
+      <p class="para">
+       Descriptor de fichero devuelto por <span class="function"><a href="#function.dio-open" class="function">dio_open()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Datos a escribir.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">len</code></dt>
+     <dd>
+      <p class="para">
+       Longitud en bytes de los datos a escribir. Si no se especifica, la función
+       escribe todos los datos al fichero especificado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dio-write-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el número de bytes escritos en <code class="parameter">fd</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.dio-write-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dio-read" class="function" rel="rdfs-seeAlso">dio_read()</a> - Leer bytes de un descriptor de fichero</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.dio-close">dio_close</a> — Cierra el descriptor de fichero fd</li><li><a href="#function.dio-fcntl">dio_fcntl</a> — Lleva a cabo la función fcntl de la biblioteca C en el fichero fd</li><li><a href="#function.dio-open">dio_open</a> — Abre (crea si fuera necesario) un fichero a un nivel más bajo que el permitido por
+   flujos de entrada y salida de las bibliotecas en C</li><li><a href="#function.dio-read">dio_read</a> — Leer bytes de un descriptor de fichero</li><li><a href="#function.dio-seek">dio_seek</a> — Salta a una posición del descriptor de fichero desde donde proceda</li><li><a href="#function.dio-stat">dio_stat</a> — Consulta información de estado del descriptor de fichero fd</li><li><a href="#function.dio-tcsetattr">dio_tcsetattr</a> — Establece los atributos de terminal y la velocidad de transmisión para un puerto serie</li><li><a href="#function.dio-truncate">dio_truncate</a> — Trunca un descriptor de fichero fd a un determinado número de bytes</li><li><a href="#function.dio-write">dio_write</a> — Escribe datos en el descriptor de fichero con un truncado opcional</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.dio">Introducción</a></li><li><a href="#dio.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#dio.installation">Instalación</a></li><li><a href="#dio.resources">Tipos de recursos</a></li></ul></li><li><a href="#dio.constants">Constantes predefinidas</a></li><li><a href="#ref.dio">Funciones de Direct IO</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.dio-close">dio_close</a> — Cierra el descriptor de fichero fd</li><li><a href="#function.dio-fcntl">dio_fcntl</a> — Lleva a cabo la función fcntl de la biblioteca C en el fichero fd</li><li><a href="#function.dio-open">dio_open</a> — Abre (crea si fuera necesario) un fichero a un nivel más bajo que el permitido por
+   flujos de entrada y salida de las bibliotecas en C</li><li><a href="#function.dio-read">dio_read</a> — Leer bytes de un descriptor de fichero</li><li><a href="#function.dio-seek">dio_seek</a> — Salta a una posición del descriptor de fichero desde donde proceda</li><li><a href="#function.dio-stat">dio_stat</a> — Consulta información de estado del descriptor de fichero fd</li><li><a href="#function.dio-tcsetattr">dio_tcsetattr</a> — Establece los atributos de terminal y la velocidad de transmisión para un puerto serie</li><li><a href="#function.dio-truncate">dio_truncate</a> — Trunca un descriptor de fichero fd a un determinado número de bytes</li><li><a href="#function.dio-write">dio_write</a> — Escribe datos en el descriptor de fichero con un truncado opcional</li></ul></li></ul></div>

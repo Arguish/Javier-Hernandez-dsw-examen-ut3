@@ -1,0 +1,1195 @@
+<div id="book.phpdbg" class="book"><hr>
+ 
+ <h1 class="title">Depurador interactivo PHP</h1>
+ 
+
+ <div id="intro.phpdbg" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Implementado como un módulo SAPI, phpdbg puede ejercer un control completo sobre el entorno
+   sin afectar la funcionalidad o el rendimiento del código.
+  </p>
+  <p class="para">
+   phpdbg tiene como objetivo ser una plataforma de depuración ligera, potente y fácil de usar para PHP.
+   Ofrece las siguientes funcionalidades:
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara">Depuración paso a paso</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">Punto de interrupción flexible (método de clase, función, archivo:línea, dirección, opcode)</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">Acceso fácil a PHP con eval() integrado</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">Una API de usuario</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">SAPI Agnóstico - Fácilmente integrable</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">Soporte de archivo de configuración PHP</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">Super Globales JIT - ¡Defina las suyas!!</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">Soporte readline opcional - Operación cómoda del terminal</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara">Operación fácil - Consulte la ayuda :)</span>
+    </li>
+   </ul>
+  
+
+  <p class="para">
+   </p><table class="doctable table">
+    <caption><strong>Opción de línea de comandos</strong></caption>
+    
+     <thead>
+      <tr>
+       <th>Opción</th>
+       <th>Argumento de ejemplo</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>-c</td>
+       <td>-c/my/php.ini</td>
+       <td>
+        Define el archivo php.ini a cargar
+       </td>
+      </tr>
+
+      <tr>
+       <td>-d</td>
+       <td>-dmemory_limit=4G</td>
+       <td>
+        Define una directiva php.ini
+       </td>
+      </tr>
+
+      <tr>
+       <td>-n</td>
+       <td class="empty"> </td>
+       <td>
+        Desactiva el php.ini por defecto
+       </td>
+      </tr>
+
+      <tr>
+       <td>-q</td>
+       <td class="empty"> </td>
+       <td>
+        Suprime el banner de bienvenida
+       </td>
+      </tr>
+
+      <tr>
+       <td>-v</td>
+       <td class="empty"> </td>
+       <td>
+        Activa la salida oplog
+       </td>
+      </tr>
+
+      <tr>
+       <td>-b</td>
+       <td class="empty"> </td>
+       <td>
+        Desactiva el color
+       </td>
+      </tr>
+
+      <tr>
+       <td>-i</td>
+       <td>-imy.init</td>
+       <td>
+        Define el archivo .phpdbginit
+       </td>
+      </tr>
+
+      <tr>
+       <td>-I</td>
+       <td class="empty"> </td>
+       <td>
+        Ignora el .phpdbginit por defecto
+       </td>
+      </tr>
+
+      <tr>
+       <td>-O</td>
+       <td>-Omy.oplog</td>
+       <td>
+        Define el archivo de salida oplog
+       </td>
+      </tr>
+
+      <tr>
+       <td>-r</td>
+       <td class="empty"> </td>
+       <td>
+        Ejecuta el contexto de ejecución
+       </td>
+      </tr>
+
+      <tr>
+       <td>-rr</td>
+       <td class="empty"> </td>
+       <td>
+        Ejecuta el contexto de ejecución y sale después de la ejecución (sin respetar los puntos de interrupción)
+       </td>
+      </tr>
+
+      <tr>
+       <td>-e</td>
+       <td class="empty"> </td>
+       <td>
+        Genera información extendida para el depurador/profiler
+       </td>
+      </tr>
+
+      <tr>
+       <td>-E</td>
+       <td class="empty"> </td>
+       <td>
+        Activa la evaluación paso a paso con eval, ¡atención!
+       </td>
+      </tr>
+
+      <tr>
+       <td>-s</td>
+       <td>-s=, -s=foo</td>
+       <td>
+        Lee el código a ejecutar desde stdin con un delimitador opcional
+       </td>
+      </tr>
+
+      <tr>
+       <td>-S</td>
+       <td>-Scli</td>
+       <td>
+        Sobrescribe el nombre SAPI, ¡atención!
+       </td>
+      </tr>
+
+      <tr>
+       <td class="empty"> </td>
+       <td class="empty"> </td>
+       <td>
+        <p class="para">
+        </p>
+       </td>
+      </tr>
+
+      <tr>
+       <td>-l</td>
+       <td>-l4000</td>
+       <td>
+        Establece el puerto de la consola remota
+       </td>
+      </tr>
+
+      <tr>
+       <td>-a</td>
+       <td>-a192.168.0.3</td>
+       <td>
+        Establece la dirección de enlace de la consola remota
+       </td>
+      </tr>
+
+      <tr>
+       <td>-x</td>
+       <td class="empty"> </td>
+       <td>
+        Activa la salida xml (en lugar de la salida de texto normal)
+       </td>
+      </tr>
+
+      <tr>
+       <td>-p</td>
+       <td>-p, -p=func, -p*</td>
+       <td>
+        Muestra los opcodes y sale
+       </td>
+      </tr>
+
+      <tr>
+       <td>-h</td>
+       <td class="empty"> </td>
+       <td>
+        Muestra el resumen de ayuda
+       </td>
+      </tr>
+
+      <tr>
+       <td>-V</td>
+       <td class="empty"> </td>
+       <td>
+        Muestra el número de versión
+       </td>
+      </tr>
+
+      <tr>
+       <td>--</td>
+       <td>-- arg1 arg2</td>
+       <td>
+        Utilizado para delimitar los argumentos phpdbg y php $argv; añada cualquier argumento $argv después
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="phpdbg.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#phpdbg.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ 
+
+
+<div id="phpdbg.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Opciones de configuración de phpdbg</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.phpdbg.eol" class="link">phpdbg.eol</a></td>
+      <td>2</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Eliminada a partir de PHP 8.1.0</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.phpdbg.path" class="link">phpdbg.path</a></td>
+      <td class="empty"> </td>
+      <td>6</td>
+      <td>Eliminada a partir de PHP 8.1.0</td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+ <p class="para">
+  </p><dl>
+   
+     <dt id="ini.phpdbg.eol">
+      <code class="parameter">phpdbg.eol</code>
+      <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       El tipo de fin de línea a utilizar para la salida. Para definir el valor, se debe utilizar uno de los alias de string.
+       </p><table class="doctable informaltable">
+        
+         <thead>
+          <tr>
+           <th><span class="type"><a href="#language.types.integer" class="type int">int</a></span> Valor</th>
+           <th><span class="type"><a href="#language.types.string" class="type string">string</a></span> Alias</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td><code class="literal">0</code></td>
+           <td>
+            <code class="literal">CRLF</code>, <code class="literal">crlf</code>,
+            <code class="literal">DOS</code>, <code class="literal">dos</code>
+           </td>
+          </tr>
+
+          <tr>
+           <td><code class="literal">1</code></td>
+           <td>
+            <code class="literal">LF</code>, <code class="literal">lf</code>,
+            <code class="literal">UNIX</code>, <code class="literal">unix</code>
+           </td>
+          </tr>
+
+          <tr>
+           <td><code class="literal">2</code></td>
+           <td>
+            <code class="literal">CR</code>, <code class="literal">cr</code>,
+            <code class="literal">MAC</code>, <code class="literal">mac</code>
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+    
+     <dt id="ini.phpdbg.path">
+      <code class="parameter">phpdbg.path</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+
+      </p>
+     </dd>
+    
+
+  </dl>
+ 
+</div>
+<hr>
+
+
+
+
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="phpdbg.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <p class="para">
+  </p><dl>
+   
+    <dt id="constant.phpdbg-version">
+     <strong><code><a href="#constant.phpdbg-version">PHPDBG_VERSION</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.phpdbg-file">
+     <strong><code><a href="#constant.phpdbg-file">PHPDBG_FILE</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Eliminado desde PHP 7.3.0.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.phpdbg-method">
+     <strong><code><a href="#constant.phpdbg-method">PHPDBG_METHOD</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Eliminado desde PHP 7.3.0.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.phpdbg-lineno">
+     <strong><code><a href="#constant.phpdbg-lineno">PHPDBG_LINENO</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Eliminado desde PHP 7.3.0.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.phpdbg-func">
+     <strong><code><a href="#constant.phpdbg-func">PHPDBG_FUNC</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Eliminado desde PHP 7.3.0.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.phpdbg-color-prompt">
+     <strong><code><a href="#constant.phpdbg-color-prompt">PHPDBG_COLOR_PROMPT</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.phpdbg-color-notice">
+     <strong><code><a href="#constant.phpdbg-color-notice">PHPDBG_COLOR_NOTICE</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.phpdbg-color-error">
+     <strong><code><a href="#constant.phpdbg-color-error">PHPDBG_COLOR_ERROR</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     </span>
+    </dd>
+   
+  </dl>
+ 
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="ref.phpdbg" class="reference"><hr>
+ <h1 class="title">phpdbg Funciones</h1>
+
+ 
+
+
+
+
+<div id="function.phpdbg-break-file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_break_file</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.6.3, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_break_file</span> — <span class="dc-title">Inserta un punto de interrupción en una línea de un fichero</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-break-file-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_break_file</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$line</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Inserta un punto de interrupción en la línea <code class="parameter">line</code> en el fichero
+   <code class="parameter">file</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-break-file-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">file</code></dt>
+    <dd>
+     <p class="para">
+      El nombre del fichero.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">line</code></dt>
+    <dd>
+     <p class="para">
+      El número de la línea.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-break-file-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.phpdbg-break-file-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.phpdbg-break-function" class="function" rel="rdfs-seeAlso">phpdbg_break_function()</a> - Inserta un punto de interrupción en la entrada de una función</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-method" class="function" rel="rdfs-seeAlso">phpdbg_break_method()</a> - Inserta un punto de interrupción en la entrada de un método</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-next" class="function" rel="rdfs-seeAlso">phpdbg_break_next()</a> - Inserta un punto de interrupción en el próximo opcode</span></li>
+   <li><span class="function"><a href="#function.phpdbg-clear" class="function" rel="rdfs-seeAlso">phpdbg_clear()</a> - Elimina todos los puntos de interrupción</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.phpdbg-break-function" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_break_function</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.6.3, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_break_function</span> — <span class="dc-title">Inserta un punto de interrupción en la entrada de una función</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-break-function-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_break_function</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$function</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Inserta un punto de interrupción en la entrada de la función
+   <code class="parameter">function</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-break-function-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">function</code></dt>
+    <dd>
+     <p class="para">
+      El nombre de la función.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-break-function-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.phpdbg-break-function-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.phpdbg-break-file" class="function" rel="rdfs-seeAlso">phpdbg_break_file()</a> - Inserta un punto de interrupción en una línea de un fichero</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-method" class="function" rel="rdfs-seeAlso">phpdbg_break_method()</a> - Inserta un punto de interrupción en la entrada de un método</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-next" class="function" rel="rdfs-seeAlso">phpdbg_break_next()</a> - Inserta un punto de interrupción en el próximo opcode</span></li>
+   <li><span class="function"><a href="#function.phpdbg-clear" class="function" rel="rdfs-seeAlso">phpdbg_clear()</a> - Elimina todos los puntos de interrupción</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.phpdbg-break-method" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_break_method</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.6.3, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_break_method</span> — <span class="dc-title">Inserta un punto de interrupción en la entrada de un método</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-break-method-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_break_method</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$method</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Inserta un punto de interrupción en la entrada del método
+   <code class="parameter">method</code> de la clase
+   <code class="parameter">class</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-break-method-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">class</code></dt>
+    <dd>
+     <p class="para">
+      El nombre de la clase.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">method</code></dt>
+    <dd>
+     <p class="para">
+      El nombre del método.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-break-method-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.phpdbg-break-method-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.phpdbg-break-file" class="function" rel="rdfs-seeAlso">phpdbg_break_file()</a> - Inserta un punto de interrupción en una línea de un fichero</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-function" class="function" rel="rdfs-seeAlso">phpdbg_break_function()</a> - Inserta un punto de interrupción en la entrada de una función</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-next" class="function" rel="rdfs-seeAlso">phpdbg_break_next()</a> - Inserta un punto de interrupción en el próximo opcode</span></li>
+   <li><span class="function"><a href="#function.phpdbg-clear" class="function" rel="rdfs-seeAlso">phpdbg_clear()</a> - Elimina todos los puntos de interrupción</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.phpdbg-break-next" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_break_next</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.6.3, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_break_next</span> — <span class="dc-title">Inserta un punto de interrupción en el próximo opcode</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-break-next-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_break_next</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Inserta un punto de interrupción en el próximo opcode.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-break-next-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-break-next-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.phpdbg-break-next-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.phpdbg-break-file" class="function" rel="rdfs-seeAlso">phpdbg_break_file()</a> - Inserta un punto de interrupción en una línea de un fichero</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-function" class="function" rel="rdfs-seeAlso">phpdbg_break_function()</a> - Inserta un punto de interrupción en la entrada de una función</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-method" class="function" rel="rdfs-seeAlso">phpdbg_break_method()</a> - Inserta un punto de interrupción en la entrada de un método</span></li>
+   <li><span class="function"><a href="#function.phpdbg-clear" class="function" rel="rdfs-seeAlso">phpdbg_clear()</a> - Elimina todos los puntos de interrupción</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.phpdbg-clear" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_clear</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.6.0, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_clear</span> — <span class="dc-title">Elimina todos los puntos de interrupción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-clear-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_clear</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Elimina todos los puntos de interrupción que han sido definidos, ya sea mediante
+   una de las funciones <span class="function"><strong>phpdbg_break_*()</strong></span>, o
+   de manera interactiva a través de la consola.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-clear-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-clear-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.phpdbg-clear-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.phpdbg-break-file" class="function" rel="rdfs-seeAlso">phpdbg_break_file()</a> - Inserta un punto de interrupción en una línea de un fichero</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-function" class="function" rel="rdfs-seeAlso">phpdbg_break_function()</a> - Inserta un punto de interrupción en la entrada de una función</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-method" class="function" rel="rdfs-seeAlso">phpdbg_break_method()</a> - Inserta un punto de interrupción en la entrada de un método</span></li>
+   <li><span class="function"><a href="#function.phpdbg-break-next" class="function" rel="rdfs-seeAlso">phpdbg_break_next()</a> - Inserta un punto de interrupción en el próximo opcode</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.phpdbg-color" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_color</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.6.0, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_color</span> — <span class="dc-title">Define el color de ciertos elementos</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-color-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_color</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$element</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$color</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Define el color <code class="parameter">color</code> para el elemento <code class="parameter">element</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-color-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">element</code></dt>
+    <dd>
+     <p class="para">
+      Una de las constantes <strong><code><a href="#constant.phpdbg-color-prompt">PHPDBG_COLOR_<span class="replaceable">*</span></a></code></strong>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">color</code></dt>
+    <dd>
+     <p class="para">
+      El nombre del color. Puede ser <code class="literal">white</code>, <code class="literal">red</code>,
+      <code class="literal">green</code>, <code class="literal">yellow</code>, <code class="literal">blue</code>,
+      <code class="literal">purple</code>, <code class="literal">cyan</code> o <code class="literal">black</code>,
+      y, opcionalmente, con los complementos <code class="literal">-bold</code> o <code class="literal">-underline</code>;
+      por ejemplo <code class="literal">white-bold</code> o <code class="literal">green-underline</code>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-color-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.phpdbg-color-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.phpdbg-prompt" class="function" rel="rdfs-seeAlso">phpdbg_prompt()</a> - Define el indicador de comandos</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.phpdbg-end-oplog" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_end_oplog</h1>
+  <p class="verinfo">(PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_end_oplog</span> — <span class="dc-title">Finaliza un oplog</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-end-oplog-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_end_oplog</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = []</span></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.array" class="type array">array</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-end-oplog-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-end-oplog-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.phpdbg-exec" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_exec</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.6.0, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_exec</span> — <span class="dc-title">Intenta definir el contexto de ejecución</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-exec-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_exec</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$context</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-exec-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">context</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-exec-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Si el contexto de ejecución ha sido definido con éxito, este contexto será
+   devuelto.
+   Si el contexto de ejecución no ha sido definido, <strong><code><a href="#constant.true">true</a></code></strong> será devuelto.
+   Si un error ha ocurrido durante la definición del contexto, <strong><code><a href="#constant.false">false</a></code></strong>
+   será devuelto y un error de nivel <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong> será
+   emitido.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.phpdbg-get-executable" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_get_executable</h1>
+  <p class="verinfo">(PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_get_executable</span> — <span class="dc-title">Devuelve un ejecutable</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-get-executable-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_get_executable</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = []</span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-get-executable-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">options</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-get-executable-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.phpdbg-prompt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_prompt</h1>
+  <p class="verinfo">(PHP 5 &gt;= 5.6.0, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_prompt</span> — <span class="dc-title">Define el indicador de comandos</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-prompt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_prompt</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Define el indicador de comandos para la cadena <code class="parameter">string</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-prompt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">string</code></dt>
+    <dd>
+     <p class="para">
+      La cadena a utilizar como indicador de comandos.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-prompt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.phpdbg-prompt-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.phpdbg-color" class="function" rel="rdfs-seeAlso">phpdbg_color()</a> - Define el color de ciertos elementos</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.phpdbg-start-oplog" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">phpdbg_start_oplog</h1>
+  <p class="verinfo">(PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">phpdbg_start_oplog</span> — <span class="dc-title">Inicia un oplog</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.phpdbg-start-oplog-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>phpdbg_start_oplog</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.phpdbg-start-oplog-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.phpdbg-start-oplog-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.phpdbg-break-file">phpdbg_break_file</a> — Inserta un punto de interrupción en una línea de un fichero</li><li><a href="#function.phpdbg-break-function">phpdbg_break_function</a> — Inserta un punto de interrupción en la entrada de una función</li><li><a href="#function.phpdbg-break-method">phpdbg_break_method</a> — Inserta un punto de interrupción en la entrada de un método</li><li><a href="#function.phpdbg-break-next">phpdbg_break_next</a> — Inserta un punto de interrupción en el próximo opcode</li><li><a href="#function.phpdbg-clear">phpdbg_clear</a> — Elimina todos los puntos de interrupción</li><li><a href="#function.phpdbg-color">phpdbg_color</a> — Define el color de ciertos elementos</li><li><a href="#function.phpdbg-end-oplog">phpdbg_end_oplog</a> — Finaliza un oplog</li><li><a href="#function.phpdbg-exec">phpdbg_exec</a> — Intenta definir el contexto de ejecución</li><li><a href="#function.phpdbg-get-executable">phpdbg_get_executable</a> — Devuelve un ejecutable</li><li><a href="#function.phpdbg-prompt">phpdbg_prompt</a> — Define el indicador de comandos</li><li><a href="#function.phpdbg-start-oplog">phpdbg_start_oplog</a> — Inicia un oplog</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.phpdbg">Introducción</a></li><li><a href="#phpdbg.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#phpdbg.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#phpdbg.constants">Constantes predefinidas</a></li><li><a href="#ref.phpdbg">phpdbg Funciones</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.phpdbg-break-file">phpdbg_break_file</a> — Inserta un punto de interrupción en una línea de un fichero</li><li><a href="#function.phpdbg-break-function">phpdbg_break_function</a> — Inserta un punto de interrupción en la entrada de una función</li><li><a href="#function.phpdbg-break-method">phpdbg_break_method</a> — Inserta un punto de interrupción en la entrada de un método</li><li><a href="#function.phpdbg-break-next">phpdbg_break_next</a> — Inserta un punto de interrupción en el próximo opcode</li><li><a href="#function.phpdbg-clear">phpdbg_clear</a> — Elimina todos los puntos de interrupción</li><li><a href="#function.phpdbg-color">phpdbg_color</a> — Define el color de ciertos elementos</li><li><a href="#function.phpdbg-end-oplog">phpdbg_end_oplog</a> — Finaliza un oplog</li><li><a href="#function.phpdbg-exec">phpdbg_exec</a> — Intenta definir el contexto de ejecución</li><li><a href="#function.phpdbg-get-executable">phpdbg_get_executable</a> — Devuelve un ejecutable</li><li><a href="#function.phpdbg-prompt">phpdbg_prompt</a> — Define el indicador de comandos</li><li><a href="#function.phpdbg-start-oplog">phpdbg_start_oplog</a> — Inicia un oplog</li></ul></li></ul></div>

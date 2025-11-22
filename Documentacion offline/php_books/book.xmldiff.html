@@ -1,0 +1,860 @@
+<div id="book.xmldiff" class="book"><hr>
+ 
+ <h1 class="title">Diferencias y fusión de documentos XML</h1>
+ 
+
+ <div id="intro.xmldiff" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Esta extensión es capaz de calcular las diferencias de dos documentos XML y luego aplicarlas en el documento de origen. El diff es un documento XML que contiene en sus nodos, en formato legible por humanos, las instruciones para copiar/insertar/eliminar. Objetos del tipo DOMDocument, ficheros locales y strings en memoria pueden ser procesados.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+
+<div id="xmldiff.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#xmldiff.requirements">Requerimientos</a></li><li><a href="#xmldiff.installation">Instalación</a></li></ul>
+
+
+ <div id="xmldiff.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">libdiffmark - la versión 0.10 se incluye con la extensión. Si diffmark está disponible en los paquetes del sistema, su uso es altamente recomendado.</p>
+  <p class="para">Extensión libxml</p>
+  <p class="para">Extensión DOM</p>
+ </div>
+<hr>
+
+
+ <div id="xmldiff.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+       Esta extensión <a href="https://pecl.php.net/" class="link external">» PECL</a> no está integrada en PHP.
+  </p>
+  <p class="para">
+    Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/xmldiff" class="link external">» https://pecl.php.net/package/xmldiff</a>.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+ 
+ 
+
+
+
+<div id="class.xmldiff-base" class="reference"><hr>
+
+ <h1 class="title">La clase XMLDiff\Base</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p>
+
+
+  <div class="section" id="xmldiff-base.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Clase abstracta, base para todas las clases de comparación en la extensión.
+   </p>
+  </div>
+
+
+  <div class="section" id="xmldiff-base.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">XMLDiff\Base</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-base.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$nsname</code></span>)</div>
+
+    <div class="methodsynopsis dc-description"><span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-base.diff" class="methodname">diff</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-base.merge" class="methodname">merge</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+<div id="xmldiff-base.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">XMLDiff\Base::__construct</h1>
+  <p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p><p class="refpurpose"><span class="refname">XMLDiff\Base::__construct</span> — <span class="dc-title">Constructor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-xmldiff-base.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>XMLDiff\Base::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$nsname</code></span>)</div>
+
+  <p class="para rdfs-comment">
+   Constructor base para todas las clases de trabajadores en la extensión Xmldiff.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-xmldiff-base.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">nsname</code></dt>
+    <dd>
+     <p class="para">
+      Nombre del espacio de nombres personalizado para el documento de diferencias. El espacio de nombres por defecto es http://www.locus.cz/diffmark y eso es suficiente para evitar conflictos de nombres. Usa este parámetro si quieres cambiarlo por alguna razón.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="xmldiff-base.diff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">XMLDiff\Base::diff</h1>
+  <p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p><p class="refpurpose"><span class="refname">XMLDiff\Base::diff</span> — <span class="dc-title">Produce diferencias de dos documentos XML</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-xmldiff-base.diff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><strong>XMLDiff\Base::diff</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   Método abstracto diferencial para ser aplicado por las clases hereditarias.
+  </p>
+  <p class="para">
+   El propósito básico de este método es producir diferencias entre dos documentos. El orden paramétrico importa y producirá diferentes resultados.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-xmldiff-base.diff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">from</code></dt>
+    <dd>
+     <p class="para">
+      Documento fuente XML.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">to</code></dt>
+    <dd>
+     <p class="para">
+      Documento XML de destino.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-xmldiff-base.diff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Depende de la implementación.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="xmldiff-base.merge" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">XMLDiff\Base::merge</h1>
+  <p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p><p class="refpurpose"><span class="refname">XMLDiff\Base::merge</span> — <span class="dc-title">Produce un nuevo documento XML basado en diferencias</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-xmldiff-base.merge-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><strong>XMLDiff\Base::merge</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   Método de fusión abstracta para ser implementado por las clases hereditarias.
+  </p>
+  <p class="para">
+   Básicamente el propósito del método es producir un nuevo documento XML basado en la información diferencial.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-xmldiff-base.merge-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">src</code></dt>
+    <dd>
+     <p class="para">
+      Documento fuente XML.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">diff</code></dt>
+    <dd>
+     <p class="para">
+      Documento producido por el método diferencial.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-xmldiff-base.merge-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Depende de la implementación.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#xmldiff-base.construct">XMLDiff\Base::__construct</a> — Constructor</li><li><a href="#xmldiff-base.diff">XMLDiff\Base::diff</a> — Produce diferencias de dos documentos XML</li><li><a href="#xmldiff-base.merge">XMLDiff\Base::merge</a> — Produce un nuevo documento XML basado en diferencias</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="class.xmldiff-dom" class="reference"><hr>
+
+ <h1 class="title">La clase XMLDiff\DOM</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p>
+
+
+  <div class="section" id="xmldiff-dom.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="xmldiff-dom.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">XMLDiff\DOM</strong>
+     </span>
+
+     <span class="ooclass">
+      <span class="modifier">extends</span>
+       <a href="#class.xmldiff-base" class="classname">XMLDiff\Base</a>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-dom.diff" class="methodname">diff</a></span>(<span class="methodparam"><span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-dom.merge" class="methodname">merge</a></span>(<span class="methodparam"><span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span></div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="methodsynopsis dc-description"><span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-base.diff" class="methodname">XMLDiff\Base::diff</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-base.merge" class="methodname">XMLDiff\Base::merge</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="xmldiff-dom.diff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">XMLDiff\DOM::diff</h1>
+  <p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p><p class="refpurpose"><span class="refname">XMLDiff\DOM::diff</span> — <span class="dc-title">Diferencia dos objetos DOMDocument</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-xmldiff-dom.diff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>XMLDiff\DOM::diff</strong></span>(<span class="methodparam"><span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span></div>
+
+  <p class="para rdfs-comment">
+   Diferencia dos instancias de DOMDocument y produce la nueva que contiene la información de la diferencia.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-xmldiff-dom.diff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">from</code></dt>
+    <dd>
+     <p class="para">
+      Fuente del objeto DOMDocument.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">to</code></dt>
+    <dd>
+     <p class="para">
+      Objeto de destino DOMDocument.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-xmldiff-dom.diff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   DOMDocument con la información de diferencia o NULL.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="xmldiff-dom.merge" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">XMLDiff\DOM::merge</h1>
+  <p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p><p class="refpurpose"><span class="refname">XMLDiff\DOM::merge</span> — <span class="dc-title">Produce DOMDocument unido</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-xmldiff-dom.merge-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>XMLDiff\DOM::merge</strong></span>(<span class="methodparam"><span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#class.domdocument" class="type DOMDocument">DOMDocument</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crear un nuevo DOMDocument basado en las diferencias.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-xmldiff-dom.merge-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">src</code></dt>
+    <dd>
+     <p class="para">
+      Objeto fuente DOMDocument.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">diff</code></dt>
+    <dd>
+     <p class="para">
+      Objeto DOMDocument que contiene la información de diferencias.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-xmldiff-dom.merge-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   DOMDocument unido o NULL.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#xmldiff-dom.diff">XMLDiff\DOM::diff</a> — Diferencia dos objetos DOMDocument</li><li><a href="#xmldiff-dom.merge">XMLDiff\DOM::merge</a> — Produce DOMDocument unido</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="class.xmldiff-memory" class="reference"><hr>
+
+ <h1 class="title">La clase XMLDiff\Memory</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p>
+
+
+  <div class="section" id="xmldiff-memory.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="xmldiff-memory.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">XMLDiff\Memory</strong>
+     </span>
+
+     <span class="ooclass">
+      <span class="modifier">extends</span>
+       <a href="#class.xmldiff-base" class="classname">XMLDiff\Base</a>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-memory.diff" class="methodname">diff</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-memory.merge" class="methodname">merge</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="methodsynopsis dc-description"><span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-base.diff" class="methodname">XMLDiff\Base::diff</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-base.merge" class="methodname">XMLDiff\Base::merge</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="xmldiff-memory.diff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">XMLDiff\Memory::diff</h1>
+  <p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p><p class="refpurpose"><span class="refname">XMLDiff\Memory::diff</span> — <span class="dc-title">Diferenciar dos documentos XML</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-xmldiff-memory.diff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>XMLDiff\Memory::diff</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Diferenciar dos string que contienen documentos XML y producir la información diferencial.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-xmldiff-memory.diff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">from</code></dt>
+    <dd>
+     <p class="para">
+      Documento fuente XML.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">to</code></dt>
+    <dd>
+     <p class="para">
+      Documento XML de destino.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-xmldiff-memory.diff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   String con el documento XML que contiene la información del diferencia o NULL.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="xmldiff-memory.merge" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">XMLDiff\Memory::merge</h1>
+  <p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p><p class="refpurpose"><span class="refname">XMLDiff\Memory::merge</span> — <span class="dc-title">Produce un documento XML unido</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-xmldiff-memory.merge-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>XMLDiff\Memory::merge</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crear un nuevo documento XML basado en diferencias y documento fuente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-xmldiff-memory.merge-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">src</code></dt>
+    <dd>
+     <p class="para">
+      Documento fuente XML.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">diff</code></dt>
+    <dd>
+     <p class="para">
+      Documento XML que contiene información de diferencias.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-xmldiff-memory.merge-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   String con el nuevo documento XML o NULL.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#xmldiff-memory.diff">XMLDiff\Memory::diff</a> — Diferenciar dos documentos XML</li><li><a href="#xmldiff-memory.merge">XMLDiff\Memory::merge</a> — Produce un documento XML unido</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="class.xmldiff-file" class="reference"><hr>
+
+ <h1 class="title">La clase XMLDiff\File</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p>
+
+
+  <div class="section" id="xmldiff-file.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="xmldiff-file.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">XMLDiff\File</strong>
+     </span>
+
+     <span class="ooclass">
+      <span class="modifier">extends</span>
+       <a href="#class.xmldiff-base" class="classname">XMLDiff\Base</a>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-file.diff" class="methodname">diff</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-file.merge" class="methodname">merge</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="methodsynopsis dc-description"><span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-base.diff" class="methodname">XMLDiff\Base::diff</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">abstract</span> <span class="modifier">public</span> <span class="methodname"><a href="#xmldiff-base.merge" class="methodname">XMLDiff\Base::merge</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="xmldiff-file.diff" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">XMLDiff\File::diff</h1>
+  <p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p><p class="refpurpose"><span class="refname">XMLDiff\File::diff</span> — <span class="dc-title">Diferencia dos archivos XML</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-xmldiff-file.diff-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>XMLDiff\File::diff</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Diferencia dos archivos XML locales y produce un string con la información de diferenciación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-xmldiff-file.diff-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">from</code></dt>
+    <dd>
+     <p class="para">
+      Path to the source document.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">to</code></dt>
+    <dd>
+     <p class="para">
+      Ruta al documento fuente.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-xmldiff-file.diff-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   String con el documento XML que contiene la información diferencial o NULL.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="xmldiff-file.merge" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">XMLDiff\File::merge</h1>
+  <p class="verinfo">(PECL xmldiff &gt;= 0.8.0)</p><p class="refpurpose"><span class="refname">XMLDiff\File::merge</span> — <span class="dc-title">Produce un documento XML unido</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-xmldiff-file.merge-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>XMLDiff\File::merge</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$src</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$diff</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crea un nuevo documento XML basado en diferencias y documento fuente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-xmldiff-file.merge-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">src</code></dt>
+    <dd>
+     <p class="para">
+      Ruta al documento XML de origen.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">diff</code></dt>
+    <dd>
+     <p class="para">
+      Ruta al documento XML con la información de diferencia.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-xmldiff-file.merge-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   String con el nuevo documento XML o NULL.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#xmldiff-file.diff">XMLDiff\File::diff</a> — Diferencia dos archivos XML</li><li><a href="#xmldiff-file.merge">XMLDiff\File::merge</a> — Produce un documento XML unido</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.xmldiff">Introducción</a></li><li><a href="#xmldiff.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#xmldiff.requirements">Requerimientos</a></li><li><a href="#xmldiff.installation">Instalación</a></li></ul></li><li><a href="#class.xmldiff-base">XMLDiff\Base</a> — La clase XMLDiff\Base<ul class="chunklist chunklist_book chunklist_children"><li><a href="#xmldiff-base.construct">XMLDiff\Base::__construct</a> — Constructor</li><li><a href="#xmldiff-base.diff">XMLDiff\Base::diff</a> — Produce diferencias de dos documentos XML</li><li><a href="#xmldiff-base.merge">XMLDiff\Base::merge</a> — Produce un nuevo documento XML basado en diferencias</li></ul></li><li><a href="#class.xmldiff-dom">XMLDiff\DOM</a> — La clase XMLDiff\DOM<ul class="chunklist chunklist_book chunklist_children"><li><a href="#xmldiff-dom.diff">XMLDiff\DOM::diff</a> — Diferencia dos objetos DOMDocument</li><li><a href="#xmldiff-dom.merge">XMLDiff\DOM::merge</a> — Produce DOMDocument unido</li></ul></li><li><a href="#class.xmldiff-memory">XMLDiff\Memory</a> — La clase XMLDiff\Memory<ul class="chunklist chunklist_book chunklist_children"><li><a href="#xmldiff-memory.diff">XMLDiff\Memory::diff</a> — Diferenciar dos documentos XML</li><li><a href="#xmldiff-memory.merge">XMLDiff\Memory::merge</a> — Produce un documento XML unido</li></ul></li><li><a href="#class.xmldiff-file">XMLDiff\File</a> — La clase XMLDiff\File<ul class="chunklist chunklist_book chunklist_children"><li><a href="#xmldiff-file.diff">XMLDiff\File::diff</a> — Diferencia dos archivos XML</li><li><a href="#xmldiff-file.merge">XMLDiff\File::merge</a> — Produce un documento XML unido</li></ul></li></ul></div>

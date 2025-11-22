@@ -1,0 +1,3221 @@
+<div id="book.mcrypt" class="book"><hr>
+ 
+ <h1 class="title">Mcrypt</h1>
+
+ 
+ <div id="intro.mcrypt" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   
+<p class="para">
+ Esta funcionalidad está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+</p>
+<p class="para">
+ Las alternativas a esta funcionalidad incluyen:
+</p>
+
+   <ul class="simplelist">
+    <li>
+     <a href="#book.sodium" class="link">Sodium</a>
+     (disponible a partir de PHP 7.2.0)
+    </li>
+    <li>
+     <a href="#book.openssl" class="link">OpenSSL</a>
+    </li>
+   </ul>
+  </div>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta extensión ha sido movida al módulo <a href="https://pecl.php.net/" class="link external">» PECL</a> y no será integrada en PHP a partir de PHP 7.2.0.
+   </p>
+  </blockquote>
+  <p class="para">
+   Estas funciones permiten acceder a la biblioteca
+   mcrypt, que dispone de una gran variedad de algoritmos
+   de cifrado, como DES, TripleDES, Blowfish (por omisión), 3-WAY,
+   SAFER-SK64, SAFER-SK128, TWOFISH, TEA, RC2 y GOST en modos CBC,
+   OFB, CFB y ECB. Asimismo, aceptan también RC6 e IDEA que son
+   considerados como "no libres".
+   CFB/OFB es de 8 bits por omisión.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="mcrypt.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#mcrypt.requirements">Requerimientos</a></li><li><a href="#mcrypt.installation">Instalación</a></li><li><a href="#mcrypt.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#mcrypt.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ <div id="mcrypt.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Estas funciones utilizan <a href="http://mcrypt.sourceforge.net/" class="link external">» mcrypt</a>.
+   Para utilizar esta biblioteca, descargue
+   el fichero <var class="filename">libmcrypt-x.x.tar.gz</var> desde
+   <a href="http://mcrypt.sourceforge.net/" class="link external">» http://mcrypt.sourceforge.net/</a>
+   y siga las instrucciones de instalación proporcionadas.
+  </p>
+  <p class="simpara">
+   Se requiere la versión 2.5.6 o posterior de la biblioteca libmcrypt.
+  </p>
+  <p class="para">
+   Los usuarios de Windows encontrarán la biblioteca en la versión Windows
+   de PHP 5.3. La versión binaria de Windows de PHP 5.3 utiliza la versión estática
+   de la biblioteca MCrypt, no se necesita ninguna DLL.
+  </p>
+  <p class="para">
+   Si se compila PHP con la biblioteca <code class="literal">libmcrypt 2.4.x</code>,
+   se admiten los siguientes algoritmos: <code class="literal">"CAST"</code>, <code class="literal">"LOKI97"</code>, <code class="literal">"RIJNDAEL"</code>, <code class="literal">"SAFERPLUS"</code>,
+   <code class="literal">"SERPENT"</code> así como los siguientes cifrados: <code class="literal">"ENIGMA"</code> (cifrado), <code class="literal">"PANAMA"</code>,
+   <code class="literal">"RC4"</code> y <code class="literal">"WAKE"</code>. Con <code class="literal">libmcrypt 2.4.x</code> otro modo de cifrado
+   está disponible: <code class="literal">"nOFB"</code>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="mcrypt.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Esta extensión ha sido movida al módulo <a href="https://pecl.php.net/" class="link external">» PECL</a> y no será integrada en PHP a partir de PHP 7.2.0
+ </p>
+ <p class="para">
+  Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/mcrypt" class="link external">» https://pecl.php.net/package/mcrypt</a>.
+ </p>
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="mcrypt.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+ </p><table class="doctable table">
+   <caption><strong>Opciones de configuración mcrypt</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+    <tr>
+     <td><a href="#ini.mcrypt.algorithms-dir" class="link">mcrypt.algorithms_dir</a></td>
+     <td><strong><code><a href="#constant.null">null</a></code></strong></td>
+     <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+     <td class="empty"> </td>
+    </tr>
+
+    <tr>
+     <td><a href="#ini.mcrypt.modes-dir" class="link">mcrypt.modes_dir</a></td>
+     <td><strong><code><a href="#constant.null">null</a></code></strong></td>
+     <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+     <td class="empty"> </td>
+    </tr>
+
+   </tbody>
+  
+ </table>
+
+ Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+ <p class="para">
+  </p><dl>
+   
+    <dt id="ini.mcrypt.algorithms-dir">
+     <code class="parameter">mcrypt.algorithms_dir</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      El directorio que contiene los algoritmos. Por omisión es el directorio indicado durante la
+      compilación de libmcrypt, típicamente se trata de
+      <em>/usr/local/lib/libmcrypt</em>. Consulte
+      <span class="function"><a href="#function.mcrypt-list-algorithms" class="function">mcrypt_list_algorithms()</a></span> para más detalles.
+     </p>
+    </dd>
+   
+   
+    <dt id="ini.mcrypt.modes-dir">
+     <code class="parameter">mcrypt.modes_dir</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      El directorio que contiene los modos. Por omisión es el directorio indicado durante la
+      compilación de libmcrypt, típicamente se trata de
+      <em>/usr/local/lib/libmcrypt</em>. Consulte
+      <span class="function"><a href="#function.mcrypt-list-modes" class="function">mcrypt_list_modes()</a></span> para más detalles.
+     </p>
+    </dd>
+   
+  </dl>
+ 
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ <div id="mcrypt.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   <span class="function"><a href="#function.mcrypt-module-open" class="function">mcrypt_module_open()</a></span> devuelve un puntero de cifrado.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="mcrypt.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <p class="para">
+  Mcrypt puede operar en 4 modos de cifrado (<code class="literal">CBC</code>,
+  <code class="literal">OFB</code>, <code class="literal">CFB</code> y <code class="literal">ECB</code>).
+  Si está vinculado contra libmcrypt-2.4.x o posterior, las funciones pueden
+  operar asimismo en modo <code class="literal">nOFB</code> y en modo <code class="literal">STREAM</code>.
+  A continuación se encuentra una lista con todos los modos de cifrado soportados con
+  las constantes que están definidas para el modo de cifrado. Para una referencia
+  más completa y discusiones, ver Applied Cryptography by Schneier (ISBN 0-471-11709-9).
+  </p><ul class="itemizedlist">
+   <li class="listitem">
+    <span class="simpara">
+     <strong><code><a href="#constant.mcrypt-mode-ecb">MCRYPT_MODE_ECB</a></code></strong> (<code class="literal">electronic codebook</code>)
+     es un modo de cifrado por bloques que generalmente es inapropiado para la mayoría
+     de los usos. El uso de este modo está desaconsejado.
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <strong><code><a href="#constant.mcrypt-mode-cbc">MCRYPT_MODE_CBC</a></code></strong> (<code class="literal">cipher block chaining</code>)
+     es un modo de cifrado por bloques que es considerablemente más seguro que
+     el modo <code class="literal">ECB</code>.
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <strong><code><a href="#constant.mcrypt-mode-cfb">MCRYPT_MODE_CFB</a></code></strong> (<code class="literal">cipher feedback,
+     en modo de 8 bits</code>) es un modo de cifrado por flujo.
+     Se recomienda utilizar el modo <code class="literal">NCFB</code> en lugar
+     del modo <code class="literal">CFB</code>.
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <strong><code><a href="#constant.mcrypt-mode-ofb">MCRYPT_MODE_OFB</a></code></strong> (<code class="literal">output feedback, en
+     8 bits</code>) es un modo de cifrado por flujo comparable a
+     <code class="literal">CFB</code>, pero puede ser utilizado en aplicaciones donde la
+     propagación de errores no puede ser tolerada.
+     Se recomienda utilizar el modo <code class="literal">NOFB</code> en lugar
+     del modo <code class="literal">OFB</code>.
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <strong><code><a href="#constant.mcrypt-mode-nofb">MCRYPT_MODE_NOFB</a></code></strong> (<code class="literal">output feedback,
+     en modo de n bits</code>) es comparable al modo <code class="literal">OFB</code>,
+     pero opera sobre el tamaño de bloque completo del algoritmo.
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <strong><code><a href="#constant.mcrypt-mode-stream">MCRYPT_MODE_STREAM</a></code></strong> es un modo adicional, para incluir
+     algoritmos de flujo tales como <code class="literal">"WAKE"</code> o <code class="literal">"RC4"</code>.
+    </span>
+   </li>
+  </ul>
+ 
+
+ <p class="para">
+  Mcrypt soporta otros modos de operación para los cuales no hay constantes
+  predefinidas.
+  Pueden ser utilizados pasando un <span class="type"><a href="#language.types.string" class="type string">string</a></span> en lugar de las constantes faltantes.
+  </p><ul class="itemizedlist">
+   <li class="listitem">
+    <span class="simpara">
+     <code class="literal">"ctr"</code> (<code class="literal">counter mode</code>) es un modo de cifrado por flujo.
+    </span>
+   </li>
+   <li class="listitem">
+    <span class="simpara">
+     <code class="literal">"ncfb"</code> (<code class="literal">cipher feedback,
+     en modo de n bits</code>) es comparable al modo <code class="literal">CFB</code>,
+     pero opera sobre el tamaño de bloque completo del algoritmo.
+    </span>
+   </li>
+  </ul>
+ 
+
+ <p class="para">
+  A continuación se presentan algunos otros modos y métodos de compresión:
+  </p><dl>
+   
+    <dt id="constant.mcrypt-encrypt">
+     <strong><code><a href="#constant.mcrypt-encrypt">MCRYPT_ENCRYPT</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.mcrypt-decrypt">
+     <strong><code><a href="#constant.mcrypt-decrypt">MCRYPT_DECRYPT</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.mcrypt-dev-random">
+     <strong><code><a href="#constant.mcrypt-dev-random">MCRYPT_DEV_RANDOM</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.mcrypt-dev-urandom">
+     <strong><code><a href="#constant.mcrypt-dev-urandom">MCRYPT_DEV_URANDOM</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.mcrypt-rand">
+     <strong><code><a href="#constant.mcrypt-rand">MCRYPT_RAND</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+
+     </span>
+    </dd>
+   
+  </dl>
+ 
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="mcrypt.ciphers" class="appendix"><hr>
+ <h1 class="title">Modos de cifrado Mcrypt</h1>
+
+ <p class="para">
+  A continuación se presenta una lista no exhaustiva de los modos de cifrado de la extensión
+  mcrypt. Para disponer de una lista completa de los cifrados soportados,
+  consulte las definiciones en el fichero <var class="filename">mcrypt.h</var>. La regla
+  general con la API mcrypt-2.2.x es que se puede acceder al
+  modo de cifrado desde PHP con la constante MCRYPT_ciphername. Con
+  la biblioteca libmcrypt-2.4.x y libmcrypt-2.5.x, estas constantes funcionan
+  siempre, pero es posible especificar el nombre del cifrado en una cadena,
+  al llamar a <span class="function"><a href="#function.mcrypt-module-open" class="function">mcrypt_module_open()</a></span>.
+  </p><ul class="itemizedlist">
+   <li class="listitem"><span class="simpara">MCRYPT_3DES</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_ARCFOUR_IV (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_ARCFOUR (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_BLOWFISH</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_CAST_128</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_CAST_256</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_CRYPT</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_DES</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_DES_COMPAT (libmcrypt 2.2.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_ENIGMA (libmcrypt &gt; 2.4.x únicamente, alias de MCRYPT_CRYPT)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_GOST</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_IDEA (no libre)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_LOKI97 (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_MARS (libmcrypt &gt; 2.4.x únicamente, no libre)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_PANAMA (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_RIJNDAEL_128 (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_RIJNDAEL_192 (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_RIJNDAEL_256 (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_RC2</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_RC4 (libmcrypt 2.2.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_RC6 (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_RC6_128 (libmcrypt 2.2.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_RC6_192 (libmcrypt 2.2.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_RC6_256 (libmcrypt 2.2.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_SAFER64</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_SAFER128</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_SAFERPLUS (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_SERPENT(libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_SERPENT_128 (libmcrypt 2.2.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_SERPENT_192 (libmcrypt 2.2.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_SERPENT_256 (libmcrypt 2.2.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_SKIPJACK (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_TEAN (libmcrypt 2.2.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_THREEWAY</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_TRIPLEDES (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_TWOFISH (para las versiones antiguas de mcrypt 2.x o mcrypt &gt; 2.4.x )</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_TWOFISH128 (TWOFISHxxx está disponible en las nuevas versiones 2.x,
+    pero no en las versiones 2.4.x)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_TWOFISH192</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_TWOFISH256</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_WAKE (libmcrypt &gt; 2.4.x únicamente)</span></li>
+   <li class="listitem"><span class="simpara">MCRYPT_XTEA (libmcrypt &gt; 2.4.x únicamente)</span></li>
+  </ul>
+ 
+ <p class="para">
+  Se debe (modo <strong><code><a href="#constant.cfb">CFB</a></code></strong> y <strong><code><a href="#constant.ofb">OFB</a></code></strong>)
+  o puede (modo <strong><code><a href="#constant.cbc">CBC</a></code></strong>) proporcionar un vector de inicialización
+  (IV) para estos modos de cifrado. IV debe ser único, y tener el mismo
+  valor en el cifrado y en el descifrado. Para datos que serán
+  almacenados después del cifrado, se puede tomar el resultado de una
+  función como MD5, aplicada al nombre del fichero. De lo contrario,
+  se puede enviar IV con los datos cifrados, (consulte el capítulo
+  9.3 de Applied Cryptography by Schneier (ISBN 0-471-11709-9) de Schneier (ISBN 0-471-11709-9)
+  para más detalles sobre el tema).
+ </p>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="ref.mcrypt" class="reference"><hr>
+ <h1 class="title">Funciones Mcrypt</h1>
+
+ 
+
+
+
+
+<div id="function.mcrypt-create-iv" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_create_iv</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_create_iv</span> — <span class="dc-title">Crea un vector de inicialización (IV) a partir de una fuente aleatoria</span></p>
+
+ </div>
+
+ <div id="function.mcrypt-create-iv-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   
+<p class="para">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+</p>
+<p class="para">
+ Las alternativas a esta función incluyen:
+</p>
+
+   <ul class="simplelist">
+    <li><span class="function"><a href="#function.random-bytes" class="function">random_bytes()</a></span></li>
+   </ul>
+  </div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-create-iv-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_create_iv</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$source</code><span class="initializer"> = MCRYPT_DEV_URANDOM</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>mcrypt_create_iv()</strong></span> crea un IV
+   (vector de inicialización) a partir de una fuente aleatoria.
+  </p>
+  <p class="para">
+   El vector de inicialización es el único medio de proporcionar una inicialización
+   de reemplazo a los métodos de inicialización. Este vector no necesita
+   ser particularmente secreto, aunque es mejor que lo sea. Puede enviarse
+   con los documentos cifrados sin perder seguridad.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-create-iv-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">size</code></dt>
+     <dd>
+      <p class="para">
+       El tamaño del vector.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">source</code></dt>
+     <dd>
+      <p class="para">
+       La fuente de un IV. La fuente puede ser <strong><code><a href="#constant.mcrypt-rand">MCRYPT_RAND</a></code></strong> (el generador
+       de números aleatorios del sistema), <strong><code><a href="#constant.mcrypt-dev-random">MCRYPT_DEV_RANDOM</a></code></strong>
+       (lee los datos desde <var class="filename">/dev/random</var>) y
+       <strong><code><a href="#constant.mcrypt-dev-urandom">MCRYPT_DEV_URANDOM</a></code></strong> (lee los datos desde
+       <var class="filename">/dev/urandom</var>). Antes de la versión 5.3.0,
+       <strong><code><a href="#constant.mcrypt-rand">MCRYPT_RAND</a></code></strong> era la única constante
+       soportada por Windows.
+      </p>
+      <p class="para">
+       Tenga en cuenta que el valor por defecto de este parámetro era
+       <strong><code><a href="#constant.mcrypt-dev-random">MCRYPT_DEV_RANDOM</a></code></strong> antes de PHP 5.6.0.
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       <span class="simpara">
+        Tenga en cuenta que la constante <strong><code><a href="#constant.mcrypt-dev-random">MCRYPT_DEV_RANDOM</a></code></strong>
+        puede bloquearse mientras espera que haya más entropía disponible.
+       </span>
+      </p></blockquote>
+     </dd>
+    
+   </dl>
+   
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-create-iv-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el vector de inicialización, o bien <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-create-iv-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-999">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_create_iv()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>     $size </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_get_iv_size</span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_CAST_256</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_MODE_CFB</span><span style="color: #007700">);<br>     </span><span style="color: #0000BB">$iv </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_create_iv</span><span style="color: #007700">(</span><span style="color: #0000BB">$size</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_DEV_RANDOM</span><span style="color: #007700">);<br>     </span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ 
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-create-iv-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><a href="http://www.ciphersbyritter.com/GLOSSARY.HTM#IV" class="link external">» http://www.ciphersbyritter.com/GLOSSARY.HTM#IV</a></li>
+    <li><a href="http://www.quadibloc.com/crypto/co0409.htm" class="link external">» http://www.quadibloc.com/crypto/co0409.htm</a></li>
+    <li>Capítulo 9.3 de Applied Cryptography by Schneier (ISBN 0-471-11709-9)</li>
+    <li><span class="function"><a href="#function.random-bytes" class="function" rel="rdfs-seeAlso">random_bytes()</a> - Obtiene bytes aleatorios criptográficamente seguros</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-decrypt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_decrypt</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_decrypt</span> — <span class="dc-title">Descifra un texto con los parámetros dados</span></p>
+
+ </div>
+ <div id="function.mcrypt-decrypt-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-decrypt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_decrypt</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$cipher</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$iv</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Descifra los datos <code class="parameter">data</code> y devuelve los datos descifrados.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-decrypt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">cipher</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-ciphername">MCRYPT_ciphername</a></code></strong> constants, or the name of the algorithm as string.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave utilizada durante el cifrado de los datos. Si el tamaño de la clave
+       proporcionada no es soportado por el cipher, la función emitirá un
+       warning y devolverá <strong><code><a href="#constant.false">false</a></code></strong>
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Los datos que serán descifrados utilizando los parámetros
+       <code class="parameter">cipher</code> y <code class="parameter">mode</code>.
+       Si el tamaño de los datos no corresponde a n * el tamaño del bloque,
+       los datos serán completados con '<code class="literal">\0</code>'.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-mode-modename">MCRYPT_MODE_modename</a></code></strong> constants, or one of the following strings: "ecb", "cbc", "cfb", "ofb", "nofb" or "stream".</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">iv</code></dt>
+     <dd>
+      <p class="para">Used for the initialization in CBC, CFB, OFB modes, and in some algorithms in STREAM mode. If the provided IV size is not supported by the chaining mode or no IV was provided, but the chaining mode requires one, the function will emit a warning and return <strong><code><a href="#constant.false">false</a></code></strong>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-decrypt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve los datos descifrados en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+    o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-decrypt-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-encrypt" class="function" rel="rdfs-seeAlso">mcrypt_encrypt()</a> - Cifra un texto</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-get-algorithms-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_get_algorithms_name</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_get_algorithms_name</span> — <span class="dc-title">Devuelve el nombre del algoritmo de cifrado</span></p>
+
+ </div>
+
+ <div id="function.mcrypt-enc-get-algorithms-name-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-get-algorithms-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_get_algorithms_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>mcrypt_enc_get_algorithms_name()</strong></span> devuelve el nombre de
+   el algoritmo utilizado por <code class="parameter">td</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-get-algorithms-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-get-algorithms-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre del algoritmo actual, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   </p>
+  </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-enc-get-algorithms-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1000">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_enc_get_algorithms_name()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>     $td </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_module_open </span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_CAST_256</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_MODE_CFB</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">);<br>     echo </span><span style="color: #0000BB">mcrypt_enc_get_algorithms_name</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">). </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br><br>     </span><span style="color: #0000BB">$td </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_module_open </span><span style="color: #007700">(</span><span style="color: #DD0000">'cast-256'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_MODE_CFB</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">);<br>     echo </span><span style="color: #0000BB">mcrypt_enc_get_algorithms_name</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">). </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br>     </span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">CAST-256
+CAST-256</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-get-block-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_get_block_size</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_get_block_size</span> — <span class="dc-title">Devuelve el tamaño de bloque de un algoritmo</span></p>
+
+ </div>
+ <div id="function.mcrypt-enc-get-block-size-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-get-block-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_get_block_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene el tamaño de bloque de un algoritmo.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-get-block-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de ficheros.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-get-block-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tamaño de bloque del algoritmo, en bytes.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-get-iv-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_get_iv_size</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_get_iv_size</span> — <span class="dc-title">Devuelve el tamaño del VI de un algoritmo</span></p>
+
+ </div>
+ <div id="function.mcrypt-enc-get-iv-size-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-get-iv-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_get_iv_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función devuelve el tamaño del VI del algoritmo designado
+   por <code class="parameter">td</code>, en bytes. Si el valor devuelto
+   es 0, es que el algoritmo no requiere de VI. Un VI es
+   requerido en modo <code class="literal">"cbc"</code>, <code class="literal">"cfb"</code> y
+   <code class="literal">"ofb"</code>, y a veces en modo <code class="literal">"stream"</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-get-iv-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de ficheros.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-get-iv-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tamaño del IV, o <code class="literal">0</code> si el IV es ignorado por el algoritmo.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-get-key-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_get_key_size</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_get_key_size</span> — <span class="dc-title">Devuelve el tamaño máximo de la clave para un modo</span></p>
+
+ </div>
+ <div id="function.mcrypt-enc-get-key-size-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-get-key-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_get_key_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el tamaño máximo de la clave para un modo dado.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-get-key-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de fichero.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-get-key-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tamaño máximo de la clave para el modo dado.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-get-modes-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_get_modes_name</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_get_modes_name</span> — <span class="dc-title">Devuelve el nombre del modo</span></p>
+
+ </div>
+ <div id="function.mcrypt-enc-get-modes-name-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-get-modes-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_get_modes_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el nombre del modo.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-get-modes-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-get-modes-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+  </p>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-enc-get-modes-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1001">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_enc_get_modes_name()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$td </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_module_open </span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_CAST_256</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_MODE_CFB</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">mcrypt_enc_get_modes_name</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">). </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$td </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_module_open </span><span style="color: #007700">(</span><span style="color: #DD0000">'cast-256'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #DD0000">'ecb'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">mcrypt_enc_get_modes_name</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">). </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">CFB
+ECB</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-get-supported-key-sizes" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_get_supported_key_sizes</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_get_supported_key_sizes</span> — <span class="dc-title">Devuelve un array que contiene los tamaños de clave admitidos por un algoritmo</span></p>
+
+ </div>
+
+ <div id="function.mcrypt-enc-get-supported-key-sizes-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-get-supported-key-sizes-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_get_supported_key_sizes</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>mcrypt_enc_get_supported_key_sizes()</strong></span> lee
+   los tamaños de clave soportados por el algoritmo actual del
+   recurso de cifrado <code class="parameter">td</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-get-supported-key-sizes-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-get-supported-key-sizes-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array que contiene los tamaños de clave soportados por el algoritmo
+   designado por <code class="parameter">td</code>. Si devuelve un array
+   vacío, es que todas las claves entre 1 y
+   <span class="function"><a href="#function.mcrypt-enc-get-key-size" class="function">mcrypt_enc_get_key_size()</a></span> son admitidas por
+   el algoritmo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-enc-get-supported-key-sizes-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1002">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_enc_get_supported_key_sizes()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>    $td </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_module_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'rijndael-256'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #DD0000">'ecb'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">mcrypt_enc_get_supported_key_sizes</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(3) {
+  [0]=&gt;
+  int(16)
+  [1]=&gt;
+  int(24)
+  [2]=&gt;
+  int(32)
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-is-block-algorithm" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_is_block_algorithm</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_is_block_algorithm</span> — <span class="dc-title">Comprueba si el cifrado es por bloques en un algoritmo</span></p>
+
+ </div>
+ <div id="function.mcrypt-enc-is-block-algorithm-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-is-block-algorithm-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_is_block_algorithm</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Comprueba si el cifrado es por bloques en un algoritmo.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-is-block-algorithm-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-is-block-algorithm-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si el algoritmo utilizado es un algoritmo por bloques, y <strong><code><a href="#constant.false">false</a></code></strong>
+   si es un algoritmo por flujo.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-is-block-algorithm-mode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_is_block_algorithm_mode</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_is_block_algorithm_mode</span> — <span class="dc-title">Comprueba si el modo de cifrado es por bloques</span></p>
+
+ </div>
+ <div id="function.mcrypt-enc-is-block-algorithm-mode-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-is-block-algorithm-mode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_is_block_algorithm_mode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Comprueba si el modo de cifrado es por bloques (por ejemplo,
+   <strong><code><a href="#constant.false">false</a></code></strong> para un flujo, y <strong><code><a href="#constant.true">true</a></code></strong> para <code class="literal">"cbc"</code>, <code class="literal">"cfb"</code>, <code class="literal">"ofb"</code>).
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-is-block-algorithm-mode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-is-block-algorithm-mode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si este modo utiliza algoritmos por bloques, y <strong><code><a href="#constant.false">false</a></code></strong> en caso contrario.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-is-block-mode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_is_block_mode</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_is_block_mode</span> — <span class="dc-title">Comprueba si el modo devuelve los datos por bloques</span></p>
+
+ </div>
+ <div id="function.mcrypt-enc-is-block-mode-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-is-block-mode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_is_block_mode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Comprueba si el modo devuelve los datos por bloques (por ejemplo, <strong><code><a href="#constant.true">true</a></code></strong> para <code class="literal">"cbc"</code>
+   y <code class="literal">"ecb"</code>, y <strong><code><a href="#constant.false">false</a></code></strong> para <code class="literal">"cfb"</code> y un flujo).
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-is-block-mode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-is-block-mode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si el modo devuelve bloques de bytes,
+   o bien <strong><code><a href="#constant.false">false</a></code></strong> si solo devuelve bytes.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-enc-self-test" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_enc_self_test</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_enc_self_test</span> — <span class="dc-title">Prueba un módulo abierto</span></p>
+
+ </div>
+ <div id="function.mcrypt-enc-self-test-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-enc-self-test-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_enc_self_test</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Realiza una prueba del módulo abierto y designado por <code class="parameter">td</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-enc-self-test-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-enc-self-test-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <code class="literal">0</code> en caso de éxito o un <span class="type"><a href="#language.types.integer" class="type int">int</a></span> negativo en
+   caso de fallo.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-encrypt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_encrypt</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_encrypt</span> — <span class="dc-title">Cifra un texto</span></p>
+
+ </div>
+
+ <div id="function.mcrypt-encrypt-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-encrypt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_encrypt</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$cipher</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$iv</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>mcrypt_encrypt()</strong></span> cifra los datos y devuelve
+   los datos cifrados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-encrypt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">cipher</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-ciphername">MCRYPT_ciphername</a></code></strong> constants, or the name of the algorithm as string.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave con la que se cifrarán los datos. Si el tamaño de la clave
+       proporcionada no es compatible con el cipher, la función emitirá un
+       warning y devolverá <strong><code><a href="#constant.false">false</a></code></strong>
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Los datos que se cifrarán, con el <code class="parameter">cipher</code> y el
+       <code class="parameter">mode</code> indicado.
+       Si el tamaño de los datos no es un múltiplo del tamaño de bloque,
+       los datos se rellenarán con caracteres '<code class="literal">\0</code>',
+       según sea necesario.
+      </p>
+      <p class="para">
+       El texto cifrado devuelto puede ser más largo que el tamaño de los datos
+       pasados como argumento a través de <code class="parameter">data</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-mode-modename">MCRYPT_MODE_modename</a></code></strong> constants, or one of the following strings: "ecb", "cbc", "cfb", "ofb", "nofb" or "stream".</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">iv</code></dt>
+     <dd>
+      <p class="para">Used for the initialization in CBC, CFB, OFB modes, and in some algorithms in STREAM mode. If the provided IV size is not supported by the chaining mode or no IV was provided, but the chaining mode requires one, the function will emit a warning and return <strong><code><a href="#constant.false">false</a></code></strong>.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-encrypt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve los datos cifrados, como <span class="type"><a href="#language.types.string" class="type string">string</a></span>  o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-encrypt-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1003">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_encrypt()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>    </span><span style="color: #FF8000"># --- CIFRADO ---<br><br>    # la clave debería ser un binario aleatorio, utilice la función scrypt, bcrypt<br>    # o PBKDF2 para convertir una cadena de caracteres en una clave.<br>    # La clave se especifica utilizando notación hexadecimal.<br>    </span><span style="color: #0000BB">$key </span><span style="color: #007700">= </span><span style="color: #0000BB">pack</span><span style="color: #007700">(</span><span style="color: #DD0000">'H*'</span><span style="color: #007700">, </span><span style="color: #DD0000">"bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3"</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000"># Muestra el tamaño de la clave utilizada; claves de 16, 24 o 32 bytes para<br>    # AES-128, 192 y 256 respectivamente.<br>    </span><span style="color: #0000BB">$key_size </span><span style="color: #007700">=  </span><span style="color: #0000BB">strlen</span><span style="color: #007700">(</span><span style="color: #0000BB">$key</span><span style="color: #007700">);<br>    echo </span><span style="color: #DD0000">"Tamaño de la clave: " </span><span style="color: #007700">. </span><span style="color: #0000BB">$key_size </span><span style="color: #007700">. </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br><br>    </span><span style="color: #0000BB">$plaintext </span><span style="color: #007700">= </span><span style="color: #DD0000">"Esta cadena de caracteres ha sido cifrada en AES-256 / CBC / ZeroBytePadding."</span><span style="color: #007700">;<br><br>    </span><span style="color: #FF8000"># Crea un IV aleatorio para usar con el cifrado CBC<br>    </span><span style="color: #0000BB">$iv_size </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_get_iv_size</span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_RIJNDAEL_128</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_MODE_CBC</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">$iv </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_create_iv</span><span style="color: #007700">(</span><span style="color: #0000BB">$iv_size</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_RAND</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000"># Crea un texto cifrado compatible con AES (Rijndael block size = 128)<br>    # para mantener el texto confidencial.<br>    # Solo aplicable para entradas codificadas que nunca terminan<br>    # con el valor 00h (debido a la eliminación predeterminada de ceros finales)<br>    </span><span style="color: #0000BB">$ciphertext </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_encrypt</span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_RIJNDAEL_128</span><span style="color: #007700">, </span><span style="color: #0000BB">$key</span><span style="color: #007700">,<br>                                 </span><span style="color: #0000BB">$plaintext</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_MODE_CBC</span><span style="color: #007700">, </span><span style="color: #0000BB">$iv</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000"># Se añade el IV al inicio del texto cifrado para hacerlo disponible para el descifrado<br>    </span><span style="color: #0000BB">$ciphertext </span><span style="color: #007700">= </span><span style="color: #0000BB">$iv </span><span style="color: #007700">. </span><span style="color: #0000BB">$ciphertext</span><span style="color: #007700">;<br><br>    </span><span style="color: #FF8000"># Codifica el texto cifrado resultante para que pueda ser representado por una cadena de caracteres<br>    </span><span style="color: #0000BB">$ciphertext_base64 </span><span style="color: #007700">= </span><span style="color: #0000BB">base64_encode</span><span style="color: #007700">(</span><span style="color: #0000BB">$ciphertext</span><span style="color: #007700">);<br><br>    echo  </span><span style="color: #0000BB">$ciphertext_base64 </span><span style="color: #007700">. </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br><br>    </span><span style="color: #FF8000"># === ADVERTENCIA ===<br><br>    # El texto cifrado resultante no contiene integridad ni autenticación<br>    # y no está protegido contra ataques de tipo "oracle padding".<br><br>    # --- DESCIFRADO ---<br><br>    </span><span style="color: #0000BB">$ciphertext_dec </span><span style="color: #007700">= </span><span style="color: #0000BB">base64_decode</span><span style="color: #007700">(</span><span style="color: #0000BB">$ciphertext_base64</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000"># Obtiene el IV, iv_size debe haber sido creado utilizando la función<br>    # mcrypt_get_iv_size()<br>    </span><span style="color: #0000BB">$iv_dec </span><span style="color: #007700">= </span><span style="color: #0000BB">substr</span><span style="color: #007700">(</span><span style="color: #0000BB">$ciphertext_dec</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">$iv_size</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000"># Obtiene el texto del cipher (todo, excepto $iv_size del inicio)<br>    </span><span style="color: #0000BB">$ciphertext_dec </span><span style="color: #007700">= </span><span style="color: #0000BB">substr</span><span style="color: #007700">(</span><span style="color: #0000BB">$ciphertext_dec</span><span style="color: #007700">, </span><span style="color: #0000BB">$iv_size</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000"># Se deben eliminar los caracteres de valor 00h del final del texto plano<br>    </span><span style="color: #0000BB">$plaintext_dec </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_decrypt</span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_RIJNDAEL_128</span><span style="color: #007700">, </span><span style="color: #0000BB">$key</span><span style="color: #007700">,<br>                                    </span><span style="color: #0000BB">$ciphertext_dec</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_MODE_CBC</span><span style="color: #007700">, </span><span style="color: #0000BB">$iv_dec</span><span style="color: #007700">);<br><br>    echo  </span><span style="color: #0000BB">$plaintext_dec </span><span style="color: #007700">. </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Tamaño de la clave: 32
+ENJW8mS2KaJoNB5E5CoSAAu0xARgsR1bdzFWpEn+poYw45q+73az5kYi4j+0haevext1dGrcW8Qi59txfCBV8BBj3bzRP3dFCp3CPQSJ8eU=
+Esta cadena de caracteres ha sido cifrada en AES-256 / CBC / ZeroBytePadding.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-encrypt-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-decrypt" class="function" rel="rdfs-seeAlso">mcrypt_decrypt()</a> - Descifra un texto con los parámetros dados</span></li>
+    <li><span class="function"><a href="#function.mcrypt-module-open" class="function" rel="rdfs-seeAlso">mcrypt_module_open()</a> - Abre el módulo del algoritmo y del modo a utilizar</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-generic" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_generic</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_generic</span> — <span class="dc-title">Cifra los datos</span></p>
+
+ </div>
+ <div id="function.mcrypt-generic-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-generic-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_generic</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>mcrypt_generic()</strong></span> cifra los datos
+   <code class="parameter">data</code>. Los datos se completan
+   con "<code class="literal">\0</code>" para obtener un tamaño múltiplo del tamaño
+   de un bloque. Devuelve los datos cifrados. Tenga en cuenta que la longitud
+   del string devuelto puede ser más larga que la
+   pasada como argumento, debido al relleno.
+  </p>
+  <p class="para">
+   Si se desea almacenar los datos cifrados en una base de datos
+   asegúrese de almacenar el string completo devuelto por esta función,
+   de lo contrario el string no se descifrará correctamente. Si el string original
+   contiene 10 caracteres y el tamaño de un bloque es de 8 (utilice
+   <span class="function"><a href="#function.mcrypt-enc-get-block-size" class="function">mcrypt_enc_get_block_size()</a></span> para determinar este tamaño),
+   se necesitará al menos 16 caracteres en el campo de la base de datos.
+   Tenga en cuenta que el string devuelto por <span class="function"><a href="#function.mdecrypt-generic" class="function">mdecrypt_generic()</a></span> tendrá
+   16 caracteres de longitud... utilice <code class="literal">rtrim($str, "\0")</code>
+   para eliminar el relleno.
+  </p>
+  <p class="para">
+   Por ejemplo, si se almacenan los datos en una base de datos MySQL,
+   recuerde que los campos de tipo VARCHAR eliminan automáticamente los
+   espacios adicionales durante la inserción. Como los datos cifrados pueden
+   terminar con un espacio (ASCII 32), los datos se dañarán por esta
+   eliminación. Almacene los datos en un campo de tipo TINYBLOB/TINYTEXT
+   (o más grande) para que todo funcione normalmente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-generic-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+      <p class="para">
+       El manejador de cifrado <code class="parameter">td</code> debe ser
+       inicializado con la función <span class="function"><a href="#function.mcrypt-generic-init" class="function">mcrypt_generic_init()</a></span>,
+       con una clave y un VI, antes de llamar a esta función. Cuando el cifrado
+       se realiza, se deben liberar los buffers llamando a la función
+       <span class="function"><a href="#function.mcrypt-generic-deinit" class="function">mcrypt_generic_deinit()</a></span>.
+       Consulte <span class="function"><a href="#function.mcrypt-module-open" class="function">mcrypt_module_open()</a></span> para un ejemplo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Los datos a cifrar.
+      </p>
+     </dd>
+    
+   </dl>
+   
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-generic-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve los datos cifrados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-generic-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mdecrypt-generic" class="function" rel="rdfs-seeAlso">mdecrypt_generic()</a> - Desencripta los datos</span></li>
+    <li><span class="function"><a href="#function.mcrypt-generic-init" class="function" rel="rdfs-seeAlso">mcrypt_generic_init()</a> - Inicializa todos los buffers necesarios</span></li>
+    <li><span class="function"><a href="#function.mcrypt-generic-deinit" class="function" rel="rdfs-seeAlso">mcrypt_generic_deinit()</a> - Prepara el módulo para la descarga</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-generic-deinit" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_generic_deinit</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.7, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_generic_deinit</span> — <span class="dc-title">Prepara el módulo para la descarga</span></p>
+
+ </div>
+ <div id="function.mcrypt-generic-deinit-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-generic-deinit-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_generic_deinit</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Prepara el módulo de cifrado <code class="parameter">td</code> para la descarga.
+   Todos los búferes se vacían, pero el módulo no se descarga.
+   Se debe llamar a <span class="function"><a href="#function.mcrypt-module-close" class="function">mcrypt_module_close()</a></span> manualmente
+   (aunque PHP lo hará por usted al final del script).
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-generic-deinit-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-generic-deinit-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-generic-deinit-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-module-open" class="function" rel="rdfs-seeAlso">mcrypt_module_open()</a> - Abre el módulo del algoritmo y del modo a utilizar</span></li>
+    <li><span class="function"><a href="#function.mcrypt-generic-init" class="function" rel="rdfs-seeAlso">mcrypt_generic_init()</a> - Inicializa todos los buffers necesarios</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-generic-init" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_generic_init</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_generic_init</span> — <span class="dc-title">Inicializa todos los buffers necesarios</span></p>
+
+ </div>
+ <div id="function.mcrypt-generic-init-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-generic-init-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_generic_init</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$iv</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Se debe llamar a <span class="function"><strong>mcrypt_generic_init()</strong></span>
+   antes de cada llamada a <span class="function"><a href="#function.mcrypt-generic" class="function">mcrypt_generic()</a></span> o
+   <span class="function"><a href="#function.mdecrypt-generic" class="function">mdecrypt_generic()</a></span>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-generic-init-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       El tamaño máximo de la clave debe ser el devuelto por
+       <span class="function"><a href="#function.mcrypt-enc-get-key-size" class="function">mcrypt_enc_get_key_size()</a></span> y todos los valores
+       inferiores también serán válidos.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">iv</code></dt>
+     <dd>
+      <p class="para">
+       El vector de inicialización (VI) debe tener el tamaño de un bloque,
+       pero se debe leer su tamaño llamando a
+       <span class="function"><a href="#function.mcrypt-enc-get-iv-size" class="function">mcrypt_enc_get_iv_size()</a></span>. VI es ignorado en modo
+       ECB. VI DEBE existir en modos <code class="literal">"CFB"</code>,
+       <code class="literal">"CBC"</code>, <code class="literal">"STREAM"</code>, <code class="literal">"nOFB"</code>
+       y <code class="literal">"OFB"</code>. Debe ser aleatorio y único (pero no secreto).
+       El mismo VI debe ser utilizado para el cifrado y el descifrado.
+       Si no se desea utilizar, se puede rellenar con ceros, pero
+       no se recomienda.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-generic-init-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un valor negativo en caso de error: -3 si el tamaño
+   de la clave es incorrecto, -4 cuando hay un problema de asignación de
+   memoria y cualquier otro valor en caso de error desconocido. Si ocurre un
+   error, se muestra una alerta. <strong><code><a href="#constant.false">false</a></code></strong> es devuelto si se pasan parámetros
+   incorrectos a la función.
+  </p>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-generic-init-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-module-open" class="function" rel="rdfs-seeAlso">mcrypt_module_open()</a> - Abre el módulo del algoritmo y del modo a utilizar</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-get-block-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_get_block_size</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_get_block_size</span> — <span class="dc-title">Devuelve el tamaño de bloques de un cifrado</span></p>
+
+ </div>
+ <div id="function.mcrypt-get-block-size-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-get-block-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_get_block_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$cipher</code></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>mcrypt_get_block_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$cipher</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   El primer prototipo se utiliza cuando PHP está compilado con la biblioteca
+   libmcrypt 2.2.x, el segundo cuando está compilado con
+   libmcrypt 2.4.x o 2.5.x.
+  </p>
+  <p class="para">
+   <span class="function"><strong>mcrypt_get_block_size()</strong></span> sirve para leer el tamaño
+   de bloques del cifrado <code class="parameter">cipher</code> (en
+   combinación con un modo de cifrado).
+  </p>
+  <p class="para">
+   Se recomienda utilizar la función
+   <span class="function"><a href="#function.mcrypt-enc-get-block-size" class="function">mcrypt_enc_get_block_size()</a></span>,
+   ya que utiliza el recurso devuelto por
+   <span class="function"><a href="#function.mcrypt-module-open" class="function">mcrypt_module_open()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-get-block-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">cipher</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-ciphername">MCRYPT_ciphername</a></code></strong> constants, or the name of the algorithm as string.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-mode-modename">MCRYPT_MODE_modename</a></code></strong> constants, or one of the following strings: "ecb", "cbc", "cfb", "ofb", "nofb" or "stream".</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-get-block-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Lee el tamaño de bloque, en forma de un <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-get-block-size-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1004">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_get_block_size()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Este ejemplo muestra cómo utilizar esta función cuando PHP
+     está compilado con libmcrypt 2.4.x y 2.5.x.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">mcrypt_get_block_size</span><span style="color: #007700">(</span><span style="color: #DD0000">'tripledes'</span><span style="color: #007700">, </span><span style="color: #DD0000">'ecb'</span><span style="color: #007700">); </span><span style="color: #FF8000">// 8<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-get-block-size-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-get-key-size" class="function" rel="rdfs-seeAlso">mcrypt_get_key_size()</a> - Devuelve el tamaño de la clave de cifrado</span></li>
+    <li><span class="function"><a href="#function.mcrypt-enc-get-block-size" class="function" rel="rdfs-seeAlso">mcrypt_enc_get_block_size()</a> - Devuelve el tamaño de bloque de un algoritmo</span></li>
+    <li><span class="function"><a href="#function.mcrypt-encrypt" class="function" rel="rdfs-seeAlso">mcrypt_encrypt()</a> - Cifra un texto</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-get-cipher-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_get_cipher_name</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_get_cipher_name</span> — <span class="dc-title">Lee el nombre del cifrado utilizado</span></p>
+
+ </div>
+ <div id="function.mcrypt-get-cipher-name-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-get-cipher-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_get_cipher_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$cipher</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>mcrypt_get_cipher_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$cipher</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>mcrypt_get_cipher_name()</strong></span> devuelve el nombre del cifrado
+   utilizado.
+  </p>
+  <p class="para">
+   <span class="function"><strong>mcrypt_get_cipher_name()</strong></span> toma el número de
+   cifrado (con libmcrypt 2.2.x) o toma el nombre del cifrado
+   (con libmcrypt 2.4.x) como argumento, y devuelve el nombre del
+   cifrado, o <strong><code><a href="#constant.false">false</a></code></strong>, si no existe.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-get-cipher-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">cipher</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-ciphername">MCRYPT_ciphername</a></code></strong> constants, or the name of the algorithm as string.</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-get-cipher-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función devuelve el nombre del cipher o <strong><code><a href="#constant.false">false</a></code></strong> si el cipher no existe.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-get-cipher-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1005">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_get_cipher_name()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cipher </span><span style="color: #007700">= </span><span style="color: #0000BB">MCRYPT_TripleDES</span><span style="color: #007700">;<br><br>echo </span><span style="color: #0000BB">mcrypt_get_cipher_name</span><span style="color: #007700">(</span><span style="color: #0000BB">$cipher</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">3DES</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-get-iv-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_get_iv_size</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_get_iv_size</span> — <span class="dc-title">Retorna el tamaño del VI utilizado por un par cifrado/modo</span></p>
+
+ </div>
+ <div id="function.mcrypt-get-iv-size-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-get-iv-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_get_iv_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$cipher</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>mcrypt_get_iv_size()</strong></span> retorna el tamaño del
+   vector de inicialización (VI). Si el algoritmo no utiliza
+   un vector de inicialización, se retorna cero.
+  </p>
+  <p class="para">
+   Es más útil utilizar la función <span class="function"><a href="#function.mcrypt-enc-get-iv-size" class="function">mcrypt_enc_get_iv_size()</a></span>,
+   ya que utiliza el recurso retornado por <span class="function"><a href="#function.mcrypt-module-open" class="function">mcrypt_module_open()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-get-iv-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">cipher</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-ciphername">MCRYPT_ciphername</a></code></strong> constants, or the name of the algorithm as string.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-mode-modename">MCRYPT_MODE_modename</a></code></strong> constants, or one of the following strings: "ecb", "cbc", "cfb", "ofb", "nofb" or "stream".</p>
+      <p class="para">
+       El VI es ignorado en modo ECB, ya que este modo no lo requiere.
+       Debe tener el mismo VI (punto de partida) durante el cifrado
+       y el descifrado, de lo contrario, el cifrado fallará.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-get-iv-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna el tamaño del vector de inicialización (VI), en bytes.
+   En caso de error, la función retorna <strong><code><a href="#constant.false">false</a></code></strong>. Si el vector de inicialización
+   no es necesario, se retorna 0.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-get-iv-size-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1006">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_get_iv_size()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">mcrypt_get_iv_size</span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_CAST_256</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_MODE_CFB</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br><br>echo </span><span style="color: #0000BB">mcrypt_get_iv_size</span><span style="color: #007700">(</span><span style="color: #DD0000">'des'</span><span style="color: #007700">, </span><span style="color: #DD0000">'ecb'</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-get-iv-size-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-get-block-size" class="function" rel="rdfs-seeAlso">mcrypt_get_block_size()</a> - Devuelve el tamaño de bloques de un cifrado</span></li>
+    <li><span class="function"><a href="#function.mcrypt-enc-get-iv-size" class="function" rel="rdfs-seeAlso">mcrypt_enc_get_iv_size()</a> - Devuelve el tamaño del VI de un algoritmo</span></li>
+    <li><span class="function"><a href="#function.mcrypt-create-iv" class="function" rel="rdfs-seeAlso">mcrypt_create_iv()</a> - Crea un vector de inicialización (IV) a partir de una fuente aleatoria</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-get-key-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_get_key_size</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_get_key_size</span> — <span class="dc-title">Devuelve el tamaño de la clave de cifrado</span></p>
+
+ </div>
+ <div id="function.mcrypt-get-key-size-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-get-key-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_get_key_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$cipher</code></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>mcrypt_get_key_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$cipher</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   La primera sintaxis utiliza libmcrypt 2.2.x, y la segunda
+   libmcrypt 2.4.x o posterior.
+  </p>
+  <p class="para">
+   <span class="function"><strong>mcrypt_get_key_size()</strong></span> se utiliza para obtener el tamaño de
+   la clave del cifrado <code class="parameter">cipher</code>.
+  </p>
+  <p class="para">
+   Es más interesante utilizar la función
+   <span class="function"><a href="#function.mcrypt-enc-get-key-size" class="function">mcrypt_enc_get_key_size()</a></span> ya que utiliza el recurso
+   devuelto por la función <span class="function"><a href="#function.mcrypt-module-open" class="function">mcrypt_module_open()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-get-key-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">cipher</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-ciphername">MCRYPT_ciphername</a></code></strong> constants, or the name of the algorithm as string.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-mode-modename">MCRYPT_MODE_modename</a></code></strong> constants, or one of the following strings: "ecb", "cbc", "cfb", "ofb", "nofb" or "stream".</p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-get-key-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tamaño máximo soportado para una clave del algoritmo, en bytes
+    o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-get-key-size-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1007">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_get_key_size()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">mcrypt_get_key_size</span><span style="color: #007700">(</span><span style="color: #DD0000">'tripledes'</span><span style="color: #007700">, </span><span style="color: #DD0000">'ecb'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>
+     El ejemplo anterior muestra el uso de la función
+     cuando ha sido compilada con la biblioteca
+     2.4.x o 2.5.x.
+    </p></div>
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">24</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-get-key-size-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-get-block-size" class="function" rel="rdfs-seeAlso">mcrypt_get_block_size()</a> - Devuelve el tamaño de bloques de un cifrado</span></li>
+    <li><span class="function"><a href="#function.mcrypt-enc-get-key-size" class="function" rel="rdfs-seeAlso">mcrypt_enc_get_key_size()</a> - Devuelve el tamaño máximo de la clave para un modo</span></li>
+    <li><span class="function"><a href="#function.mcrypt-encrypt" class="function" rel="rdfs-seeAlso">mcrypt_encrypt()</a> - Cifra un texto</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-list-algorithms" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_list_algorithms</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_list_algorithms</span> — <span class="dc-title">Lista todos los algoritmos de cifrado soportados</span></p>
+
+ </div>
+ <div id="function.mcrypt-list-algorithms-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-list-algorithms-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_list_algorithms</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$lib_dir</code><span class="initializer"> = ini_get("mcrypt.algorithms_dir")</span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Lista todos los algoritmos de cifrado de <code class="parameter">lib_dir</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-list-algorithms-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">lib_dir</code></dt>
+     <dd>
+      <p class="para">
+       Especifica el directorio donde se encuentran los algoritmos. Si se omite,
+       se utiliza el valor de la directiva <code class="literal">mcrypt.algorithms_dir</code> del fichero
+       <var class="filename">php.ini</var>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-list-algorithms-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array con los algoritmos soportados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-list-algorithms-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1008">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_list_algorithms()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$algorithms </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_list_algorithms</span><span style="color: #007700">();<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$algorithms</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [0] =&gt; cast-128
+    [1] =&gt; gost
+    [2] =&gt; rijndael-128
+    [3] =&gt; twofish
+    [4] =&gt; arcfour
+    [5] =&gt; cast-256
+    [6] =&gt; loki97
+    [7] =&gt; rijndael-192
+    [8] =&gt; saferplus
+    [9] =&gt; wake
+    [10] =&gt; blowfish-compat
+    [11] =&gt; des
+    [12] =&gt; rijndael-256
+    [13] =&gt; serpent
+    [14] =&gt; xtea
+    [15] =&gt; blowfish
+    [16] =&gt; enigma
+    [17] =&gt; rc2
+    [18] =&gt; tripledes
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-list-modes" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_list_modes</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_list_modes</span> — <span class="dc-title">Lista todos los modos de cifrado soportados</span></p>
+
+ </div>
+ <div id="function.mcrypt-list-modes-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-list-modes-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_list_modes</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$lib_dir</code><span class="initializer"> = ini_get("mcrypt.modes_dir")</span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Lista todos los modos de cifrado de <code class="parameter">lib_dir</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-list-modes-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">lib_dir</code></dt>
+     <dd>
+      <p class="para">
+       Especifica el directorio donde se encuentran todos los modos.
+       Si se omite, se utiliza el valor de la directiva <code class="literal">mcrypt.modes_dir</code>
+       en el <var class="filename">php.ini</var>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-list-modes-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array con todos los modos soportados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-list-modes-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1009">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_list_modes()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$modes </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_list_modes</span><span style="color: #007700">();<br><br>foreach (</span><span style="color: #0000BB">$modes </span><span style="color: #007700">as </span><span style="color: #0000BB">$mode</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">"</span><span style="color: #0000BB">$mode</span><span style="color: #DD0000"> &lt;br /&gt;\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>
+     El ejemplo anterior mostrará todos los modos soportados
+     en el directorio por omisión. Si el modo no está definido
+     por la directiva <code class="literal">mcrypt.modes_dir</code> del <var class="filename">php.ini</var>,
+     se utilizará el directorio por omisión de mcrypt (el directorio
+     <var class="filename">/usr/local/lib/libmcrypt</var>).
+    </p></div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-module-close" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_module_close</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_module_close</span> — <span class="dc-title">Libera el módulo de cifrado</span></p>
+
+ </div>
+ <div id="function.mcrypt-module-close-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-module-close-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_module_close</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Libera el módulo <code class="parameter">td</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-module-close-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       El recurso de cifrado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-module-close-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-module-close-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-module-open" class="function" rel="rdfs-seeAlso">mcrypt_module_open()</a> - Abre el módulo del algoritmo y del modo a utilizar</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-module-get-algo-block-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_module_get_algo_block_size</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_module_get_algo_block_size</span> — <span class="dc-title">Devuelve el tamaño de bloques de un algoritmo</span></p>
+
+ </div>
+ <div id="function.mcrypt-module-get-algo-block-size-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-module-get-algo-block-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_module_get_algo_block_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algorithm</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$lib_dir</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el tamaño de bloques de un algoritmo.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-module-get-algo-block-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algorithm</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del algoritmo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">lib_dir</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro opcional <code class="parameter">lib_dir</code> contiene la
+       ruta de acceso hasta el módulo del algoritmo en el sistema.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-module-get-algo-block-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tamaño de bloques de un algoritmo, en bytes.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-module-get-algo-key-size" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_module_get_algo_key_size</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_module_get_algo_key_size</span> — <span class="dc-title">Devuelve el tamaño máximo de clave</span></p>
+
+ </div>
+ <div id="function.mcrypt-module-get-algo-key-size-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+ <div class="refsect1 description" id="refsect1-function.mcrypt-module-get-algo-key-size-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_module_get_algo_key_size</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algorithm</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$lib_dir</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el tamaño máximo de clave.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-module-get-algo-key-size-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algorithm</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del algoritmo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">lib_dir</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro opcional <code class="parameter">lib_dir</code> contiene la ruta
+       hasta el módulo del algoritmo en el sistema.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-module-get-algo-key-size-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tamaño máximo de la clave soportada por el algoritmo
+   <code class="parameter">algorithm</code>.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-module-get-supported-key-sizes" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_module_get_supported_key_sizes</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_module_get_supported_key_sizes</span> — <span class="dc-title">Devuelve un array que contiene los tamaños de claves soportados por el algoritmo abierto</span></p>
+
+ </div>
+ <div id="function.mcrypt-module-get-supported-key-sizes-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-module-get-supported-key-sizes-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_module_get_supported_key_sizes</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algorithm</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$lib_dir</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve un array que contiene los tamaños de claves soportados por
+   el algoritmo de cifrado <code class="parameter">algorithm</code>.
+   Si devuelve un array vacío, entonces todas las claves entre
+   1 y <span class="function"><a href="#function.mcrypt-module-get-algo-key-size" class="function">mcrypt_module_get_algo_key_size()</a></span> son
+   soportadas por el algoritmo.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-module-get-supported-key-sizes-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algorithm</code></dt>
+     <dd>
+      <p class="para">
+       El algoritmo a utilizar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">lib_dir</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro opcional
+       <code class="parameter">lib_dir</code> puede contener la ruta de acceso
+       del directorio de instalación del módulo, en el sistema.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-module-get-supported-key-sizes-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array que contiene los tamaños de claves soportados por
+   el algoritmo de cifrado <code class="parameter">algorithm</code>.
+   Si devuelve un array vacío, entonces todas las claves entre
+   1 y <span class="function"><a href="#function.mcrypt-module-get-algo-key-size" class="function">mcrypt_module_get_algo_key_size()</a></span> son
+   soportadas por el algoritmo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-module-get-supported-key-sizes-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-enc-get-supported-key-sizes" class="function" rel="rdfs-seeAlso">mcrypt_enc_get_supported_key_sizes()</a> - Devuelve un array que contiene los tamaños de clave admitidos por un algoritmo</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-module-is-block-algorithm" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_module_is_block_algorithm</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_module_is_block_algorithm</span> — <span class="dc-title">Indica si un algoritmo funciona por bloques</span></p>
+
+ </div>
+ <div id="function.mcrypt-module-is-block-algorithm-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-module-is-block-algorithm-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_module_is_block_algorithm</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algorithm</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$lib_dir</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>mcrypt_module_is_block_algorithm()</strong></span> devuelve <strong><code><a href="#constant.true">true</a></code></strong>
+   si <code class="parameter">algorithm</code> es un algoritmo por bloques,
+   o <strong><code><a href="#constant.false">false</a></code></strong> si es un algoritmo por flujo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-module-is-block-algorithm-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algorithm</code></dt>
+     <dd>
+      <p class="para">
+       El algoritmo a verificar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">lib_dir</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro opcional <code class="parameter">lib_dir</code>
+       puede contener la ruta donde se encuentran los módulos de los algoritmos
+       en el disco del sistema.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-module-is-block-algorithm-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si el algoritmo especificado es un algoritmo por bloques
+   o <strong><code><a href="#constant.false">false</a></code></strong> si es un algoritmo por flujo.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-module-is-block-algorithm-mode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_module_is_block_algorithm_mode</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_module_is_block_algorithm_mode</span> — <span class="dc-title">Indica si un modo funciona por bloques</span></p>
+
+ </div>
+ <div id="function.mcrypt-module-is-block-algorithm-mode-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-module-is-block-algorithm-mode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_module_is_block_algorithm_mode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$lib_dir</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función devuelve <strong><code><a href="#constant.true">true</a></code></strong> si el modo debe ser utilizado
+   con un algoritmo por bloques, de lo contrario, devuelve <strong><code><a href="#constant.false">false</a></code></strong>
+   (i.e. <strong><code><a href="#constant.false">false</a></code></strong> para un flujo, y <strong><code><a href="#constant.true">true</a></code></strong> para cbc, cfb, ofb).
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-module-is-block-algorithm-mode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       El modo a verificar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">lib_dir</code></dt>
+     <dd>
+      <p class="para">
+       El argumento opcional <code class="parameter">lib_dir</code>
+       puede contener el directorio donde los módulos de algoritmo
+       se encuentran en el sistema.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-module-is-block-algorithm-mode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función devuelve <strong><code><a href="#constant.true">true</a></code></strong> si el modo debe ser utilizado
+   con un algoritmo por bloques, de lo contrario, devuelve <strong><code><a href="#constant.false">false</a></code></strong>
+   (i.e. <strong><code><a href="#constant.false">false</a></code></strong> para un flujo, y <strong><code><a href="#constant.true">true</a></code></strong> para cbc, cfb, ofb).
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-module-is-block-mode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_module_is_block_mode</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_module_is_block_mode</span> — <span class="dc-title">Indica si un modo trabaja por bloques</span></p>
+
+ </div>
+ <div id="function.mcrypt-module-is-block-mode-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-module-is-block-mode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_module_is_block_mode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$lib_dir</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función devuelve <strong><code><a href="#constant.true">true</a></code></strong> si este modo proporciona bloques de bytes o
+   <strong><code><a href="#constant.false">false</a></code></strong> si solo produce bytes.
+   (i.e. <strong><code><a href="#constant.true">true</a></code></strong> para <code class="literal">"cbc"</code> y <code class="literal">"ecb"</code>,
+   y <strong><code><a href="#constant.false">false</a></code></strong> para <code class="literal">"cfb"</code> y <code class="literal">"stream"</code>).
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-module-is-block-mode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-mode-modename">MCRYPT_MODE_modename</a></code></strong> constants, or one of the following strings: "ecb", "cbc", "cfb", "ofb", "nofb" or "stream".</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">lib_dir</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro opcional <code class="parameter">lib_dir</code> contiene
+       la ruta de acceso hasta el módulo del algoritmo en el sistema.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-module-is-block-mode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función devuelve <strong><code><a href="#constant.true">true</a></code></strong> si este modo proporciona bloques de bytes o
+   <strong><code><a href="#constant.false">false</a></code></strong> si solo produce bytes.
+   (i.e. <strong><code><a href="#constant.true">true</a></code></strong> para <code class="literal">"cbc"</code> y <code class="literal">"ecb"</code>,
+   y <strong><code><a href="#constant.false">false</a></code></strong> para <code class="literal">"cfb"</code> y <code class="literal">"stream"</code>).
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-module-open" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_module_open</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_module_open</span> — <span class="dc-title">Abre el módulo del algoritmo y del modo a utilizar</span></p>
+
+ </div>
+ <div id="function.mcrypt-module-open-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-module-open-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_module_open</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algorithm</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algorithm_directory</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode_directory</code></span><br>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>mcrypt_module_open()</strong></span> abre el módulo del algoritmo
+   y del modo a utilizar. El nombre del algoritmo se especifica mediante el parámetro
+   <code class="parameter">algorithm</code> (por ejemplo: <code class="literal">"twofish"</code>),
+   o bien una de las constantes <strong><code><a href="#constant.mcrypt-ciphername">MCRYPT_ciphername</a></code></strong>. La biblioteca se cierra
+   al llamar a <span class="function"><a href="#function.mcrypt-module-close" class="function">mcrypt_module_close()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-module-open-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algorithm</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-ciphername">MCRYPT_ciphername</a></code></strong> constants, or the name of the algorithm as string.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">algorithm_directory</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro <code class="parameter">algorithm_directory</code> se utiliza
+       para localizar el módulo de cifrado. Cuando se especifica un
+       nombre de directorio, se utilizará. Si se especifica una cadena vacía
+       (<code class="literal">""</code>), se utilizará el valor definido en la directiva
+       <code class="literal">mcrypt.algorithms_dir</code> del fichero <var class="filename">php.ini</var>. Cuando no está definida, el directorio por omisión utilizado
+       será aquel en el que se encuentre la biblioteca libmcrypt
+       (habitualmente, <var class="filename">/usr/local/lib/libmcrypt</var>).
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-mode-modename">MCRYPT_MODE_modename</a></code></strong> constants, or one of the following strings: "ecb", "cbc", "cfb", "ofb", "nofb" or "stream".</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode_directory</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro <code class="parameter">mode_directory</code> se utiliza para localizar
+       el módulo de cifrado. Si se especifica un nombre de directorio, se utilizará.
+       Cuando se especifica una cadena vacía (<code class="literal">""</code>), se utilizará el valor
+       de la directiva <code class="literal">mcrypt.modes_dir</code> del fichero <var class="filename">php.ini</var>.
+       Si no está definida, el directorio por omisión utilizado
+       será aquel en el que se encuentre la biblioteca libmcrypt
+       (habitualmente <var class="filename">/usr/local/lib/libmcrypt</var>).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-module-open-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Normalmente, esta función devuelve un descriptor de cifrado, o
+   <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-module-open-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1010">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_module_open()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$td </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_module_open</span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_DES</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">,<br>    </span><span style="color: #0000BB">MCRYPT_MODE_ECB</span><span style="color: #007700">, </span><span style="color: #DD0000">'/usr/lib/mcrypt-modes'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$td </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_module_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'rijndael-256'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #DD0000">'ofb'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   La primera línea del ejemplo anterior intentará abrir el cifrado
+   <code class="literal">DES</code>, en el directorio por omisión, y el modo <code class="literal">ECB</code> en el directorio
+   <var class="filename">/usr/lib/mcrypt-modes</var>. El segundo ejemplo utiliza
+   las cadenas como nombre para el cifrado y el modo. Esto solo funciona
+   si la extensión está compilada con libmcrypt 2.4.x o 2.5.x.
+  </p>
+  <p class="para">
+   </p><div class="example" id="example-1011">
+    <p><strong>Ejemplo #2 Utilización de <span class="function"><strong>mcrypt_module_open()</strong></span> para cifrar</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">/* Carga un cifrado */<br></span><span style="color: #0000BB">$td </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_module_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'rijndael-256'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #DD0000">'ofb'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Crea el VI y determina el tamaño de la clave */<br></span><span style="color: #0000BB">$iv </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_create_iv</span><span style="color: #007700">(</span><span style="color: #0000BB">mcrypt_enc_get_iv_size</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">), </span><span style="color: #0000BB">MCRYPT_DEV_RANDOM</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$ks </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_enc_get_key_size</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Crea la clave (ejemplo únicamente: MD5 no es un buen algoritmo de hash para esto) */<br></span><span style="color: #0000BB">$key </span><span style="color: #007700">= </span><span style="color: #0000BB">substr</span><span style="color: #007700">(</span><span style="color: #0000BB">hash</span><span style="color: #007700">(</span><span style="color: #DD0000">'md5'</span><span style="color: #007700">, </span><span style="color: #DD0000">'very secret key'</span><span style="color: #007700">), </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">$ks</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Inicializa el cifrado */<br></span><span style="color: #0000BB">mcrypt_generic_init</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">, </span><span style="color: #0000BB">$key</span><span style="color: #007700">, </span><span style="color: #0000BB">$iv</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Cifra los datos */<br></span><span style="color: #0000BB">$encrypted </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_generic</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">, </span><span style="color: #DD0000">'This is very important data'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Libera el gestor de cifrado */<br></span><span style="color: #0000BB">mcrypt_generic_deinit</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Inicializa el módulo de cifrado para el descifrado */<br></span><span style="color: #0000BB">mcrypt_generic_init</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">, </span><span style="color: #0000BB">$key</span><span style="color: #007700">, </span><span style="color: #0000BB">$iv</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Descifra los datos */<br></span><span style="color: #0000BB">$decrypted </span><span style="color: #007700">= </span><span style="color: #0000BB">mdecrypt_generic</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">, </span><span style="color: #0000BB">$encrypted</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Libera el gestor de descifrado y cierra el módulo */<br></span><span style="color: #0000BB">mcrypt_generic_deinit</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">);<br></span><span style="color: #0000BB">mcrypt_module_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Muestra la cadena */<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">trim</span><span style="color: #007700">(</span><span style="color: #0000BB">$decrypted</span><span style="color: #007700">).</span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mcrypt-module-open-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-module-close" class="function" rel="rdfs-seeAlso">mcrypt_module_close()</a> - Libera el módulo de cifrado</span></li>
+    <li><span class="function"><a href="#function.mcrypt-generic" class="function" rel="rdfs-seeAlso">mcrypt_generic()</a> - Cifra los datos</span></li>
+    <li><span class="function"><a href="#function.mdecrypt-generic" class="function" rel="rdfs-seeAlso">mdecrypt_generic()</a> - Desencripta los datos</span></li>
+    <li><span class="function"><a href="#function.mcrypt-generic-init" class="function" rel="rdfs-seeAlso">mcrypt_generic_init()</a> - Inicializa todos los buffers necesarios</span></li>
+    <li><span class="function"><a href="#function.mcrypt-generic-deinit" class="function" rel="rdfs-seeAlso">mcrypt_generic_deinit()</a> - Prepara el módulo para la descarga</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mcrypt-module-self-test" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mcrypt_module_self_test</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mcrypt_module_self_test</span> — <span class="dc-title">Prueba un modo</span></p>
+
+ </div>
+ <div id="function.mcrypt-module-self-test-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mcrypt-module-self-test-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mcrypt_module_self_test</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algorithm</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$lib_dir</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Realiza una prueba sobre el algoritmo especificado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mcrypt-module-self-test-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">algorithm</code></dt>
+     <dd>
+      <p class="para">One of the <strong><code><a href="#constant.mcrypt-ciphername">MCRYPT_ciphername</a></code></strong> constants, or the name of the algorithm as string.</p>
+     </dd>
+    
+    
+     <dt><code class="parameter">lib_dir</code></dt>
+     <dd>
+      <p class="para">
+       El argumento opcional <code class="parameter">lib_dir</code> contiene
+       la ruta de acceso hasta el módulo del algoritmo en el sistema.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mcrypt-module-self-test-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si la prueba funciona, y <strong><code><a href="#constant.false">false</a></code></strong> en caso contrario.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mcrypt-module-self-test-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1012">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mcrypt_module_self_test()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">mcrypt_module_self_test</span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_RIJNDAEL_128</span><span style="color: #007700">)) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">mcrypt_module_self_test</span><span style="color: #007700">(</span><span style="color: #0000BB">MCRYPT_BOGUS_CYPHER</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)
+bool(false)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.mdecrypt-generic" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">mdecrypt_generic</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5, PHP 7 &lt; 7.2.0, PECL mcrypt &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">mdecrypt_generic</span> — <span class="dc-title">Desencripta los datos</span></p>
+
+ </div>
+ <div id="function.mdecrypt-generic-refsynopsisdiv">
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función está <em>OBSOLETA</em> a partir de PHP 7.1.0 y ha sido
+ <em>ELIMINADA</em> a partir de PHP 7.2.0.
+ Depender de esta función está altamente desaconsejado.
+</p></div>
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.mdecrypt-generic-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>mdecrypt_generic</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$td</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$data</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Desencripta los datos <code class="parameter">data</code>. Tenga en cuenta que la longitud
+   del string desencriptado puede ser más larga que el string original, ya que
+   puede haber sido completado con caracteres.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.mdecrypt-generic-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">td</code></dt>
+     <dd>
+      <p class="para">
+       Un descriptor de cifrado, devuelto por la función
+       <span class="function"><a href="#function.mcrypt-module-open" class="function">mcrypt_module_open()</a></span>
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">data</code></dt>
+     <dd>
+      <p class="para">
+       Los datos cifrados.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.mdecrypt-generic-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el string desencriptado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.mdecrypt-generic-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1013">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>mdecrypt_generic()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">/* Datos */<br></span><span style="color: #0000BB">$key </span><span style="color: #007700">= </span><span style="color: #DD0000">'Esta es una clave de cifrado muy larga, incluso demasiado larga'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$plain_text </span><span style="color: #007700">= </span><span style="color: #DD0000">'Estos son datos importantes'</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">/* Abre el módulo y crea un VI */<br></span><span style="color: #0000BB">$td </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_module_open</span><span style="color: #007700">(</span><span style="color: #DD0000">'des'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #DD0000">'ecb'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$key </span><span style="color: #007700">= </span><span style="color: #0000BB">substr</span><span style="color: #007700">(</span><span style="color: #0000BB">$key</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">mcrypt_enc_get_key_size</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">));<br></span><span style="color: #0000BB">$iv_size </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_enc_get_iv_size</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$iv </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_create_iv</span><span style="color: #007700">(</span><span style="color: #0000BB">$iv_size</span><span style="color: #007700">, </span><span style="color: #0000BB">MCRYPT_RAND</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Inicializa el módulo de cifrado */<br></span><span style="color: #007700">if (</span><span style="color: #0000BB">mcrypt_generic_init</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">, </span><span style="color: #0000BB">$key</span><span style="color: #007700">, </span><span style="color: #0000BB">$iv</span><span style="color: #007700">) != -</span><span style="color: #0000BB">1</span><span style="color: #007700">) {<br><br>    </span><span style="color: #FF8000">/* Cifra los datos */<br>    </span><span style="color: #0000BB">$c_t </span><span style="color: #007700">= </span><span style="color: #0000BB">mcrypt_generic</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">, </span><span style="color: #0000BB">$plain_text</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">mcrypt_generic_deinit</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000">/* Reinicia los buffers para el descifrado */<br>    </span><span style="color: #0000BB">mcrypt_generic_init</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">, </span><span style="color: #0000BB">$key</span><span style="color: #007700">, </span><span style="color: #0000BB">$iv</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">$p_t </span><span style="color: #007700">= </span><span style="color: #0000BB">mdecrypt_generic</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">, </span><span style="color: #0000BB">$c_t</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000">/* Limpia */<br>    </span><span style="color: #0000BB">mcrypt_generic_deinit</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">mcrypt_module_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$td</span><span style="color: #007700">);<br>}<br><br>if (</span><span style="color: #0000BB">strncmp</span><span style="color: #007700">(</span><span style="color: #0000BB">$p_t</span><span style="color: #007700">, </span><span style="color: #0000BB">$plain_text</span><span style="color: #007700">, </span><span style="color: #0000BB">strlen</span><span style="color: #007700">(</span><span style="color: #0000BB">$plain_text</span><span style="color: #007700">)) == </span><span style="color: #0000BB">0</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">"ok\n"</span><span style="color: #007700">;<br>} else {<br>    echo </span><span style="color: #DD0000">"error\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   El ejemplo anterior muestra cómo verificar que los datos antes
+   del cifrado son los mismos que después del
+   cifrado/descifrado. Es muy importante reiniciar
+   el buffer de cifrado con <span class="function"><a href="#function.mcrypt-generic-init" class="function">mcrypt_generic_init()</a></span>
+   antes de descifrar los datos.
+  </p>
+  <p class="para">
+   El gestor de descifrado debe ser siempre inicializado
+   por la función <span class="function"><a href="#function.mcrypt-generic-init" class="function">mcrypt_generic_init()</a></span> con una clave
+   y un VI antes de llamar a esta función. Cuando el cifrado está hecho,
+   es necesario liberar los datos cifrados llamando
+   a <span class="function"><a href="#function.mcrypt-generic-deinit" class="function">mcrypt_generic_deinit()</a></span>.
+   Consulte <span class="function"><a href="#function.mcrypt-module-open" class="function">mcrypt_module_open()</a></span> para un ejemplo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.mdecrypt-generic-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mcrypt-generic" class="function" rel="rdfs-seeAlso">mcrypt_generic()</a> - Cifra los datos</span></li>
+    <li><span class="function"><a href="#function.mcrypt-generic-init" class="function" rel="rdfs-seeAlso">mcrypt_generic_init()</a> - Inicializa todos los buffers necesarios</span></li>
+    <li><span class="function"><a href="#function.mcrypt-generic-deinit" class="function" rel="rdfs-seeAlso">mcrypt_generic_deinit()</a> - Prepara el módulo para la descarga</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.mcrypt-create-iv">mcrypt_create_iv</a> — Crea un vector de inicialización (IV) a partir de una fuente aleatoria</li><li><a href="#function.mcrypt-decrypt">mcrypt_decrypt</a> — Descifra un texto con los parámetros dados</li><li><a href="#function.mcrypt-enc-get-algorithms-name">mcrypt_enc_get_algorithms_name</a> — Devuelve el nombre del algoritmo de cifrado</li><li><a href="#function.mcrypt-enc-get-block-size">mcrypt_enc_get_block_size</a> — Devuelve el tamaño de bloque de un algoritmo</li><li><a href="#function.mcrypt-enc-get-iv-size">mcrypt_enc_get_iv_size</a> — Devuelve el tamaño del VI de un algoritmo</li><li><a href="#function.mcrypt-enc-get-key-size">mcrypt_enc_get_key_size</a> — Devuelve el tamaño máximo de la clave para un modo</li><li><a href="#function.mcrypt-enc-get-modes-name">mcrypt_enc_get_modes_name</a> — Devuelve el nombre del modo</li><li><a href="#function.mcrypt-enc-get-supported-key-sizes">mcrypt_enc_get_supported_key_sizes</a> — Devuelve un array que contiene los tamaños de clave admitidos por un algoritmo</li><li><a href="#function.mcrypt-enc-is-block-algorithm">mcrypt_enc_is_block_algorithm</a> — Comprueba si el cifrado es por bloques en un algoritmo</li><li><a href="#function.mcrypt-enc-is-block-algorithm-mode">mcrypt_enc_is_block_algorithm_mode</a> — Comprueba si el modo de cifrado es por bloques</li><li><a href="#function.mcrypt-enc-is-block-mode">mcrypt_enc_is_block_mode</a> — Comprueba si el modo devuelve los datos por bloques</li><li><a href="#function.mcrypt-enc-self-test">mcrypt_enc_self_test</a> — Prueba un módulo abierto</li><li><a href="#function.mcrypt-encrypt">mcrypt_encrypt</a> — Cifra un texto</li><li><a href="#function.mcrypt-generic">mcrypt_generic</a> — Cifra los datos</li><li><a href="#function.mcrypt-generic-deinit">mcrypt_generic_deinit</a> — Prepara el módulo para la descarga</li><li><a href="#function.mcrypt-generic-init">mcrypt_generic_init</a> — Inicializa todos los buffers necesarios</li><li><a href="#function.mcrypt-get-block-size">mcrypt_get_block_size</a> — Devuelve el tamaño de bloques de un cifrado</li><li><a href="#function.mcrypt-get-cipher-name">mcrypt_get_cipher_name</a> — Lee el nombre del cifrado utilizado</li><li><a href="#function.mcrypt-get-iv-size">mcrypt_get_iv_size</a> — Retorna el tamaño del VI utilizado por un par cifrado/modo</li><li><a href="#function.mcrypt-get-key-size">mcrypt_get_key_size</a> — Devuelve el tamaño de la clave de cifrado</li><li><a href="#function.mcrypt-list-algorithms">mcrypt_list_algorithms</a> — Lista todos los algoritmos de cifrado soportados</li><li><a href="#function.mcrypt-list-modes">mcrypt_list_modes</a> — Lista todos los modos de cifrado soportados</li><li><a href="#function.mcrypt-module-close">mcrypt_module_close</a> — Libera el módulo de cifrado</li><li><a href="#function.mcrypt-module-get-algo-block-size">mcrypt_module_get_algo_block_size</a> — Devuelve el tamaño de bloques de un algoritmo</li><li><a href="#function.mcrypt-module-get-algo-key-size">mcrypt_module_get_algo_key_size</a> — Devuelve el tamaño máximo de clave</li><li><a href="#function.mcrypt-module-get-supported-key-sizes">mcrypt_module_get_supported_key_sizes</a> — Devuelve un array que contiene los tamaños de claves soportados por el algoritmo abierto</li><li><a href="#function.mcrypt-module-is-block-algorithm">mcrypt_module_is_block_algorithm</a> — Indica si un algoritmo funciona por bloques</li><li><a href="#function.mcrypt-module-is-block-algorithm-mode">mcrypt_module_is_block_algorithm_mode</a> — Indica si un modo funciona por bloques</li><li><a href="#function.mcrypt-module-is-block-mode">mcrypt_module_is_block_mode</a> — Indica si un modo trabaja por bloques</li><li><a href="#function.mcrypt-module-open">mcrypt_module_open</a> — Abre el módulo del algoritmo y del modo a utilizar</li><li><a href="#function.mcrypt-module-self-test">mcrypt_module_self_test</a> — Prueba un modo</li><li><a href="#function.mdecrypt-generic">mdecrypt_generic</a> — Desencripta los datos</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.mcrypt">Introducción</a></li><li><a href="#mcrypt.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#mcrypt.requirements">Requerimientos</a></li><li><a href="#mcrypt.installation">Instalación</a></li><li><a href="#mcrypt.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#mcrypt.resources">Tipos de recursos</a></li></ul></li><li><a href="#mcrypt.constants">Constantes predefinidas</a></li><li><a href="#mcrypt.ciphers">Modos de cifrado Mcrypt</a></li><li><a href="#ref.mcrypt">Funciones Mcrypt</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.mcrypt-create-iv">mcrypt_create_iv</a> — Crea un vector de inicialización (IV) a partir de una fuente aleatoria</li><li><a href="#function.mcrypt-decrypt">mcrypt_decrypt</a> — Descifra un texto con los parámetros dados</li><li><a href="#function.mcrypt-enc-get-algorithms-name">mcrypt_enc_get_algorithms_name</a> — Devuelve el nombre del algoritmo de cifrado</li><li><a href="#function.mcrypt-enc-get-block-size">mcrypt_enc_get_block_size</a> — Devuelve el tamaño de bloque de un algoritmo</li><li><a href="#function.mcrypt-enc-get-iv-size">mcrypt_enc_get_iv_size</a> — Devuelve el tamaño del VI de un algoritmo</li><li><a href="#function.mcrypt-enc-get-key-size">mcrypt_enc_get_key_size</a> — Devuelve el tamaño máximo de la clave para un modo</li><li><a href="#function.mcrypt-enc-get-modes-name">mcrypt_enc_get_modes_name</a> — Devuelve el nombre del modo</li><li><a href="#function.mcrypt-enc-get-supported-key-sizes">mcrypt_enc_get_supported_key_sizes</a> — Devuelve un array que contiene los tamaños de clave admitidos por un algoritmo</li><li><a href="#function.mcrypt-enc-is-block-algorithm">mcrypt_enc_is_block_algorithm</a> — Comprueba si el cifrado es por bloques en un algoritmo</li><li><a href="#function.mcrypt-enc-is-block-algorithm-mode">mcrypt_enc_is_block_algorithm_mode</a> — Comprueba si el modo de cifrado es por bloques</li><li><a href="#function.mcrypt-enc-is-block-mode">mcrypt_enc_is_block_mode</a> — Comprueba si el modo devuelve los datos por bloques</li><li><a href="#function.mcrypt-enc-self-test">mcrypt_enc_self_test</a> — Prueba un módulo abierto</li><li><a href="#function.mcrypt-encrypt">mcrypt_encrypt</a> — Cifra un texto</li><li><a href="#function.mcrypt-generic">mcrypt_generic</a> — Cifra los datos</li><li><a href="#function.mcrypt-generic-deinit">mcrypt_generic_deinit</a> — Prepara el módulo para la descarga</li><li><a href="#function.mcrypt-generic-init">mcrypt_generic_init</a> — Inicializa todos los buffers necesarios</li><li><a href="#function.mcrypt-get-block-size">mcrypt_get_block_size</a> — Devuelve el tamaño de bloques de un cifrado</li><li><a href="#function.mcrypt-get-cipher-name">mcrypt_get_cipher_name</a> — Lee el nombre del cifrado utilizado</li><li><a href="#function.mcrypt-get-iv-size">mcrypt_get_iv_size</a> — Retorna el tamaño del VI utilizado por un par cifrado/modo</li><li><a href="#function.mcrypt-get-key-size">mcrypt_get_key_size</a> — Devuelve el tamaño de la clave de cifrado</li><li><a href="#function.mcrypt-list-algorithms">mcrypt_list_algorithms</a> — Lista todos los algoritmos de cifrado soportados</li><li><a href="#function.mcrypt-list-modes">mcrypt_list_modes</a> — Lista todos los modos de cifrado soportados</li><li><a href="#function.mcrypt-module-close">mcrypt_module_close</a> — Libera el módulo de cifrado</li><li><a href="#function.mcrypt-module-get-algo-block-size">mcrypt_module_get_algo_block_size</a> — Devuelve el tamaño de bloques de un algoritmo</li><li><a href="#function.mcrypt-module-get-algo-key-size">mcrypt_module_get_algo_key_size</a> — Devuelve el tamaño máximo de clave</li><li><a href="#function.mcrypt-module-get-supported-key-sizes">mcrypt_module_get_supported_key_sizes</a> — Devuelve un array que contiene los tamaños de claves soportados por el algoritmo abierto</li><li><a href="#function.mcrypt-module-is-block-algorithm">mcrypt_module_is_block_algorithm</a> — Indica si un algoritmo funciona por bloques</li><li><a href="#function.mcrypt-module-is-block-algorithm-mode">mcrypt_module_is_block_algorithm_mode</a> — Indica si un modo funciona por bloques</li><li><a href="#function.mcrypt-module-is-block-mode">mcrypt_module_is_block_mode</a> — Indica si un modo trabaja por bloques</li><li><a href="#function.mcrypt-module-open">mcrypt_module_open</a> — Abre el módulo del algoritmo y del modo a utilizar</li><li><a href="#function.mcrypt-module-self-test">mcrypt_module_self_test</a> — Prueba un modo</li><li><a href="#function.mdecrypt-generic">mdecrypt_generic</a> — Desencripta los datos</li></ul></li></ul></div>

@@ -1,0 +1,3760 @@
+<div id="book.rpminfo" class="book"><hr>
+ 
+ <h1 class="title">RpmInfo</h1>
+ 
+
+ <div id="intro.rpminfo" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="simpara">
+   Esta extensión permite recuperar información a partir de ficheros RPM
+   o de la base de datos de los RPM instalados.
+  </p>
+  <p class="simpara">
+   Asimismo proporciona una envoltura de flujo <code class="literal">rpm</code> para recuperar el contenido de los RPM
+   (desde la versión 1.0.0 con librpm &gt;= 4.13).
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+<div id="rpminfo.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#rpminfo.requirements">Requerimientos</a></li><li><a href="#rpminfo.installation">Instalación mediante PECL</a></li></ul>
+
+
+ <div id="rpminfo.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="simpara">
+   Esta extensión requiere la versión 4.11.3 o superior de <a href="https://rpm.org/" class="link external">» librpm</a>.
+  </p>
+ </div>
+<hr>
+
+
+ <div id="rpminfo.installation" class="section"><hr>
+  <h2 class="title">Instalación mediante PECL</h2>
+  <p class="simpara">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/rpminfo" class="link external">» https://pecl.php.net/package/rpminfo</a>.
+  </p>
+ </div>
+<hr>
+
+
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="rpminfo.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+
+ <dl>
+  <strong class="title">Constantes diversas</strong>
+  
+   <dt id="constant.rpmversion">
+    <strong><code><a href="#constant.rpmversion">RPMVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     La versión de la biblioteca RPM.
+    </span>
+   </dd>
+  
+ </dl>
+
+ <dl>
+  <strong class="title">RPM Senses</strong>
+  
+   <dt id="constant.rpmsense-any">
+    <strong><code><a href="#constant.rpmsense-any">RPMSENSE_ANY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-less">
+    <strong><code><a href="#constant.rpmsense-less">RPMSENSE_LESS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-greater">
+    <strong><code><a href="#constant.rpmsense-greater">RPMSENSE_GREATER</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-equal">
+    <strong><code><a href="#constant.rpmsense-equal">RPMSENSE_EQUAL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-posttrans">
+    <strong><code><a href="#constant.rpmsense-posttrans">RPMSENSE_POSTTRANS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-prereq">
+    <strong><code><a href="#constant.rpmsense-prereq">RPMSENSE_PREREQ</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-pretrans">
+    <strong><code><a href="#constant.rpmsense-pretrans">RPMSENSE_PRETRANS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-interp">
+    <strong><code><a href="#constant.rpmsense-interp">RPMSENSE_INTERP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-script-pre">
+    <strong><code><a href="#constant.rpmsense-script-pre">RPMSENSE_SCRIPT_PRE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-script-post">
+    <strong><code><a href="#constant.rpmsense-script-post">RPMSENSE_SCRIPT_POST</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-script-preun">
+    <strong><code><a href="#constant.rpmsense-script-preun">RPMSENSE_SCRIPT_PREUN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-script-postun">
+    <strong><code><a href="#constant.rpmsense-script-postun">RPMSENSE_SCRIPT_POSTUN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-script-verify">
+    <strong><code><a href="#constant.rpmsense-script-verify">RPMSENSE_SCRIPT_VERIFY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-find-requires">
+    <strong><code><a href="#constant.rpmsense-find-requires">RPMSENSE_FIND_REQUIRES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-find-provides">
+    <strong><code><a href="#constant.rpmsense-find-provides">RPMSENSE_FIND_PROVIDES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-triggerin">
+    <strong><code><a href="#constant.rpmsense-triggerin">RPMSENSE_TRIGGERIN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-triggerun">
+    <strong><code><a href="#constant.rpmsense-triggerun">RPMSENSE_TRIGGERUN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-triggerpostun">
+    <strong><code><a href="#constant.rpmsense-triggerpostun">RPMSENSE_TRIGGERPOSTUN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-missingok">
+    <strong><code><a href="#constant.rpmsense-missingok">RPMSENSE_MISSINGOK</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-rpmlib">
+    <strong><code><a href="#constant.rpmsense-rpmlib">RPMSENSE_RPMLIB</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-triggerprein">
+    <strong><code><a href="#constant.rpmsense-triggerprein">RPMSENSE_TRIGGERPREIN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-keyring">
+    <strong><code><a href="#constant.rpmsense-keyring">RPMSENSE_KEYRING</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmsense-config">
+    <strong><code><a href="#constant.rpmsense-config">RPMSENSE_CONFIG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+ </dl>
+
+ <dl>
+  <strong class="title">RPM Mire</strong>
+  
+   <dt id="constant.rpmmire-default">
+    <strong><code><a href="#constant.rpmmire-default">RPMMIRE_DEFAULT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Modelo de búsqueda en una expresión regular con
+     <code class="literal">\.</code>, <code class="literal">.*</code>,
+     y <code class="literal">^...$</code> añadidos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmmire-strcmp">
+    <strong><code><a href="#constant.rpmmire-strcmp">RPMMIRE_STRCMP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El modelo de búsqueda es una <span class="type"><a href="#language.types.string" class="type string">string</a></span>,
+     utilizando <code class="code">strcmp(3)</code>.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmmire-regex">
+    <strong><code><a href="#constant.rpmmire-regex">RPMMIRE_REGEX</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El modelo de búsqueda es una expresión regular,
+     utilizando <code class="code">regcomp(3)</code>.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmmire-glob">
+    <strong><code><a href="#constant.rpmmire-glob">RPMMIRE_GLOB</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El modelo de búsqueda es una expresión global,
+     utilizando <code class="code">fnmatch(3)</code>.
+    </span>
+   </dd>
+  
+ </dl>
+
+ <dl>
+  <strong class="title">RPM tags</strong>
+  
+   <dt id="constant.rpmtag-arch">
+    <strong><code><a href="#constant.rpmtag-arch">RPMTAG_ARCH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-archsuffix">
+    <strong><code><a href="#constant.rpmtag-archsuffix">RPMTAG_ARCHSUFFIX</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.18
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-archivesize">
+    <strong><code><a href="#constant.rpmtag-archivesize">RPMTAG_ARCHIVESIZE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-basenames">
+    <strong><code><a href="#constant.rpmtag-basenames">RPMTAG_BASENAMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El nombre (no la ruta) de los ficheros, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-bugurl">
+    <strong><code><a href="#constant.rpmtag-bugurl">RPMTAG_BUGURL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-buildarchs">
+    <strong><code><a href="#constant.rpmtag-buildarchs">RPMTAG_BUILDARCHS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-buildhost">
+    <strong><code><a href="#constant.rpmtag-buildhost">RPMTAG_BUILDHOST</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-buildtime">
+    <strong><code><a href="#constant.rpmtag-buildtime">RPMTAG_BUILDTIME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-c">
+    <strong><code><a href="#constant.rpmtag-c">RPMTAG_C</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-changelogname">
+    <strong><code><a href="#constant.rpmtag-changelogname">RPMTAG_CHANGELOGNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-changelogtext">
+    <strong><code><a href="#constant.rpmtag-changelogtext">RPMTAG_CHANGELOGTEXT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-changelogtime">
+    <strong><code><a href="#constant.rpmtag-changelogtime">RPMTAG_CHANGELOGTIME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-classdict">
+    <strong><code><a href="#constant.rpmtag-classdict">RPMTAG_CLASSDICT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-conflictflags">
+    <strong><code><a href="#constant.rpmtag-conflictflags">RPMTAG_CONFLICTFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-conflictname">
+    <strong><code><a href="#constant.rpmtag-conflictname">RPMTAG_CONFLICTNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Dependencias conflictivas, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-conflictnevrs">
+    <strong><code><a href="#constant.rpmtag-conflictnevrs">RPMTAG_CONFLICTNEVRS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-conflicts">
+    <strong><code><a href="#constant.rpmtag-conflicts">RPMTAG_CONFLICTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-conflictversion">
+    <strong><code><a href="#constant.rpmtag-conflictversion">RPMTAG_CONFLICTVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-cookie">
+    <strong><code><a href="#constant.rpmtag-cookie">RPMTAG_COOKIE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-dbinstance">
+    <strong><code><a href="#constant.rpmtag-dbinstance">RPMTAG_DBINSTANCE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-dependsdict">
+    <strong><code><a href="#constant.rpmtag-dependsdict">RPMTAG_DEPENDSDICT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-description">
+    <strong><code><a href="#constant.rpmtag-description">RPMTAG_DESCRIPTION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-dirindexes">
+    <strong><code><a href="#constant.rpmtag-dirindexes">RPMTAG_DIRINDEXES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-dirnames">
+    <strong><code><a href="#constant.rpmtag-dirnames">RPMTAG_DIRNAMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El directorio de los ficheros, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-distribution">
+    <strong><code><a href="#constant.rpmtag-distribution">RPMTAG_DISTRIBUTION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-disttag">
+    <strong><code><a href="#constant.rpmtag-disttag">RPMTAG_DISTTAG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-disturl">
+    <strong><code><a href="#constant.rpmtag-disturl">RPMTAG_DISTURL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-dsaheader">
+    <strong><code><a href="#constant.rpmtag-dsaheader">RPMTAG_DSAHEADER</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-e">
+    <strong><code><a href="#constant.rpmtag-e">RPMTAG_E</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-encoding">
+    <strong><code><a href="#constant.rpmtag-encoding">RPMTAG_ENCODING</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-enhanceflags">
+    <strong><code><a href="#constant.rpmtag-enhanceflags">RPMTAG_ENHANCEFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-enhancename">
+    <strong><code><a href="#constant.rpmtag-enhancename">RPMTAG_ENHANCENAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Dependencia débil, con el índice de la base de datos, requiere librpm &gt;= 4.13.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-enhancenevrs">
+    <strong><code><a href="#constant.rpmtag-enhancenevrs">RPMTAG_ENHANCENEVRS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-enhances">
+    <strong><code><a href="#constant.rpmtag-enhances">RPMTAG_ENHANCES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-enhanceversion">
+    <strong><code><a href="#constant.rpmtag-enhanceversion">RPMTAG_ENHANCEVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-epoch">
+    <strong><code><a href="#constant.rpmtag-epoch">RPMTAG_EPOCH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-epochnum">
+    <strong><code><a href="#constant.rpmtag-epochnum">RPMTAG_EPOCHNUM</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-evr">
+    <strong><code><a href="#constant.rpmtag-evr">RPMTAG_EVR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-excludearch">
+    <strong><code><a href="#constant.rpmtag-excludearch">RPMTAG_EXCLUDEARCH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-excludeos">
+    <strong><code><a href="#constant.rpmtag-excludeos">RPMTAG_EXCLUDEOS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-exclusivearch">
+    <strong><code><a href="#constant.rpmtag-exclusivearch">RPMTAG_EXCLUSIVEARCH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-exclusiveos">
+    <strong><code><a href="#constant.rpmtag-exclusiveos">RPMTAG_EXCLUSIVEOS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filecaps">
+    <strong><code><a href="#constant.rpmtag-filecaps">RPMTAG_FILECAPS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-fileclass">
+    <strong><code><a href="#constant.rpmtag-fileclass">RPMTAG_FILECLASS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filecolors">
+    <strong><code><a href="#constant.rpmtag-filecolors">RPMTAG_FILECOLORS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filecontexts">
+    <strong><code><a href="#constant.rpmtag-filecontexts">RPMTAG_FILECONTEXTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filedependsn">
+    <strong><code><a href="#constant.rpmtag-filedependsn">RPMTAG_FILEDEPENDSN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filedependsx">
+    <strong><code><a href="#constant.rpmtag-filedependsx">RPMTAG_FILEDEPENDSX</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filedevices">
+    <strong><code><a href="#constant.rpmtag-filedevices">RPMTAG_FILEDEVICES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filedigestalgo">
+    <strong><code><a href="#constant.rpmtag-filedigestalgo">RPMTAG_FILEDIGESTALGO</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filedigests">
+    <strong><code><a href="#constant.rpmtag-filedigests">RPMTAG_FILEDIGESTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-fileflags">
+    <strong><code><a href="#constant.rpmtag-fileflags">RPMTAG_FILEFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filegroupname">
+    <strong><code><a href="#constant.rpmtag-filegroupname">RPMTAG_FILEGROUPNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-fileinodes">
+    <strong><code><a href="#constant.rpmtag-fileinodes">RPMTAG_FILEINODES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filelangs">
+    <strong><code><a href="#constant.rpmtag-filelangs">RPMTAG_FILELANGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filelinktos">
+    <strong><code><a href="#constant.rpmtag-filelinktos">RPMTAG_FILELINKTOS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filemd5s">
+    <strong><code><a href="#constant.rpmtag-filemd5s">RPMTAG_FILEMD5S</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filemodes">
+    <strong><code><a href="#constant.rpmtag-filemodes">RPMTAG_FILEMODES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filemtimes">
+    <strong><code><a href="#constant.rpmtag-filemtimes">RPMTAG_FILEMTIMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filenames">
+    <strong><code><a href="#constant.rpmtag-filenames">RPMTAG_FILENAMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filenlinks">
+    <strong><code><a href="#constant.rpmtag-filenlinks">RPMTAG_FILENLINKS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-fileprovide">
+    <strong><code><a href="#constant.rpmtag-fileprovide">RPMTAG_FILEPROVIDE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filerdevs">
+    <strong><code><a href="#constant.rpmtag-filerdevs">RPMTAG_FILERDEVS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filerequire">
+    <strong><code><a href="#constant.rpmtag-filerequire">RPMTAG_FILEREQUIRE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filesignaturelength">
+    <strong><code><a href="#constant.rpmtag-filesignaturelength">RPMTAG_FILESIGNATURELENGTH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filesignatures">
+    <strong><code><a href="#constant.rpmtag-filesignatures">RPMTAG_FILESIGNATURES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filesizes">
+    <strong><code><a href="#constant.rpmtag-filesizes">RPMTAG_FILESIZES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filestates">
+    <strong><code><a href="#constant.rpmtag-filestates">RPMTAG_FILESTATES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggerconds">
+    <strong><code><a href="#constant.rpmtag-filetriggerconds">RPMTAG_FILETRIGGERCONDS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggerflags">
+    <strong><code><a href="#constant.rpmtag-filetriggerflags">RPMTAG_FILETRIGGERFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggerindex">
+    <strong><code><a href="#constant.rpmtag-filetriggerindex">RPMTAG_FILETRIGGERINDEX</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggername">
+    <strong><code><a href="#constant.rpmtag-filetriggername">RPMTAG_FILETRIGGERNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El nombre del fichero desencadenante, con el índice de la base de datos, requiere librpm &gt;= 4.13.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggerpriorities">
+    <strong><code><a href="#constant.rpmtag-filetriggerpriorities">RPMTAG_FILETRIGGERPRIORITIES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggerscriptflags">
+    <strong><code><a href="#constant.rpmtag-filetriggerscriptflags">RPMTAG_FILETRIGGERSCRIPTFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggerscriptprog">
+    <strong><code><a href="#constant.rpmtag-filetriggerscriptprog">RPMTAG_FILETRIGGERSCRIPTPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggerscripts">
+    <strong><code><a href="#constant.rpmtag-filetriggerscripts">RPMTAG_FILETRIGGERSCRIPTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggertype">
+    <strong><code><a href="#constant.rpmtag-filetriggertype">RPMTAG_FILETRIGGERTYPE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-filetriggerversion">
+    <strong><code><a href="#constant.rpmtag-filetriggerversion">RPMTAG_FILETRIGGERVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-fileusername">
+    <strong><code><a href="#constant.rpmtag-fileusername">RPMTAG_FILEUSERNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-fileverifyflags">
+    <strong><code><a href="#constant.rpmtag-fileverifyflags">RPMTAG_FILEVERIFYFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-fscontexts">
+    <strong><code><a href="#constant.rpmtag-fscontexts">RPMTAG_FSCONTEXTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-gif">
+    <strong><code><a href="#constant.rpmtag-gif">RPMTAG_GIF</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-group">
+    <strong><code><a href="#constant.rpmtag-group">RPMTAG_GROUP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El grupo de paquete, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-hdrid">
+    <strong><code><a href="#constant.rpmtag-hdrid">RPMTAG_HDRID</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Obsoleto, utilizar <strong><code><a href="#constant.rpmtag-sha1header">RPMTAG_SHA1HEADER</a></code></strong> en su lugar. Eliminado en librpm 6.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-headercolor">
+    <strong><code><a href="#constant.rpmtag-headercolor">RPMTAG_HEADERCOLOR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-headeri18ntable">
+    <strong><code><a href="#constant.rpmtag-headeri18ntable">RPMTAG_HEADERI18NTABLE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-headerimage">
+    <strong><code><a href="#constant.rpmtag-headerimage">RPMTAG_HEADERIMAGE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-headerimmutable">
+    <strong><code><a href="#constant.rpmtag-headerimmutable">RPMTAG_HEADERIMMUTABLE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-headerregions">
+    <strong><code><a href="#constant.rpmtag-headerregions">RPMTAG_HEADERREGIONS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-headersignatures">
+    <strong><code><a href="#constant.rpmtag-headersignatures">RPMTAG_HEADERSIGNATURES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-icon">
+    <strong><code><a href="#constant.rpmtag-icon">RPMTAG_ICON</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-installcolor">
+    <strong><code><a href="#constant.rpmtag-installcolor">RPMTAG_INSTALLCOLOR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-installtid">
+    <strong><code><a href="#constant.rpmtag-installtid">RPMTAG_INSTALLTID</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El identificador de transacción de instalación, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-installtime">
+    <strong><code><a href="#constant.rpmtag-installtime">RPMTAG_INSTALLTIME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-instfilenames">
+    <strong><code><a href="#constant.rpmtag-instfilenames">RPMTAG_INSTFILENAMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     La ruta de los ficheros, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-instprefixes">
+    <strong><code><a href="#constant.rpmtag-instprefixes">RPMTAG_INSTPREFIXES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-license">
+    <strong><code><a href="#constant.rpmtag-license">RPMTAG_LICENSE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-longarchivesize">
+    <strong><code><a href="#constant.rpmtag-longarchivesize">RPMTAG_LONGARCHIVESIZE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-longfilesizes">
+    <strong><code><a href="#constant.rpmtag-longfilesizes">RPMTAG_LONGFILESIZES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-longsigsize">
+    <strong><code><a href="#constant.rpmtag-longsigsize">RPMTAG_LONGSIGSIZE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-longsize">
+    <strong><code><a href="#constant.rpmtag-longsize">RPMTAG_LONGSIZE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-modularitylabel">
+    <strong><code><a href="#constant.rpmtag-modularitylabel">RPMTAG_MODULARITYLABEL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-n">
+    <strong><code><a href="#constant.rpmtag-n">RPMTAG_N</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-name">
+    <strong><code><a href="#constant.rpmtag-name">RPMTAG_NAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El nombre del paquete, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-nevr">
+    <strong><code><a href="#constant.rpmtag-nevr">RPMTAG_NEVR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-nevra">
+    <strong><code><a href="#constant.rpmtag-nevra">RPMTAG_NEVRA</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-nopatch">
+    <strong><code><a href="#constant.rpmtag-nopatch">RPMTAG_NOPATCH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-nosource">
+    <strong><code><a href="#constant.rpmtag-nosource">RPMTAG_NOSOURCE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-nvr">
+    <strong><code><a href="#constant.rpmtag-nvr">RPMTAG_NVR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-nvra">
+    <strong><code><a href="#constant.rpmtag-nvra">RPMTAG_NVRA</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-o">
+    <strong><code><a href="#constant.rpmtag-o">RPMTAG_O</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-obsoleteflags">
+    <strong><code><a href="#constant.rpmtag-obsoleteflags">RPMTAG_OBSOLETEFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-obsoletename">
+    <strong><code><a href="#constant.rpmtag-obsoletename">RPMTAG_OBSOLETENAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Paquete obsoleto, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-obsoletenevrs">
+    <strong><code><a href="#constant.rpmtag-obsoletenevrs">RPMTAG_OBSOLETENEVRS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-obsoletes">
+    <strong><code><a href="#constant.rpmtag-obsoletes">RPMTAG_OBSOLETES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-obsoleteversion">
+    <strong><code><a href="#constant.rpmtag-obsoleteversion">RPMTAG_OBSOLETEVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-oldenhances">
+    <strong><code><a href="#constant.rpmtag-oldenhances">RPMTAG_OLDENHANCES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-oldenhancesflags">
+    <strong><code><a href="#constant.rpmtag-oldenhancesflags">RPMTAG_OLDENHANCESFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-oldenhancesname">
+    <strong><code><a href="#constant.rpmtag-oldenhancesname">RPMTAG_OLDENHANCESNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-oldenhancesversion">
+    <strong><code><a href="#constant.rpmtag-oldenhancesversion">RPMTAG_OLDENHANCESVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-oldfilenames">
+    <strong><code><a href="#constant.rpmtag-oldfilenames">RPMTAG_OLDFILENAMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-oldsuggests">
+    <strong><code><a href="#constant.rpmtag-oldsuggests">RPMTAG_OLDSUGGESTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-oldsuggestsflags">
+    <strong><code><a href="#constant.rpmtag-oldsuggestsflags">RPMTAG_OLDSUGGESTSFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-oldsuggestsname">
+    <strong><code><a href="#constant.rpmtag-oldsuggestsname">RPMTAG_OLDSUGGESTSNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-oldsuggestsversion">
+    <strong><code><a href="#constant.rpmtag-oldsuggestsversion">RPMTAG_OLDSUGGESTSVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-optflags">
+    <strong><code><a href="#constant.rpmtag-optflags">RPMTAG_OPTFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-orderflags">
+    <strong><code><a href="#constant.rpmtag-orderflags">RPMTAG_ORDERFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-ordername">
+    <strong><code><a href="#constant.rpmtag-ordername">RPMTAG_ORDERNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-orderversion">
+    <strong><code><a href="#constant.rpmtag-orderversion">RPMTAG_ORDERVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-origbasenames">
+    <strong><code><a href="#constant.rpmtag-origbasenames">RPMTAG_ORIGBASENAMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-origdirindexes">
+    <strong><code><a href="#constant.rpmtag-origdirindexes">RPMTAG_ORIGDIRINDEXES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-origdirnames">
+    <strong><code><a href="#constant.rpmtag-origdirnames">RPMTAG_ORIGDIRNAMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-origfilenames">
+    <strong><code><a href="#constant.rpmtag-origfilenames">RPMTAG_ORIGFILENAMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-os">
+    <strong><code><a href="#constant.rpmtag-os">RPMTAG_OS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-p">
+    <strong><code><a href="#constant.rpmtag-p">RPMTAG_P</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-packager">
+    <strong><code><a href="#constant.rpmtag-packager">RPMTAG_PACKAGER</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-patch">
+    <strong><code><a href="#constant.rpmtag-patch">RPMTAG_PATCH</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-patchesflags">
+    <strong><code><a href="#constant.rpmtag-patchesflags">RPMTAG_PATCHESFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-patchesname">
+    <strong><code><a href="#constant.rpmtag-patchesname">RPMTAG_PATCHESNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-patchesversion">
+    <strong><code><a href="#constant.rpmtag-patchesversion">RPMTAG_PATCHESVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-payloadcompressor">
+    <strong><code><a href="#constant.rpmtag-payloadcompressor">RPMTAG_PAYLOADCOMPRESSOR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-payloaddigest">
+    <strong><code><a href="#constant.rpmtag-payloaddigest">RPMTAG_PAYLOADDIGEST</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-payloaddigestalt">
+    <strong><code><a href="#constant.rpmtag-payloaddigestalt">RPMTAG_PAYLOADDIGESTALT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Con librpm &gt;= 4.16.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-payloaddigestalgo">
+    <strong><code><a href="#constant.rpmtag-payloaddigestalgo">RPMTAG_PAYLOADDIGESTALGO</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-payloadflags">
+    <strong><code><a href="#constant.rpmtag-payloadflags">RPMTAG_PAYLOADFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-payloadformat">
+    <strong><code><a href="#constant.rpmtag-payloadformat">RPMTAG_PAYLOADFORMAT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-pkgid">
+    <strong><code><a href="#constant.rpmtag-pkgid">RPMTAG_PKGID</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Obsoleto, utilizar <strong><code><a href="#constant.rpmtag-sigmd5">RPMTAG_SIGMD5</a></code></strong> en su lugar. Eliminado en librpm 6.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-platform">
+    <strong><code><a href="#constant.rpmtag-platform">RPMTAG_PLATFORM</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-policies">
+    <strong><code><a href="#constant.rpmtag-policies">RPMTAG_POLICIES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-policyflags">
+    <strong><code><a href="#constant.rpmtag-policyflags">RPMTAG_POLICYFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-policynames">
+    <strong><code><a href="#constant.rpmtag-policynames">RPMTAG_POLICYNAMES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-policytypes">
+    <strong><code><a href="#constant.rpmtag-policytypes">RPMTAG_POLICYTYPES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-policytypesindexes">
+    <strong><code><a href="#constant.rpmtag-policytypesindexes">RPMTAG_POLICYTYPESINDEXES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-postin">
+    <strong><code><a href="#constant.rpmtag-postin">RPMTAG_POSTIN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-postinflags">
+    <strong><code><a href="#constant.rpmtag-postinflags">RPMTAG_POSTINFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-postinprog">
+    <strong><code><a href="#constant.rpmtag-postinprog">RPMTAG_POSTINPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-posttrans">
+    <strong><code><a href="#constant.rpmtag-posttrans">RPMTAG_POSTTRANS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-posttransflags">
+    <strong><code><a href="#constant.rpmtag-posttransflags">RPMTAG_POSTTRANSFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-posttransprog">
+    <strong><code><a href="#constant.rpmtag-posttransprog">RPMTAG_POSTTRANSPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-postun">
+    <strong><code><a href="#constant.rpmtag-postun">RPMTAG_POSTUN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-postunflags">
+    <strong><code><a href="#constant.rpmtag-postunflags">RPMTAG_POSTUNFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-postunprog">
+    <strong><code><a href="#constant.rpmtag-postunprog">RPMTAG_POSTUNPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-postuntrans">
+    <strong><code><a href="#constant.rpmtag-postuntrans">RPMTAG_POSTUNTRANS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.19
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-postuntransflags">
+    <strong><code><a href="#constant.rpmtag-postuntransflags">RPMTAG_POSTUNTRANSFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.19
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-postuntransprog">
+    <strong><code><a href="#constant.rpmtag-postuntransprog">RPMTAG_POSTUNTRANSPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.19
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-prefixes">
+    <strong><code><a href="#constant.rpmtag-prefixes">RPMTAG_PREFIXES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-prein">
+    <strong><code><a href="#constant.rpmtag-prein">RPMTAG_PREIN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-preinflags">
+    <strong><code><a href="#constant.rpmtag-preinflags">RPMTAG_PREINFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-preinprog">
+    <strong><code><a href="#constant.rpmtag-preinprog">RPMTAG_PREINPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-pretrans">
+    <strong><code><a href="#constant.rpmtag-pretrans">RPMTAG_PRETRANS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-pretransflags">
+    <strong><code><a href="#constant.rpmtag-pretransflags">RPMTAG_PRETRANSFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-pretransprog">
+    <strong><code><a href="#constant.rpmtag-pretransprog">RPMTAG_PRETRANSPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-preun">
+    <strong><code><a href="#constant.rpmtag-preun">RPMTAG_PREUN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-preunflags">
+    <strong><code><a href="#constant.rpmtag-preunflags">RPMTAG_PREUNFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-preunprog">
+    <strong><code><a href="#constant.rpmtag-preunprog">RPMTAG_PREUNPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-preuntrans">
+    <strong><code><a href="#constant.rpmtag-preuntrans">RPMTAG_PREUNTRANS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.19
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-preuntransflags">
+    <strong><code><a href="#constant.rpmtag-preuntransflags">RPMTAG_PREUNTRANSFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.19
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-preuntransprog">
+    <strong><code><a href="#constant.rpmtag-preuntransprog">RPMTAG_PREUNTRANSPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.19
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-provideflags">
+    <strong><code><a href="#constant.rpmtag-provideflags">RPMTAG_PROVIDEFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-providename">
+    <strong><code><a href="#constant.rpmtag-providename">RPMTAG_PROVIDENAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Las dependencias proporcionadas, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-providenevrs">
+    <strong><code><a href="#constant.rpmtag-providenevrs">RPMTAG_PROVIDENEVRS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-provides">
+    <strong><code><a href="#constant.rpmtag-provides">RPMTAG_PROVIDES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-provideversion">
+    <strong><code><a href="#constant.rpmtag-provideversion">RPMTAG_PROVIDEVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-pubkeys">
+    <strong><code><a href="#constant.rpmtag-pubkeys">RPMTAG_PUBKEYS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-r">
+    <strong><code><a href="#constant.rpmtag-r">RPMTAG_R</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-recommendflags">
+    <strong><code><a href="#constant.rpmtag-recommendflags">RPMTAG_RECOMMENDFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-recommendname">
+    <strong><code><a href="#constant.rpmtag-recommendname">RPMTAG_RECOMMENDNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Las dependencias débiles recomendadas, con el índice de la base de datos, requiere librpm &gt;= 4.13.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-recommendnevrs">
+    <strong><code><a href="#constant.rpmtag-recommendnevrs">RPMTAG_RECOMMENDNEVRS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-recommends">
+    <strong><code><a href="#constant.rpmtag-recommends">RPMTAG_RECOMMENDS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-recommendversion">
+    <strong><code><a href="#constant.rpmtag-recommendversion">RPMTAG_RECOMMENDVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-recontexts">
+    <strong><code><a href="#constant.rpmtag-recontexts">RPMTAG_RECONTEXTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-release">
+    <strong><code><a href="#constant.rpmtag-release">RPMTAG_RELEASE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-removetid">
+    <strong><code><a href="#constant.rpmtag-removetid">RPMTAG_REMOVETID</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-requireflags">
+    <strong><code><a href="#constant.rpmtag-requireflags">RPMTAG_REQUIREFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-requirename">
+    <strong><code><a href="#constant.rpmtag-requirename">RPMTAG_REQUIRENAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Las dependencias requeridas, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-requirenevrs">
+    <strong><code><a href="#constant.rpmtag-requirenevrs">RPMTAG_REQUIRENEVRS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-requires">
+    <strong><code><a href="#constant.rpmtag-requires">RPMTAG_REQUIRES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-requireversion">
+    <strong><code><a href="#constant.rpmtag-requireversion">RPMTAG_REQUIREVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-rpmversion">
+    <strong><code><a href="#constant.rpmtag-rpmversion">RPMTAG_RPMVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-rsaheader">
+    <strong><code><a href="#constant.rpmtag-rsaheader">RPMTAG_RSAHEADER</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-sha1header">
+    <strong><code><a href="#constant.rpmtag-sha1header">RPMTAG_SHA1HEADER</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     La firma SHA1, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-sha256header">
+    <strong><code><a href="#constant.rpmtag-sha256header">RPMTAG_SHA256HEADER</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-siggpg">
+    <strong><code><a href="#constant.rpmtag-siggpg">RPMTAG_SIGGPG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-sigmd5">
+    <strong><code><a href="#constant.rpmtag-sigmd5">RPMTAG_SIGMD5</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     La firma MD5, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-sigpgp">
+    <strong><code><a href="#constant.rpmtag-sigpgp">RPMTAG_SIGPGP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-sigsize">
+    <strong><code><a href="#constant.rpmtag-sigsize">RPMTAG_SIGSIZE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-size">
+    <strong><code><a href="#constant.rpmtag-size">RPMTAG_SIZE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-source">
+    <strong><code><a href="#constant.rpmtag-source">RPMTAG_SOURCE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-sourcepackage">
+    <strong><code><a href="#constant.rpmtag-sourcepackage">RPMTAG_SOURCEPACKAGE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-sourcepkgid">
+    <strong><code><a href="#constant.rpmtag-sourcepkgid">RPMTAG_SOURCEPKGID</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-sourcerpm">
+    <strong><code><a href="#constant.rpmtag-sourcerpm">RPMTAG_SOURCERPM</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-spec">
+    <strong><code><a href="#constant.rpmtag-spec">RPMTAG_SPEC</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.18
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-suggestflags">
+    <strong><code><a href="#constant.rpmtag-suggestflags">RPMTAG_SUGGESTFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-suggestname">
+    <strong><code><a href="#constant.rpmtag-suggestname">RPMTAG_SUGGESTNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El directorio de los ficheros, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-suggestnevrs">
+    <strong><code><a href="#constant.rpmtag-suggestnevrs">RPMTAG_SUGGESTNEVRS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-suggests">
+    <strong><code><a href="#constant.rpmtag-suggests">RPMTAG_SUGGESTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-suggestversion">
+    <strong><code><a href="#constant.rpmtag-suggestversion">RPMTAG_SUGGESTVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-summary">
+    <strong><code><a href="#constant.rpmtag-summary">RPMTAG_SUMMARY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-supplementflags">
+    <strong><code><a href="#constant.rpmtag-supplementflags">RPMTAG_SUPPLEMENTFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-supplementname">
+    <strong><code><a href="#constant.rpmtag-supplementname">RPMTAG_SUPPLEMENTNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Las dependencias débiles, con el índice de la base de datos, requiere librpm &gt;= 4.13.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-supplementnevrs">
+    <strong><code><a href="#constant.rpmtag-supplementnevrs">RPMTAG_SUPPLEMENTNEVRS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-supplements">
+    <strong><code><a href="#constant.rpmtag-supplements">RPMTAG_SUPPLEMENTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-supplementversion">
+    <strong><code><a href="#constant.rpmtag-supplementversion">RPMTAG_SUPPLEMENTVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-sysusers">
+    <strong><code><a href="#constant.rpmtag-sysusers">RPMTAG_SYSUSERS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.19
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggerconds">
+    <strong><code><a href="#constant.rpmtag-transfiletriggerconds">RPMTAG_TRANSFILETRIGGERCONDS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggerflags">
+    <strong><code><a href="#constant.rpmtag-transfiletriggerflags">RPMTAG_TRANSFILETRIGGERFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggerindex">
+    <strong><code><a href="#constant.rpmtag-transfiletriggerindex">RPMTAG_TRANSFILETRIGGERINDEX</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggername">
+    <strong><code><a href="#constant.rpmtag-transfiletriggername">RPMTAG_TRANSFILETRIGGERNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El nombre del desencadenador de fichero de transacción, con el índice de la base de datos, requiere librpm &gt;= 4.13.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggerpriorities">
+    <strong><code><a href="#constant.rpmtag-transfiletriggerpriorities">RPMTAG_TRANSFILETRIGGERPRIORITIES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggerscriptflags">
+    <strong><code><a href="#constant.rpmtag-transfiletriggerscriptflags">RPMTAG_TRANSFILETRIGGERSCRIPTFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggerscriptprog">
+    <strong><code><a href="#constant.rpmtag-transfiletriggerscriptprog">RPMTAG_TRANSFILETRIGGERSCRIPTPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggerscripts">
+    <strong><code><a href="#constant.rpmtag-transfiletriggerscripts">RPMTAG_TRANSFILETRIGGERSCRIPTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggertype">
+    <strong><code><a href="#constant.rpmtag-transfiletriggertype">RPMTAG_TRANSFILETRIGGERTYPE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-transfiletriggerversion">
+    <strong><code><a href="#constant.rpmtag-transfiletriggerversion">RPMTAG_TRANSFILETRIGGERVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-translationurl">
+    <strong><code><a href="#constant.rpmtag-translationurl">RPMTAG_TRANSLATIONURL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.18
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-triggerconds">
+    <strong><code><a href="#constant.rpmtag-triggerconds">RPMTAG_TRIGGERCONDS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-triggerflags">
+    <strong><code><a href="#constant.rpmtag-triggerflags">RPMTAG_TRIGGERFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-triggerindex">
+    <strong><code><a href="#constant.rpmtag-triggerindex">RPMTAG_TRIGGERINDEX</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-triggername">
+    <strong><code><a href="#constant.rpmtag-triggername">RPMTAG_TRIGGERNAME</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El nombre del desencadenador, con el índice de la base de datos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-triggerscriptflags">
+    <strong><code><a href="#constant.rpmtag-triggerscriptflags">RPMTAG_TRIGGERSCRIPTFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-triggerscriptprog">
+    <strong><code><a href="#constant.rpmtag-triggerscriptprog">RPMTAG_TRIGGERSCRIPTPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-triggerscripts">
+    <strong><code><a href="#constant.rpmtag-triggerscripts">RPMTAG_TRIGGERSCRIPTS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-triggertype">
+    <strong><code><a href="#constant.rpmtag-triggertype">RPMTAG_TRIGGERTYPE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-triggerversion">
+    <strong><code><a href="#constant.rpmtag-triggerversion">RPMTAG_TRIGGERVERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-upstreamreleases">
+    <strong><code><a href="#constant.rpmtag-upstreamreleases">RPMTAG_UPSTREAMRELEASES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Requiere librpm &gt;= 4.18
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-url">
+    <strong><code><a href="#constant.rpmtag-url">RPMTAG_URL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-v">
+    <strong><code><a href="#constant.rpmtag-v">RPMTAG_V</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-vcs">
+    <strong><code><a href="#constant.rpmtag-vcs">RPMTAG_VCS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-vendor">
+    <strong><code><a href="#constant.rpmtag-vendor">RPMTAG_VENDOR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-verbose">
+    <strong><code><a href="#constant.rpmtag-verbose">RPMTAG_VERBOSE</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-verifyscript">
+    <strong><code><a href="#constant.rpmtag-verifyscript">RPMTAG_VERIFYSCRIPT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-verifyscriptflags">
+    <strong><code><a href="#constant.rpmtag-verifyscriptflags">RPMTAG_VERIFYSCRIPTFLAGS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-verifyscriptprog">
+    <strong><code><a href="#constant.rpmtag-verifyscriptprog">RPMTAG_VERIFYSCRIPTPROG</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-veritysignaturealgo">
+    <strong><code><a href="#constant.rpmtag-veritysignaturealgo">RPMTAG_VERITYSIGNATUREALGO</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Con librpm &gt;= 4.17.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-veritysignatures">
+    <strong><code><a href="#constant.rpmtag-veritysignatures">RPMTAG_VERITYSIGNATURES</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Con librpm &gt;= 4.17.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-version">
+    <strong><code><a href="#constant.rpmtag-version">RPMTAG_VERSION</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.rpmtag-xpm">
+    <strong><code><a href="#constant.rpmtag-xpm">RPMTAG_XPM</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="ref.rpminfo" class="reference"><hr>
+ <h1 class="title">Funciones de RpmInfo</h1>
+
+ 
+
+
+<div id="function.rpmaddtag" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rpmaddtag</h1>
+  <p class="verinfo">(PECL rpminfo &gt;= 0.5.0)</p><p class="refpurpose"><span class="refname">rpmaddtag</span> — <span class="dc-title">Añade un tag recuperado en una consulta</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rpmaddtag-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rpmaddtag</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$tag</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="simpara">
+   Añade un tag recuperado en una consulta previa.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rpmaddtag-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">tag</code></dt>
+    <dd>
+     <span class="simpara">
+      Una de las constantes <strong><code><a href="#constant.rpmtag-arch">RPMTAG_<span class="replaceable">*</span></a></code></strong>, ver la página de las <a href="#rpminfo.constants" class="link">constantes rpminfo</a>.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rpmaddtag-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.rpmaddtag-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.rpminfo" class="function" rel="rdfs-seeAlso">rpminfo()</a> - Devuelve información de un fichero RPM</span></li>
+   <li><span class="function"><a href="#function.rpmdbinfo" class="function" rel="rdfs-seeAlso">rpmdbinfo()</a> - Devuelve la información de un RPM instalado</span></li>
+   <li><span class="function"><a href="#function.rpmdbsearch" class="function" rel="rdfs-seeAlso">rpmdbsearch()</a> - Busca paquetes RPM</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rpmdbinfo" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rpmdbinfo</h1>
+  <p class="verinfo">(PECL rpminfo &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">rpmdbinfo</span> — <span class="dc-title">Devuelve la información de un RPM instalado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rpmdbinfo-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rpmdbinfo</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$nevr</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$full</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.array" class="type array">array</a></span></span></div>
+
+  <p class="simpara">
+   Recupera la información sobre un paquete instalado, desde la base de datos RPM del sistema.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rpmdbinfo-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">nevr</code></dt>
+    <dd>
+     <span class="simpara">
+      El nombre con opcionalmente el epoch, la versión y la release.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">full</code></dt>
+    <dd>
+     <span class="simpara">
+      Si es <strong><code><a href="#constant.true">true</a></code></strong>, se recupera toda la información de cabecera del fichero, de lo contrario, solo un conjunto mínimo.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rpmdbinfo-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Un <span class="type"><a href="#language.types.array" class="type array">array</a></span> de <span class="type"><a href="#language.types.array" class="type array">array</a></span> de información o NULL en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.rpmdbinfo-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3482">
+   <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>rpmdbinfo()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>rpmaddtag</span><span style="color: #007700">(</span><span style="color: #0000BB">RPMTAG_INSTALLTIME</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">rpmdbinfo</span><span style="color: #007700">(</span><span style="color: #DD0000">"php-pecl-rpminfo"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [0] =&gt; Array
+        (
+            [Name] =&gt; php-pecl-rpminfo
+            [Version] =&gt; 0.4.2
+            [Release] =&gt; 1.fc31
+            [Summary] =&gt; RPM information
+            [Installtime] =&gt; 1586244687
+            [Arch] =&gt; x86_64
+        )
+)</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.rpmdbinfo-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.rpmaddtag" class="function" rel="rdfs-seeAlso">rpmaddtag()</a> - Añade un tag recuperado en una consulta</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rpmdbsearch" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rpmdbsearch</h1>
+  <p class="verinfo">(PECL rpminfo &gt;= 0.3.0)</p><p class="refpurpose"><span class="refname">rpmdbsearch</span> — <span class="dc-title">Busca paquetes RPM</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rpmdbsearch-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rpmdbsearch</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$pattern</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$rpmtag</code><span class="initializer"> = RPMTAG_NAME</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$rpmmire</code><span class="initializer"> = -1</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$full</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.array" class="type array">array</a></span></span></div>
+
+  <p class="simpara">
+   Busca paquetes en la base de datos RPM del sistema.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rpmdbsearch-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">pattern</code></dt>
+    <dd>
+     <span class="simpara">
+      El valor a buscar.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">rpmtag</code></dt>
+    <dd>
+     <span class="simpara">
+      El criterio de búsqueda, una de las constantes
+      <strong><code><a href="#constant.rpmtag-arch">RPMTAG_<span class="replaceable">*</span></a></code></strong>.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">rpmmire</code></dt>
+    <dd>
+     <span class="simpara">
+      El tipo de patrón, una de las constantes
+      <strong><code><a href="#constant.rpmmire-default">RPMMIRE_<span class="replaceable">*</span></a></code></strong>.
+      Cuando &lt; 0 el criterio debe ser igual al valor, y el índice de la base de datos es utilizado si es posible.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">full</code></dt>
+    <dd>
+     <span class="simpara">
+      Si <strong><code><a href="#constant.true">true</a></code></strong> toda la información de encabezado para el fichero es recuperada, de lo contrario solo un conjunto mínimo.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rpmdbsearch-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Un <span class="type"><a href="#language.types.array" class="type array">array</a></span> de <span class="type"><a href="#language.types.array" class="type array">array</a></span> de información o <strong><code><a href="#constant.null">null</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.rpmdbsearch-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3483">
+   <p><strong>Ejemplo #1 Búsqueda del paquete que posee un fichero</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$info </span><span style="color: #007700">= </span><span style="color: #0000BB">rpmdbsearch</span><span style="color: #007700">(</span><span style="color: #DD0000">"/usr/bin/php"</span><span style="color: #007700">, </span><span style="color: #0000BB">RPMTAG_INSTFILENAMES</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [0] =&gt; Array
+        (
+            [Name] =&gt; php-cli
+            [Version] =&gt; 7.4.4
+            [Release] =&gt; 1.fc32
+            [Summary] =&gt; Interfaz de línea de comandos para PHP
+            [Arch] =&gt; x86_64
+        )
+
+)</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.rpmdbsearch-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.rpmaddtag" class="function" rel="rdfs-seeAlso">rpmaddtag()</a> - Añade un tag recuperado en una consulta</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rpmdefine" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rpmdefine</h1>
+  <p class="verinfo">(PECL rpminfo &gt;= 1.2.0)</p><p class="refpurpose"><span class="refname">rpmdefine</span> — <span class="dc-title">Define o cambia el valor de una macro RPM</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rpmdefine-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rpmdefine</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="simpara">
+   Define o cambia el valor de una macro RPM.
+  </p>
+  <p class="simpara">
+   Puede ser utilizado para seleccionar la ruta de acceso de la base de datos y el motor a utilizar
+   en lugar del predeterminado del sistema.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rpmdefine-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">text</code></dt>
+    <dd>
+     <span class="simpara">
+      El nombre de la macro, las opciones, el cuerpo.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rpmdefine-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.rpmdefine-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3484">
+   <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>rpmdefine()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// utiliza una base de datos antigua (bdb) de un chroot EL-8<br></span><span style="color: #0000BB">rpmdefine</span><span style="color: #007700">(</span><span style="color: #DD0000">"_dbpath /var/lib/mock/almalinux-8-x86_64/root/var/lib/rpm"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">rpmdefine</span><span style="color: #007700">(</span><span style="color: #DD0000">"_db_backend bdb_ro"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">rpmdbinfo</span><span style="color: #007700">(</span><span style="color: #DD0000">"almalinux-release"</span><span style="color: #007700">)[</span><span style="color: #0000BB">0</span><span style="color: #007700">][</span><span style="color: #DD0000">"Summary"</span><span style="color: #007700">]);<br><br></span><span style="color: #FF8000">// utiliza una base de datos nueva (sqlite) de un chroot Fedora-41<br></span><span style="color: #0000BB">rpmdefine</span><span style="color: #007700">(</span><span style="color: #DD0000">"_dbpath /var/lib/mock/fedora-41-x86_64/root/usr/lib/sysimage/rpm"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">rpmdefine</span><span style="color: #007700">(</span><span style="color: #DD0000">"_db_backend sqlite"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">rpmdbinfo</span><span style="color: #007700">(</span><span style="color: #DD0000">"fedora-release"</span><span style="color: #007700">)[</span><span style="color: #0000BB">0</span><span style="color: #007700">][</span><span style="color: #DD0000">"Summary"</span><span style="color: #007700">]);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">AlmaLinux release file
+Fedora release files</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.rpmdefine-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.rpmexpand" class="function" rel="rdfs-seeAlso">rpmexpand()</a> - Obtiene el valor expandido de una macro RPM</span></li>
+   <li><span class="function"><a href="#function.rpmdbinfo" class="function" rel="rdfs-seeAlso">rpmdbinfo()</a> - Devuelve la información de un RPM instalado</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.rpmexpand" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rpmexpand</h1>
+  <p class="verinfo">(PECL rpminfo &gt;= 1.2.0)</p><p class="refpurpose"><span class="refname">rpmexpand</span> — <span class="dc-title">Obtiene el valor expandido de una macro RPM</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rpmexpand-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rpmexpand</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="simpara">
+   Obtiene el valor expandido de una macro RPM.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rpmexpand-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">text</code></dt>
+    <dd>
+     <span class="simpara">
+      El texto con las macros RPM a expandir.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rpmexpand-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Un <span class="type"><a href="#language.types.string" class="type string">string</a></span> con la(s) macro(s) expandida(s) concatenada(s).
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.rpmexpand-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3485">
+   <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>rpmexpand()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$distro </span><span style="color: #007700">= </span><span style="color: #0000BB">rpmexpand</span><span style="color: #007700">(</span><span style="color: #DD0000">"%{?fedora:Fedora %{fedora}}%{?rhel:Enterprise Linux %{rhel}}"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$distro</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Fedora 41</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.rpmexpand-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.rpmexpandnumeric" class="function" rel="rdfs-seeAlso">rpmexpandnumeric()</a> - Obtiene el valor numérico de una macro RPM</span></li>
+  </ul>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.rpmexpandnumeric" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rpmexpandnumeric</h1>
+  <p class="verinfo">(PECL rpminfo &gt;= 1.2.0)</p><p class="refpurpose"><span class="refname">rpmexpandnumeric</span> — <span class="dc-title">Obtiene el valor numérico de una macro RPM</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rpmexpandnumeric-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rpmexpandnumeric</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="simpara">
+   Obtiene el valor numérico de una macro RPM.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rpmexpandnumeric-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">text</code></dt>
+    <dd>
+     <span class="simpara">
+      El texto con las macros RPM a expandir.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rpmexpandnumeric-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   La expansión de la macro como <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+   Los valores booleanos (<code class="literal">Y</code> o <code class="literal">y</code> retorna 1,
+   <code class="literal">N</code> o <code class="literal">n</code> retorna <code class="literal">0</code>)
+   también están permitidos.
+   Una macro no definida retorna <code class="literal">0</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.rpmexpandnumeric-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3486">
+   <p><strong>Ejemplo #1 Un ejemplo <span class="function"><strong>rpmexpandnumeric()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$bits </span><span style="color: #007700">= </span><span style="color: #0000BB">rpmexpandnumeric</span><span style="color: #007700">(</span><span style="color: #DD0000">"%__isa_bits"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$bits</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">64</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.rpmexpandnumeric-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.rpmexpand" class="function" rel="rdfs-seeAlso">rpmexpand()</a> - Obtiene el valor expandido de una macro RPM</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rpmgetsymlink" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rpmgetsymlink</h1>
+  <p class="verinfo">(PECL rpminfo &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">rpmgetsymlink</span> — <span class="dc-title">Devuelve el destino de un enlace simbólico</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rpmgetsymlink-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rpmgetsymlink</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$path</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span></div>
+
+  <p class="simpara">
+   Devuelve el destino de un enlace simbólico.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rpmgetsymlink-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">path</code></dt>
+    <dd>
+     <span class="simpara">
+      La ruta de acceso del fichero RPM.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">name</code></dt>
+    <dd>
+     <span class="simpara">
+      El nombre del fichero enlace simbólico.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rpmgetsymlink-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Un <span class="type"><a href="#language.types.string" class="type string">string</a></span> con el destino del enlace simbólico,
+   <strong><code><a href="#constant.null">null</a></code></strong> en caso de error, o una cadena vacía si no es un enlace simbólico.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rpminfo" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rpminfo</h1>
+  <p class="verinfo">(PECL rpminfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">rpminfo</span> — <span class="dc-title">Devuelve información de un fichero RPM</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rpminfo-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rpminfo</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$path</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$full</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$error</code><span class="initializer"> = ?</span></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.array" class="type array">array</a></span></span></div>
+
+  <p class="simpara">
+   Devuelve información sobre un fichero local, un paquete RPM.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rpminfo-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">path</code></dt>
+    <dd>
+     <span class="simpara">
+      La ruta de acceso del fichero RPM.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">full</code></dt>
+    <dd>
+     <span class="simpara">
+      Si <strong><code><a href="#constant.true">true</a></code></strong>, se recupera toda la información de cabecera del fichero,
+      de lo contrario, solo un conjunto mínimo.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">error</code></dt>
+    <dd>
+     <span class="simpara">
+      Si se proporciona, recibirá el mensaje de error posible,
+      y evitará una advertencia de ejecución.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rpminfo-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Un <span class="type"><a href="#language.types.array" class="type array">array</a></span> de información, o <strong><code><a href="#constant.null">null</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.rpminfo-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-3487">
+   <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>rpminfo()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>rpmaddtag</span><span style="color: #007700">(</span><span style="color: #0000BB">RPMTAG_BUILDTIME</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$info </span><span style="color: #007700">= </span><span style="color: #0000BB">rpminfo</span><span style="color: #007700">(</span><span style="color: #DD0000">"./php-pecl-rpminfo-0.4.2-1.el8.remi.7.4.x86_64.rpm"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$info</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [Name] =&gt; php-pecl-rpminfo
+    [Version] =&gt; 0.4.2
+    [Release] =&gt; 1.el8
+    [Summary] =&gt; RPM information
+    [Buildtime] =&gt; 1586244821
+    [Arch] =&gt; x86_64
+)</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.rpminfo-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.rpmaddtag" class="function" rel="rdfs-seeAlso">rpmaddtag()</a> - Añade un tag recuperado en una consulta</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.rpmvercmp" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">rpmvercmp</h1>
+  <p class="verinfo">(PECL rpminfo &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">rpmvercmp</span> — <span class="dc-title">Comparación de versiones RPM</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.rpmvercmp-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>rpmvercmp</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$evr1</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$evr2</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$operator</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></span></div>
+
+  <p class="simpara">
+   Compara dos versiones de paquetes RPM.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.rpmvercmp-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">evr1</code></dt>
+    <dd>
+     <span class="simpara">
+      La primera cadena <code class="literal">epoch:version-release</code>.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">evr2</code></dt>
+    <dd>
+     <span class="simpara">
+      La segunda cadena <code class="literal">epoch:version-release</code>.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">operator</code></dt>
+    <dd>
+     <p class="para">
+      Un operador opcional.
+      Los operadores posibles son:
+      <span class="simplelist"><code class="literal">&lt;</code>, <code class="literal">lt</code>, <code class="literal">&lt;=</code>, <code class="literal">le</code>, <code class="literal">&gt;</code>, <code class="literal">gt</code>, <code class="literal">&gt;=</code>, <code class="literal">ge</code>, <code class="literal">==</code>, <code class="literal">=</code>, <code class="literal">eq</code>, <code class="literal">!=</code>, <code class="literal">&lt;&gt;</code>, <code class="literal">ne</code></span>.
+     </p>
+     <span class="simpara">
+      Este parámetro distingue mayúsculas y minúsculas, los valores deben estar en minúsculas.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.rpmvercmp-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Devuelve <code class="literal">-1</code> si <code class="parameter">evr1</code> es inferior a
+   <code class="parameter">evr2</code>, <code class="literal">1</code> si <code class="parameter">evr1</code> es
+   superior a <code class="parameter">evr2</code>, y <code class="literal">0</code> si son iguales.
+  </p>
+  <p class="simpara">
+   Cuando se utiliza el argumento opcional <code class="parameter">operator</code>, la función
+   devolverá <strong><code><a href="#constant.true">true</a></code></strong> si la relación es la especificada por
+   el operador, en caso contrario <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.rpmvercmp-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL rpminfo 0.7.0</td>
+      <td>
+       El <code class="parameter">operator</code> opcional ha sido añadido.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.rpmaddtag">rpmaddtag</a> — Añade un tag recuperado en una consulta</li><li><a href="#function.rpmdbinfo">rpmdbinfo</a> — Devuelve la información de un RPM instalado</li><li><a href="#function.rpmdbsearch">rpmdbsearch</a> — Busca paquetes RPM</li><li><a href="#function.rpmdefine">rpmdefine</a> — Define o cambia el valor de una macro RPM</li><li><a href="#function.rpmexpand">rpmexpand</a> — Obtiene el valor expandido de una macro RPM</li><li><a href="#function.rpmexpandnumeric">rpmexpandnumeric</a> — Obtiene el valor numérico de una macro RPM</li><li><a href="#function.rpmgetsymlink">rpmgetsymlink</a> — Devuelve el destino de un enlace simbólico</li><li><a href="#function.rpminfo">rpminfo</a> — Devuelve información de un fichero RPM</li><li><a href="#function.rpmvercmp">rpmvercmp</a> — Comparación de versiones RPM</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.rpminfo">Introducción</a></li><li><a href="#rpminfo.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#rpminfo.requirements">Requerimientos</a></li><li><a href="#rpminfo.installation">Instalación mediante PECL</a></li></ul></li><li><a href="#rpminfo.constants">Constantes predefinidas</a></li><li><a href="#ref.rpminfo">Funciones de RpmInfo</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.rpmaddtag">rpmaddtag</a> — Añade un tag recuperado en una consulta</li><li><a href="#function.rpmdbinfo">rpmdbinfo</a> — Devuelve la información de un RPM instalado</li><li><a href="#function.rpmdbsearch">rpmdbsearch</a> — Busca paquetes RPM</li><li><a href="#function.rpmdefine">rpmdefine</a> — Define o cambia el valor de una macro RPM</li><li><a href="#function.rpmexpand">rpmexpand</a> — Obtiene el valor expandido de una macro RPM</li><li><a href="#function.rpmexpandnumeric">rpmexpandnumeric</a> — Obtiene el valor numérico de una macro RPM</li><li><a href="#function.rpmgetsymlink">rpmgetsymlink</a> — Devuelve el destino de un enlace simbólico</li><li><a href="#function.rpminfo">rpminfo</a> — Devuelve información de un fichero RPM</li><li><a href="#function.rpmvercmp">rpmvercmp</a> — Comparación de versiones RPM</li></ul></li></ul></div>

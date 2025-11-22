@@ -1,0 +1,2793 @@
+<div id="book.memcache" class="book"><hr>
+ 
+ <h1 class="title">Memcache</h1>
+
+ 
+ <div id="intro.memcache" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   El módulo <code class="literal">Memcache</code> proporciona una interfaz procedimental manejable
+   así como orientada a objetos a <code class="literal">Memcache</code>, un demonio altamente eficiente en
+   la gestión de la caché, que está principalmente destinado a reducir la carga de las bases
+   de datos en las aplicaciones web dinámicas.
+  </p>
+  <p class="para">
+   El módulo <code class="literal">Memcache</code> proporciona asimismo un
+   gestor de <a href="#ref.session" class="link">sesión</a> (<code class="literal">memcache</code>).
+  </p>
+  <p class="para">
+   Más información sobre <code class="literal">Memcache</code> puede ser
+   consultada en <a href="http://www.memcached.org/" class="link external">» http://www.memcached.org/</a>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="memcache.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#memcache.requirements">Requerimientos</a></li><li><a href="#memcache.installation">Instalación</a></li><li><a href="#memcache.ini">Configuración en tiempo de ejecución</a></li><li><a href="#memcache.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ <div id="memcache.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Este módulo utiliza las funciones de la biblioteca <a href="http://www.zlib.net/" class="link external">» zlib</a>
+   para soportar la compresión de datos a la volée. Zlib es por lo tanto requerido para instalar
+   este módulo.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+<div id="memcache.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Esta extensión <a href="https://pecl.php.net/" class="link external">» PECL</a> no está integrada en PHP.
+  Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/memcache" class="link external">» https://pecl.php.net/package/memcache</a>.
+ </p>
+ <blockquote class="note"><p><strong class="note">Nota</strong>: 
+  </p><p class="para">
+   Es posible desactivar el gestor de sesiones memcache. La opción 'pecl install'
+   pregunta por esta opción (por defecto está activada) de todas formas cuando se compila
+   estáticamente en PHP se puede utilizar la opción de configuración
+   <strong class="option configure">--disable-memcache-session</strong>.
+  </p>
+ </blockquote>
+
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ 
+
+
+
+<div id="memcache.ini" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Opciones de configuración memcache</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.memcache.allow-failover" class="link">memcache.allow_failover</a></td>
+      <td>"1"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Disponible a partir de memcache 2.0.2.</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.max-failover-attempts" class="link">memcache.max_failover_attempts</a></td>
+      <td>"20"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Disponible a partir de memcache 2.1.0.</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.chunk-size" class="link">memcache.chunk_size</a></td>
+      <td>"8192"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Disponible a partir de memcache 2.0.2.</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.default-port" class="link">memcache.default_port</a></td>
+      <td>"11211"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Disponible a partir de memcache 2.0.2.</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.hash-strategy" class="link">memcache.hash_strategy</a></td>
+      <td>"standard"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Disponible a partir de memcache 2.2.0.</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.hash-function" class="link">memcache.hash_function</a></td>
+      <td>"crc32"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Disponible a partir de memcache 2.2.0.</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.protocol" class="link">memcache.protocol</a></td>
+      <td>ascii</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Supportado a partir de memcache 3.0.0</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.redundancy" class="link">memcache.redundancy</a></td>
+      <td>1</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Supportado a partir de memcache 3.0.0</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.session-redundancy" class="link">memcache.session_redundancy</a></td>
+      <td>2</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Supportado a partir de memcache 3.0.0</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.compress-threshold" class="link">memcache.compress_threshold</a></td>
+      <td>20000</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Supportado a partir de memcache 3.0.3</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.lock-timeout" class="link">memcache.lock_timeout</a></td>
+      <td>15</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Supportado a partir de memcache 3.0.4</td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+  <table class="doctable table">
+   <caption><strong>Opciones de Configuración de Sesión que Afectan el Comportamiento de Memcache</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.memcache.save-handler" class="link">session.save_handler</a></td>
+      <td>"files"</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Supportado a partir de memcache 2.1.2</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.memcache.save-path" class="link">session.save_path</a></td>
+      <td>""</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Supportado a partir de memcache 2.1.2</td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+  Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+ 
+
+<p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+<p class="para">
+ </p><dl>
+
+  
+   <dt id="ini.memcache.allow-failover">
+    <code class="parameter">memcache.allow_failover</code>
+    <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Si se debe cambiar a otros servidores en caso de error.
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.max-failover-attempts">
+    <code class="parameter">memcache.max_failover_attempts</code>
+    <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Define cuántos servidores intentar cuando se fijan o recuperan
+     datos. Utilice solo en conjunción con memcache.allow_failover.
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.chunk-size">
+    <code class="parameter">memcache.chunk_size</code>
+    <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Los datos deben transferirse en fragmentos de este tamaño;
+     Configurar este valor a un valor pequeño provoca más escrituras
+     en la red. Intente aumentar este valor a 32768 si se encuentran
+     retrasos inexplicables.
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.default-port">
+    <code class="parameter">memcache.default_port</code>
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     El número de puerto TCP por defecto a utilizar al conectarse
+     al servidor memcache si no se especifica otro puerto.
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.hash-strategy">
+    <code class="parameter">memcache.hash_strategy</code>
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Controla la estrategia a aplicar al mapear las claves en los servidores.
+     Definir este valor a <code class="literal">consistent</code> para activar el hash consistente
+     que permite añadir o eliminar servidores del grupo sin necesidad de
+     remapear las claves. Definir este valor a <code class="literal">standard</code> hará que se utilice
+     la estrategia antigua.
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.hash-function">
+    <code class="parameter">memcache.hash_function</code>
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Controla la función de hash a aplicar al mapear las claves
+     en los servidores, <code class="literal">crc32</code> utilizará el CRC32 estándar,
+     mientras que <code class="literal">fnv</code> utilizará FNV-1a.
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.protocol">
+    <code class="parameter">memcache.protocol</code>
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.redundancy">
+    <code class="parameter">memcache.redundancy</code>
+    <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.session-redundancy">
+    <code class="parameter">memcache.session_redundancy</code>
+    <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.compress-threshold">
+    <code class="parameter">memcache.compress_threshold</code>
+    <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.lock-timeout">
+    <code class="parameter">memcache.lock_timeout</code>
+    <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.save-handler">
+    <code class="parameter">session.save_handler</code>
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Utilice memcache como gestor de sesión definiendo este valor a
+     <code class="literal">memcache</code>.
+    </p>
+   </dd>
+  
+
+  
+   <dt id="ini.memcache.save-path">
+    <code class="parameter">session.save_path</code>
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Define las URL de servidor, separadas por comas, a utilizar para el almacenamiento de
+     las sesiones, por ejemplo: <code class="literal">"tcp://host1:11211, tcp://host2:11211"</code>.
+    </p>
+    <p class="para">
+     Cada URL puede contener parámetros que serán aplicados al servidor, de la misma
+     forma que para el método <span class="function"><a href="#memcache.addserver" class="function">Memcache::addServer()</a></span>. Por ejemplo:
+     <code class="literal">"tcp://host1:11211?persistent=1&amp;weight=1&amp;timeout=1&amp;retry_interval=15"</code>
+    </p>
+   </dd>
+  
+
+ </dl>
+
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ <div id="memcache.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   Existe una única recurso utilizado por el módulo <code class="literal">Memcache</code>:
+   es el enlace identificador que representa la conexión del servidor de caché.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="memcache.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <table class="doctable table">
+  <caption><strong>Constantes MemCache</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr id="constantmemcache-compressed">
+      <td>
+       <strong><code><a href="#constant.memcache-compressed">MEMCACHE_COMPRESSED</a></code></strong>
+       (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+      </td>
+      <td>
+       Utilizada para activar a la volada la compresión de los datos con las funciones
+       <span class="function"><a href="#memcache.set" class="function">Memcache::set()</a></span>,
+       <span class="function"><a href="#memcache.add" class="function">Memcache::add()</a></span> y
+       <span class="function"><a href="#memcache.replace" class="function">Memcache::replace()</a></span>.
+      </td>
+     </tr>
+
+     <tr id="constantmemcache-have-session">
+      <td>
+       <strong><code><a href="#constant.memcache-have-session">MEMCACHE_HAVE_SESSION</a></code></strong>
+       (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+      </td>
+      <td>
+       1 si el gestor de sesión Memcache está disponible, 0 en caso contrario.
+      </td>
+     </tr>
+
+     <tr id="constantmemcache-user1">
+      <td>
+       <strong><code><a href="#constant.memcache-user1">MEMCACHE_USER1</a></code></strong>
+       (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+      </td>
+      <td>
+       Utilizado para activar los flags de aplicación definidos
+       por los usuarios, con los métodos
+       <span class="function"><a href="#memcache.set" class="function">Memcache::set()</a></span>,
+       <span class="function"><a href="#memcache.add" class="function">Memcache::add()</a></span> y
+       <span class="function"><a href="#memcache.replace" class="function">Memcache::replace()</a></span>.
+      </td>
+     </tr>
+
+     <tr id="constantmemcache-user2">
+      <td>
+       <strong><code><a href="#constant.memcache-user2">MEMCACHE_USER2</a></code></strong>
+       (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+      </td>
+      <td>
+       Utilizado para activar los flags de aplicación definidos
+       por los usuarios, con los métodos
+       <span class="function"><a href="#memcache.set" class="function">Memcache::set()</a></span>,
+       <span class="function"><a href="#memcache.add" class="function">Memcache::add()</a></span> y
+       <span class="function"><a href="#memcache.replace" class="function">Memcache::replace()</a></span>.
+      </td>
+     </tr>
+
+     <tr id="constantmemcache-user3">
+      <td>
+       <strong><code><a href="#constant.memcache-user3">MEMCACHE_USER3</a></code></strong>
+       (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+      </td>
+      <td>
+       Utilizado para activar los flags de aplicación definidos
+       por los usuarios, con los métodos
+       <span class="function"><a href="#memcache.set" class="function">Memcache::set()</a></span>,
+       <span class="function"><a href="#memcache.add" class="function">Memcache::add()</a></span> y
+       <span class="function"><a href="#memcache.replace" class="function">Memcache::replace()</a></span>.
+      </td>
+     </tr>
+
+     <tr id="constantmemcache-user4">
+      <td>
+       <strong><code><a href="#constant.memcache-user4">MEMCACHE_USER4</a></code></strong>
+       (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+      </td>
+      <td>
+       Utilizado para activar los flags de aplicación definidos
+       por los usuarios, con los métodos
+       <span class="function"><a href="#memcache.set" class="function">Memcache::set()</a></span>,
+       <span class="function"><a href="#memcache.add" class="function">Memcache::add()</a></span> y
+       <span class="function"><a href="#memcache.replace" class="function">Memcache::replace()</a></span>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="memcache.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#memcache.examples-overview">Uso básico</a></li></ul>
+
+ <div id="memcache.examples-overview" class="section"><hr>
+  <h2 class="title">Uso básico</h2>
+  <p class="para">
+   </p><div class="example" id="example-4660">
+    <p><strong>Ejemplo #1 Ejemplos de la extensión memcache extension</strong></p>
+    <div class="example-contents"><p>
+     En este ejemplo, se guarda un objeto en cache y luego se devuelve de nuevo.
+     Objetos y otros tipos no escalares se serializan antes de guardarse, por lo
+     tanto es imposible guardar recursos. (ej. identificadores de conexión y otros
+     tipos) en caché.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$memcache </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'localhost'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">) or die (</span><span style="color: #DD0000">"No se pudo contectar"</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$version </span><span style="color: #007700">= </span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getVersion</span><span style="color: #007700">();<br>echo </span><span style="color: #DD0000">"Versión del servidor: "</span><span style="color: #007700">.</span><span style="color: #0000BB">$version</span><span style="color: #007700">.</span><span style="color: #DD0000">"&lt;br/&gt;\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$tmp_object </span><span style="color: #007700">= new </span><span style="color: #0000BB">stdClass</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$tmp_object</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">str_attr </span><span style="color: #007700">= </span><span style="color: #DD0000">'test'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$tmp_object</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">int_attr </span><span style="color: #007700">= </span><span style="color: #0000BB">123</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">set</span><span style="color: #007700">(</span><span style="color: #DD0000">'key'</span><span style="color: #007700">, </span><span style="color: #0000BB">$tmp_object</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">10</span><span style="color: #007700">) or die (</span><span style="color: #DD0000">"Falló al intentar guardar datos en el servidor"</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">"Guarda datos en caché (los datos expirarán en 10 segundos)&lt;br/&gt;\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$get_result </span><span style="color: #007700">= </span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">get</span><span style="color: #007700">(</span><span style="color: #DD0000">'key'</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">"Datos desde la caché:&lt;br/&gt;\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$get_result</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4661">
+    <p><strong>Ejemplo #2 Usando el gestor de sesiones de memcache</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$session_save_path </span><span style="color: #007700">= </span><span style="color: #DD0000">"tcp://</span><span style="color: #0000BB">$host</span><span style="color: #DD0000">:</span><span style="color: #0000BB">$port</span><span style="color: #DD0000">?persistent=1&amp;weight=2&amp;timeout=2&amp;retry_interval=10,  ,tcp://</span><span style="color: #0000BB">$host</span><span style="color: #DD0000">:</span><span style="color: #0000BB">$port</span><span style="color: #DD0000">  "</span><span style="color: #007700">;<br></span><span style="color: #0000BB">ini_set</span><span style="color: #007700">(</span><span style="color: #DD0000">'session.save_handler'</span><span style="color: #007700">, </span><span style="color: #DD0000">'memcache'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ini_set</span><span style="color: #007700">(</span><span style="color: #DD0000">'session.save_path'</span><span style="color: #007700">, </span><span style="color: #0000BB">$session_save_path</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+<hr>
+
+</div>
+
+<hr>
+
+
+
+
+
+
+ 
+
+
+
+<div id="class.memcache" class="reference"><hr>
+
+ <h1 class="title">La clase Memcache</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL memcache &gt;= 0.2.0)</p>
+
+
+  <div class="section" id="memcache.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Representa una conexión a un conjunto de servidores memcache.
+   </p>
+  </div>
+
+
+  <div class="section" id="memcache.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">Memcache</strong>
+     </span>
+     {</div>
+
+
+    <div class="methodsynopsis dc-description">
+   <span class="methodname"><a href="#memcache.add" class="methodname">add</a></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$var</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flag</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$expire</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.addserver" class="methodname">addServer</a></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 11211</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$persistent</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$weight</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$retry_interval</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$status</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.callable" class="type callable">callable</a></span> <code class="parameter">$failure_callback</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeoutms</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.close" class="methodname">close</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.connect" class="methodname">connect</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.decrement" class="methodname">decrement</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$value</code><span class="initializer"> = 1</span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.delete" class="methodname">delete</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$exptime</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.flush" class="methodname">flush</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.get" class="methodname">get</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$flags</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.getextendedstats" class="methodname">getExtendedStats</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$slabid</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$limit</code><span class="initializer"> = 100</span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.getserverstatus" class="methodname">getServerStatus</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 11211</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.getstats" class="methodname">getStats</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$slabid</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$limit</code><span class="initializer"> = 100</span></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.getversion" class="methodname">getVersion</a></span>(): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.increment" class="methodname">increment</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$value</code><span class="initializer"> = 1</span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.pconnect" class="methodname">pconnect</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.replace" class="methodname">replace</a></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$var</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flag</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$expire</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.set" class="methodname">set</a></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$var</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flag</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$expire</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.setcompressthreshold" class="methodname">setCompressThreshold</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$threshold</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.float" class="type float">float</a></span> <code class="parameter">$min_savings</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><a href="#memcache.setserverparams" class="methodname">setServerParams</a></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 11211</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$retry_interval</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$status</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.callable" class="type callable">callable</a></span> <code class="parameter">$failure_callback</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+<div id="memcache.add" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::add</h1>
+  <h1 class="refname">memcache_add</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::add</span> -- <span class="refname">memcache_add</span> — <span class="dc-title">Añade un elemento en el servidor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.add-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::add</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$var</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flag</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$expire</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_add</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$var</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flag</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$expire</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::add()</strong></span> almacena la variable
+   <code class="parameter">var</code> con la clave <code class="parameter">key</code> solo si esta
+   clave no existe ya en el servidor.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.add-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave a asociar al elemento.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">var</code></dt>
+     <dd>
+      <p class="para">
+       La variable a almacenar. Los strings y los integers se almacenan tal cual,
+       los otros tipos se serializan.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flag</code></dt>
+     <dd>
+      <p class="para">
+       Utilice <strong><code><a href="#constant.memcache-compressed">MEMCACHE_COMPRESSED</a></code></strong> para comprimir el elemento
+       (utiliza zlib).
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">expire</code></dt>
+     <dd>
+      <p class="para">
+       Tiempo de expiración del elemento. Si es igual a cero, el elemento nunca
+       expirará. También puede utilizarse un timestamp Unix o un número de segundos
+       a partir del tiempo actual, pero en este caso el número de segundos no debe
+       exceder 2592000 (30 días).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.add-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+   Devuelve <strong><code><a href="#constant.false">false</a></code></strong> si la clave ya existe. Para el resto, el comportamiento de
+   <span class="function"><strong>Memcache::add()</strong></span> es el mismo que
+   <span class="function"><a href="#memcache.set" class="function">Memcache::set()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.add-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4662">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::add()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">"localhost"</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">memcache_add</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">'var_key'</span><span style="color: #007700">, </span><span style="color: #DD0000">'test variable'</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">30</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">add</span><span style="color: #007700">(</span><span style="color: #DD0000">'var_key'</span><span style="color: #007700">, </span><span style="color: #DD0000">'test variable'</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">30</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.add-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.set" class="function" rel="rdfs-seeAlso">Memcache::set()</a> - Almacena datos en el servidor de caché</span></li>
+    <li><span class="function"><a href="#memcache.replace" class="function" rel="rdfs-seeAlso">Memcache::replace()</a> - Remplaza el valor de un elemento existente</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.addserver" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::addServer</h1>
+  <h1 class="refname">memcache_add_server</h1>
+  <p class="verinfo">(PECL memcache &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Memcache::addServer</span> -- <span class="refname">memcache_add_server</span> — <span class="dc-title">Añade un servidor memcache a la lista de conexión</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.addserver-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::addServer</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 11211</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$persistent</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$weight</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$retry_interval</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$status</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.callable" class="type callable">callable</a></span> <code class="parameter">$failure_callback</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeoutms</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_add_server</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 11211</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$persistent</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$weight</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$retry_interval</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$status</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.callable" class="type callable">callable</a></span> <code class="parameter">$failure_callback</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeoutms</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::addServer()</strong></span> añade un servidor a la lista de
+   conexión.
+  </p>
+
+  <p class="para">
+   Al utilizar este método (a diferencia de los métodos
+   <span class="function"><a href="#memcache.connect" class="function">Memcache::connect()</a></span> y <span class="function"><a href="#memcache.pconnect" class="function">Memcache::pconnect()</a></span>),
+   la conexión a la red no se establece hasta que sea necesaria. Además,
+   no hay inconveniente en añadir muchos servidores a la lista, incluso si no
+   todos serán utilizados.
+  </p>
+
+  <p class="para">
+   El fallo puede producirse en cualquier momento con cualquier
+   método siempre que otros servidores estén disponibles, la petición
+   no emitirá error. Cualquier interfaz de conexión o nivel de errores de servidor Memcache (a excepción de la falta de memoria) puede
+   lanzar el fallo. Errores normales de cliente como añadir una
+   clave existente no lanzará un fallo.
+  </p>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta función fue añadida en la versión 2.0.0 de Memcache.
+   </p>
+  </blockquote>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.addserver-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">host</code></dt>
+     <dd>
+      <p class="para">
+       Apunta al host donde memcache escucha para conexiones. Este parámetro puede especificar también otros transportes como <code class="literal">unix:///path/to/memcached.sock</code>
+       para usar sockets Unix, y en este caso, <code class="parameter">port</code> debe definirse también a <code class="literal">0</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">port</code></dt>
+     <dd>
+      <p class="para">
+       Apunta al puerto donde memcache escucha para conexiones.
+       Defínase este parámetro a <code class="literal">0</code> al usar sockets Unix.
+      </p>
+      <p class="para">
+       Nota: Por omisión, el parámetro <code class="parameter">port</code>
+       toma el valor de la opción de configuración
+       <a href="#ini.memcache.default-port" class="link">memcache.default_port</a>
+       cuando no se especifica. Por esta razón, es recomendable
+       especificar explícitamente el puerto al llamar a este método.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">persistent</code></dt>
+     <dd>
+      <p class="para">
+       Controla el uso de una conexión persistente. El valor por
+       omisión es <strong><code><a href="#constant.true">true</a></code></strong>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">weight</code></dt>
+     <dd>
+      <p class="para">
+       Número de entradas a crear para este servidor que a su vez controla su
+       probabilidad de ser elegido. La probabilidad es relativa al peso total
+       de todos los servidores.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">timeout</code></dt>
+     <dd>
+      <p class="para">
+       Valor en segundos que será utilizado para conectarse al demonio.
+       Piénsese dos veces antes de cambiar el valor por omisión de un segundo
+       - podría perderse todos los beneficios de usar la caché si la conexión es demasiado lenta.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">retry_interval</code></dt>
+     <dd>
+      <p class="para">
+       Controla cuántas veces se intentará un servidor que falla, el valor
+       por omisión es de 15 segundos. Si este parámetro vale -1, no se realizará
+       ningún nuevo intento. Ni este parámetro, ni el parámetro
+       <code class="parameter">persistent</code> tienen efecto cuando esta extensión
+       se carga dinámicamente mediante la función <span class="function"><a href="#function.dl" class="function">dl()</a></span>.
+      </p>
+      <p class="para">
+       Cada estructura de conexión fallida tiene su propio tiempo límite
+       y antes de que este expire, será saltada durante la selección del
+       proceso para servir una petición. Una vez expirado, la conexión será
+       correctamente reconectada o marcada como fallida por otro
+       intervalo de <code class="parameter">retry_interval</code> segundos. El efecto
+       típico es que cada hijo de servidor web intentará la conexión
+       cada <code class="parameter">retry_interval</code> segundos al servir una página.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">status</code></dt>
+     <dd>
+      <p class="para">
+       Controla si el servidor debe ser indicado como en línea.
+       Cuando este parámetro vale <strong><code><a href="#constant.false">false</a></code></strong> y el parámetro <code class="parameter">retry_interval</code>
+       vale -1, permite mantener un servidor fallido en la lista
+       y no afectará al algoritmo de distribución de claves. Las peticiones
+       para este servidor fallarán inmediatamente según la configuración del
+       parámetro <code class="parameter">memcache.allow_failover</code>.
+       Por omisión, este parámetro vale <strong><code><a href="#constant.true">true</a></code></strong>, significando que el servidor debe ser
+       considerado como en línea.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">failure_callback</code></dt>
+     <dd>
+      <p class="para">
+       Permite al usuario especificar una función de retorno para manejar un error. La función de retorno se ejecuta antes de alcanzar el límite de intentos. La función toma dos parámetros; el nombre del host y el puerto
+       del servidor que falló.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">timeoutms</code></dt>
+     <dd>
+      <p class="para">
+
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.addserver-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.addserver-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4663">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::addServer()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br><br></span><span style="color: #0000BB">$memcache </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addServer</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addServer</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host2'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API procedimental */<br><br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #0000BB">memcache_add_server</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">'memcache_host2'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-memcache.addserver-notes">
+  <h3 class="title">Notas</h3>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    Cuando el parámetro <code class="parameter">port</code> no se especifica, este método
+    tomará el valor de la directiva de configuración INI
+    <a href="#ini.memcache.default-port" class="link">memcache.default_port</a>.
+    Si este valor ha sido modificado en otro lugar de su aplicación,
+    esto puede llevar a resultados inesperados: por esta razón, es recomendable
+    siempre especificar el puerto explícitamente al llamar al método.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.addserver-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.connect" class="function" rel="rdfs-seeAlso">Memcache::connect()</a> - Establece una conexión con el servidor Memcache</span></li>
+    <li><span class="function"><a href="#memcache.pconnect" class="function" rel="rdfs-seeAlso">Memcache::pconnect()</a> - Establece una conexión persistente a un servidor de caché</span></li>
+    <li><span class="function"><a href="#memcache.close" class="function" rel="rdfs-seeAlso">Memcache::close()</a> - Cierra la conexión con el servidor Memcache</span></li>
+    <li><span class="function"><a href="#memcache.setserverparams" class="function" rel="rdfs-seeAlso">Memcache::setServerParams()</a> - Modifica los parámetros y los estados del servidor durante la ejecución</span></li>
+    <li><span class="function"><a href="#memcache.getserverstatus" class="function" rel="rdfs-seeAlso">Memcache::getServerStatus()</a> - Retorna el estado del servidor</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.close" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::close</h1>
+  <h1 class="refname">memcache_close</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.4.0)</p><p class="refpurpose"><span class="refname">Memcache::close</span> -- <span class="refname">memcache_close</span> — <span class="dc-title">Cierra la conexión con el servidor Memcache</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.close-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::close</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_close</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::close()</strong></span> cierra la conexión al servidor
+   <code class="literal">Memcache</code>. Esta función no cierra las conexiones
+   persistentes que serán cerradas únicamente durante el reinicio del servidor web.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.close-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.close-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.close-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4664">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::close()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/*<br>haga algo aquí ...<br>*/<br></span><span style="color: #0000BB">memcache_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/*<br>haga algo aquí ...<br>*/<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">close</span><span style="color: #007700">();<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.close-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.connect" class="function" rel="rdfs-seeAlso">Memcache::connect()</a> - Establece una conexión con el servidor Memcache</span></li>
+    <li><span class="function"><a href="#memcache.pconnect" class="function" rel="rdfs-seeAlso">Memcache::pconnect()</a> - Establece una conexión persistente a un servidor de caché</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.connect" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::connect</h1>
+  <h1 class="refname">memcache_connect</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::connect</span> -- <span class="refname">memcache_connect</span> — <span class="dc-title">Establece una conexión con el servidor Memcache</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.connect-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::connect</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_connect</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::connect()</strong></span> establece una conexión con el servidor
+   de caché <code class="literal">Memcache</code>.
+   La conexión, que ha sido abierta utilizando la función
+   <span class="function"><strong>Memcache::connect()</strong></span> se cerrará automáticamente
+   al final del script. No obstante, puede cerrarse manualmente utilizando la
+   función <span class="function"><a href="#memcache.close" class="function">Memcache::close()</a></span>.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.connect-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">host</code></dt>
+     <dd>
+      <p class="para">
+       Especifica el host donde memcache escucha para conexiones. Este parámetro puede también
+       especificar otros transportes como <code class="literal">unix:///path/to/memcached.sock</code>
+       para utilizar sockets Unix, y en este caso, <code class="parameter">port</code> debe también
+       ser definido a <code class="literal">0</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">port</code></dt>
+     <dd>
+      <p class="para">
+       Especifica el puerto donde memcache escucha para conexiones. Defina este parámetro a
+       <code class="literal">0</code> al utilizar sockets Unix.
+      </p>
+      <p class="para">
+       Nota: Por omisión, el parámetro <code class="parameter">port</code> toma el valor
+       de la opción de configuración <a href="#ini.memcache.default-port" class="link">memcache.default_port</a>
+       si no es especificado. Por esta razón, es recomendable especificar explícitamente
+       el puerto al llamar a este método.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">timeout</code></dt>
+     <dd>
+      <p class="para">
+       Valor en segundos que será utilizado para conectarse al demonio.
+       Considérelo dos veces antes de cambiar el valor por omisión de un segundo
+       - podría perderse todos los beneficios de utilizar la caché si la conexión es demasiado lenta.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.connect-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.connect-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4665">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::connect()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API procedimental */<br><br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br><br></span><span style="color: #0000BB">$memcache </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-memcache.connect-notes">
+  <h3 class="title">Notas</h3>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    Cuando el parámetro <code class="parameter">port</code> no es especificado, este método
+    tomará el valor de la directiva de configuración INI
+    <a href="#ini.memcache.default-port" class="link">memcache.default_port</a>.
+    Si este valor ha sido modificado en otro lugar de la aplicación,
+    esto puede conducir a resultados inesperados: por esta razón, es recomendable
+    siempre especificar el puerto explícitamente al llamar al método.
+   </p>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.connect-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.pconnect" class="function" rel="rdfs-seeAlso">Memcache::pconnect()</a> - Establece una conexión persistente a un servidor de caché</span></li>
+    <li><span class="function"><a href="#memcache.close" class="function" rel="rdfs-seeAlso">Memcache::close()</a> - Cierra la conexión con el servidor Memcache</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.decrement" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::decrement</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::decrement</span> — <span class="dc-title">Disminuye el valor de un elemento</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.decrement-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::decrement</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$value</code><span class="initializer"> = 1</span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_decrement</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$value</code><span class="initializer"> = 1</span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::decrement()</strong></span> disminuye el valor del
+   elemento por <code class="parameter">value</code>. De manera similar
+   a la función <span class="function"><a href="#memcache.increment" class="function">memcache::increment()</a></span>, el valor actual
+   del elemento se convierte primero en numérico y luego
+   se resta el valor <code class="parameter">value</code>.
+   </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     El nuevo valor del elemento no puede ser inferior a cero.
+    </p>
+   </blockquote>
+   <blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     No se debe utilizar la función <span class="function"><strong>Memcache::decrement()</strong></span> con elementos
+     almacenados comprimidos. En este caso, la llamada a la función
+     <span class="function"><a href="#memcache.get" class="function">Memcache::get()</a></span> fallará.
+    </p>
+   </blockquote>
+   <span class="function"><strong>Memcache::decrement()</strong></span> <em>no crea</em>
+   un elemento si no existe.
+  
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.decrement-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       Clave del elemento a disminuir.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       Disminuye el elemento por <code class="parameter">value</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.decrement-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el valor del nuevo elemento en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.decrement-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4666">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::decrement()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* disminución del elemento por 2 */<br></span><span style="color: #0000BB">$new_value </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_decrement</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">'test_item'</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* disminución del elemento por 3 */<br></span><span style="color: #0000BB">$new_value </span><span style="color: #007700">= </span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">decrement</span><span style="color: #007700">(</span><span style="color: #DD0000">'test_item'</span><span style="color: #007700">, </span><span style="color: #0000BB">3</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+    </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.decrement-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.increment" class="function" rel="rdfs-seeAlso">Memcache::increment()</a> - Incrementa el valor de un elemento</span></li>
+    <li><span class="function"><a href="#memcache.replace" class="function" rel="rdfs-seeAlso">Memcache::replace()</a> - Remplaza el valor de un elemento existente</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.delete" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::delete</h1>
+  <h1 class="refname">memcache_delete</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::delete</span> -- <span class="refname">memcache_delete</span> — <span class="dc-title">Elimina un elemento del servidor de caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.delete-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::delete</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$exptime</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_delete</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$exptime</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::delete()</strong></span> elimina el elemento identificado por la clave
+   <code class="parameter">key</code>.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.delete-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave asociada al elemento a eliminar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">exptime</code></dt>
+     <dd>
+      <p class="para">
+       Este argumento obsoleto no es soportado, y su valor por omisión es
+       <code class="literal">0</code> segundos. No se debe utilizar este argumento.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.delete-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-memcache.delete-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>PECL memcache 3.0.5</td>
+      <td>
+       El argumento <code class="parameter">exptime</code> está deprecado y no debería ser proporcionado.
+       Valores distintos de <code class="literal">0</code> pueden provocar errores inesperados.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.delete-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4667">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::delete()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* el elemento será eliminado por el servidor de caché */<br></span><span style="color: #0000BB">memcache_delete</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">'key_to_delete'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">delete</span><span style="color: #007700">(</span><span style="color: #DD0000">'key_to_delete'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.delete-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.set" class="function" rel="rdfs-seeAlso">Memcache::set()</a> - Almacena datos en el servidor de caché</span></li>
+    <li><span class="function"><a href="#memcache.replace" class="function" rel="rdfs-seeAlso">Memcache::replace()</a> - Remplaza el valor de un elemento existente</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.flush" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::flush</h1>
+  <p class="verinfo">(PECL memcache &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Memcache::flush</span> — <span class="dc-title">Elimina todos los elementos existentes en el servidor de caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.flush-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::flush</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_flush</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::flush()</strong></span> invalida inmediatamente todos los
+   elementos existentes en el servidor de caché. <span class="function"><strong>Memcache::flush()</strong></span>
+   no libera ningún recurso actualmente, solo marca todos los
+   elementos como expirados, por lo que la memoria ocupada será
+   reutilizada con nuevos elementos.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.flush-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.flush-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.flush-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4668">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::flush()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">memcache_flush</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br><br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">flush</span><span style="color: #007700">();<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.get" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::get</h1>
+  <h1 class="refname">memcache_get</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::get</span> -- <span class="refname">memcache_get</span> — <span class="dc-title">Recupera un elemento del servidor de caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.get-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::get</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$flags</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>Memcache::get</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter reference">&amp;$flags</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_get</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$flags</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_get</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter reference">&amp;$flags</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::get()</strong></span> devuelve los datos previamente almacenados
+   en el elemento identificado por la clave <code class="parameter">key</code> si existe en
+   el servidor en el momento de la llamada.
+  </p>
+
+  <p class="para">
+   Se puede pasar un array de claves a la función
+   <span class="function"><strong>Memcache::get()</strong></span> para obtener un array de valores. El
+   array resultante contendrá solo las parejas clave-valor encontradas.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.get-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave o el array de claves a recuperar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       Si este argumento está presente, representará los flags de los valores
+       a recuperar. Estos flags son los mismos que los dados en el ejemplo de
+       la función <span class="function"><a href="#memcache.set" class="function">Memcache::set()</a></span>. El byte menos significativo
+       del valor está reservado para un uso interno de pecl/memcache
+       (por ejemplo, para indicar el estado de compresión y serialización).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.get-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el valor asociado con el argumento <code class="parameter">key</code>
+   o un array que contiene las parejas clave/valor encontradas cuando el argumento
+   <code class="parameter">key</code> es un <span class="type"><a href="#language.types.array" class="type array">array</a></span>. Devuelve <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error,
+   si el argumento <code class="parameter">key</code> no es encontrado,
+   o si el argumento <code class="parameter">key</code> es un <span class="type"><a href="#language.types.array" class="type array">array</a></span> vacío.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.get-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4669">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::get()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$var </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_get</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">'some_key'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$var </span><span style="color: #007700">= </span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">get</span><span style="color: #007700">(</span><span style="color: #DD0000">'some_key'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/*<br>También se puede utilizar un array de claves como argumento.<br>Si un elemento de este tipo no es encontrado en el servidor, el array<br>resultado simplemente no incluirá dicha clave.<br>*/<br><br>/* API procedimental */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$var </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_get</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, Array(</span><span style="color: #DD0000">'some_key'</span><span style="color: #007700">, </span><span style="color: #DD0000">'another_key'</span><span style="color: #007700">));<br><br></span><span style="color: #FF8000">/* API Orientada a Objetos */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$var </span><span style="color: #007700">= </span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">get</span><span style="color: #007700">(Array(</span><span style="color: #DD0000">'some_key'</span><span style="color: #007700">, </span><span style="color: #DD0000">'second_key'</span><span style="color: #007700">));<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.getextendedstats" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::getExtendedStats</h1>
+  <h1 class="refname">memcache_get_extended_stats</h1>
+  <p class="verinfo">(PECL memcache &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Memcache::getExtendedStats</span> -- <span class="refname">memcache_get_extended_stats</span> — <span class="dc-title">Recupera estadísticas de todos los servidores en la lista</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.getextendedstats-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::getExtendedStats</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$slabid</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$limit</code><span class="initializer"> = 100</span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_get_extended_stats</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$slabid</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$limit</code><span class="initializer"> = 100</span></span><br>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::getExtendedStats()</strong></span> devuelve un array
+   asociativo de dos dimensiones con estadísticas de servidores. Las claves
+   de los arrays corresponden a host:puerto de los servidores y los valores
+   contienen estadísticas del servidor individual. Un servidor en fallo
+   tendrá sus entradas correspondientes fijadas a <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta función fue añadida en la versión 2.0.0 de Memcache.
+   </p>
+  </blockquote>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.getextendedstats-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">type</code></dt>
+     <dd>
+      <p class="para">
+       El tipo de estadísticas a recuperar. Los valores válidos son: <code class="literal">"reset"</code>,
+       <code class="literal">"malloc"</code>, <code class="literal">"maps"</code>, <code class="literal">"cachedump"</code>,
+       <code class="literal">"slabs"</code>, <code class="literal">"items"</code>, <code class="literal">"sizes"</code>.
+       Según las especificaciones del protocolo memcached, estos argumentos opcionales
+       pueden ser modificados según las necesidades de los desarrolladores de memcache.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">slabid</code></dt>
+     <dd>
+      <p class="para">
+       Utilizado con el parámetro <code class="parameter">type</code> definido como cachedump
+       para identificar el slab a recuperar. El comando cachedump
+       sobrecarga el servidor y solo debe ser utilizado con fines de depuración.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">limit</code></dt>
+     <dd>
+      <p class="para">
+       Utilizado con el parámetro <code class="parameter">type</code> definido como
+       cachedump para limitar el número de entradas a recuperar.
+      </p>
+     </dd>
+    
+   </dl>
+   <div class="warning"><strong class="warning">Advertencia</strong>
+    <p class="simpara">
+     El tipo de estadística cachedump ha sido eliminado del proceso
+     memcached por razones de seguridad.
+    </p>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.getextendedstats-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array asociativo con estadísticas de los servidores o
+   <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.getextendedstats-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4670">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::getExtendedStats()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>    $memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br>    </span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addServer</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addServer</span><span style="color: #007700">(</span><span style="color: #DD0000">'failed_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br>    </span><span style="color: #0000BB">$stats </span><span style="color: #007700">= </span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getExtendedStats</span><span style="color: #007700">();<br>    </span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$stats</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [memcache_host:11211] =&gt; Array
+        (
+            [pid] =&gt; 3756
+            [uptime] =&gt; 603011
+            [time] =&gt; 1133810435
+            [version] =&gt; 1.1.12
+            [rusage_user] =&gt; 0.451931
+            [rusage_system] =&gt; 0.634903
+            [curr_items] =&gt; 2483
+            [total_items] =&gt; 3079
+            [bytes] =&gt; 2718136
+            [curr_connections] =&gt; 2
+            [total_connections] =&gt; 807
+            [connection_structures] =&gt; 13
+            [cmd_get] =&gt; 9748
+            [cmd_set] =&gt; 3096
+            [get_hits] =&gt; 5976
+            [get_misses] =&gt; 3772
+            [bytes_read] =&gt; 3448968
+            [bytes_written] =&gt; 2318883
+            [limit_maxbytes] =&gt; 33554432
+        )
+
+    [failed_host:11211] =&gt; false
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.getextendedstats-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.getversion" class="function" rel="rdfs-seeAlso">Memcache::getVersion()</a> - Devuelve el número de versión del servidor</span></li>
+    <li><span class="function"><a href="#memcache.getstats" class="function" rel="rdfs-seeAlso">Memcache::getStats()</a> - Lee las estadísticas del servidor</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.getserverstatus" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::getServerStatus</h1>
+  <h1 class="refname">memcache_get_server_status</h1>
+  <p class="verinfo">(PECL memcache &gt;= 2.1.0)</p><p class="refpurpose"><span class="refname">Memcache::getServerStatus</span> -- <span class="refname">memcache_get_server_status</span> — <span class="dc-title">Retorna el estado del servidor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.getserverstatus-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::getServerStatus</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 11211</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_get_server_status</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 11211</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::getServerStatus()</strong></span> retorna el estado
+   en línea/fuera de línea del servidor.
+  </p>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta función fue añadida en la versión 2.1.0 de Memcache.
+   </p>
+  </blockquote>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.getserverstatus-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">host</code></dt>
+     <dd>
+      <p class="para">
+       Apunta al host donde memcache escucha conexiones.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">port</code></dt>
+     <dd>
+      <p class="para">
+       Apunta al puerto donde memcache escucha conexiones.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.getserverstatus-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna el estado del servidor. 0 si el servidor falla, un valor
+   diferente de cero en caso contrario.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.getserverstatus-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4671">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::getServerStatus()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br></span><span style="color: #0000BB">$memcache </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addServer</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getServerStatus</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">$memcache </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">memcache_get_server_status</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache</span><span style="color: #007700">, </span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.getserverstatus-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.addserver" class="function" rel="rdfs-seeAlso">Memcache::addServer()</a> - Añade un servidor memcache a la lista de conexión</span></li>
+    <li><span class="function"><a href="#memcache.setserverparams" class="function" rel="rdfs-seeAlso">Memcache::setServerParams()</a> - Modifica los parámetros y los estados del servidor durante la ejecución</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.getstats" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::getStats</h1>
+  <h1 class="refname">memcache_get_stats</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::getStats</span> -- <span class="refname">memcache_get_stats</span> — <span class="dc-title">Lee las estadísticas del servidor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.getstats-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::getStats</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$slabid</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$limit</code><span class="initializer"> = 100</span></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_get_stats</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$slabid</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$limit</code><span class="initializer"> = 100</span></span><br>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::getStats()</strong></span> devuelve un array asociativo
+   con las estadísticas del servidor. Los índices del array corresponden
+   a los parámetros de estadísticas, y el valor asociado es el valor de
+   dichas estadísticas.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.getstats-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">type</code></dt>
+     <dd>
+      <p class="para">
+       El tipo de estadísticas a recuperar. Los valores válidos son {<code class="literal">"reset"</code>,
+       <code class="literal">"malloc"</code>, <code class="literal">"maps"</code>, <code class="literal">"cachedump"</code>,
+       <code class="literal">"slabs"</code>, <code class="literal">"items"</code>, <code class="literal">"sizes"</code>.
+       Según las especificaciones del protocolo memcached, estos argumentos opcionales son susceptibles
+       de ser modificados según las necesidades de los desarrolladores de memcache.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">slabid</code></dt>
+     <dd>
+      <p class="para">
+       Utilizado con el parámetro <code class="parameter">type</code> definido como cachedump
+       para identificar el slab a recuperar. El comando cachedump
+       sobrecarga el servidor y no debe ser utilizado excepto para depuración.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">limit</code></dt>
+     <dd>
+      <p class="para">
+       Utilizado con el parámetro <code class="parameter">type</code> definido como
+       cachedump para limitar el número de entradas a recuperar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.getstats-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array asociativo de las estadísticas de un servidor o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.getstats-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.getversion" class="function" rel="rdfs-seeAlso">Memcache::getVersion()</a> - Devuelve el número de versión del servidor</span></li>
+    <li><span class="function"><a href="#memcache.getextendedstats" class="function" rel="rdfs-seeAlso">Memcache::getExtendedStats()</a> - Recupera estadísticas de todos los servidores en la lista</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.getversion" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::getVersion</h1>
+  <h1 class="refname">memcache_get_version</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::getVersion</span> -- <span class="refname">memcache_get_version</span> — <span class="dc-title">Devuelve el número de versión del servidor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.getversion-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::getVersion</strong></span>(): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_get_version</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::getVersion()</strong></span> devuelve una cadena con
+   el número de versión del servidor.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.getversion-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.getversion-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un <span class="type"><a href="#language.types.string" class="type string">string</a></span> con el número de versión del servidor o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.getversion-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4672">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::getVersion()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br></span><span style="color: #0000BB">$memcache </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getVersion</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">$memcache </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">memcache_get_version</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.getversion-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.getextendedstats" class="function" rel="rdfs-seeAlso">Memcache::getExtendedStats()</a> - Recupera estadísticas de todos los servidores en la lista</span></li>
+    <li><span class="function"><a href="#memcache.getstats" class="function" rel="rdfs-seeAlso">Memcache::getStats()</a> - Lee las estadísticas del servidor</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.increment" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::increment</h1>
+  <h1 class="refname">memcache_increment</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::increment</span> -- <span class="refname">memcache_increment</span> — <span class="dc-title">Incrementa el valor de un elemento</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.increment-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::increment</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$value</code><span class="initializer"> = 1</span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_increment</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$value</code><span class="initializer"> = 1</span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::increment()</strong></span> incrementa el valor de un elemento
+   identificado por la clave <code class="parameter">key</code> por el valor
+   <code class="parameter">value</code>. Si el elemento identificado por la clave
+   <code class="parameter">key</code> no es de tipo numérico y no puede
+   ser convertido a número, el valor de este elemento será definido a
+   <code class="parameter">value</code>.
+   <span class="function"><strong>Memcache::increment()</strong></span> <em>no crea</em>
+   un elemento si no existe.
+   </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     No se debe utilizar <span class="function"><strong>memcache::increment()</strong></span> con elementos
+     almacenados comprimidos. En este caso, la llamada a la función
+     <span class="function"><a href="#memcache.get" class="function">Memcache::get()</a></span> fallará.
+    </p>
+   </blockquote>
+  
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.increment-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       Clave del elemento a incrementar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       Incrementa el elemento por <code class="parameter">value</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.increment-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el valor del nuevo elemento en caso de éxito  o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.increment-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4673">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::increment()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* incrementación del contador en 2 */<br></span><span style="color: #0000BB">$current_value </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_increment</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">'counter'</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* incrementación del contador en 3 */<br></span><span style="color: #0000BB">$current_value </span><span style="color: #007700">= </span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">increment</span><span style="color: #007700">(</span><span style="color: #DD0000">'counter'</span><span style="color: #007700">, </span><span style="color: #0000BB">3</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.increment-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.decrement" class="function" rel="rdfs-seeAlso">Memcache::decrement()</a> - Disminuye el valor de un elemento</span></li>
+    <li><span class="function"><a href="#memcache.replace" class="function" rel="rdfs-seeAlso">Memcache::replace()</a> - Remplaza el valor de un elemento existente</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.pconnect" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::pconnect</h1>
+  <h1 class="refname">memcache_pconnect</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.4.0)</p><p class="refpurpose"><span class="refname">Memcache::pconnect</span> -- <span class="refname">memcache_pconnect</span> — <span class="dc-title">Establece una conexión persistente a un servidor de caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.pconnect-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::pconnect</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>Memcache::pconnect</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::pconnect()</strong></span> es similar a la función
+   <span class="function"><a href="#memcache.connect" class="function">Memcache::connect()</a></span> con la diferencia de que la conexión
+   será persistente.
+   Este tipo de conexión no se cierra al finalizar el script ni por la función
+   <span class="function"><a href="#memcache.close" class="function">Memcache::close()</a></span>.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.pconnect-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">host</code></dt>
+     <dd>
+      <p class="para">
+       Especifica el host donde memcache escucha conexiones. Este parámetro
+       puede también especificar otros transportes como
+       <code class="literal">unix:///path/to/memcached.sock</code>
+       para utilizar sockets Unix, y, en este caso,
+       <code class="parameter">port</code> debe también definirse
+       a <code class="literal">0</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">port</code></dt>
+     <dd>
+      <p class="para">
+       Especifica el puerto donde memcache escucha conexiones. Defínase este parámetro
+       a <code class="literal">0</code> al utilizar sockets Unix.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">timeout</code></dt>
+     <dd>
+      <p class="para">
+       Valor en segundos que será utilizado para conectarse al demonio.
+       Piénsese dos veces antes de cambiar el valor por omisión de un segundo
+       - podría perderse todos los beneficios de utilizar la caché
+       si la conexión es demasiado lenta.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.pconnect-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna un objeto Memcache o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.pconnect-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4674">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::pconnect()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_pconnect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br><br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">pconnect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.pconnect-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.connect" class="function" rel="rdfs-seeAlso">Memcache::connect()</a> - Establece una conexión con el servidor Memcache</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.replace" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::replace</h1>
+  <h1 class="refname">memcache_replace</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::replace</span> -- <span class="refname">memcache_replace</span> — <span class="dc-title">Remplaza el valor de un elemento existente</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.replace-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::replace</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$var</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flag</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$expire</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_replace</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$var</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flag</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$expire</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::replace()</strong></span> se utiliza para reemplazar el valor
+   de un elemento identificado por la clave <code class="parameter">key</code>. En el caso de
+   que el elemento identificado por la clave <code class="parameter">key</code> no exista,
+   la función <span class="function"><strong>Memcache::replace()</strong></span> devolverá <strong><code><a href="#constant.false">false</a></code></strong>.
+   Por lo demás, la función <span class="function"><strong>Memcache::replace()</strong></span> funciona
+   de la misma manera que la función <span class="function"><a href="#memcache.set" class="function">Memcache::set()</a></span>.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.replace-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave que se asociará con el elemento.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">var</code></dt>
+     <dd>
+      <p class="para">
+       La variable a almacenar. Los strings y los integers se almacenan como tales,
+       los demás tipos se almacenan de manera serializada.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flag</code></dt>
+     <dd>
+      <p class="para">
+       Utilice <strong><code><a href="#constant.memcache-compressed">MEMCACHE_COMPRESSED</a></code></strong> para almacenar
+       el elemento comprimido (utiliza zlib).
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">expire</code></dt>
+     <dd>
+      <p class="para">
+       Tiempo de expiración para el elemento. Si es igual a <code class="literal">0</code>, el elemento
+       no expirará nunca. También puede utilizarse un timestamp Unix o un número de
+       segundos a partir de la fecha actual, pero en este último caso, el número de
+       segundos no debe exceder 2592000 (30 días).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.replace-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.replace-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4675">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::replace()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API procedimental */<br></span><span style="color: #0000BB">memcache_replace</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">"test_key"</span><span style="color: #007700">, </span><span style="color: #DD0000">"some variable"</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">30</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">replace</span><span style="color: #007700">(</span><span style="color: #DD0000">"test_key"</span><span style="color: #007700">, </span><span style="color: #DD0000">"some variable"</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">30</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.replace-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.set" class="function" rel="rdfs-seeAlso">Memcache::set()</a> - Almacena datos en el servidor de caché</span></li>
+    <li><span class="function"><a href="#memcache.add" class="function" rel="rdfs-seeAlso">Memcache::add()</a> - Añade un elemento en el servidor</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.set" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::set</h1>
+  <h1 class="refname">memcache_set</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">Memcache::set</span> -- <span class="refname">memcache_set</span> — <span class="dc-title">Almacena datos en el servidor de caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.set-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::set</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$var</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flag</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$expire</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_set</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$var</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flag</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$expire</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::set()</strong></span> almacena el elemento <code class="parameter">var</code>
+   con la clave <code class="parameter">key</code> en el servidor de caché.
+   El parámetro <code class="parameter">expire</code> representa el tiempo de expiración en segundos
+   del elemento. Si vale 0, el elemento no expirará nunca (aunque el servidor
+   de caché no garantiza que este elemento siempre estará almacenado, puede ser
+   eliminado de la caché para hacer espacio para otros elementos).
+   Puede utilizarse la constante <strong><code><a href="#constant.memcache-compressed">MEMCACHE_COMPRESSED</a></code></strong>
+   como valor del parámetro <code class="parameter">flag</code>
+   si se desea utilizar la compresión en tiempo real (utilizando la biblioteca zlib).
+   </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     Tenga en cuenta que los recursos (es decir, identificadores de archivos o conexiones)
+     no pueden almacenarse en la caché, ya que no pueden ser representados linealmente.
+    </p>
+   </blockquote>
+  
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.set-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave que se asociará con el elemento.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">var</code></dt>
+     <dd>
+      <p class="para">
+       La variable a registrar. Los strings y los integers se registran como tales,
+       los demás tipos se registran de manera serializada.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flag</code></dt>
+     <dd>
+      <p class="para">
+       Utilice <strong><code><a href="#constant.memcache-compressed">MEMCACHE_COMPRESSED</a></code></strong> para registrar
+       el elemento comprimido (utiliza zlib).
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">expire</code></dt>
+     <dd>
+      <p class="para">
+       Tiempo de expiración para el elemento. Si es igual a <code class="literal">0</code>, el elemento no expirará.
+       También puede utilizarse un timestamp Unix o un número de segundos a partir de la fecha actual,
+       pero en este último caso, el número de segundos no debe exceder 2592000 (30 días).
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.set-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.set-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4676">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::set()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">/* API procedimental */<br><br>/* conexión al servidor de caché */<br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/*<br>define el valor del elemento identificado por la clave 'var_key' ;<br>utilización del valor 0 para el flag ;<br>la compresión no se utiliza ;<br>el tiempo de expiración es de 30 segundos<br>*/<br></span><span style="color: #0000BB">memcache_set</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">'var_key'</span><span style="color: #007700">, </span><span style="color: #DD0000">'algunas variables'</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">30</span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">memcache_get</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">'var_key'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+   <div class="example" id="example-4677">
+    <p><strong>Ejemplo #2 Ejemplo con <span class="function"><strong>Memcache::set()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">/* API orientada a objetos */<br><br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">/* conexión al servidor de caché */<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/*<br>define el valor del elemento identificado por la clave 'var_key' ;<br>utilización de la compresión en tiempo real ;<br>el tiempo de expiración es de 50 segundos<br>*/<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">set</span><span style="color: #007700">(</span><span style="color: #DD0000">'var_key'</span><span style="color: #007700">, </span><span style="color: #DD0000">'algunas variables grandes'</span><span style="color: #007700">, </span><span style="color: #0000BB">MEMCACHE_COMPRESSED</span><span style="color: #007700">, </span><span style="color: #0000BB">50</span><span style="color: #007700">);<br><br>echo </span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">get</span><span style="color: #007700">(</span><span style="color: #DD0000">'var_key'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.set-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.add" class="function" rel="rdfs-seeAlso">Memcache::add()</a> - Añade un elemento en el servidor</span></li>
+    <li><span class="function"><a href="#memcache.replace" class="function" rel="rdfs-seeAlso">Memcache::replace()</a> - Remplaza el valor de un elemento existente</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.setcompressthreshold" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::setCompressThreshold</h1>
+  <p class="verinfo">(PECL memcache &gt;= 2.0.0)</p><p class="refpurpose"><span class="refname">Memcache::setCompressThreshold</span> — <span class="dc-title">Activa la compresión automática de los valores grandes</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.setcompressthreshold-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::setCompressThreshold</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$threshold</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.float" class="type float">float</a></span> <code class="parameter">$min_savings</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_set_compress_threshold</strong></span>(<span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$threshold</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.float" class="type float">float</a></span> <code class="parameter">$min_savings</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::setCompressThreshold()</strong></span> activa la compresión
+   automática de los valores grandes.
+  </p>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta función fue añadida en la versión 2.0.0 de Memcache.
+   </p>
+  </blockquote>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.setcompressthreshold-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">threshold</code></dt>
+     <dd>
+      <p class="para">
+       Controla el tamaño mínimo de valor antes de intentar comprimir
+       automáticamente.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">min_saving</code></dt>
+     <dd>
+      <p class="para">
+       Especifica el número mínimo de ahorro para guardar los valores
+       comprimidos. El valor proporcionado debe estar entre 0 y 1. El valor
+       por omisión es 0.2, lo que da un mínimo de 20% de ahorro de compresión.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.setcompressthreshold-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.setcompressthreshold-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4678">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::setCompressThreshold()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br><br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addServer</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">setCompressThreshold</span><span style="color: #007700">(</span><span style="color: #0000BB">20000</span><span style="color: #007700">, </span><span style="color: #0000BB">0.2</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API procedimental */<br><br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #0000BB">memcache_set_compress_threshold</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #0000BB">20000</span><span style="color: #007700">, </span><span style="color: #0000BB">0.2</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="memcache.setserverparams" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Memcache::setServerParams</h1>
+  <h1 class="refname">memcache_set_server_params</h1>
+  <p class="verinfo">(PECL memcache &gt;= 2.1.0)</p><p class="refpurpose"><span class="refname">Memcache::setServerParams</span> -- <span class="refname">memcache_set_server_params</span> — <span class="dc-title">Modifica los parámetros y los estados del servidor durante la ejecución</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-memcache.setserverparams-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>Memcache::setServerParams</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 11211</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$retry_interval</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$status</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.callable" class="type callable">callable</a></span> <code class="parameter">$failure_callback</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>memcache_set_server_params</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#class.memcache" class="type Memcache">Memcache</a></span> <code class="parameter">$memcache</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 11211</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$retry_interval</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$status</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.callable" class="type callable">callable</a></span> <code class="parameter">$failure_callback</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>Memcache::setServerParams()</strong></span> modifica los parámetros del
+   servidor durante la ejecución.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Esta función fue añadida en la versión 2.1.0 de Memcache.
+   </p>
+  </blockquote>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-memcache.setserverparams-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">host</code></dt>
+     <dd>
+      <p class="para">
+       Host donde memcache escucha para conexiones.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">port</code></dt>
+     <dd>
+      <p class="para">
+       Puerto donde memcache escucha para conexiones.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">timeout</code></dt>
+     <dd>
+      <p class="para">
+       Valor en segundos que será utilizado para conectarse al demonio.
+       Piénselo dos veces antes de cambiar el valor por omisión de un segundo
+       - podría perderse todos los beneficios del uso de la caché si la conexión es demasiado lenta.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">retry_interval</code></dt>
+     <dd>
+      <p class="para">
+       Controla cuántas veces se intentará conectar a un servidor que falla:
+       el valor por omisión es de 15 segundos. Si este parámetro vale -1, no se realizará
+       ningún nuevo intento. Ni este parámetro, ni el parámetro
+       <code class="parameter">persistent</code> tienen efecto cuando esta extensión
+       es cargada dinámicamente mediante la función <span class="function"><a href="#function.dl" class="function">dl()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">status</code></dt>
+     <dd>
+      <p class="para">
+       Controla si el servidor debe ser indicado como en línea.
+       Cuando este parámetro vale <strong><code><a href="#constant.false">false</a></code></strong> y el parámetro <code class="parameter">retry_interval</code>
+       vale -1, permite mantener un servidor fallido en la lista
+       y no afectará al algoritmo de distribución de claves. Las peticiones
+       para este servidor fallarán inmediatamente según la configuración del
+       parámetro <code class="parameter">memcache.allow_failover</code>.
+       Por omisión, este parámetro vale <strong><code><a href="#constant.true">true</a></code></strong>, significando que el servidor debe ser
+       considerado como en línea.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">failure_callback</code></dt>
+     <dd>
+      <p class="para">
+       Permite al usuario especificar una función de devolución de llamada para
+       manejar un error. La función es ejecutada antes de alcanzar el límite de intentos.
+       La función toma dos argumentos; el nombre del host y el puerto
+       del servidor que falló.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-memcache.setserverparams-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-memcache.setserverparams-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4679">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>Memcache::setServerParams()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">function </span><span style="color: #0000BB">_callback_memcache_failure</span><span style="color: #007700">(</span><span style="color: #0000BB">$host</span><span style="color: #007700">, </span><span style="color: #0000BB">$port</span><span style="color: #007700">) {<br>    print </span><span style="color: #DD0000">"memcache '</span><span style="color: #0000BB">$host</span><span style="color: #DD0000">:</span><span style="color: #0000BB">$port</span><span style="color: #DD0000">' falló"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #FF8000">/* API orientada a objetos */<br><br></span><span style="color: #0000BB">$memcache </span><span style="color: #007700">= new </span><span style="color: #0000BB">Memcache</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">// Añade el servidor en modo fuera de línea<br></span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">addServer</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">, -</span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Reemplaza el servidor en línea<br></span><span style="color: #0000BB">$memcache</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">setServerParams</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">15</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">, </span><span style="color: #DD0000">'_callback_memcache_failure'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* API procedimental */<br><br></span><span style="color: #0000BB">$memcache_obj </span><span style="color: #007700">= </span><span style="color: #0000BB">memcache_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">);<br></span><span style="color: #0000BB">memcache_set_server_params</span><span style="color: #007700">(</span><span style="color: #0000BB">$memcache_obj</span><span style="color: #007700">, </span><span style="color: #DD0000">'memcache_host'</span><span style="color: #007700">, </span><span style="color: #0000BB">11211</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">15</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">, </span><span style="color: #DD0000">'_callback_memcache_failure'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-memcache.setserverparams-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#memcache.addserver" class="function" rel="rdfs-seeAlso">Memcache::addServer()</a> - Añade un servidor memcache a la lista de conexión</span></li>
+    <li><span class="function"><a href="#memcache.getserverstatus" class="function" rel="rdfs-seeAlso">Memcache::getServerStatus()</a> - Retorna el estado del servidor</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#memcache.add">Memcache::add</a> — Añade un elemento en el servidor</li><li><a href="#memcache.addserver">Memcache::addServer</a> — Añade un servidor memcache a la lista de conexión</li><li><a href="#memcache.close">Memcache::close</a> — Cierra la conexión con el servidor Memcache</li><li><a href="#memcache.connect">Memcache::connect</a> — Establece una conexión con el servidor Memcache</li><li><a href="#memcache.decrement">Memcache::decrement</a> — Disminuye el valor de un elemento</li><li><a href="#memcache.delete">Memcache::delete</a> — Elimina un elemento del servidor de caché</li><li><a href="#memcache.flush">Memcache::flush</a> — Elimina todos los elementos existentes en el servidor de caché</li><li><a href="#memcache.get">Memcache::get</a> — Recupera un elemento del servidor de caché</li><li><a href="#memcache.getextendedstats">Memcache::getExtendedStats</a> — Recupera estadísticas de todos los servidores en la lista</li><li><a href="#memcache.getserverstatus">Memcache::getServerStatus</a> — Retorna el estado del servidor</li><li><a href="#memcache.getstats">Memcache::getStats</a> — Lee las estadísticas del servidor</li><li><a href="#memcache.getversion">Memcache::getVersion</a> — Devuelve el número de versión del servidor</li><li><a href="#memcache.increment">Memcache::increment</a> — Incrementa el valor de un elemento</li><li><a href="#memcache.pconnect">Memcache::pconnect</a> — Establece una conexión persistente a un servidor de caché</li><li><a href="#memcache.replace">Memcache::replace</a> — Remplaza el valor de un elemento existente</li><li><a href="#memcache.set">Memcache::set</a> — Almacena datos en el servidor de caché</li><li><a href="#memcache.setcompressthreshold">Memcache::setCompressThreshold</a> — Activa la compresión automática de los valores grandes</li><li><a href="#memcache.setserverparams">Memcache::setServerParams</a> — Modifica los parámetros y los estados del servidor durante la ejecución</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="ref.memcache" class="reference"><hr>
+ <h1 class="title">Funciones de Memcache</h1>
+ 
+
+
+<div id="function.memcache-debug" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">memcache_debug</h1>
+  <p class="verinfo">(PECL memcache &gt;= 0.2.0)</p><p class="refpurpose"><span class="refname">memcache_debug</span> — <span class="dc-title">Activa/desactiva debug output</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.memcache-debug-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>memcache_debug</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$on_off</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>memcache_debug()</strong></span> activa el debug output si el parámetro
+   <code class="parameter">on_off</code> es igual a <strong><code><a href="#constant.true">true</a></code></strong> y lo desactiva si es igual a
+   <strong><code><a href="#constant.false">false</a></code></strong>.
+   </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     Solamente se puede acceder a <span class="function"><strong>memcache_debug()</strong></span> si PHP fue compilado
+     con la opción --enable-debug y en este caso siempre retorna <strong><code><a href="#constant.true">true</a></code></strong>.
+     De lo contrario, esta función no tiene ningún efecto y siempre devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+    </p>
+   </blockquote>
+  
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.memcache-debug-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">on_off</code></dt>
+     <dd>
+      <p class="para">
+       Activa debug output si es igual a <strong><code><a href="#constant.true">true</a></code></strong>.
+       Desactiva debug output si es igual a <strong><code><a href="#constant.false">false</a></code></strong>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.memcache-debug-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si PHP fue compilado con la opción --enable-debug, de lo contrario
+   devuelve <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.memcache-debug">memcache_debug</a> — Activa/desactiva debug output</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.memcache">Introducción</a></li><li><a href="#memcache.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#memcache.requirements">Requerimientos</a></li><li><a href="#memcache.installation">Instalación</a></li><li><a href="#memcache.ini">Configuración en tiempo de ejecución</a></li><li><a href="#memcache.resources">Tipos de recursos</a></li></ul></li><li><a href="#memcache.constants">Constantes predefinidas</a></li><li><a href="#memcache.examples">Ejemplos</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#memcache.examples-overview">Uso básico</a></li></ul></li><li><a href="#class.memcache">Memcache</a> — La clase Memcache<ul class="chunklist chunklist_book chunklist_children"><li><a href="#memcache.add">Memcache::add</a> — Añade un elemento en el servidor</li><li><a href="#memcache.addserver">Memcache::addServer</a> — Añade un servidor memcache a la lista de conexión</li><li><a href="#memcache.close">Memcache::close</a> — Cierra la conexión con el servidor Memcache</li><li><a href="#memcache.connect">Memcache::connect</a> — Establece una conexión con el servidor Memcache</li><li><a href="#memcache.decrement">Memcache::decrement</a> — Disminuye el valor de un elemento</li><li><a href="#memcache.delete">Memcache::delete</a> — Elimina un elemento del servidor de caché</li><li><a href="#memcache.flush">Memcache::flush</a> — Elimina todos los elementos existentes en el servidor de caché</li><li><a href="#memcache.get">Memcache::get</a> — Recupera un elemento del servidor de caché</li><li><a href="#memcache.getextendedstats">Memcache::getExtendedStats</a> — Recupera estadísticas de todos los servidores en la lista</li><li><a href="#memcache.getserverstatus">Memcache::getServerStatus</a> — Retorna el estado del servidor</li><li><a href="#memcache.getstats">Memcache::getStats</a> — Lee las estadísticas del servidor</li><li><a href="#memcache.getversion">Memcache::getVersion</a> — Devuelve el número de versión del servidor</li><li><a href="#memcache.increment">Memcache::increment</a> — Incrementa el valor de un elemento</li><li><a href="#memcache.pconnect">Memcache::pconnect</a> — Establece una conexión persistente a un servidor de caché</li><li><a href="#memcache.replace">Memcache::replace</a> — Remplaza el valor de un elemento existente</li><li><a href="#memcache.set">Memcache::set</a> — Almacena datos en el servidor de caché</li><li><a href="#memcache.setcompressthreshold">Memcache::setCompressThreshold</a> — Activa la compresión automática de los valores grandes</li><li><a href="#memcache.setserverparams">Memcache::setServerParams</a> — Modifica los parámetros y los estados del servidor durante la ejecución</li></ul></li><li><a href="#ref.memcache">Funciones de Memcache</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.memcache-debug">memcache_debug</a> — Activa/desactiva debug output</li></ul></li></ul></div>

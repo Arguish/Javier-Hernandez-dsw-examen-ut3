@@ -1,0 +1,2114 @@
+<div id="book.stomp" class="book"><hr>
+ 
+ <h1 class="title">Cliente Stomp</h1>
+ 
+
+ <div id="intro.stomp" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Esta extensión permite a aplicaciones php comunicarse con cualquier Message Brokers compatible con el protocolo STOMP,
+   a través de sencillas interfaces procedurales orientadas a objetos.
+   <a href="https://stomp.github.io/" class="link external">» Stomp official site</a>
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="stomp.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#stomp.requirements">Requerimientos</a></li><li><a href="#stomp.installation">Instalación</a></li><li><a href="#stomp.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#stomp.resources">Tipos de recursos</a></li></ul>
+
+
+ <div id="stomp.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">El paquete <a href="http://www.openssl.org/" class="link external">» OpenSSL</a> &gt;= 0.9.6 y la extensión <a href="#book.openssl" class="link">openssl</a> pueden ser también requeridos para utilizar stomp a través de SSL.</p>
+ </div>
+<hr>
+
+
+ <div id="stomp.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/stomp" class="link external">» https://pecl.php.net/package/stomp</a>
+  </p>
+ </div>
+<hr>
+
+
+ 
+ 
+
+
+
+<div id="stomp.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Opciones de configuración Stomp</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.stomp.default-broker" class="link">stomp.default_broker</a></td>
+      <td>tcp://localhost:61613</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.stomp.default-connection-timeout-sec" class="link">stomp.default_connection_timeout_sec</a></td>
+      <td>2</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.stomp.default-connection-timeout-usec" class="link">stomp.default_connection_timeout_usec</a></td>
+      <td>0</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td></td>
+     </tr>
+
+
+     <tr>
+      <td><a href="#ini.stomp.default-read-timeout-sec" class="link">stomp.default_read_timeout_sec</a></td>
+      <td>2</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.stomp.default-read-timeout-usec" class="link">stomp.default_read_timeout_usec</a></td>
+      <td>0</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td></td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+ <p class="para">
+  </p><dl>
+   
+    <dt id="ini.stomp.default-broker">
+     <code class="parameter">stomp.default_broker</code>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      La URI broker por defecto a utilizar cuando conectemos a el message broker si otra URI no es especificada.
+     </p>
+    </dd>
+   
+   
+    <dt id="ini.stomp.default-connection-timeout-sec">
+     <code class="parameter">stomp.default_connection_timeout_sec</code>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Los segundos parte del tiempo de espera de la solicitud de conexión por defecto.
+     </p>
+    </dd>
+   
+   
+    <dt id="ini.stomp.default-connection-timeout-usec">
+     <code class="parameter">stomp.default_connection_timeout_usec</code>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Los microsegundos parte del tiempo de espera de la solicitud de conexión por defecto.
+     </p>
+    </dd>
+   
+   
+    <dt id="ini.stomp.default-read-timeout-sec">
+     <code class="parameter">stomp.default_read_timeout_sec</code>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Los segundos parte del tiempo de espera de lectura por defecto.
+     </p>
+    </dd>
+   
+   
+    <dt id="ini.stomp.default-read-timeout-usec">
+     <code class="parameter">stomp.default_read_timeout_usec</code>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+    </dt>
+    <dd>
+     <p class="para">
+      Los microsegundos parte del tiempo de espera de lectura por defecto.
+     </p>
+    </dd>
+   
+  </dl>
+ 
+</div>
+<hr>
+
+
+ 
+
+ 
+ <div id="stomp.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+    Sólo hay un tipo de recurso utilizado en la extensión stomp - este es
+    el identificador de enlace para una conexión stomp.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+
+<div id="stomp.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+
+ 
+  <p class="para">
+   </p><div class="example" id="example-4850">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$queue  </span><span style="color: #007700">= </span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$msg    </span><span style="color: #007700">= </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* Enviar un mensaje a la cola 'foo' */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">send</span><span style="color: #007700">(</span><span style="color: #0000BB">$queue</span><span style="color: #007700">, </span><span style="color: #0000BB">$msg</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* suscribirse a mensajes de la cola 'foo' */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">subscribe</span><span style="color: #007700">(</span><span style="color: #0000BB">$queue</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* leer una trama (frame) */<br></span><span style="color: #0000BB">$frame </span><span style="color: #007700">= </span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">readFrame</span><span style="color: #007700">();<br><br>if (</span><span style="color: #0000BB">$frame</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">body </span><span style="color: #007700">=== </span><span style="color: #0000BB">$msg</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$frame</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000">/* reconocer que la trama (frame) fue recibida */<br>    </span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">ack</span><span style="color: #007700">(</span><span style="color: #0000BB">$frame</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #FF8000">/* cerrar conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+object(StompFrame)#2 (3) {
+  ["command"]=&gt;
+  string(7) "MESSAGE"
+  ["headers"]=&gt;
+  array(5) {
+    ["message-id"]=&gt;
+    string(41) "ID:php.net-55293-1257226743606-4:2:-1:1:1"
+    ["destination"]=&gt;
+    string(10) "/queue/foo"
+    ["timestamp"]=&gt;
+    string(13) "1257226805828"
+    ["expires"]=&gt;
+    string(1) "0"
+    ["priority"]=&gt;
+    string(1) "0"
+  }
+  ["body"]=&gt;
+  string(3) "bar"
+}
+</pre></div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4851">
+   <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$queue  </span><span style="color: #007700">= </span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$msg    </span><span style="color: #007700">= </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'ssl://localhost:61612'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* iniciar una transacción */<br></span><span style="color: #0000BB">stomp_begin</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Enviar un mensaje a la cola 'foo' */<br></span><span style="color: #0000BB">stomp_send</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #0000BB">$queue</span><span style="color: #007700">, </span><span style="color: #0000BB">$msg</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'transaction' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">));<br><br></span><span style="color: #FF8000">/* confirmar una transacción */<br></span><span style="color: #0000BB">stomp_commit</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* suscribirse a mensajes de la cola 'foo' */<br></span><span style="color: #0000BB">stomp_subscribe</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #0000BB">$queue</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* leer una trama (frame) */<br></span><span style="color: #0000BB">$frame </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_read_frame</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$frame</span><span style="color: #007700">[</span><span style="color: #DD0000">'body'</span><span style="color: #007700">] === </span><span style="color: #0000BB">$msg</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$frame</span><span style="color: #007700">);<br><br>    </span><span style="color: #FF8000">/* reconocer que la trama fue recibida */<br>    </span><span style="color: #0000BB">stomp_ack</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #0000BB">$frame</span><span style="color: #007700">[</span><span style="color: #DD0000">'headers'</span><span style="color: #007700">][</span><span style="color: #DD0000">'message-id'</span><span style="color: #007700">]);<br>}<br><br></span><span style="color: #FF8000">/* cerrar conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+array(3) {
+  ["command"]=&gt;
+  string(7) "MESSAGE"
+  ["body"]=&gt;
+  string(3) "bar"
+  ["headers"]=&gt;
+  array(6) {
+    ["transaction"]=&gt;
+    string(2) "t1"
+    ["message-id"]=&gt;
+    string(41) "ID:php.net-55293-1257226743606-4:3:-1:1:1"
+    ["destination"]=&gt;
+    string(10) "/queue/foo"
+    ["timestamp"]=&gt;
+    string(13) "1257227037059"
+    ["expires"]=&gt;
+    string(1) "0"
+    ["priority"]=&gt;
+    string(1) "0"
+  }
+}
+</pre></div>
+    </div>
+   </div>
+  
+ 
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+
+<div id="ref.stomp" class="reference"><hr>
+ <h1 class="title">Funciones Stomp</h1>
+
+ 
+
+
+
+<div id="function.stomp-connect-error" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">stomp_connect_error</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.3.0)</p><p class="refpurpose"><span class="refname">stomp_connect_error</span> — <span class="dc-title">Devuelve una cadena descripción de el último error al conectar</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.stomp-connect-error-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>stomp_connect_error</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve una cadena descripción de el último error al conectar.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.stomp-connect-error-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.stomp-connect-error-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Una cadena que describe el error, o <strong><code><a href="#constant.null">null</a></code></strong> si no hay errores.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.stomp-connect-error-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4852">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>stomp_connect_error()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'http://localhost:61613'</span><span style="color: #007700">);<br><br>if(!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Connection failed: Invalid Broker URI scheme</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.stomp-version" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">stomp_version</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">stomp_version</span> — <span class="dc-title">Obtiene la versión actual de la extensión stomp</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.stomp-version-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>stomp_version</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve una cadena que contiene la versión actual de la extensión stomp.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.stomp-version-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.stomp-version-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+    Esta devuelve la versión actual de la extensión stomp
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.stomp-version-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4853">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>stomp_version()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">stomp_version</span><span style="color: #007700">());<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">string(5) "0.2.0"</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.stomp-connect-error">stomp_connect_error</a> — Devuelve una cadena descripción de el último error al conectar</li><li><a href="#function.stomp-version">stomp_version</a> — Obtiene la versión actual de la extensión stomp</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+
+<div id="class.stomp" class="reference"><hr>
+
+ <h1 class="title">La clase Stomp</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL stomp &gt;= 0.1.0)</p>
+
+
+  <div class="section" id="stomp.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+Representa una conexión entre PHP y un Message Brokers que cumpla con las normas del protocolo Stomp.
+   </p>
+  </div>
+
+
+  <div class="section" id="stomp.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">Stomp</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="constructorsynopsis dc-description">
+    <span class="modifier">public</span> <span class="methodname"><a href="#stomp.construct" class="methodname">__construct</a></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$broker</code><span class="initializer"> = ini_get("stomp.default_broker_uri")</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$username</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$password</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span><br>)</div>
+
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.abort" class="methodname">abort</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_abort</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.ack" class="methodname">ack</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$msg</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_ack</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$msg</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.begin" class="methodname">begin</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_begin</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.commit" class="methodname">commit</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_commit</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_connect</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$broker</code><span class="initializer"> = ini_get("stomp.default_broker_uri")</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$username</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$password</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_close</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.error" class="methodname">error</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_error</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.getreadtimeout" class="methodname">getReadTimeout</a></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_get_read_timeout</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.getsessionid" class="methodname">getSessionId</a></span>(): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_get_session_id</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.hasframe" class="methodname">hasFrame</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_has_frame</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.readframe" class="methodname">readFrame</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class_name</code><span class="initializer"> = "stompFrame"</span></span>): <span class="type"><a href="#class.stompframe" class="type stompframe">stompframe</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_read_frame</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.send" class="methodname">send</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$msg</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_send</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$msg</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.setreadtimeout" class="methodname">setReadTimeout</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$seconds</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$microseconds</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_set_read_timeout</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$seconds</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$microseconds</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.subscribe" class="methodname">subscribe</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_subscribe</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.unsubscribe" class="methodname">unsubscribe</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_unsubscribe</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+    <div class="destructorsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.destruct" class="methodname">__destruct</a></span>()</div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+<div id="stomp.abort" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::abort</h1>
+  <h1 class="refname">stomp_abort</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::abort</span> -- <span class="refname">stomp_abort</span> — <span class="dc-title">Deshacer una transacción en curso</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.abort-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::abort</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_abort</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Deshacer una transacción en curso.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.abort-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+    
+     <dt><code class="parameter">transaction_id</code></dt>
+     <dd>
+      <p class="para">
+       La transacción a abortar.
+      </p>
+     </dd>
+    
+    <dt><code class="parameter">headers</code></dt><dd><p class="para">Array asociativo que contiene los encabezados adicionales (ejemplo: receipt).</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.abort-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.abort-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4854">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* iniciar una transacción */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">begin</span><span style="color: #007700">(</span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* enviar un mensaje a la cola */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">send</span><span style="color: #007700">(</span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">, </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'transaction' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">));<br><br></span><span style="color: #FF8000">/* deshacer/abortar */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">abort</span><span style="color: #007700">(</span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4855">
+    <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* iniciar una transacción */<br></span><span style="color: #0000BB">stomp_begin</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* enviar un mensaje a la cola 'foo' */<br></span><span style="color: #0000BB">stomp_send</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">, </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'transaction' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">));<br><br></span><span style="color: #FF8000">/* deshacer/abortar */<br></span><span style="color: #0000BB">stomp_abort</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-stomp.abort-notes">
+  <h3 class="title">Notas</h3>
+  <div class="tip"><strong class="tip">Sugerencia</strong><p class="simpara">Stomp es, por naturaleza, asíncrono. Una comunicación síncrona puede ser implementada añadiendo un encabezado <code class="literal">receipt</code>. Esto hará que los métodos no devuelvan nada hasta que el mensaje de confirmación no haya sido recibido o hasta que el tiempo de espera no sea alcanzado.</p></div>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="stomp.ack" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::ack</h1>
+  <h1 class="refname">stomp_ack</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::ack</span> -- <span class="refname">stomp_ack</span> — <span class="dc-title">Confirmar la recepción y el consumo de un mensaje</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.ack-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::ack</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$msg</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_ack</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$msg</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Confirmar el consumo de un mensaje desde una suscripción enviando el cliente una trama ACK de confirmación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.ack-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+    
+     <dt><code class="parameter">msg</code></dt>
+     <dd>
+      <p class="para">
+       El mensaje/Id del mensaje a ser confirmado.
+      </p>
+     </dd>
+    
+    <dt><code class="parameter">headers</code></dt><dd><p class="para">Array asociativo que contiene los encabezados adicionales (ejemplo: receipt).</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.ack-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.ack-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4856">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$queue  </span><span style="color: #007700">= </span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$msg    </span><span style="color: #007700">= </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* enviar un mensaje a la cola 'foo' */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">send</span><span style="color: #007700">(</span><span style="color: #0000BB">$queue</span><span style="color: #007700">, </span><span style="color: #0000BB">$msg</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* suscribirse a mensajes de la cola 'foo' */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">subscribe</span><span style="color: #007700">(</span><span style="color: #0000BB">$queue</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* leer una trama */<br></span><span style="color: #0000BB">$frame </span><span style="color: #007700">= </span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">readFrame</span><span style="color: #007700">();<br><br>if (</span><span style="color: #0000BB">$frame</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">body </span><span style="color: #007700">=== </span><span style="color: #0000BB">$msg</span><span style="color: #007700">) {<br>    </span><span style="color: #FF8000">/* confirmar que la trama fue recibida */<br>    </span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">ack</span><span style="color: #007700">(</span><span style="color: #0000BB">$frame</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #FF8000">/* eliminar la suscripción */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">unsubscribe</span><span style="color: #007700">(</span><span style="color: #0000BB">$queue</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4857">
+    <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$queue  </span><span style="color: #007700">= </span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$msg    </span><span style="color: #007700">= </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">;<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'ssl://localhost:61612'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* iniciar una transacción */<br></span><span style="color: #0000BB">stomp_begin</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* enviar un mensaje a la cola 'foo' */<br></span><span style="color: #0000BB">stomp_send</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #0000BB">$queue</span><span style="color: #007700">, </span><span style="color: #0000BB">$msg</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'transaction' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">));<br><br></span><span style="color: #FF8000">/* validar una transacción */<br></span><span style="color: #0000BB">stomp_commit</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* suscribirse a mensajes de la cola 'foo' */<br></span><span style="color: #0000BB">stomp_subscribe</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #0000BB">$queue</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* leer una trama */<br></span><span style="color: #0000BB">$frame </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_read_frame</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$frame</span><span style="color: #007700">[</span><span style="color: #DD0000">'body'</span><span style="color: #007700">] === </span><span style="color: #0000BB">$msg</span><span style="color: #007700">) {<br>    </span><span style="color: #FF8000">/* confirmar que la trama fue recibida */<br>    </span><span style="color: #0000BB">stomp_ack</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #0000BB">$frame</span><span style="color: #007700">[</span><span style="color: #DD0000">'headers'</span><span style="color: #007700">][</span><span style="color: #DD0000">'message-id'</span><span style="color: #007700">]);<br>}<br><br></span><span style="color: #FF8000">/* eliminar la suscripción */<br></span><span style="color: #0000BB">stomp_unsubscribe</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #0000BB">$queue</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-stomp.ack-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">Un encabezado de transacción puede ser especificado, indicando que la confirmación de los mensajes debe ser parte de la transacción.</p></blockquote>
+  <div class="tip"><strong class="tip">Sugerencia</strong><p class="simpara">Stomp es, por naturaleza, asíncrono. Una comunicación síncrona puede ser implementada añadiendo un encabezado <code class="literal">receipt</code>. Esto hará que los métodos no devuelvan nada hasta que el mensaje de confirmación no haya sido recibido o hasta que el tiempo de espera no sea alcanzado.</p></div>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="stomp.begin" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::begin</h1>
+  <h1 class="refname">stomp_begin</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::begin</span> -- <span class="refname">stomp_begin</span> — <span class="dc-title">Iniciar una transacción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.begin-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::begin</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_begin</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Inicia una transacción.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.begin-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+    
+     <dt><code class="parameter">transaction_id</code></dt>
+     <dd>
+      <p class="para">
+       La identificación de la transacción.
+      </p>
+     </dd>
+    
+    <dt><code class="parameter">headers</code></dt><dd><p class="para">Array asociativo que contiene los encabezados adicionales (ejemplo: receipt).</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.begin-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.begin-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   Vea <span class="function"><a href="#stomp.commit" class="function">stomp_commit()</a></span> o <span class="function"><a href="#stomp.abort" class="function">stomp_abort()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-stomp.begin-notes">
+  <h3 class="title">Notas</h3>
+  <div class="tip"><strong class="tip">Sugerencia</strong><p class="simpara">Stomp es, por naturaleza, asíncrono. Una comunicación síncrona puede ser implementada añadiendo un encabezado <code class="literal">receipt</code>. Esto hará que los métodos no devuelvan nada hasta que el mensaje de confirmación no haya sido recibido o hasta que el tiempo de espera no sea alcanzado.</p></div>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="stomp.commit" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::commit</h1>
+  <h1 class="refname">stomp_commit</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::commit</span> -- <span class="refname">stomp_commit</span> — <span class="dc-title">Validar una transacción en curso</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.commit-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::commit</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_commit</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$transaction_id</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Valida una transacción en curso.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.commit-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+    
+     <dt><code class="parameter">transaction_id</code></dt>
+     <dd>
+      <p class="para">
+       La identificación de la transacción.
+      </p>
+     </dd>
+    
+    <dt><code class="parameter">headers</code></dt><dd><p class="para">Array asociativo que contiene los encabezados adicionales (ejemplo: receipt).</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.commit-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.commit-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4858">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* iniciar una transacción */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">begin</span><span style="color: #007700">(</span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* enviar un mensaje a la cola */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">send</span><span style="color: #007700">(</span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">, </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'transaction' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">));<br><br></span><span style="color: #FF8000">/* validar */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">commit</span><span style="color: #007700">(</span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4859">
+    <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* iniciar una transacción */<br></span><span style="color: #0000BB">stomp_begin</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* enviar un mensaje a la cola 'foo' */<br></span><span style="color: #0000BB">stomp_send</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">, </span><span style="color: #DD0000">'bar'</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'transaction' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">));<br><br></span><span style="color: #FF8000">/* validar */<br></span><span style="color: #0000BB">stomp_commit</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'t1'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-stomp.commit-notes">
+  <h3 class="title">Notas</h3>
+  <div class="tip"><strong class="tip">Sugerencia</strong><p class="simpara">Stomp es, por naturaleza, asíncrono. Una comunicación síncrona puede ser implementada añadiendo un encabezado <code class="literal">receipt</code>. Esto hará que los métodos no devuelvan nada hasta que el mensaje de confirmación no haya sido recibido o hasta que el tiempo de espera no sea alcanzado.</p></div>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="stomp.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::__construct</h1>
+  <h1 class="refname">stomp_connect</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::__construct</span> -- <span class="refname">stomp_connect</span> — <span class="dc-title">Abre una conexión</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.construct-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (constructor):</p>
+  <div class="constructorsynopsis dc-description">
+    <span class="modifier">public</span> <span class="methodname"><strong>Stomp::__construct</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$broker</code><span class="initializer"> = ini_get("stomp.default_broker_uri")</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$username</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$password</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span><br>)</div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+   <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_connect</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$broker</code><span class="initializer"> = ini_get("stomp.default_broker_uri")</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$username</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$password</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   Abre una conexión con un Message Broker compatible con el protocolo STOMP.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">broker</code></dt>
+     <dd>
+      <p class="para">
+       La URI broker
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">username</code></dt>
+     <dd>
+      <p class="para">
+       El nombre de usuario.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">password</code></dt>
+     <dd>
+      <p class="para">
+       La contraseña.
+      </p>
+     </dd>
+    
+    <dt><code class="parameter">headers</code></dt><dd><p class="para">Array asociativo que contiene los encabezados adicionales (ejemplo: receipt).</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.construct-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">Un encabezado de transacción puede ser especificado, indicando que la confirmación de los mensajes debe ser parte de la transacción.</p></blockquote>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-stomp.construct-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>PECL stomp 1.0.1</td>
+       <td>
+        El paramétro <code class="parameter">headers</code> fue añadido
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.construct-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4860">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4861">
+    <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'ssl://localhost:61612'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="stomp.destruct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::__destruct</h1>
+  <h1 class="refname">stomp_close</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::__destruct</span> -- <span class="refname">stomp_close</span> — <span class="dc-title">Cierra una conexión stomp</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.destruct-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (destructor):</p>
+  <div class="destructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::__destruct</strong></span>()</div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_close</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Cierra una conexión previamente abierta.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.destruct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.destruct-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.destruct-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   Vea <span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="stomp.error" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::error</h1>
+  <h1 class="refname">stomp_error</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::error</span> -- <span class="refname">stomp_error</span> — <span class="dc-title">Obtiene el último error stomp</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.error-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::error</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_error</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene el último error stomp.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.error-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+     <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.error-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una cadena de error o <strong><code><a href="#constant.false">false</a></code></strong> si no hay errores.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.error-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4862">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">error</span><span style="color: #007700">());<br><br>if (!</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">abort</span><span style="color: #007700">(</span><span style="color: #DD0000">'unknown-transaction'</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'receipt' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'foo'</span><span style="color: #007700">))) {<br>    </span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+     <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(false)
+string(43) "Invalid transaction id: unknown-transaction"</pre>
+</div>
+     </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4863">
+    <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'ssl://localhost:61612'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">stomp_error</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">));<br><br>if (!</span><span style="color: #0000BB">stomp_abort</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'unknown-transaction'</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'receipt' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'foo'</span><span style="color: #007700">))) {<br>    </span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">stomp_error</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">));<br>}<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+     <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(false)
+string(43) "Invalid transaction id: unknown-transaction"</pre>
+</div>
+     </div>
+   </div>
+  
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="stomp.getreadtimeout" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::getReadTimeout</h1>
+  <h1 class="refname">stomp_get_read_timeout</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.3.0)</p><p class="refpurpose"><span class="refname">Stomp::getReadTimeout</span> -- <span class="refname">stomp_get_read_timeout</span> — <span class="dc-title">Obtener la lectura del tiempo de espera de la solicitud</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.getreadtimeout-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::getReadTimeout</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_get_read_timeout</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene la lectura del tiempo de espera de la solicitud
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.getreadtimeout-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.getreadtimeout-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array con dos elementos: sec y usec.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.getreadtimeout-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4864">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getReadTimeout</span><span style="color: #007700">());<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+     <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(2) {
+  ["sec"]=&gt;
+  int(2)
+  ["usec"]=&gt;
+  int(0)
+}</pre>
+</div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4865">
+    <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'ssl://localhost:61612'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">stomp_get_read_timeout</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">));<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+     <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(2) {
+  ["sec"]=&gt;
+  int(2)
+  ["usec"]=&gt;
+  int(0)
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="stomp.getsessionid" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::getSessionId</h1>
+  <h1 class="refname">stomp_get_session_id</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::getSessionId</span> -- <span class="refname">stomp_get_session_id</span> — <span class="dc-title">Obtiene el identificador de sesión actual stomp</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.getsessionid-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+    <span class="modifier">public</span> <span class="methodname"><strong>Stomp::getSessionId</strong></span>(): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_get_session_id</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene el identificador de sesión actual stomp.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.getsessionid-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.getsessionid-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span> session id on success o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.getsessionid-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4866">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getSessionId</span><span style="color: #007700">());<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+     <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">string(35) "ID:php.net-52873-1257291895530-4:14"</pre>
+</div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4867">
+    <p><strong>Ejemplo #2 Estilo procedural</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'ssl://localhost:61612'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">stomp_get_session_id</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">));<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+     <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">string(35) "ID:php.net-52873-1257291895530-4:14"</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="stomp.hasframe" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::hasFrame</h1>
+  <h1 class="refname">stomp_has_frame</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::hasFrame</span> -- <span class="refname">stomp_has_frame</span> — <span class="dc-title">Indica si existe o no una trama lista para leer</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.hasframe-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::hasFrame</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_has_frame</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Indica si existe o no una trama lista para leer.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.hasframe-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.hasframe-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si hay una trama lista para leer, o <strong><code><a href="#constant.false">false</a></code></strong> en caso contrario.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="stomp.readframe" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::readFrame</h1>
+  <h1 class="refname">stomp_read_frame</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::readFrame</span> -- <span class="refname">stomp_read_frame</span> — <span class="dc-title">Leer la siguiente trama</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.readframe-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::readFrame</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$class_name</code><span class="initializer"> = "stompFrame"</span></span>): <span class="type"><a href="#class.stompframe" class="type stompframe">stompframe</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_read_frame</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Lee la siguiente trama. Es posible crear una instancia de un objeto de una clase específica, y pasar parámetros al constructor de esa clase.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.readframe-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+    
+     <dt><code class="parameter">class_name</code></dt>
+     <dd>
+      <p class="para">
+        El nombre de la clase a instanciar. Si no se especifica, un objeto stompFrame es devuelto.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.readframe-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">Un encabezado de transacción puede ser especificado, indicando que la confirmación de los mensajes debe ser parte de la transacción.</p></blockquote>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-stomp.readframe-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>PECL stomp 0.4.0</td>
+       <td>
+        El parámentro <code class="parameter">class_name</code> fue añadido.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.readframe-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4868">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* suscribirse a mensajes de la cola 'foo' */<br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">subscribe</span><span style="color: #007700">(</span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* leer una trama */<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">readFrame</span><span style="color: #007700">());<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+     <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">object(StompFrame)#2 (3) {
+  ["command"]=&gt;
+  string(7) "MESSAGE"
+  ["headers"]=&gt;
+  array(5) {
+    ["message-id"]=&gt;
+    string(41) "ID:php.net-55293-1257226743606-4:2:-1:1:1"
+    ["destination"]=&gt;
+    string(10) "/queue/foo"
+    ["timestamp"]=&gt;
+    string(13) "1257226805828"
+    ["expires"]=&gt;
+    string(1) "0"
+    ["priority"]=&gt;
+    string(1) "0"
+  }
+  ["body"]=&gt;
+  string(3) "bar"
+}</pre>
+</div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4869">
+    <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'ssl://localhost:61612'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #FF8000">/* suscribirse a mensajes de la cola 'foo' */<br></span><span style="color: #0000BB">stomp_subscribe</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #DD0000">'/queue/foo'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* leer una trama */<br></span><span style="color: #0000BB">$frame </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_read_frame</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+     <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">array(3) {
+  ["command"]=&gt;
+  string(7) "MESSAGE"
+  ["body"]=&gt;
+  string(3) "bar"
+  ["headers"]=&gt;
+  array(6) {
+    ["transaction"]=&gt;
+    string(2) "t1"
+    ["message-id"]=&gt;
+    string(41) "ID:php.net-55293-1257226743606-4:3:-1:1:1"
+    ["destination"]=&gt;
+    string(10) "/queue/foo"
+    ["timestamp"]=&gt;
+    string(13) "1257227037059"
+    ["expires"]=&gt;
+    string(1) "0"
+    ["priority"]=&gt;
+    string(1) "0"
+  }
+}</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="stomp.send" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::send</h1>
+  <h1 class="refname">stomp_send</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::send</span> -- <span class="refname">stomp_send</span> — <span class="dc-title">Envía un mensaje</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.send-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::send</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$msg</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_send</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$msg</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Envía un mensaje a el Message Broker.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.send-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+    
+     <dt><code class="parameter">destination</code></dt>
+     <dd>
+      <p class="para">
+       A dónde eenviar el mensaje
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">msg</code></dt>
+     <dd>
+      <p class="para">
+       Mensaje a enviar.
+      </p>
+     </dd>
+    
+    <dt><code class="parameter">headers</code></dt><dd><p class="para">Array asociativo que contiene los encabezados adicionales (ejemplo: receipt).</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.send-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.send-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   Vea <span class="function"><a href="#stomp.ack" class="function">stomp_ack()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-stomp.send-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">Un encabezado de transacción puede ser especificado, indicando que la confirmación de los mensajes debe ser parte de la transacción.</p></blockquote>
+  <div class="tip"><strong class="tip">Sugerencia</strong><p class="simpara">Stomp es, por naturaleza, asíncrono. Una comunicación síncrona puede ser implementada añadiendo un encabezado <code class="literal">receipt</code>. Esto hará que los métodos no devuelvan nada hasta que el mensaje de confirmación no haya sido recibido o hasta que el tiempo de espera no sea alcanzado.</p></div>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="stomp.setreadtimeout" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::setReadTimeout</h1>
+  <h1 class="refname">stomp_set_read_timeout</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.3.0)</p><p class="refpurpose"><span class="refname">Stomp::setReadTimeout</span> -- <span class="refname">stomp_set_read_timeout</span> — <span class="dc-title">Establecer el tiempo de espera de lectura</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.setreadtimeout-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::setReadTimeout</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$seconds</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$microseconds</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_set_read_timeout</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$seconds</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$microseconds</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Establece el tiempo de espera de lectura.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.setreadtimeout-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+    
+     <dt><code class="parameter">seconds</code></dt>
+     <dd>
+      <p class="para">
+       Los segundos parte de el tiempo de espera a ser establecido.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">microseconds</code></dt>
+     <dd>
+      <p class="para">
+       Los microsegundos parte de el tiempo de espera a ser establecido.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.setreadtimeout-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.setreadtimeout-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4870">
+    <p><strong>Ejemplo #1 Estilo orientado a objetos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #007700">try {<br>    </span><span style="color: #0000BB">$stomp </span><span style="color: #007700">= new </span><span style="color: #0000BB">Stomp</span><span style="color: #007700">(</span><span style="color: #DD0000">'tcp://localhost:61613'</span><span style="color: #007700">);<br>} catch(</span><span style="color: #0000BB">StompException $e</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$e</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">getMessage</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #0000BB">$stomp</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">setReadTimeout</span><span style="color: #007700">(</span><span style="color: #0000BB">10</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #007700">unset(</span><span style="color: #0000BB">$stomp</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-4871">
+    <p><strong>Ejemplo #2 Estilo procedimental</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">/* conexión */<br></span><span style="color: #0000BB">$link </span><span style="color: #007700">= </span><span style="color: #0000BB">stomp_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'ssl://localhost:61612'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* comprobar la conexión */<br></span><span style="color: #007700">if (!</span><span style="color: #0000BB">$link</span><span style="color: #007700">) {<br>    die(</span><span style="color: #DD0000">'Connection failed: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">stomp_connect_error</span><span style="color: #007700">());<br>}<br><br></span><span style="color: #0000BB">stomp_set_read_timeout</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">, </span><span style="color: #0000BB">10</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* cerrar la conexión */<br></span><span style="color: #0000BB">stomp_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$link</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="stomp.subscribe" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::subscribe</h1>
+  <h1 class="refname">stomp_subscribe</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::subscribe</span> -- <span class="refname">stomp_subscribe</span> — <span class="dc-title">Registrarse para escuchar a un destino dado</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.subscribe-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::subscribe</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_subscribe</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Registrarse para escuchar a un destino dado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.subscribe-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+    
+     <dt><code class="parameter">destination</code></dt>
+     <dd>
+      <p class="para">
+       Destino al que suscribirse.
+      </p>
+     </dd>
+    
+    <dt><code class="parameter">headers</code></dt><dd><p class="para">Array asociativo que contiene los encabezados adicionales (ejemplo: receipt).</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.subscribe-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.subscribe-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   Vea <span class="function"><a href="#stomp.ack" class="function">stomp_ack()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-stomp.subscribe-notes">
+  <h3 class="title">Notas</h3>
+  <div class="tip"><strong class="tip">Sugerencia</strong><p class="simpara">Stomp es, por naturaleza, asíncrono. Una comunicación síncrona puede ser implementada añadiendo un encabezado <code class="literal">receipt</code>. Esto hará que los métodos no devuelvan nada hasta que el mensaje de confirmación no haya sido recibido o hasta que el tiempo de espera no sea alcanzado.</p></div>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="stomp.unsubscribe" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Stomp::unsubscribe</h1>
+  <h1 class="refname">stomp_unsubscribe</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">Stomp::unsubscribe</span> -- <span class="refname">stomp_unsubscribe</span> — <span class="dc-title">Dar de baja una suscripción existente</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.unsubscribe-description">
+  <h3 class="title">Descripción</h3>
+  <p class="para">Estilo orientado a objetos (método):</p>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Stomp::unsubscribe</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">Estilo procedimental:</p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>stomp_unsubscribe</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$link</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$destination</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Dar de baja una suscripción existente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.unsubscribe-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    <dt><code class="parameter">link</code></dt><dd><p class="para">Estilo procedimental únicamente: El identificador stomp devuelto por la función<span class="function"><a href="#stomp.construct" class="function">stomp_connect()</a></span>.</p></dd>
+    
+     <dt><code class="parameter">destination</code></dt>
+     <dd>
+      <p class="para">
+       Suscripción a eliminar
+      </p>
+     </dd>
+    
+    <dt><code class="parameter">headers</code></dt><dd><p class="para">Array asociativo que contiene los encabezados adicionales (ejemplo: receipt).</p></dd>
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.unsubscribe-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-stomp.unsubscribe-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   Vea <span class="function"><a href="#stomp.ack" class="function">stomp_ack()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-stomp.unsubscribe-notes">
+  <h3 class="title">Notas</h3>
+  <div class="tip"><strong class="tip">Sugerencia</strong><p class="simpara">Stomp es, por naturaleza, asíncrono. Una comunicación síncrona puede ser implementada añadiendo un encabezado <code class="literal">receipt</code>. Esto hará que los métodos no devuelvan nada hasta que el mensaje de confirmación no haya sido recibido o hasta que el tiempo de espera no sea alcanzado.</p></div>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#stomp.abort">Stomp::abort</a> — Deshacer una transacción en curso</li><li><a href="#stomp.ack">Stomp::ack</a> — Confirmar la recepción y el consumo de un mensaje</li><li><a href="#stomp.begin">Stomp::begin</a> — Iniciar una transacción</li><li><a href="#stomp.commit">Stomp::commit</a> — Validar una transacción en curso</li><li><a href="#stomp.construct">Stomp::__construct</a> — Abre una conexión</li><li><a href="#stomp.destruct">Stomp::__destruct</a> — Cierra una conexión stomp</li><li><a href="#stomp.error">Stomp::error</a> — Obtiene el último error stomp</li><li><a href="#stomp.getreadtimeout">Stomp::getReadTimeout</a> — Obtener la lectura del tiempo de espera de la solicitud</li><li><a href="#stomp.getsessionid">Stomp::getSessionId</a> — Obtiene el identificador de sesión actual stomp</li><li><a href="#stomp.hasframe">Stomp::hasFrame</a> — Indica si existe o no una trama lista para leer</li><li><a href="#stomp.readframe">Stomp::readFrame</a> — Leer la siguiente trama</li><li><a href="#stomp.send">Stomp::send</a> — Envía un mensaje</li><li><a href="#stomp.setreadtimeout">Stomp::setReadTimeout</a> — Establecer el tiempo de espera de lectura</li><li><a href="#stomp.subscribe">Stomp::subscribe</a> — Registrarse para escuchar a un destino dado</li><li><a href="#stomp.unsubscribe">Stomp::unsubscribe</a> — Dar de baja una suscripción existente</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.stompframe" class="reference"><hr>
+
+ <h1 class="title">La clase StompFrame</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL stomp &gt;= 0.1.0)</p>
+
+
+  <div class="section" id="stompframe.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Representa un mensaje el cual fue enviado o recibido desde un Message Brokers que cumple con las normas del protocolo Stomp.
+   </p>
+  </div>
+
+
+  <div class="section" id="stompframe.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">StompFrame</strong>
+     </span>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Propiedades */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">public</span>
+      <var class="varname"><a href="#stompframe.props.command">$<var class="varname">command</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+      <var class="varname"><a href="#stompframe.props.headers">$<var class="varname">headers</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+      <var class="varname"><a href="#stompframe.props.body">$<var class="varname">body</var></a></var>;</div>
+
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="methodname"><a href="#stompframe.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$command</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$body</code><span class="initializer"> = ?</span></span>)</div>
+
+   }</div>
+
+
+  </div>
+
+
+
+  <div class="section" id="stompframe.props">
+   <h2 class="title">Propiedades</h2>
+   <dl>
+    
+     <dt id="stompframe.props.command"><var class="varname">command</var></dt>
+     <dd>
+      <p class="para">Frame command.</p>
+     </dd>
+    
+    
+     <dt id="stompframe.props.headers"><var class="varname">headers</var></dt>
+     <dd>
+      <p class="para">Frame headers (<span class="type"><a href="#language.types.array" class="type array">array</a></span>).</p>
+     </dd>
+    
+    
+     <dt id="stompframe.props.body"><var class="varname">body</var></dt>
+     <dd>
+      <p class="para">Frame body.</p>
+     </dd>
+    
+   </dl>
+  </div>
+
+
+
+ </div>
+
+ 
+
+
+
+<div id="stompframe.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">StompFrame::__construct</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">StompFrame::__construct</span> — <span class="dc-title">Constructor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stompframe.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="methodname"><strong>StompFrame::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$command</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$headers</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$body</code><span class="initializer"> = ?</span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Constructor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stompframe.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">command</code></dt>
+     <dd>
+      <p class="para">
+       Comando del frame
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">headers</code></dt>
+     <dd>
+      <p class="para">
+       encabezados del frame (<span class="type"><a href="#language.types.array" class="type array">array</a></span>).
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">body</code></dt>
+     <dd>
+      <p class="para">
+       cuerpo del frame
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#stompframe.construct">StompFrame::__construct</a> — Constructor</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.stompexception" class="reference"><hr>
+
+ <h1 class="title">La clase StompException</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL stomp &gt;= 0.1.0)</p>
+
+
+  <div class="section" id="stompexception.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+Representa un error proveniente desde la extensión stomp. Vea <a href="#language.exceptions" class="link">Exceptions</a> para obtener más información acerca de las excepciones en PHP.
+   </p>
+  </div>
+
+
+  <div class="section" id="stompexception.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">StompException</strong>
+     </span>
+
+     <span class="ooclass">
+      <span class="modifier">extends</span>
+       <a href="#class.exception" class="classname">Exception</a>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#exception.getmessage" class="methodname">Exception::getMessage</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#exception.getprevious" class="methodname">Exception::getPrevious</a></span>(): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.throwable" class="type Throwable">Throwable</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#exception.getcode" class="methodname">Exception::getCode</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#exception.getfile" class="methodname">Exception::getFile</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#exception.getline" class="methodname">Exception::getLine</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#exception.gettrace" class="methodname">Exception::getTrace</a></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#exception.gettraceasstring" class="methodname">Exception::getTraceAsString</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#exception.tostring" class="methodname">Exception::__toString</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">private</span> <span class="methodname"><a href="#exception.clone" class="methodname">Exception::__clone</a></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#stomp.getdetails" class="methodname">getDetails</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+   }</div>
+
+
+  </div>
+ </div>
+
+ 
+
+
+
+<div id="stomp.getdetails" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">StompException::getDetails</h1>
+  <p class="verinfo">(PECL stomp &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">StompException::getDetails</span> — <span class="dc-title">Obtener detalles de la excepción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-stomp.getdetails-description">
+  <h3 class="title">Descripción</h3>
+   <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>StompException::getDetails</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtener detalles de la excepción.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-stomp.getdetails-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-stomp.getdetails-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+    <span class="type"><a href="#language.types.string" class="type string">string</a></span> que contiene los detalles del error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#stomp.getdetails">StompException::getDetails</a> — Obtener detalles de la excepción</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.stomp">Introducción</a></li><li><a href="#stomp.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#stomp.requirements">Requerimientos</a></li><li><a href="#stomp.installation">Instalación</a></li><li><a href="#stomp.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#stomp.resources">Tipos de recursos</a></li></ul></li><li><a href="#stomp.examples">Ejemplos</a></li><li><a href="#ref.stomp">Funciones Stomp</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.stomp-connect-error">stomp_connect_error</a> — Devuelve una cadena descripción de el último error al conectar</li><li><a href="#function.stomp-version">stomp_version</a> — Obtiene la versión actual de la extensión stomp</li></ul></li><li><a href="#class.stomp">Stomp</a> — La clase Stomp<ul class="chunklist chunklist_book chunklist_children"><li><a href="#stomp.abort">Stomp::abort</a> — Deshacer una transacción en curso</li><li><a href="#stomp.ack">Stomp::ack</a> — Confirmar la recepción y el consumo de un mensaje</li><li><a href="#stomp.begin">Stomp::begin</a> — Iniciar una transacción</li><li><a href="#stomp.commit">Stomp::commit</a> — Validar una transacción en curso</li><li><a href="#stomp.construct">Stomp::__construct</a> — Abre una conexión</li><li><a href="#stomp.destruct">Stomp::__destruct</a> — Cierra una conexión stomp</li><li><a href="#stomp.error">Stomp::error</a> — Obtiene el último error stomp</li><li><a href="#stomp.getreadtimeout">Stomp::getReadTimeout</a> — Obtener la lectura del tiempo de espera de la solicitud</li><li><a href="#stomp.getsessionid">Stomp::getSessionId</a> — Obtiene el identificador de sesión actual stomp</li><li><a href="#stomp.hasframe">Stomp::hasFrame</a> — Indica si existe o no una trama lista para leer</li><li><a href="#stomp.readframe">Stomp::readFrame</a> — Leer la siguiente trama</li><li><a href="#stomp.send">Stomp::send</a> — Envía un mensaje</li><li><a href="#stomp.setreadtimeout">Stomp::setReadTimeout</a> — Establecer el tiempo de espera de lectura</li><li><a href="#stomp.subscribe">Stomp::subscribe</a> — Registrarse para escuchar a un destino dado</li><li><a href="#stomp.unsubscribe">Stomp::unsubscribe</a> — Dar de baja una suscripción existente</li></ul></li><li><a href="#class.stompframe">StompFrame</a> — La clase StompFrame<ul class="chunklist chunklist_book chunklist_children"><li><a href="#stompframe.construct">StompFrame::__construct</a> — Constructor</li></ul></li><li><a href="#class.stompexception">StompException</a> — La clase StompException<ul class="chunklist chunklist_book chunklist_children"><li><a href="#stomp.getdetails">StompException::getDetails</a> — Obtener detalles de la excepción</li></ul></li></ul></div>

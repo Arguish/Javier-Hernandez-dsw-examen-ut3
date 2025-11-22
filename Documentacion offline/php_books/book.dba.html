@@ -1,0 +1,2471 @@
+<div id="book.dba" class="book"><hr>
+ 
+ <h1 class="title">Capa de abstracción de base de datos (estilo dbm)</h1>
+ 
+
+ 
+ <div id="intro.dba" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Estas funciones permiten el acceso a las bases de datos del estilo
+   Berkeley DB.
+  </p>
+  <p class="para">
+   Se trata de una capa de abstracción general para varias bases
+   de datos, basadas en ficheros. Por esta razón
+   las funcionalidades se limitan a acciones comunes soportadas
+   por las bases de datos modernas, como
+   <a href="https://www.oracle.com/database/berkeley-db/db.html" class="link external">» Oracle Berkeley DB</a>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+
+<div id="dba.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#dba.requirements">Requerimientos</a></li><li><a href="#dba.installation">Instalación</a></li><li><a href="#dba.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#dba.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ <div id="dba.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   El comportamiento de ciertos aspectos depende de la implementación de la
+   base de datos subyacente. Las funciones como
+   <span class="function"><a href="#function.dba-optimize" class="function">dba_optimize()</a></span> y <span class="function"><a href="#function.dba-sync" class="function">dba_sync()</a></span>
+   funcionan como se espera para una base de datos, mientras que pueden no hacer nada en otras. Deben descargarse e instalarse los gestores DBA soportados.
+   </p><table class="doctable table">
+    <caption><strong>Lista de gestores DBA</strong></caption>
+    
+     <thead>
+      <tr>
+       <th>Gestor</th>
+       <th>Notas</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td><code class="literal">dbm</code></td>
+       <td>
+        DBM es la más antigua (la original) de las bases de datos
+        de estilo Berkeley DB. Debería evitarse su uso
+        si es posible. No se proporciona soporte para la compatibilidad de las funciones internas a DB2 y gdbm, ya que solo son compatibles a nivel de código fuente, pero no pueden manejar el formato original DBM.
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">ndbm</code></td>
+       <td>
+        Ndbm es un nuevo tipo y más flexible que dbm. Sin embargo,
+        presenta limitaciones arbitrarias de dbm
+        (y por lo tanto, está obsoleto).
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">gdbm</code></td>
+       <td>
+        Gdbm es un <a href="https://ftp.gnu.org/pub/gnu/gdbm/" class="link external">» gestor de
+        bases de datos GNU</a>.
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">db2</code></td>
+       <td>
+        <a href="http://www.sleepycat.com/" class="link external">» Oracle Berkeley
+         DB 2</a>. Se describe como "un toolkit que proporciona
+        soporte de alto rendimiento para bases de datos,
+        tanto del lado cliente como del lado servidor."
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">db3</code></td>
+       <td>
+        <a href="http://www.sleepycat.com/" class="link external">» Oracle Berkeley DB
+         3</a>.
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">db4</code></td>
+       <td>
+        <a href="http://www.sleepycat.com/" class="link external">» Oracle Berkeley DB
+        4 o 5</a>. Esta opción puede
+        utilizarse con BDB 5 a partir de PHP 5.3.3.
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">cdb</code></td>
+       <td>
+        Cdb es un paquete rápido, ligero y fiable para crear y leer
+        bases de datos constantes. Fue creado por el autor
+        de qmail y puede encontrarse en
+        <a href="http://cr.yp.to/cdb.html" class="link external">» http://cr.yp.to/cdb.html</a>. Dado que es "constante",
+        solo se soportarán las operaciones de lectura.
+        También se soporta la escritura (y no la actualización)
+        mediante la biblioteca interna cdb.
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">cdb_make</code></td>
+       <td>
+        Se soporta la escritura (y no la actualización)
+        de archivos cdb cuando se utiliza la biblioteca cdb.
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">flatfile</code></td>
+       <td>
+        Esto está disponible por razones de compatibilidad con
+        la extensión obsoleta <code class="literal">dbm</code>. Sin embargo, puede
+        utilizarse cuando los archivos han sido creados en este formato.
+        Ocurre cuando la configuración no ha logrado encontrar una
+        biblioteca externa.
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">inifile</code></td>
+       <td>
+        Esto está disponible para permitir la modificación de los
+        archivos php.ini desde scripts PHP. Al utilizar archivos ini, pueden pasarse arrays de la forma
+        (0=&gt;grupo,1=&gt;nombre_valor) o strings de la forma
+        "[grupo]nombre_valor" donde el grupo es opcional. Dado que las
+        funciones <span class="function"><a href="#function.dba-firstkey" class="function">dba_firstkey()</a></span> y <span class="function"><a href="#function.dba-nextkey" class="function">dba_nextkey()</a></span>
+        devuelven un string representando la clave, existe una nueva función, <span class="function"><a href="#function.dba-key-split" class="function">dba_key_split()</a></span>,
+        que permite convertir las claves en arrays sin pérdida.
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">qdbm</code></td>
+       <td>
+        La biblioteca qdbm puede descargarse desde
+        <a href="http://fallabs.com/qdbm/index.html" class="link external">» http://fallabs.com/qdbm/index.html</a>.
+       </td>
+      </tr>
+
+
+      <tr>
+       <td><code class="literal">tcadb</code></td>
+       <td>
+        La biblioteca Tokyo Cabinet puede ser
+        descargada desde <a href="http://fallabs.com/tokyocabinet/" class="link external">» http://fallabs.com/tokyocabinet/</a>.
+       </td>
+      </tr>
+
+      <tr>
+       <td><code class="literal">lmdb</code></td>
+       <td>
+        Disponible a partir de PHP 7.2.0. La biblioteca Lightning
+        Memory-Mapped Database puede ser descargada desde
+         <a href="https://symas.com/lmdb/" class="link external">» https://symas.com/lmdb/</a>.
+       </td>
+      </tr>
+
+
+     </tbody>
+    
+   </table>
+
+  
+  <p class="para">
+   Al llamar a la función <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> o
+   la función <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>, debe proporcionarse uno de los
+   nombres de gestor como argumento. La lista
+   de gestores disponibles puede mostrarse utilizando
+   la función <span class="function"><a href="#function.phpinfo" class="function">phpinfo()</a></span> o la función
+   <span class="function"><a href="#function.dba-handlers" class="function">dba_handlers()</a></span>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="dba.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Al utilizar la opción de compilación <strong class="option configure">--enable-dba=shared</strong>,
+  puede compilarse un módulo dinámico que active el soporte
+  de las bases de datos de estilo DBM para PHP. Asimismo, debe añadirse el soporte
+  de al menos uno de los siguientes gestores, especificando la opción de
+  configuración <strong class="option configure">--with-XXXX</strong> o
+  <strong class="option configure">--enable-XXXX</strong> durante la configuración de
+  PHP.
+ </p>
+ <div class="warning"><strong class="warning">Advertencia</strong>
+  <p class="para">
+   Tras configurar y compilar PHP, deben ejecutarse las siguientes pruebas
+   desde la línea de comandos: <code class="literal">php run-tests.php
+   ext/dba</code>. Esto muestra si la combinación de controladores
+   funciona. Los más problemáticos son <code class="literal">dbm</code> y
+   <code class="literal">ndbm</code> que entran en conflicto con numerosas instalaciones.
+   Esto se debe a que en muchos sistemas, estas bibliotecas forman
+   parte de más de una biblioteca. La prueba de configuración impide
+   simplemente configurar descriptores cuya combinación es defectuosa
+   aunque funcionen correctamente por separado.
+  </p>
+ </div>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Gestores DBA soportados</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Gestor</th>
+      <th>Opción de configuración</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><code class="literal">dbm</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de dbm, añada la opción
+        de compilación <strong class="option configure">--with-dbm[=DIR]</strong>.
+        </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          dbm es una sobrecarga que suele dar lugar a fallos.
+          Por tanto, solo debe utilizarse dbm si se está seguro de que
+          funciona y se necesita este formato.
+         </p>
+        </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">ndbm</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de ndbm, añada la opción
+        de compilación <strong class="option configure">--with-ndbm[=DIR]</strong>.
+        </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          ndbm es una sobrecarga que suele dar lugar a fallos.
+          Por tanto, solo debe utilizarse ndbm si se está seguro de que
+          funciona y se necesita este formato.
+         </p>
+        </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">gdbm</code></td>
+      <td>
+       Para activar el soporte de gdbm, añada la opción
+       de compilación <strong class="option configure">--with-gdbm[=DIR]</strong>.
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">db2</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de Oracle Berkeley DB 2, añada la opción
+        de compilación <strong class="option configure">--with-db2[=DIR]</strong>.
+        </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          db2 entra en conflicto con db3 y db4.
+         </p>
+        </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">db3</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de Oracle Berkeley DB 3, añada la opción
+        de compilación <strong class="option configure">--with-db3[=DIR]</strong>.
+        </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          db3 entra en conflicto con db2 y db4.
+         </p>
+        </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">db4</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de Oracle Berkeley DB 4, añada la opción
+        de compilación <strong class="option configure">--with-db4[=DIR]</strong>.
+        </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          db4 entra en conflicto con db2 y db3.
+         </p>
+        </blockquote>
+        <blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          Las bibliotecas db con versiones comprendidas entre 4.1 y 4.1.24 no pueden utilizarse con ninguna versión de PHP.
+         </p>
+         <p class="para">
+          El soporte DB5 se añadió en PHP 5.3.3.
+         </p>
+        </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">cdb</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de cdb, añada la opción
+        de compilación <strong class="option configure">--with-cdb[=DIR]</strong>.
+        </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          Puede omitirse el uso de DIR, para aprovechar la biblioteca cdb proporcionada con PHP, que añade un gestor cdb_make, permite la creación de fichero
+          cdb y permite el acceso a los ficheros cbd a través de la red con los flujos de PHP.
+         </p>
+        </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">flatfile</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de ficheros, añada la opción
+        de compilación
+       <strong class="option configure">--enable-flatfile</strong>.
+        Anteriormente a PHP 5.2.1 debía utilizarse la opción
+        <strong class="option configure">--with-flatfile</strong> en su lugar.
+        </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          Esto se añadió para asegurar la compatibilidad con la extensión
+          <code class="literal">dbm</code> que está obsoleta.
+          Úsese este gestor solo cuando no pueda instalarse ningún otro gestor y no pueda utilizarse el gestor cdb integrado.
+         </p>
+        </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">inifile</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de <code class="literal">inifile</code>, añada la opción
+        de compilación <strong class="option configure">--enable-inifile</strong>.
+        Anteriormente a PHP 5.2.1 debía utilizarse la opción
+        <strong class="option configure">--with-inifile</strong> en su lugar.
+        </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          Esta opción se añadió para permitir leer y escribir en
+          ficheros de inicialización de tipo Microsoft
+          (<var class="filename">.ini</var>), como el <var class="filename">php.ini</var> por ejemplo.
+         </p>
+        </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">qdbm</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de qdbm, añada la opción de compilación
+        <strong class="option configure">--with-qdbm[=DIR]</strong>.
+        </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          qdbm entra en conflicto con dbm y gdbm.
+         </p>
+        </blockquote>
+        <blockquote class="note"><p><strong class="note">Nota</strong>: 
+         </p><p class="para">
+          La biblioteca qdbm puede descargarse desde
+          <a href="http://fallabs.com/qdbm/index.html" class="link external">» http://fallabs.com/qdbm/index.html</a>.
+         </p>
+        </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">tcadb</code></td>
+      <td>
+       <p class="para">
+       Para activar el soporte de Tokyo Cabinet, añada la opción de compilación
+       <strong class="option configure">--with-tcadb[=DIR]</strong>.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+        </p><p class="para">
+         La biblioteca Tokyo Cabinet puede ser
+         descargada desde <a href="http://fallabs.com/tokyocabinet/" class="link external">» http://fallabs.com/tokyocabinet/</a>.
+        </p>
+       </blockquote>
+       
+      </td>
+     </tr>
+
+
+     <tr>
+      <td><code class="literal">lmdb</code></td>
+      <td>
+       <p class="para">
+        Para activar el soporte de Lightning Memory-Mapped Database añada
+        la opción de configuración
+        <strong class="option configure">--with-lmdb[=DIR]</strong>.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+        </p><p class="para">
+         Esto se añadió en PHP 7.2.0. La biblioteca
+         Lightning Memory-Mapped Database puede descargarse desde
+         <a href="https://symas.com/lmdb/" class="link external">» https://symas.com/lmdb/</a>.
+        </p>
+       </blockquote>
+       
+      </td>
+     </tr>
+
+
+    </tbody>
+   
+  </table>
+
+ 
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ <div id="dba.configuration" class="section"><hr>
+  <h2 class="title">Configuración en tiempo de ejecución</h2>
+  <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+  <p class="para">
+   </p><table class="doctable table">
+    <caption><strong>Opciones de configuración DBA</strong></caption>
+    
+     <thead>
+      <tr>
+       <th>Nombre</th>
+       <th>Por defecto</th>
+       <th>Cambiable</th>
+       <th>Historial de cambios</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>
+        <a href="#ini.dba.default_handler" class="link">dba.default_handler</a>
+       </td>
+       <td>DBA_DEFAULT</td>
+       <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+       <td></td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+
+  <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+  <p class="para">
+   </p><dl>
+    
+     <dt id="ini.dba.default_handler">
+      <code class="parameter">dba.default_handler</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       El nombre del gestor por defecto
+      </p>
+     </dd>
+
+    
+
+   </dl>
+  
+ </div>
+<hr>
+
+ 
+
+ 
+ <div id="dba.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   A partir de PHP 8.4.0, la mayoría de las funciones DBA operan sobre o devuelven recursos (por ejemplo, <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span>
+   devuelve un identificador de enlace DBA positivo requerido por la mayoría de las funciones DBA).
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="dba.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.dba-lmdb-use-sub-dir">
+    <strong><code><a href="#constant.dba-lmdb-use-sub-dir">DBA_LMDB_USE_SUB_DIR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para">
+     Flag del controlador LMDB para permitir la creación de un subdirectorio para los ficheros de base de datos.
+     Disponible a partir de PHP 8.2.0.
+    </p>
+   </dd>
+  
+  
+   <dt id="constant.dba-lmdb-no-sub-dir">
+    <strong><code><a href="#constant.dba-lmdb-no-sub-dir">DBA_LMDB_NO_SUB_DIR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <p class="para">
+     Flag del controlador LMDB para prohibir la creación de un subdirectorio para los ficheros de base de datos.
+     Disponible a partir de PHP 8.2.0.
+    </p>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+ 
+
+
+
+
+<div id="dba.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#dba.example">Utilización</a></li></ul>
+
+ <div id="dba.example" class="section"><hr>
+  <h2 class="title">Utilización</h2>
+   <p class="para">
+    </p><div class="example" id="example-1098">
+     <p><strong>Ejemplo #1 Ejemplo con DBA</strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$id </span><span style="color: #007700">= </span><span style="color: #0000BB">dba_open</span><span style="color: #007700">(</span><span style="color: #DD0000">"/tmp/test.db"</span><span style="color: #007700">, </span><span style="color: #DD0000">"n"</span><span style="color: #007700">, </span><span style="color: #DD0000">"db2"</span><span style="color: #007700">);<br><br>if (!</span><span style="color: #0000BB">$id</span><span style="color: #007700">) {<br>    echo </span><span style="color: #DD0000">"dba_open ha fallado\n"</span><span style="color: #007700">;<br>    exit;<br>}<br><br></span><span style="color: #0000BB">dba_replace</span><span style="color: #007700">(</span><span style="color: #DD0000">"key"</span><span style="color: #007700">, </span><span style="color: #DD0000">"¡Esto es un ejemplo!"</span><span style="color: #007700">, </span><span style="color: #0000BB">$id</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">dba_exists</span><span style="color: #007700">(</span><span style="color: #DD0000">"key"</span><span style="color: #007700">, </span><span style="color: #0000BB">$id</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #0000BB">dba_fetch</span><span style="color: #007700">(</span><span style="color: #DD0000">"key"</span><span style="color: #007700">, </span><span style="color: #0000BB">$id</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">dba_delete</span><span style="color: #007700">(</span><span style="color: #DD0000">"key"</span><span style="color: #007700">, </span><span style="color: #0000BB">$id</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">dba_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$id</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+  <p class="para">
+   DBA gestiona datos binarios y no tiene límites arbitrarios.
+   Sin embargo, hereda todas las limitaciones definidas por
+   la implementación de la base de datos accedida.
+  </p>
+  <p class="para">
+   Todas las bases de datos basadas en ficheros deben
+   proporcionar una forma de definir el modo de fichero de las nuevas
+   bases creadas. Este modo se pasa generalmente como cuarto argumento
+   de las funciones <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> o
+   <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+  </p>
+  <p class="para">
+   Se puede acceder a todas las entradas de la base de datos de
+   forma lineal, utilizando las funciones <span class="function"><a href="#function.dba-firstkey" class="function">dba_firstkey()</a></span>
+   y <span class="function"><a href="#function.dba-nextkey" class="function">dba_nextkey()</a></span>. No se puede modificar la
+   base de datos mientras se está leyendo.
+  </p>
+  <p class="para">
+   </p><div class="example" id="example-1099">
+    <p><strong>Ejemplo #2 Lectura de una base de datos</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #FF8000">// ...apertura de la base de datos...<br><br></span><span style="color: #0000BB">$key </span><span style="color: #007700">= </span><span style="color: #0000BB">dba_firstkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$id</span><span style="color: #007700">);<br><br>while (</span><span style="color: #0000BB">$key </span><span style="color: #007700">!== </span><span style="color: #0000BB">false</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">true</span><span style="color: #007700">) {          </span><span style="color: #FF8000">// se retiene la clave para realizar otras acciones más tarde<br>        </span><span style="color: #0000BB">$handle_later</span><span style="color: #007700">[] = </span><span style="color: #0000BB">$key</span><span style="color: #007700">;<br>    }<br>    </span><span style="color: #0000BB">$key </span><span style="color: #007700">= </span><span style="color: #0000BB">dba_nextkey</span><span style="color: #007700">(</span><span style="color: #0000BB">$id</span><span style="color: #007700">);<br>}<br><br>foreach (</span><span style="color: #0000BB">$handle_later </span><span style="color: #007700">as </span><span style="color: #0000BB">$val</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">dba_delete</span><span style="color: #007700">(</span><span style="color: #0000BB">$val</span><span style="color: #007700">, </span><span style="color: #0000BB">$id</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+<hr>
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+ 
+
+
+<div id="class.dba-connection" class="reference"><hr>
+ <h1 class="title">La clase Dba\Connection</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 8 &gt;= 8.4.0)</p>
+
+  
+  <div class="section" id="dba-connection.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="simpara">
+    Una clase totalmente opaca que reemplaza un recurso <code class="literal">dba</code> a partir de PHP 8.4.0.
+   </p>
+  </div>
+  
+
+  <div class="section" id="dba-connection.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+   
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">Dba\Connection</strong></strong>
+     {</div>
+   }</div>
+   
+
+  </div>
+
+ </div>
+
+</div>
+
+<hr>
+
+
+
+ 
+ 
+
+
+
+<div id="ref.dba" class="reference"><hr>
+ <h1 class="title">Funciones de DBA</h1>
+
+
+
+
+
+
+<div id="function.dba-close" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_close</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_close</span> — <span class="dc-title">Cierra una base DBA</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dba-close-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_close</strong></span>(<span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_close()</strong></span> cierra la conexión establecida con
+   la base de datos y libera todos los recursos del
+   <code class="parameter">handle</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-close-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-close-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-close-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-close-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-open" class="function" rel="rdfs-seeAlso">dba_open()</a> - Abre una base de datos DBA</span></li>
+    <li><span class="function"><a href="#function.dba-popen" class="function" rel="rdfs-seeAlso">dba_popen()</a> - Establece una conexión persistente a una base de datos DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-delete" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_delete</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_delete</span> — <span class="dc-title">Elimina una línea en una base DBA</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dba-delete-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_delete</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_delete()</strong></span> elimina la entrada
+   especificada por la clave <code class="parameter">key</code>,
+   en la base identificada por <code class="parameter">handle</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-delete-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave de la entrada a eliminar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-delete-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-delete-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-delete-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-exists" class="function" rel="rdfs-seeAlso">dba_exists()</a> - Verifica si una clave DBA existe</span></li>
+    <li><span class="function"><a href="#function.dba-fetch" class="function" rel="rdfs-seeAlso">dba_fetch()</a> - Lee los datos asociados a una clave DBA</span></li>
+    <li><span class="function"><a href="#function.dba-insert" class="function" rel="rdfs-seeAlso">dba_insert()</a> - Inserta una entrada DBA</span></li>
+    <li><span class="function"><a href="#function.dba-replace" class="function" rel="rdfs-seeAlso">dba_replace()</a> - Reemplaza o inserta una línea DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-exists" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_exists</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_exists</span> — <span class="dc-title">Verifica si una clave DBA existe</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dba-exists-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_exists</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_exists()</strong></span> verifica si la clave
+   <code class="parameter">key</code> existe en la base identificada
+   por <code class="parameter">handle</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-exists-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave a verificar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-exists-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna <strong><code><a href="#constant.true">true</a></code></strong> si la clave existe, <strong><code><a href="#constant.false">false</a></code></strong> en caso contrario.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-exists-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-exists-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-delete" class="function" rel="rdfs-seeAlso">dba_delete()</a> - Elimina una línea en una base DBA</span></li>
+    <li><span class="function"><a href="#function.dba-fetch" class="function" rel="rdfs-seeAlso">dba_fetch()</a> - Lee los datos asociados a una clave DBA</span></li>
+    <li><span class="function"><a href="#function.dba-insert" class="function" rel="rdfs-seeAlso">dba_insert()</a> - Inserta una entrada DBA</span></li>
+    <li><span class="function"><a href="#function.dba-replace" class="function" rel="rdfs-seeAlso">dba_replace()</a> - Reemplaza o inserta una línea DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-fetch" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_fetch</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_fetch</span> — <span class="dc-title">Lee los datos asociados a una clave DBA</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dba-fetch-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_fetch</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$skip</code><span class="initializer"> = 0</span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="simpara">
+   Firma sobrecargada obsoleta a partir de 8.3.0:
+  </p>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>dba_fetch</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$skip</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$dba</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_fetch()</strong></span> lee los datos especificados
+   por la clave <code class="parameter">key</code> en la base identificada
+   por <code class="parameter">dba</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-fetch-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave correspondiente a los datos.
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        Al trabajar con ficheros .ini, esta función acepta
+        arrays como claves donde el índice 0 es el grupo y el índice 1 es el nombre
+        del valor. Ver la función <span class="function"><a href="#function.dba-key-split" class="function">dba_key_split()</a></span>.
+       </p>
+      </blockquote>
+     </dd>
+    
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">skip</code></dt>
+     <dd>
+      <p class="para">
+       El número de pares clave-valor a ignorar al utilizar bases de datos cdb.
+       Este valor es ignorado para todas las demás bases de datos que no admiten
+       claves múltiples con el mismo nombre.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-fetch-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la cadena asociada si se encuentra el par clave/valor, <strong><code><a href="#constant.false">false</a></code></strong> en caso contrario.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-fetch-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+     <tr>
+      <td>8.3.0</td>
+      <td>
+       La llamada a <span class="function"><strong>dba_fetch()</strong></span> con <code class="parameter">dba</code> como
+       tercer argumento es ahora obsoleta.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.2.0</td>
+      <td>
+       El argumento opcional "skip" de la función <span class="function"><strong>dba_fetch()</strong></span> ahora se coloca al final,
+       conforme a la semántica PHP lado-usuario. La firma sobrecargada previamente
+       sigue siendo aceptada pero desaconsejada.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-fetch-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-exists" class="function" rel="rdfs-seeAlso">dba_exists()</a> - Verifica si una clave DBA existe</span></li>
+    <li><span class="function"><a href="#function.dba-delete" class="function" rel="rdfs-seeAlso">dba_delete()</a> - Elimina una línea en una base DBA</span></li>
+    <li><span class="function"><a href="#function.dba-insert" class="function" rel="rdfs-seeAlso">dba_insert()</a> - Inserta una entrada DBA</span></li>
+    <li><span class="function"><a href="#function.dba-replace" class="function" rel="rdfs-seeAlso">dba_replace()</a> - Reemplaza o inserta una línea DBA</span></li>
+    <li><span class="function"><a href="#function.dba-key-split" class="function" rel="rdfs-seeAlso">dba_key_split()</a> - Transforma una representación de clave DBA por cadena en una
+   representación por array</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-firstkey" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_firstkey</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_firstkey</span> — <span class="dc-title">Lee la primera clave DBA</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dba-firstkey-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_firstkey</strong></span>(<span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_firstkey()</strong></span> devuelve la primera clave
+   de la base de datos especificada por <code class="parameter">handle</code>
+   y coloca el puntero interno de clave. Esto permitirá recorrer la base.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-firstkey-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-firstkey-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la clave en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-firstkey-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-firstkey-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-nextkey" class="function" rel="rdfs-seeAlso">dba_nextkey()</a> - Lee la clave DBA siguiente</span></li>
+    <li><span class="function"><a href="#function.dba-key-split" class="function" rel="rdfs-seeAlso">dba_key_split()</a> - Transforma una representación de clave DBA por cadena en una
+   representación por array</span></li>
+    <li>Ejemplo 2 en los <a href="#dba.examples" class="link">ejemplos DBA</a></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.dba-handlers" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_handlers</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_handlers</span> — <span class="dc-title">Listar todos los gestores disponibles</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dba-handlers-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_handlers</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$full_info</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_handlers()</strong></span> lista todos los gestores soportados por esta
+   extensión.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-handlers-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">full_info</code></dt>
+     <dd>
+      <p class="para">
+       Activa/desactiva la mostración de la información completa en el resultado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-handlers-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array de gestores de bases de datos. Si <code class="parameter">full_info</code>
+   está establecido a <strong><code><a href="#constant.true">true</a></code></strong>, el array será asociativo con los nombres de los gestores como
+   claves y la información de su versión com valor. De otro modo, el resultado será
+   un array indexado de nombres de gestores.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Cuando se usa la biblioteca cdb interna verá
+    <code class="literal">cdb</code> y <code class="literal">cdb_make</code>.
+   </p>
+  </blockquote>
+ </div>
+
+ <div class="refsect1 examples" id="refsect1-function.dba-handlers-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-1100">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>dba_handlers()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br></span><span style="color: #007700">echo </span><span style="color: #DD0000">"Gestores de DBA disponibles:\n"</span><span style="color: #007700">;<br>foreach (</span><span style="color: #0000BB">dba_handlers</span><span style="color: #007700">(</span><span style="color: #0000BB">true</span><span style="color: #007700">) as </span><span style="color: #0000BB">$nombre_gestor </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$versión_gestor</span><span style="color: #007700">) {<br>  </span><span style="color: #FF8000">// limpiar las versiones<br>  </span><span style="color: #0000BB">$versión_gestor </span><span style="color: #007700">= </span><span style="color: #0000BB">str_replace</span><span style="color: #007700">(</span><span style="color: #DD0000">'$'</span><span style="color: #007700">, </span><span style="color: #DD0000">''</span><span style="color: #007700">, </span><span style="color: #0000BB">$versión_gestor</span><span style="color: #007700">);<br>  echo </span><span style="color: #DD0000">" - </span><span style="color: #0000BB">$nombre_gestor</span><span style="color: #DD0000">: </span><span style="color: #0000BB">$versión_gestor</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>}<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Gestores de DBA disponibles:
+ - cdb: 0.75, Revision: 1.3.2.3
+ - cdb_make: 0.75, Revision: 1.2.2.4
+ - db2: Sleepycat Software: Berkeley DB 2.7.7: (08/20/99)
+ - inifile: 1.0, Revision: 1.6.2.3
+ - flatfile: 1.0, Revision: 1.5.2.4</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.dba-insert" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_insert</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_insert</span> — <span class="dc-title">Inserta una entrada DBA</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dba-insert-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_insert</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_insert()</strong></span> inserta la entrada descrita
+   por la clave <code class="parameter">key</code> y el valor
+   <code class="parameter">value</code> en la base especificada
+   por <code class="parameter">handle</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-insert-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave de la entrada a insertar. Si esta clave ya existe en la base de datos,
+       esta función fallará. Utilice la función <span class="function"><a href="#function.dba-replace" class="function">dba_replace()</a></span>
+       si se debe reemplazar una clave existente.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       El valor a insertar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-insert-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-insert-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-insert-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-exists" class="function" rel="rdfs-seeAlso">dba_exists()</a> - Verifica si una clave DBA existe</span></li>
+    <li><span class="function"><a href="#function.dba-delete" class="function" rel="rdfs-seeAlso">dba_delete()</a> - Elimina una línea en una base DBA</span></li>
+    <li><span class="function"><a href="#function.dba-fetch" class="function" rel="rdfs-seeAlso">dba_fetch()</a> - Lee los datos asociados a una clave DBA</span></li>
+    <li><span class="function"><a href="#function.dba-replace" class="function" rel="rdfs-seeAlso">dba_replace()</a> - Reemplaza o inserta una línea DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-key-split" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_key_split</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_key_split</span> — <span class="dc-title">
+   Transforma una representación de clave DBA por cadena en una
+   representación por array
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dba-key-split-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_key_split</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span>|<span class="type"><a href="#language.types.null" class="type null">null</a></span></span> <code class="parameter">$key</code></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_key_split()</strong></span> transforma una representación de
+   clave DBA por cadena en una representación por array.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-key-split-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave en forma de string.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-key-split-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array en la forma <code class="literal">array(0 =&gt; group, 1 =&gt;
+   nom_valeur)</code>. Esta función devuelve <strong><code><a href="#constant.false">false</a></code></strong> si
+   <code class="parameter">key</code> es <strong><code><a href="#constant.null">null</a></code></strong> o <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-key-split-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.4.0</td>
+      <td>
+       Pasar <strong><code><a href="#constant.null">null</a></code></strong> o <strong><code><a href="#constant.false">false</a></code></strong> a <code class="parameter">key</code>
+       está ahora deprecado.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-key-split-seealso">
+  <h3 class="title">Ver también</h3>
+   <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-firstkey" class="function" rel="rdfs-seeAlso">dba_firstkey()</a> - Lee la primera clave DBA</span></li>
+    <li><span class="function"><a href="#function.dba-nextkey" class="function" rel="rdfs-seeAlso">dba_nextkey()</a> - Lee la clave DBA siguiente</span></li>
+    <li><span class="function"><a href="#function.dba-fetch" class="function" rel="rdfs-seeAlso">dba_fetch()</a> - Lee los datos asociados a una clave DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.dba-list" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_list</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_list</span> — <span class="dc-title">Lista todos los ficheros de bases de datos DBA abiertos</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dba-list-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_list</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_list()</strong></span> lista todos los ficheros de bases de datos
+   DBA abiertos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-list-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-list-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Un array asociativo, bajo la forma
+   <code class="literal">idressource =&gt; nomfichier</code>.
+  </p>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-nextkey" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_nextkey</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_nextkey</span> — <span class="dc-title">Lee la clave DBA siguiente</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dba-nextkey-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_nextkey</strong></span>(<span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_nextkey()</strong></span> devuelve la clave siguiente,
+   en la base identificada por <code class="parameter">handle</code> y
+   incrementa el puntero de clave.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-nextkey-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-nextkey-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la clave en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-nextkey-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-nextkey-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-firstkey" class="function" rel="rdfs-seeAlso">dba_firstkey()</a> - Lee la primera clave DBA</span></li>
+    <li><span class="function"><a href="#function.dba-key-split" class="function" rel="rdfs-seeAlso">dba_key_split()</a> - Transforma una representación de clave DBA por cadena en una
+   representación por array</span></li>
+    <li>Ejemplo 2 en los <a href="#dba.examples" class="link">ejemplos DBA</a></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-open" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_open</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_open</span> — <span class="dc-title">Abre una base de datos DBA</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.dba-open-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_open</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$path</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$handler</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$permission</code><span class="initializer"> = 0644</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$map_size</code><span class="initializer"> = 0</span></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.integer" class="type int">int</a></span></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_open()</strong></span> establece una conexión a
+   la base identificada por <code class="parameter">path</code> con el
+   modo <code class="parameter">mode</code> y el identificador
+   <code class="parameter">handler</code>.
+  </p>
+ </div>
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-open-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">path</code></dt>
+     <dd>
+      <p class="para">
+       Ruta en el sistema de archivos.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       Puede ser <code class="literal">r</code> para solo lectura, <code class="literal">w</code> para
+       lectura/escritura, <code class="literal">c</code> para lectura/escritura y creación si la base no existe,
+       y <code class="literal">n</code> para creación, sobrescritura y acceso en lectura/escritura.
+       La base de datos se crea en modo BTree; los otros modos (como Hash o Queue) no son soportados.
+      </p>
+      <p class="para">
+       Además, se puede elegir el método de bloqueo de la base con el
+       carácter siguiente. Utilice <code class="literal">l</code> para bloquear la base con un
+       fichero <var class="filename">.lck</var>, o <code class="literal">d</code> para bloquear
+       la base misma. Es importante que las aplicaciones utilicen estas
+       opciones de manera coherente.
+      </p>
+      <p class="para">
+       Si se desea probar la posibilidad de acceso sin esperar la disponibilidad del bloqueo,
+       se puede añadir la letra <code class="literal">t</code> como tercer carácter. Cuando se está absolutamente seguro
+       de que la base no requiere bloqueo, se puede utilizar el guión <code class="literal">-</code>
+       en lugar de <code class="literal">l</code> o <code class="literal">d</code>.
+       Cuando no se utiliza ni <code class="literal">d</code>, ni <code class="literal">l</code> ni
+       <code class="literal">-</code>, dba bloqueará en modo <code class="literal">d</code>.
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        Solo puede haber un tipo de escritura en la base. Cuando se utiliza dba en un servidor web,
+        y varias peticiones HTTP realizan escrituras, estas solo pueden realizarse una tras otra. De igual
+        manera, la lectura durante la escritura no es posible. La extensión dba utiliza un bloqueo para evitar
+        estos problemas. A continuación se muestra la tabla de bloqueo:
+        </p><table class="doctable table">
+         <caption><strong>Bloqueo DBA</strong></caption>
+         
+          <thead>
+           <tr>
+            <th>ya abierta</th>
+            <th><code class="parameter">mode</code> = "rl"</th>
+            <th><code class="parameter">mode</code> = "rlt"</th>
+            <th><code class="parameter">mode</code> = "wl"</th>
+            <th><code class="parameter">mode</code> = "wlt"</th>
+            <th><code class="parameter">mode</code> = "rd"</th>
+            <th><code class="parameter">mode</code> = "rdt"</th>
+            <th><code class="parameter">mode</code> = "wd"</th>
+            <th><code class="parameter">mode</code> = "wdt"</th>
+           </tr>
+
+          </thead>
+
+          <tbody class="tbody">
+           <tr>
+            <td>no abierta</td>
+            <td>ok</td>
+            <td>ok</td>
+            <td>ok</td>
+            <td>ok</td>
+            <td>ok</td>
+            <td>ok</td>
+            <td>ok</td>
+            <td>ok</td>
+           </tr>
+
+           <tr>
+            <td><code class="parameter">mode</code> = "rl"</td>
+            <td>ok</td>
+            <td>ok</td>
+            <td>esperando</td>
+            <td><strong><code><a href="#constant.false">false</a></code></strong></td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+           </tr>
+
+           <tr>
+            <td><code class="parameter">mode</code> = "wl"</td>
+            <td>esperando</td>
+            <td><strong><code><a href="#constant.false">false</a></code></strong></td>
+            <td>esperando</td>
+            <td><strong><code><a href="#constant.false">false</a></code></strong></td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+           </tr>
+
+           <tr>
+            <td><code class="parameter">mode</code> = "rd"</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>ok</td>
+            <td>ok</td>
+            <td>esperando</td>
+            <td><strong><code><a href="#constant.false">false</a></code></strong></td>
+           </tr>
+
+           <tr>
+            <td><code class="parameter">mode</code> = "wd"</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>ilegal</td>
+            <td>esperando</td>
+            <td><strong><code><a href="#constant.false">false</a></code></strong></td>
+            <td>esperando</td>
+            <td><strong><code><a href="#constant.false">false</a></code></strong></td>
+           </tr>
+
+          </tbody>
+         
+        </table>
+
+        <ul class="simplelist">
+         <li>ok: La segunda llamada tiene éxito.</li>
+         <li>esperando: La segunda llamada espera a que <span class="function"><a href="#function.dba-close" class="function">dba_close()</a></span>
+          sea llamada por el primer script.</li>
+         <li>false: La segunda llamada devuelve <strong><code><a href="#constant.false">false</a></code></strong>.</li>
+         <li>ilegal: No se deben mezclar las opciones
+          <code class="literal">"l"</code> y <code class="literal">"d"</code> para el parámetro
+          <code class="parameter">mode</code>.</li>
+        </ul>
+       
+      </blockquote>
+     </dd>
+    
+    
+     <dt><code class="parameter">handler</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del <a href="#dba.requirements" class="link">gestor</a>
+       que debe ser utilizado para acceder a <code class="parameter">path</code>.
+       Se pasa a todos los parámetros opcionales dados a
+       <span class="function"><strong>dba_open()</strong></span> y puede actuar en su nombre.
+       Si el parámetro <code class="parameter">handler</code> es <strong><code><a href="#constant.null">null</a></code></strong>,
+       entonces se invoca el gestor por defecto.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">permission</code></dt>
+     <dd>
+      <p class="para">
+       Parámetro opcional de tipo <span class="type"><a href="#language.types.integer" class="type int">int</a></span> que se pasa al controlador. Tiene el mismo significado que
+       el parámetro <code class="parameter">permissions</code> de la función <span class="function"><a href="#function.chmod" class="function">chmod()</a></span>,
+       y tiene un valor por omisión de <code class="literal">0644</code>.
+      </p>
+      <p class="para">
+       Los controladores <code class="literal">db1</code>, <code class="literal">db2</code>,
+       <code class="literal">db3</code>, <code class="literal">db4</code>, <code class="literal">dbm</code>,
+       <code class="literal">gdbm</code>,
+       Los controladores <code class="literal">ndbm</code> y <code class="literal">lmdb</code> soportan el
+       parámetro <code class="parameter">permission</code>.
+      </p>
+      <p class="para">
+       El controlador <code class="literal">lmdb</code> soporta dos parámetros adicionales.
+       El primero permite definir el <code class="literal">$filemode</code>
+       (ver descripción anterior), y el segundo permite definir la
+       <code class="literal">$mapsize</code>, cuyo valor debería ser un múltiplo del tamaño de página del sistema operativo,
+       o cero para utilizar la mapsize por defecto.
+       El parámetro <code class="literal">$mapsize</code> es soportado a partir de
+       PHP 7.3.14 y 7.4.2, respectivamente.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">map_size</code></dt>
+     <dd>
+      <p class="para">
+       Parámetro opcional de tipo <span class="type"><a href="#language.types.integer" class="type int">int</a></span> que se pasa al controlador. Su valor debe ser un múltiplo del
+       tamaño de página del sistema operativo, o cero para utilizar el tamaño de mappage por defecto.
+      </p>
+      <p class="para">
+       Solo el controlador <code class="literal">lmdb</code> acepta el parámetro <code class="parameter">map_size</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       Bandera a pasar a los controladores de base de datos. Si es <strong><code><a href="#constant.null">null</a></code></strong>, se proporcionarán las banderas por defecto.
+       Actualmente, solo el controlador LMDB soporta las siguientes banderas:
+       <strong><code><a href="#constant.dba-lmdb-use-sub-dir">DBA_LMDB_USE_SUB_DIR</a></code></strong> y
+       <strong><code><a href="#constant.dba-lmdb-no-sub-dir">DBA_LMDB_NO_SUB_DIR</a></code></strong>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+ <div class="refsect1 errors" id="refsect1-function.dba-open-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   <strong><code><a href="#constant.false">false</a></code></strong> es devuelto y se emite un error de nivel <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong> cuando
+   el parámetro <code class="parameter">handler</code> es <strong><code><a href="#constant.null">null</a></code></strong>, pero no hay ningún gestor por defecto disponible.
+  </p>
+ </div>
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-open-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una instancia <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-open-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.4.0</td>
+      <td>
+       Ahora devuelve una instancia de <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>;
+       anteriormente se devolvía un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.2.0</td>
+      <td>
+       Se añade el parámetro <code class="parameter">flags</code>.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.2.0</td>
+      <td>
+       El parámetro <code class="parameter">handler</code> ahora es nullable.
+      </td>
+     </tr>
+
+     <tr>
+      <td>7.3.14, 7.4.2</td>
+      <td>
+       El controlador <code class="literal">lmdb</code> ahora soporta un parámetro
+       adicional <code class="parameter">map_size</code>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-open-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-popen" class="function" rel="rdfs-seeAlso">dba_popen()</a> - Establece una conexión persistente a una base de datos DBA</span></li>
+    <li><span class="function"><a href="#function.dba-close" class="function" rel="rdfs-seeAlso">dba_close()</a> - Cierra una base DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-optimize" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_optimize</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_optimize</span> — <span class="dc-title">Optimiza una base DBA</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dba-optimize-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_optimize</strong></span>(<span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_optimize()</strong></span> optimiza la base de datos
+   identificada por <code class="parameter">handle</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-optimize-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-optimize-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-optimize-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-optimize-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-sync" class="function" rel="rdfs-seeAlso">dba_sync()</a> - Sincroniza una base de datos DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-popen" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_popen</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_popen</span> — <span class="dc-title">Establece una conexión persistente a una base de datos DBA</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dba-popen-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_popen</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$path</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$mode</code></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$handler</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$permission</code><span class="initializer"> = 0644</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$map_size</code><span class="initializer"> = 0</span></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.integer" class="type int">int</a></span></span> <code class="parameter">$flags</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_popen()</strong></span> establece una conexión persistente
+   a la base identificada por <code class="parameter">path</code>
+   con el modo <code class="parameter">mode</code>, utilizando el identificador
+   <code class="parameter">handler</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-popen-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">path</code></dt>
+     <dd>
+      <p class="para">
+       Ruta en el sistema de ficheros.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       Puede ser <code class="literal">r</code> para solo lectura, <code class="literal">w</code> para
+       lectura/escritura, <code class="literal">c</code> para lectura/escritura y creación si la base no existe,
+       y <code class="literal">n</code> para creación, sobrescritura y acceso en lectura/escritura.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">handler</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del
+       <a href="#dba.requirements" class="link">gestor</a> que debe ser
+       utilizado para acceder a <code class="parameter">path</code>. El gestor recibe todos los argumentos adicionales
+       pasados a la función <span class="function"><strong>dba_popen()</strong></span>. Si el argumento <code class="parameter">handler</code> es <strong><code><a href="#constant.null">null</a></code></strong>,
+       entonces se invoca el gestor por defecto.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">permission</code></dt>
+     <dd>
+      <p class="para">
+       Argumento opcional de tipo entero (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>) que se pasa al controlador. Tiene el mismo significado
+       que el argumento <code class="parameter">permissions</code> de la función <span class="function"><a href="#function.chmod" class="function">chmod()</a></span>,
+       y su valor por omisión es <code class="literal">0644</code>.
+      </p>
+      <p class="para">
+       Los controladores <code class="literal">db1</code>, <code class="literal">db2</code>,
+       <code class="literal">db3</code>, <code class="literal">db4</code>, <code class="literal">dbm</code>,
+       <code class="literal">gdbm</code>,
+       <code class="literal">ndbm</code> y <code class="literal">lmdb</code> admiten el argumento
+       <code class="parameter">permission</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">map_size</code></dt>
+     <dd>
+      <p class="para">
+       Argumento opcional de tipo <span class="type"><a href="#language.types.integer" class="type int">int</a></span> que se pasa al controlador. Su valor debe ser un múltiplo de la
+       tamaño de página del sistema operativo, o cero para utilizar el tamaño de mapa por omisión.
+      </p>
+      <p class="para">
+       El controlador <code class="literal">lmdb</code> acepta el argumento <code class="parameter">map_size</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       Permite pasar banderas a los controladores de base de datos. Actualmente, solo el controlador LMDB con
+       las banderas <strong><code><a href="#constant.dba-lmdb-use-sub-dir">DBA_LMDB_USE_SUB_DIR</a></code></strong> y <strong><code><a href="#constant.dba-lmdb-no-sub-dir">DBA_LMDB_NO_SUB_DIR</a></code></strong> es soportado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-popen-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve una instancia de <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.dba-popen-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   El valor <strong><code><a href="#constant.false">false</a></code></strong> es devuelto y un error de nivel <strong><code><a href="#constant.e-warning">E_WARNING</a></code></strong> es emitido cuando
+   el argumento <code class="parameter">handler</code> es <strong><code><a href="#constant.null">null</a></code></strong>, pero no hay ningún gestor por defecto disponible.
+  </p>
+ </div>
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-popen-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+        <tr>
+          <th>Versión</th>
+          <th>Descripción</th>
+        </tr>
+
+      </thead>
+
+      <tbody class="tbody">
+        <tr>
+         <td>8.4.0</td>
+         <td>
+          Ahora devuelve una instancia de <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>;
+          anteriormente se devolvía un <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>.
+         </td>
+        </tr>
+
+        <tr>
+         <td>8.2.0</td>
+          <td>
+            Se añadió el argumento <code class="parameter">flags</code>.
+          </td>
+        </tr>
+
+        <tr>
+          <td>8.2.0</td>
+          <td>
+            El argumento <code class="parameter">handler</code> ahora es nullable.
+          </td>
+        </tr>
+
+        <tr>
+          <td>7.3.14, 7.4.2</td>
+          <td>
+            El controlador <code class="literal">lmdb</code> ahora soporta un argumento
+            adicional <code class="parameter">map_size</code>.
+          </td>
+        </tr>
+
+      </tbody>
+    
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-popen-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-open" class="function" rel="rdfs-seeAlso">dba_open()</a> - Abre una base de datos DBA</span></li>
+    <li><span class="function"><a href="#function.dba-close" class="function" rel="rdfs-seeAlso">dba_close()</a> - Cierra una base DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-replace" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_replace</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_replace</span> — <span class="dc-title">Reemplaza o inserta una línea DBA</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dba-replace-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_replace</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_replace()</strong></span> reemplaza o inserta una entrada,
+   para la clave <code class="parameter">key</code> y con el valor
+   <code class="parameter">value</code> en la base identificada por
+   <code class="parameter">dba</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-replace-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">key</code></dt>
+     <dd>
+      <p class="para">
+       La clave de la entrada a reemplazar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       El valor utilizado para el reemplazo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-replace-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-replace-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-replace-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-exists" class="function" rel="rdfs-seeAlso">dba_exists()</a> - Verifica si una clave DBA existe</span></li>
+    <li><span class="function"><a href="#function.dba-delete" class="function" rel="rdfs-seeAlso">dba_delete()</a> - Elimina una línea en una base DBA</span></li>
+    <li><span class="function"><a href="#function.dba-fetch" class="function" rel="rdfs-seeAlso">dba_fetch()</a> - Lee los datos asociados a una clave DBA</span></li>
+    <li><span class="function"><a href="#function.dba-insert" class="function" rel="rdfs-seeAlso">dba_insert()</a> - Inserta una entrada DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.dba-sync" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">dba_sync</h1>
+  <p class="verinfo">(PHP 4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">dba_sync</span> — <span class="dc-title">Sincroniza una base de datos DBA</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.dba-sync-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>dba_sync</strong></span>(<span class="methodparam"><span class="type"><a href="#class.dba-connection" class="type Dba\Connection">Dba\Connection</a></span> <code class="parameter">$dba</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>dba_sync()</strong></span> sincroniza la base de datos
+   especificada por <code class="parameter">handle</code>. Si es admisible,
+   esto probablemente iniciará una operación de reescritura física del fichero.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.dba-sync-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">dba</code></dt>
+     <dd>
+      <p class="para">
+       A <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span> instance, returned by <span class="function"><a href="#function.dba-open" class="function">dba_open()</a></span> or <span class="function"><a href="#function.dba-popen" class="function">dba_popen()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.dba-sync-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.dba-sync-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+ <td>8.4.0</td>
+ <td>
+  The <code class="parameter">dba</code> parameter expects a <span class="classname"><a href="#class.dba-connection" class="classname">Dba\Connection</a></span>
+  instance now; previously, a valid <code class="literal">dba</code> <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> was expected.
+ </td>
+</tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.dba-sync-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.dba-optimize" class="function" rel="rdfs-seeAlso">dba_optimize()</a> - Optimiza una base DBA</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.dba-close">dba_close</a> — Cierra una base DBA</li><li><a href="#function.dba-delete">dba_delete</a> — Elimina una línea en una base DBA</li><li><a href="#function.dba-exists">dba_exists</a> — Verifica si una clave DBA existe</li><li><a href="#function.dba-fetch">dba_fetch</a> — Lee los datos asociados a una clave DBA</li><li><a href="#function.dba-firstkey">dba_firstkey</a> — Lee la primera clave DBA</li><li><a href="#function.dba-handlers">dba_handlers</a> — Listar todos los gestores disponibles</li><li><a href="#function.dba-insert">dba_insert</a> — Inserta una entrada DBA</li><li><a href="#function.dba-key-split">dba_key_split</a> — Transforma una representación de clave DBA por cadena en una
+   representación por array</li><li><a href="#function.dba-list">dba_list</a> — Lista todos los ficheros de bases de datos DBA abiertos</li><li><a href="#function.dba-nextkey">dba_nextkey</a> — Lee la clave DBA siguiente</li><li><a href="#function.dba-open">dba_open</a> — Abre una base de datos DBA</li><li><a href="#function.dba-optimize">dba_optimize</a> — Optimiza una base DBA</li><li><a href="#function.dba-popen">dba_popen</a> — Establece una conexión persistente a una base de datos DBA</li><li><a href="#function.dba-replace">dba_replace</a> — Reemplaza o inserta una línea DBA</li><li><a href="#function.dba-sync">dba_sync</a> — Sincroniza una base de datos DBA</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.dba">Introducción</a></li><li><a href="#dba.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#dba.requirements">Requerimientos</a></li><li><a href="#dba.installation">Instalación</a></li><li><a href="#dba.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#dba.resources">Tipos de recursos</a></li></ul></li><li><a href="#dba.constants">Constantes predefinidas</a></li><li><a href="#dba.examples">Ejemplos</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#dba.example">Utilización</a></li></ul></li><li><a href="#class.dba-connection">Dba\Connection</a> — La clase Dba\Connection</li><li><a href="#ref.dba">Funciones de DBA</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.dba-close">dba_close</a> — Cierra una base DBA</li><li><a href="#function.dba-delete">dba_delete</a> — Elimina una línea en una base DBA</li><li><a href="#function.dba-exists">dba_exists</a> — Verifica si una clave DBA existe</li><li><a href="#function.dba-fetch">dba_fetch</a> — Lee los datos asociados a una clave DBA</li><li><a href="#function.dba-firstkey">dba_firstkey</a> — Lee la primera clave DBA</li><li><a href="#function.dba-handlers">dba_handlers</a> — Listar todos los gestores disponibles</li><li><a href="#function.dba-insert">dba_insert</a> — Inserta una entrada DBA</li><li><a href="#function.dba-key-split">dba_key_split</a> — Transforma una representación de clave DBA por cadena en una
+   representación por array</li><li><a href="#function.dba-list">dba_list</a> — Lista todos los ficheros de bases de datos DBA abiertos</li><li><a href="#function.dba-nextkey">dba_nextkey</a> — Lee la clave DBA siguiente</li><li><a href="#function.dba-open">dba_open</a> — Abre una base de datos DBA</li><li><a href="#function.dba-optimize">dba_optimize</a> — Optimiza una base DBA</li><li><a href="#function.dba-popen">dba_popen</a> — Establece una conexión persistente a una base de datos DBA</li><li><a href="#function.dba-replace">dba_replace</a> — Reemplaza o inserta una línea DBA</li><li><a href="#function.dba-sync">dba_sync</a> — Sincroniza una base de datos DBA</li></ul></li></ul></div>

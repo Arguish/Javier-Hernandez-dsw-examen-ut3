@@ -1,0 +1,1665 @@
+<div id="book.wkhtmltox" class="book"><hr>
+ 
+ 
+ <h1 class="title">wkhtmltox</h1>
+ 
+
+ <div id="intro.wkhtmltox" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+  libwkhtmltox es una librería LGPLv3 de código abierto para renderizar HTML en PDF y varios formatos de
+  imagen usando el motor de renderización QtWebKit.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="wkhtmltox.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#wkhtmltox.requirements">Requerimientos</a></li><li><a href="#wkhtmltox.installation">Instalación</a></li><li><a href="#wkhtmltox.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ <div id="wkhtmltox.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+  La fuente de libwkhtmltox y las liberaciones binarias se distribuyen en <a href="http://wkhtmltopdf.org" class="link external">» wkhtmltopdf.org</a>.
+  </p>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+   Los usuarios de Windows necesitan dar el paso adicional de añadir <var class="filename">wkhtmltox.dll</var> a su <var class="envar">PATH</var>.
+   </p>
+  </div>
+ </div>
+<hr>
+
+
+ <div id="wkhtmltox.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   El código fuente de esta extensión, y los binarios para Windows están alojados en <a href="https://github.com/krakjoe/wkhtmltox" class="link external">» github</a>,
+  </p>
+  <p class="para">
+   Buscando el código fuente y construyendo la extensión:
+   </p><div class="example-contents screen">
+   <div class="cdata"><pre>
+git clone https://github.com/krakjoe/wkhtmltox
+cd wkhtmltox
+phpize
+./configure --with-wkhtmltox=/path/to/wkhtmltox/installation
+make
+sudo make install
+   </pre></div>
+   </div>
+  
+  <p class="para">
+  Buscando actualizaciones y reconstruyendo la extensión:
+   </p><div class="example-contents screen">
+   <div class="cdata"><pre>
+cd wkhtmltox
+phpize --clean
+git pull origin master
+phpize
+./configure --with-wkhtmltox=/path/to/wkhtmltox/installation
+make
+sudo make install
+   </pre></div>
+   </div>
+  
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="wkhtmltox.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  </p><table class="doctable table">
+  <caption><strong>wkhtmltox Opciones de configuración</strong></caption>
+  
+  <thead>
+   <tr>
+    <th>Nombre</th>
+    <th>Por defecto</th>
+    <th>Cambiable</th>
+    <th>Historial de cambios</th>
+   </tr>
+
+  </thead>
+
+  <tbody class="tbody">
+   <tr>
+    <td><a href="#ini.wkhtmltox.graphics" class="link">wkhtmltox.graphics</a></td>
+    <td>Off</td>
+    <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong>|<strong><code><a href="#constant.ini-perdir">INI_PERDIR</a></code></strong></td>
+    <td>&gt;= 0.3.2</td>
+   </tr>
+
+  </tbody>
+  
+  </table>
+
+  Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+
+
+<p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+<p class="para">
+ </p><dl>
+  
+   <dt id="ini.wkhtmltox.graphics">
+    <code class="parameter">wkhtmltox.graphics</code>
+    <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>
+   </dt>
+   <dd>
+    <p class="para">
+     Permite que libwkhtmltox utilice gráficos.
+    </p>
+   </dd>
+  
+ </dl>
+
+</div>
+<hr>
+
+
+
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+
+<div id="class.wkhtmltox-pdf-converter" class="reference"><hr>
+
+ <h1 class="title">La clase wkhtmltox\PDF\Converter</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(wkhtmltox &gt;= 0.1.0)</p>
+
+
+  <div class="section" id="wkhtmltox-pdf-converter.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Convierte una entrada HTML, o un conjunto de entradas HTML, en una salida PDF
+   </p>
+  </div>
+
+
+  <div class="section" id="wkhtmltox-pdf-converter.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">wkhtmltox\PDF\Converter</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Constructor */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#wkhtmltox-pdf-converter.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$settings</code><span class="initializer"> = ?</span></span>)</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#wkhtmltox-pdf-converter.add" class="methodname">add</a></span>(<span class="methodparam"><span class="type"><a href="#class.wkhtmltox-pdf-object" class="type wkhtmltox\PDF\Object">wkhtmltox\PDF\Object</a></span> <code class="parameter">$object</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#wkhtmltox-pdf-converter.convert" class="methodname">convert</a></span>(): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#wkhtmltox-pdf-converter.getversion" class="methodname">getVersion</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="wkhtmltox-pdf-converter.add" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">wkhtmltox\PDF\Converter::add</h1>
+  <p class="verinfo">(wkhtmltox &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">wkhtmltox\PDF\Converter::add</span> — <span class="dc-title">Añade un objeto para su conversión</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-wkhtmltox-pdf-converter.add-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>wkhtmltox\PDF\Converter::add</strong></span>(<span class="methodparam"><span class="type"><a href="#class.wkhtmltox-pdf-object" class="type wkhtmltox\PDF\Object">wkhtmltox\PDF\Object</a></span> <code class="parameter">$object</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+  Añade el objeto dado a la conversión
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-wkhtmltox-pdf-converter.add-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">object</code></dt>
+    <dd>
+     <p class="para">
+      El objeto a añadir
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ 
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="wkhtmltox-pdf-converter.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">wkhtmltox\PDF\Converter::__construct</h1>
+  <p class="verinfo">(wkhtmltox &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">wkhtmltox\PDF\Converter::__construct</span> — <span class="dc-title">Crea un nuevo conversor de PDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-wkhtmltox-pdf-converter.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>wkhtmltox\PDF\Converter::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$settings</code><span class="initializer"> = ?</span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Crea un nuevo conversor de PDF, utilizando opcionalmente una configuración.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-wkhtmltox-pdf-converter.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">settings</code></dt>
+    <dd>
+     <p class="para">
+      </p><table class="doctable table">
+       
+       
+        <thead>
+         <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Valores</th>
+          <th>Registro de cambios</th>
+         </tr>
+
+        </thead>
+
+        <tbody class="tbody">
+         <tr>
+          <td>size.pageSize</td>
+          <td>Tamaño del papel del documento final</td>
+          <td>A4</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>size.width</td>
+          <td>Ancho del documento final</td>
+          <td>210mm</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>size.height</td>
+          <td>Altura del documento final</td>
+          <td>297mm</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>orientation</td>
+          <td>Orientación del documento final</td>
+          <td>
+           <table class="doctable table">
+            
+            
+             <tbody class="tbody">
+              <tr>
+               <td>Landscape</td>
+              </tr>
+
+              <tr>
+               <td>Portrait</td>
+              </tr>
+
+             </tbody>
+            
+           </table>
+
+          </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>colorMode</td>
+          <td>Modo de color del documento final</td>
+          <td>
+           <table class="doctable table">
+            
+            
+             <tbody class="tbody">
+              <tr>
+               <td>Color</td>
+              </tr>
+
+              <tr>
+               <td>Greyscale</td>
+              </tr>
+
+             </tbody>
+            
+           </table>
+
+          </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>resolution</td>
+          <td>Resolución del documento final</td>
+          <td>La mayoría de las veces, no tiene ningún efecto</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>dpi</td>
+          <td>DPI a usar al imprimir</td>
+          <td>80</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>pageOffset</td>
+          <td>Entero a añadir a los números de página generados para el encabezado,
+           el pie de página y el índice</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>copies</td>
+          <td class="empty"> </td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>collate</td>
+          <td>Si se deben intercalar las copias</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>outline</td>
+          <td>Genera un índice PDF</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>outlineDepth</td>
+          <td>Profundidad máxima del índice</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>dumpOutline</td>
+          <td>Ruta del archivo para extraer el índice XML</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>out</td>
+          <td>Ruta para el archivo final, si es "-" se usa stdout</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>documentTitle</td>
+          <td>Título del documento final</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>useCompression</td>
+          <td>Activa o desactiva la compresión sin pérdida</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>margin.top</td>
+          <td>Tamaño del margen superior</td>
+          <td>2cm</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>margin.bottom</td>
+          <td>Tamaño del margen inferior</td>
+          <td>2cm</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>margin.left</td>
+          <td>Tamaño del margen izquierdo</td>
+          <td>2cm</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>margin.right</td>
+          <td>Tamaño del margen derecho</td>
+          <td>2cm</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>imageDPI</td>
+          <td>DPI máximo para las imágenes en el documento final</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>imageQuality</td>
+          <td>El factor de compresión jpeg para las imágenes en el documento final</td>
+          <td>94</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+           <td>load.cookieJar</td>
+           <td>Ruta hacia el archivo utilizado para cargar y almacenar las cookies</td>
+           <td>/tmp/cookies.txt</td>
+           <td>&gt;= 0.1.0</td>
+         </tr>
+
+        </tbody>
+       
+      </table>
+
+     
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ 
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="wkhtmltox-pdf-converter.convert" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">wkhtmltox\PDF\Converter::convert</h1>
+  <p class="verinfo">(wkhtmltox &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">wkhtmltox\PDF\Converter::convert</span> — <span class="dc-title">Realiza la conversión a PDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-wkhtmltox-pdf-converter.convert-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>wkhtmltox\PDF\Converter::convert</strong></span>(): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span></div>
+
+  <p class="para rdfs-comment">
+  Realiza la conversión de todos los objetos añadidos anteriormente
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-wkhtmltox-pdf-converter.convert-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-wkhtmltox-pdf-converter.convert-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Donde se utiliza el valor de retorno, se llenará con el contenido del buffer de conversión
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="wkhtmltox-pdf-converter.getversion" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">wkhtmltox\PDF\Converter::getVersion</h1>
+  <p class="verinfo">(wkhtmltox &gt;= 0.3.2)</p><p class="refpurpose"><span class="refname">wkhtmltox\PDF\Converter::getVersion</span> — <span class="dc-title">Determina la versión del convertidor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-wkhtmltox-pdf-converter.getversion-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>wkhtmltox\PDF\Converter::getVersion</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+  Determina la versión del convertidor según lo informado por libwkhtmltox
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-wkhtmltox-pdf-converter.getversion-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-wkhtmltox-pdf-converter.getversion-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un string de versión
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#wkhtmltox-pdf-converter.add">wkhtmltox\PDF\Converter::add</a> — Añade un objeto para su conversión</li><li><a href="#wkhtmltox-pdf-converter.construct">wkhtmltox\PDF\Converter::__construct</a> — Crea un nuevo conversor de PDF</li><li><a href="#wkhtmltox-pdf-converter.convert">wkhtmltox\PDF\Converter::convert</a> — Realiza la conversión a PDF</li><li><a href="#wkhtmltox-pdf-converter.getversion">wkhtmltox\PDF\Converter::getVersion</a> — Determina la versión del convertidor</li></ul>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="class.wkhtmltox-pdf-object" class="reference"><hr>
+
+ <h1 class="title">La clase wkhtmltox\PDF\Object</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(wkhtmltox &gt;= 0.1.0)</p>
+
+
+  <div class="section" id="wkhtmltox-pdf-object.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Representa un documento HTML, convertidor de entrada a PDF
+   </p>
+  </div>
+
+
+  <div class="section" id="wkhtmltox-pdf-object.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">wkhtmltox\PDF\Object</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Constructor */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#wkhtmltox-pdf-object.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$buffer</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$settings</code><span class="initializer"> = ?</span></span>)</div>
+
+
+   
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="wkhtmltox-pdf-object.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">wkhtmltox\PDF\Object::__construct</h1>
+  <p class="verinfo">(wkhtmltox &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">wkhtmltox\PDF\Object::__construct</span> — <span class="dc-title">Crea un nuevo objeto PDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-wkhtmltox-pdf-object.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>wkhtmltox\PDF\Object::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$buffer</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$settings</code><span class="initializer"> = ?</span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Crea un nuevo objeto PDF desde el buffer proporcionado,
+   y las configuraciones opcionales.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-wkhtmltox-pdf-object.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">buffer</code></dt>
+    <dd>
+     <p class="para">
+      HTML
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">settings</code></dt>
+    <dd>
+     <p class="para">
+      </p><table class="doctable table">
+       
+       
+        <thead>
+         <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Valor</th>
+          <th>Registro de cambios</th>
+         </tr>
+
+        </thead>
+
+        <tbody class="tbody">
+         <tr>
+          <td>page</td>
+          <td>URL o ruta del archivo HTML a
+           convertir</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>useExternalLinks</td>
+          <td>Establecer en <strong><code><a href="#constant.true">true</a></code></strong> para convertir los enlaces externos
+            enlaces PDF en la salida</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>useLocalLinks</td>
+          <td>Establecer en <strong><code><a href="#constant.true">true</a></code></strong> para convertir los enlaces internos
+           en los datos de entrada en enlaces PDF en la salida</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>produceForms</td>
+          <td>Establecer en <strong><code><a href="#constant.true">true</a></code></strong> para convertir los formularios
+           HTML en formularios PDF</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>replacements</td>
+          <td>no documentado</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>includeInOutline</td>
+          <td>Establecer en <strong><code><a href="#constant.true">true</a></code></strong> para incluir las secciones
+           de este objeto en el contorno y la tabla de contenidos</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>pagesCount</td>
+          <td>Establecer en <strong><code><a href="#constant.true">true</a></code></strong> para incluir en la tabla de contenidos el número
+           de páginas de este objeto</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>tocXsl</td>
+          <td>Establecer en hoja de estilo para convertir este objeto en un objeto de tabla de contenidos</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>toc.useDottedLines</td>
+          <td>Establecer en <strong><code><a href="#constant.true">true</a></code></strong> para usar líneas de puntos
+           en la tabla de contenidos</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>toc.captionText</td>
+          <td>El pie de ilustración para la tabla de contenidos</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>toc.forwardLinks</td>
+          <td>Establecer en <strong><code><a href="#constant.true">true</a></code></strong> para crear enlaces
+           desde la tabla de contenidos hacia el contenido</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>toc.backLinks</td>
+          <td>Establecer en <strong><code><a href="#constant.true">true</a></code></strong> para crear enlaces
+           desde el contenido hacia la tabla de contenidos</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>toc.indentation</td>
+          <td>La indentación para la tabla de contenidos</td>
+          <td>2em</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>toc.fontScale</td>
+          <td>El factor para reducir la fuente de caracteres
+           en todos los niveles de la tabla de contenidos</td>
+          <td>0.8</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>header.fontSize</td>
+          <td>El tamaño de la fuente de caracteres a usar en el encabezado</td>
+          <td>13</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>header.fontName</td>
+          <td>El nombre de la fuente de caracteres a usar en el encabezado</td>
+          <td>times</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>header.left</td>
+          <td>El texto para el lado izquierdo del encabezado</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>header.center</td>
+          <td>El texto para el centro del encabezado</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>header.right</td>
+          <td>El texto para el lado derecho del encabezado</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>header.line</td>
+          <td>Activa o desactiva la regla horizontal bajo el encabezado</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>header.spacing</td>
+          <td>El espacio entre el encabezado y el contenido</td>
+          <td>1.8</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>header.htmlUrl</td>
+          <td>URL o la ruta hacia el archivo HTML a usar
+           en el encabezado</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>footer.fontSize</td>
+          <td>El tamaño de la fuente de caracteres a usar en el pie de página</td>
+          <td>13</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>footer.fontName</td>
+          <td>El nombre de la fuente de caracteres a usar en el pie de página</td>
+          <td>times</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>footer.left</td>
+          <td>El texto para el lado izquierdo del pie de página</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>footer.center</td>
+          <td>El texto para el centro del pie de página</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>footer.right</td>
+          <td>El texto para el lado derecho del pie de página</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>footer.line</td>
+          <td>Activa o desactiva la regla horizontal bajo el pie de página</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>footer.spacing</td>
+          <td>El espacio entre el pie de página y el contenido</td>
+          <td>1.8</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>footer.htmlUrl</td>
+          <td>URL o la ruta del archivo HTML a usar en el
+           pie de página</td>
+          <td class="empty"> </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         
+
+<tr>
+  <td>load.username</td>
+  <td>nombre de usuario a utilizar al conectarse a un sitio web</td>
+  <td>bart</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.password</td>
+  <td>contraseña a utilizar al conectarse a un sitio web</td>
+  <td>elbarto</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.jsdelay</td>
+  <td>el tiempo en milisegundos a esperar después de cargar una página antes de capturarla</td>
+  <td>1200</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.zoomFactor</td>
+  <td>cuánto zoom debe aplicarse al contenido</td>
+  <td>2.2</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.customHeaders</td>
+  <td>encabezados personalizados a enviar al solicitar la página web principal</td>
+  <td class="empty"> </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.repertCustomHeaders</td>
+  <td>establecer en true para enviar con todas las solicitudes</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.cookies</td>
+  <td>cookie a enviar al solicitar la página web principal</td>
+  <td class="empty"> </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.post</td>
+  <td>string a enviar al realizar una solicitud post a la página web principal</td>
+  <td class="empty"> </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.blockLocalFileAccess</td>
+  <td>impide que los archivos locales y los archivos de tubería accedan a otros archivos locales</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.stopSlowScript</td>
+  <td>detiene los scripts lentos de javascript</td>
+  <td>booleano</td>
+  <td class="empty"> </td>
+</tr>
+
+<tr>
+  <td>load.debugJavascript</td>
+  <td>permite que javascript lance advertencias</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.loadErrorHandling</td>
+  <td>define la estrategia de manejo de errores</td>
+  <td>
+   <table class="doctable table">
+    
+    
+     <tbody class="tbody">
+      <tr>
+       <td>abort</td>
+       <td>aborta el proceso de conversión</td>
+      </tr>
+
+      <tr>
+       <td>skip</td>
+       <td>no añade el objeto a la salida final</td>
+      </tr>
+
+      <tr>
+       <td>ignore</td>
+       <td>intenta añadir el objeto a la salida final</td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.proxy</td>
+  <td class="empty"> </td>
+  <td class="empty"> </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+
+         
+
+<tr>
+  <td>web.background</td>
+  <td>incluye una imagen de fondo en la salida</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.loadImages</td>
+  <td>incluye imágenes en la salida</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.enableJavascript</td>
+  <td>activa o desactiva javascript</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.enableIntelligentShrinking</td>
+  <td>activa el intento de poner más contenido en la página, se aplica solo a la salida PDF</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.minimumFontSize</td>
+  <td>el tamaño de fuente mínimo permitido</td>
+  <td>9</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.printMediaType</td>
+  <td>muestra el contenido usando el tipo de medio de impresión en lugar del tipo de medio de pantalla</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.defaultEncoding</td>
+  <td>el contenido a usar cuando no se especifica ninguna codificación</td>
+  <td>utf-8</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.userStyleSheet</td>
+  <td>URL o ruta hacia una hoja de estilo de usuario especificada</td>
+  <td>/ruta/hacia/estilo.css</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.enablePlugins</td>
+  <td>activa o desactiva los plugins NS</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+
+        </tbody>
+       
+      </table>
+
+     
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ 
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#wkhtmltox-pdf-object.construct">wkhtmltox\PDF\Object::__construct</a> — Crea un nuevo objeto PDF</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+
+<div id="class.wkhtmltox-image-converter" class="reference"><hr>
+
+ <h1 class="title">La clase wkhtmltox\Image\Converter</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(wkhtmltox &gt;= 0.1.0)</p>
+
+
+  <div class="section" id="wkhtmltox-image-converter.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Convierte una entrada HTML en varios formatos de imagen
+   </p>
+  </div>
+
+
+  <div class="section" id="wkhtmltox-image-converter.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">wkhtmltox\Image\Converter</strong>
+     </span>
+     {</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Constructor */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#wkhtmltox-image-converter.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$buffer</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$settings</code><span class="initializer"> = ?</span></span>)</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#wkhtmltox-image-converter.convert" class="methodname">convert</a></span>(): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#wkhtmltox-image-converter.getversion" class="methodname">getVersion</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+
+
+
+<div id="wkhtmltox-image-converter.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">wkhtmltox\Image\Converter::__construct</h1>
+  <p class="verinfo">(wkhtmltox &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">wkhtmltox\Image\Converter::__construct</span> — <span class="dc-title">Crea un nuevo convertidor de imágenes</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-wkhtmltox-image-converter.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>wkhtmltox\Image\Converter::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$buffer</code><span class="initializer"> = ?</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$settings</code><span class="initializer"> = ?</span></span>)</div>
+
+  <p class="para rdfs-comment">
+   Crea un convertidor de imágenes, utilizando opcionalmente un buffer de entrada
+   así como una configuración
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-wkhtmltox-image-converter.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">buffer</code></dt>
+    <dd>
+     <p class="para">
+      HTML
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">settings</code></dt>
+    <dd>
+     <p class="para">
+      </p><table class="doctable table">
+       
+       
+        <thead>
+         <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Valor</th>
+          <th>Registro de cambios</th>
+         </tr>
+
+        </thead>
+
+        <tbody class="tbody">
+         <tr>
+          <td>in</td>
+          <td>URL o ruta del archivo de entrada, si se usa la salida "-"</td>
+          <td>/ruta/hacia/marcado.html</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>out</td>
+          <td>Ruta del archivo de salida, si es "-" se usa stdout; por omisión, se usa un buffer interno</td>
+          <td>/ruta/hacia/salida.png</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>fmt</td>
+          <td>Formato de salida a usar</td>
+          <td>
+           <table class="doctable table">
+            
+            
+             <tbody class="tbody">
+              <tr>
+               <td>""</td>
+               <td>predeterminado</td>
+              </tr>
+
+              <tr>
+               <td>jpg</td>
+               <td>salida como JPEG</td>
+              </tr>
+
+              <tr>
+               <td>png</td>
+               <td>salida como PNG</td>
+              </tr>
+
+              <tr>
+               <td>bmp</td>
+               <td>salida como mapa de bits</td>
+              </tr>
+
+              <tr>
+               <td>svg</td>
+               <td>salida como SVG</td>
+              </tr>
+
+             </tbody>
+            
+           </table>
+
+          </td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>transparent</td>
+          <td>En la salida PNG o SVG, hace el fondo transparente</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>screenWidth</td>
+          <td>El ancho de pantalla a usar para el renderizado en píxeles</td>
+          <td>800</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>smartWidth</td>
+          <td>Cuando es <strong><code><a href="#constant.true">true</a></code></strong>, el ancho de la pantalla se extiende al ancho del contenido</td>
+          <td>booleano</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>quality</td>
+          <td>Factor de compresión a usar cuando la salida es una imagen JPEG</td>
+          <td>94</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>crop.left</td>
+          <td>Izquierda/coordenada X de la ventana a capturar, en píxeles</td>
+          <td>200</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>crop.top</td>
+          <td>Arriba/coordenada Y de la ventana a capturar, en píxeles</td>
+          <td>200</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>crop.width</td>
+          <td>Ancho de la ventana a capturar, en píxeles</td>
+          <td>200</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+          <td>crop.height</td>
+          <td>Altura de la ventana a capturar, en píxeles</td>
+          <td>200</td>
+          <td>&gt;= 0.1.0</td>
+         </tr>
+
+         <tr>
+           <td>load.cookieJar</td>
+           <td>Ruta del archivo utilizado para cargar y almacenar las cookies.</td>
+           <td>/tmp/cookies.txt</td>
+           <td>&gt;= 0.1.0</td>
+         </tr>
+
+         
+
+<tr>
+  <td>load.username</td>
+  <td>nombre de usuario a utilizar al conectarse a un sitio web</td>
+  <td>bart</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.password</td>
+  <td>contraseña a utilizar al conectarse a un sitio web</td>
+  <td>elbarto</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.jsdelay</td>
+  <td>el tiempo en milisegundos a esperar después de cargar una página antes de capturarla</td>
+  <td>1200</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.zoomFactor</td>
+  <td>cuánto zoom debe aplicarse al contenido</td>
+  <td>2.2</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.customHeaders</td>
+  <td>encabezados personalizados a enviar al solicitar la página web principal</td>
+  <td class="empty"> </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.repertCustomHeaders</td>
+  <td>establecer en true para enviar con todas las solicitudes</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.cookies</td>
+  <td>cookie a enviar al solicitar la página web principal</td>
+  <td class="empty"> </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.post</td>
+  <td>string a enviar al realizar una solicitud post a la página web principal</td>
+  <td class="empty"> </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.blockLocalFileAccess</td>
+  <td>impide que los archivos locales y los archivos de tubería accedan a otros archivos locales</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.stopSlowScript</td>
+  <td>detiene los scripts lentos de javascript</td>
+  <td>booleano</td>
+  <td class="empty"> </td>
+</tr>
+
+<tr>
+  <td>load.debugJavascript</td>
+  <td>permite que javascript lance advertencias</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.loadErrorHandling</td>
+  <td>define la estrategia de manejo de errores</td>
+  <td>
+   <table class="doctable table">
+    
+    
+     <tbody class="tbody">
+      <tr>
+       <td>abort</td>
+       <td>aborta el proceso de conversión</td>
+      </tr>
+
+      <tr>
+       <td>skip</td>
+       <td>no añade el objeto a la salida final</td>
+      </tr>
+
+      <tr>
+       <td>ignore</td>
+       <td>intenta añadir el objeto a la salida final</td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>load.proxy</td>
+  <td class="empty"> </td>
+  <td class="empty"> </td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+
+         
+
+<tr>
+  <td>web.background</td>
+  <td>incluye una imagen de fondo en la salida</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.loadImages</td>
+  <td>incluye imágenes en la salida</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.enableJavascript</td>
+  <td>activa o desactiva javascript</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.enableIntelligentShrinking</td>
+  <td>activa el intento de poner más contenido en la página, se aplica solo a la salida PDF</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.minimumFontSize</td>
+  <td>el tamaño de fuente mínimo permitido</td>
+  <td>9</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.printMediaType</td>
+  <td>muestra el contenido usando el tipo de medio de impresión en lugar del tipo de medio de pantalla</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.defaultEncoding</td>
+  <td>el contenido a usar cuando no se especifica ninguna codificación</td>
+  <td>utf-8</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.userStyleSheet</td>
+  <td>URL o ruta hacia una hoja de estilo de usuario especificada</td>
+  <td>/ruta/hacia/estilo.css</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+<tr>
+  <td>web.enablePlugins</td>
+  <td>activa o desactiva los plugins NS</td>
+  <td>booleano</td>
+  <td>&gt;= 0.1.0</td>
+</tr>
+
+
+        </tbody>
+       
+      </table>
+
+     
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ 
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="wkhtmltox-image-converter.convert" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">wkhtmltox\Image\Converter::convert</h1>
+  <p class="verinfo">(wkhtmltox &gt;= 0.1.0)</p><p class="refpurpose"><span class="refname">wkhtmltox\Image\Converter::convert</span> — <span class="dc-title">Realiza la conversión de la imagen</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-wkhtmltox-image-converter.convert-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>wkhtmltox\Image\Converter::convert</strong></span>(): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span></div>
+
+  <p class="para rdfs-comment">
+  Realiza la conversión de la memoria intermedia de entrada
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-wkhtmltox-image-converter.convert-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-wkhtmltox-image-converter.convert-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Cuando se utilice el valor de retorno, se rellenará con el contenido de la memoria intermedia de conversión
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="wkhtmltox-image-converter.getversion" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">wkhtmltox\Image\Converter::getVersion</h1>
+  <p class="verinfo">(wkhtmltox &gt;= 0.3.2)</p><p class="refpurpose"><span class="refname">wkhtmltox\Image\Converter::getVersion</span> — <span class="dc-title">Determina la versión del convertidor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-wkhtmltox-image-converter.getversion-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>wkhtmltox\Image\Converter::getVersion</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+  Determina la versión del convertidor según lo informado por libwkhtmltox
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-wkhtmltox-image-converter.getversion-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-wkhtmltox-image-converter.getversion-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un string de versión
+  </p>
+  <div class="warning"><strong class="warning">Advertencia</strong>
+   <p class="para">
+    Esto todavía no se ha implementado por libwkhtmltox
+   </p>
+  </div>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#wkhtmltox-image-converter.construct">wkhtmltox\Image\Converter::__construct</a> — Crea un nuevo convertidor de imágenes</li><li><a href="#wkhtmltox-image-converter.convert">wkhtmltox\Image\Converter::convert</a> — Realiza la conversión de la imagen</li><li><a href="#wkhtmltox-image-converter.getversion">wkhtmltox\Image\Converter::getVersion</a> — Determina la versión del convertidor</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.wkhtmltox">Introducción</a></li><li><a href="#wkhtmltox.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#wkhtmltox.requirements">Requerimientos</a></li><li><a href="#wkhtmltox.installation">Instalación</a></li><li><a href="#wkhtmltox.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#class.wkhtmltox-pdf-converter">wkhtmltox\PDF\Converter</a> — La clase wkhtmltox\PDF\Converter<ul class="chunklist chunklist_book chunklist_children"><li><a href="#wkhtmltox-pdf-converter.add">wkhtmltox\PDF\Converter::add</a> — Añade un objeto para su conversión</li><li><a href="#wkhtmltox-pdf-converter.construct">wkhtmltox\PDF\Converter::__construct</a> — Crea un nuevo conversor de PDF</li><li><a href="#wkhtmltox-pdf-converter.convert">wkhtmltox\PDF\Converter::convert</a> — Realiza la conversión a PDF</li><li><a href="#wkhtmltox-pdf-converter.getversion">wkhtmltox\PDF\Converter::getVersion</a> — Determina la versión del convertidor</li></ul></li><li><a href="#class.wkhtmltox-pdf-object">wkhtmltox\PDF\Object</a> — La clase wkhtmltox\PDF\Object<ul class="chunklist chunklist_book chunklist_children"><li><a href="#wkhtmltox-pdf-object.construct">wkhtmltox\PDF\Object::__construct</a> — Crea un nuevo objeto PDF</li></ul></li><li><a href="#class.wkhtmltox-image-converter">wkhtmltox\Image\Converter</a> — La clase wkhtmltox\Image\Converter<ul class="chunklist chunklist_book chunklist_children"><li><a href="#wkhtmltox-image-converter.construct">wkhtmltox\Image\Converter::__construct</a> — Crea un nuevo convertidor de imágenes</li><li><a href="#wkhtmltox-image-converter.convert">wkhtmltox\Image\Converter::convert</a> — Realiza la conversión de la imagen</li><li><a href="#wkhtmltox-image-converter.getversion">wkhtmltox\Image\Converter::getVersion</a> — Determina la versión del convertidor</li></ul></li></ul></div>

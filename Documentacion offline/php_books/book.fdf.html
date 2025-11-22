@@ -1,0 +1,3097 @@
+<div id="book.fdf" class="book"><hr>
+ 
+ <h1 class="title">Formato de formulario</h1>
+ 
+
+ 
+ <div id="intro.fdf" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="simpara">
+   <code class="literal">Forms Data Format</code> (FDF) es un formato de formulario para documentos
+   PDF. La documentación (en inglés) puede ser leída en
+   <a href="http://www.adobe.com/devnet/acrobat/fdftoolkit.html" class="link external">» http://www.adobe.com/devnet/acrobat/fdftoolkit.html</a>
+   para más detalles sobre los pormenores.
+  </p>
+  <p class="simpara">
+   El espíritu de FDF es similar al de los formularios HTML. Las
+   diferencias radican en los medios de transmisión de los
+   datos al servidor, cuando el botón <code class="literal">"submit"</code> (enviar) es
+   presionado (lo cual es del ámbito de Form Data Format) y el formato de
+   formulario en sí mismo (que es más bien del ámbito de Portable Document
+   Format, PDF). Gestionar datos FDF es uno de los objetivos de las
+   funciones FDF. Pero hay otros. También es posible tomar un
+   formulario PDF y prellenar los campos sin modificar el
+   formulario en sí. En este caso, se creará un documento FDF
+   (<span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>), se llenarán los campos
+   (<span class="function"><a href="#function.fdf-set-value" class="function">fdf_set_value()</a></span>) y se asociará a un fichero PDF
+   (<span class="function"><a href="#function.fdf-set-file" class="function">fdf_set_file()</a></span>). Finalmente, todo será enviado
+   al cliente, con el tipo MIME <code class="literal">application/vnd.fdf</code>. El módulo <code class="literal">"Acrobat reader"</code>
+   del navegador reconocerá este tipo MIME y leerá el fichero
+   PDF, luego lo llenará con FDF.
+  </p>
+
+  <p class="simpara">
+   Si se edita un fichero FDF con un editor de texto, se encontrará
+   un catálogo de objetos con el nombre de <code class="literal">FDF</code>. Este objeto
+   puede contener entradas tales como <code class="literal">Fields</code>,
+   <code class="literal">F</code>, <code class="literal">Status</code> etc.
+   Las entradas más comúnmente utilizadas son
+   <code class="literal">Fields</code>, que indica una lista de campos de control,
+   y <code class="literal">F</code> que contiene el nombre del fichero PDF al que
+   pertenecen estos datos. Estas entradas son designadas en la documentación
+   PDF bajo el nombre de /F-Key o /Status-Key.
+   La modificación de estas entradas es posible con las funciones
+   <span class="function"><a href="#function.fdf-set-file" class="function">fdf_set_file()</a></span> y <span class="function"><a href="#function.fdf-set-status" class="function">fdf_set_status()</a></span>.
+   Los campos son modificables con las funciones
+   <span class="function"><a href="#function.fdf-set-value" class="function">fdf_set_value()</a></span>, <span class="function"><a href="#function.fdf-set-opt" class="function">fdf_set_opt()</a></span> etc.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="fdf.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#fdf.requirements">Requerimientos</a></li><li><a href="#fdf.installation">Instalación</a></li><li><a href="#fdf.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ <div id="fdf.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Se necesitará el SDK de FDF toolkit, disponible en el sitio
+   <a href="http://www.adobe.com/devnet/acrobat/fdftoolkit.html" class="link external">» http://www.adobe.com/devnet/acrobat/fdftoolkit.html</a>.
+   Desde PHP 4.3.0, se necesitará la versión 5.0 del SDK.
+   La biblioteca FDF toolkit está disponible como una biblioteca compilada, editada por Adobe, en los sistemas operativos Win32,
+   Linux, Solaris y AIX.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="fdf.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Esta extensión es considerada no mantenida y muerta.
+        Sin embargo, el código fuente sigue disponible desde el
+<abbr>SVN</abbr> de
+<abbr title="PHP Extension and Application Repository">PECL</abbr> aquí: 
+  <a href="https://svn.php.net/viewvc/pecl/fdf" class="link external">» https://svn.php.net/viewvc/pecl/fdf</a>.
+ </p>
+ <p class="para">
+  Esta extensión ya no se proporciona con PHP.
+ </p>
+ <blockquote class="note"><p><strong class="note">Nota</strong>: 
+  <span class="simpara">
+   Si se encuentran problemas durante la configuración de FDF con soporte fdftk, verifique que el fichero de encabezado
+   <var class="filename">fdftk.h</var> y la biblioteca
+   <var class="filename">libfdftk.so</var> estén en su lugar. El script
+   <strong class="command">configure</strong> soporta la jerarquía de directorios de la distribución
+   FDF SDK y la organización clásica <var class="filename">DIR/include</var> y
+   <var class="filename">DIR/lib</var>: por lo tanto, se puede utilizar uno u otro
+   directamente con la distribución descomprimida, o bien incluyendo el
+   fichero de encabezado y la biblioteca apropiada en su sistema, es decir,
+   en <var class="filename">/usr/local/include</var> y
+   <var class="filename">/usr/local/lib</var>. Solo queda configurar
+   con <strong class="option configure">--with-fdftk=/usr/local</strong>.
+  </span>
+ </p></blockquote>
+ <blockquote class="note"><p><strong class="note">Nota</strong>: 
+  <strong>Nota para usuarios Win32</strong><br>
+  </p><p class="para">
+   Para hacer funcionar esta extensión, algunas bibliotecas
+<abbr title="Dynamic Link Library">DLL</abbr> deben estar disponibles a través del
+<var class="envar">PATH</var> del sistema Windows. Lea la
+<abbr>F.A.Q</abbr> titulada
+"<a href="#faq.installation.addtopath" class="link">Cómo agregar mi carpeta
+PHP a mi PATH de Windows</a>" para más información. Copiar las bibliotecas DLL desde la
+carpeta PHP a la carpeta del sistema de Windows también funciona (ya que la carpeta del sistema está por defecto en el
+<var class="envar">PATH</var> del sistema), pero este método no es recomendado.
+<em>Esta extensión requiere que los siguientes archivos estén en el
+<var class="envar">PATH</var>:</em> 
+   <var class="filename">fdftk.dll</var>
+  </p>
+ </blockquote>
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ <div id="fdf.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   La mayoría de las funciones FDF requieren un recurso de tipo
+   <code class="parameter">fdf</code> como primer argumento. Un recurso
+   <code class="parameter">fdf</code> es una estructura que representa un
+   fichero FDF abierto. Se pueden crear recursos <code class="parameter">fdf</code>
+   con las funciones <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>,
+   <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> y <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="fdf.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.fdfvalue">
+    <strong><code><a href="#constant.fdfvalue">FDFValue</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfstatus">
+    <strong><code><a href="#constant.fdfstatus">FDFStatus</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdffile">
+    <strong><code><a href="#constant.fdffile">FDFFile</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfid">
+    <strong><code><a href="#constant.fdfid">FDFID</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfff">
+    <strong><code><a href="#constant.fdfff">FDFFf</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfsetff">
+    <strong><code><a href="#constant.fdfsetff">FDFSetFf</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfclearff">
+    <strong><code><a href="#constant.fdfclearff">FDFClearFf</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfflags">
+    <strong><code><a href="#constant.fdfflags">FDFFlags</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfsetf">
+    <strong><code><a href="#constant.fdfsetf">FDFSetF</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfclrf">
+    <strong><code><a href="#constant.fdfclrf">FDFClrF</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfap">
+    <strong><code><a href="#constant.fdfap">FDFAP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfas">
+    <strong><code><a href="#constant.fdfas">FDFAS</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfaction">
+    <strong><code><a href="#constant.fdfaction">FDFAction</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfaa">
+    <strong><code><a href="#constant.fdfaa">FDFAA</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfapref">
+    <strong><code><a href="#constant.fdfapref">FDFAPRef</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfif">
+    <strong><code><a href="#constant.fdfif">FDFIF</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfenter">
+    <strong><code><a href="#constant.fdfenter">FDFEnter</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfexit">
+    <strong><code><a href="#constant.fdfexit">FDFExit</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfdown">
+    <strong><code><a href="#constant.fdfdown">FDFDown</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfup">
+    <strong><code><a href="#constant.fdfup">FDFUp</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfformat">
+    <strong><code><a href="#constant.fdfformat">FDFFormat</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfvalidate">
+    <strong><code><a href="#constant.fdfvalidate">FDFValidate</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfkeystroke">
+    <strong><code><a href="#constant.fdfkeystroke">FDFKeystroke</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfcalculate">
+    <strong><code><a href="#constant.fdfcalculate">FDFCalculate</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfnormalap">
+    <strong><code><a href="#constant.fdfnormalap">FDFNormalAP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfrolloverap">
+    <strong><code><a href="#constant.fdfrolloverap">FDFRolloverAP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.fdfdownap">
+    <strong><code><a href="#constant.fdfdownap">FDFDownAP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="fdf.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+
+ <p class="para">
+  Los siguientes ejemplos muestran cómo evaluar los datos
+  del formulario.
+  </p><div class="example" id="example-3407">
+   <p><strong>Ejemplo #1 Evaluar un documento FDF</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Abrir un fichero FDF desde una string proporcionada por la extensión PDF<br>// El formulario PDF contiene varios campos de texto con los nombres<br>// volume, date, comment, publisher, preparer y dos casillas de verificación<br>// show_publisher y show_preparer.<br></span><span style="color: #0000BB">$fdf </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_open_string</span><span style="color: #007700">(</span><span style="color: #0000BB">$HTTP_FDF_DATA</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$volume </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_get_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"volume"</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">'El campo Volume contiene el valor: "&lt;strong&gt;' </span><span style="color: #007700">. </span><span style="color: #0000BB">$volume </span><span style="color: #007700">. </span><span style="color: #DD0000">'&lt;/strong&gt;"&lt;br /&gt;'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$date </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_get_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"date"</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">'El valor del campo date era "&lt;strong&gt;' </span><span style="color: #007700">. </span><span style="color: #0000BB">$date </span><span style="color: #007700">. </span><span style="color: #DD0000">'&lt;/strong&gt;"&lt;br /&gt;'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$comment </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_get_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"comment"</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">'El valor del campo comment era "&lt;strong&gt;' </span><span style="color: #007700">. </span><span style="color: #0000BB">$comment </span><span style="color: #007700">. </span><span style="color: #DD0000">'&lt;/strong&gt;"&lt;br /&gt;'</span><span style="color: #007700">;<br><br>if (</span><span style="color: #0000BB">fdf_get_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"show_publisher"</span><span style="color: #007700">) == </span><span style="color: #DD0000">"On"</span><span style="color: #007700">) {<br>  </span><span style="color: #0000BB">$publisher </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_get_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"publisher"</span><span style="color: #007700">);<br>  echo </span><span style="color: #DD0000">"El valor del campo Publisher era: '&lt;strong&gt;" </span><span style="color: #007700">. </span><span style="color: #0000BB">$publisher </span><span style="color: #007700">. </span><span style="color: #DD0000">"&lt;/strong&gt;&lt;br /&gt;"</span><span style="color: #007700">;<br>} else<br>  echo </span><span style="color: #DD0000">'El valor del campo Publisher no debe ser mostrado.&lt;br /&gt;'</span><span style="color: #007700">;<br><br>if (</span><span style="color: #0000BB">fdf_get_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"show_preparer"</span><span style="color: #007700">) == </span><span style="color: #DD0000">"On"</span><span style="color: #007700">) {<br>  </span><span style="color: #0000BB">$preparer </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_get_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"preparer"</span><span style="color: #007700">);<br>  echo </span><span style="color: #DD0000">'El valor del campo Preparer era "&lt;strong&gt;' </span><span style="color: #007700">. </span><span style="color: #0000BB">$preparer </span><span style="color: #007700">. </span><span style="color: #DD0000">'&lt;/strong&gt;"&lt;br /&gt;'</span><span style="color: #007700">;<br>} else<br>  echo </span><span style="color: #DD0000">'El valor del campo Preparer no debe ser mostrado.&lt;br /&gt;'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">fdf_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+  </div>
+ 
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="ref.fdf" class="reference"><hr>
+ <h1 class="title">Funciones FDF</h1>
+
+ 
+
+
+
+
+<div id="function.fdf-add-doc-javascript" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_add_doc_javascript</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_add_doc_javascript</span> — <span class="dc-title">Añade código javascript a un documento FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-add-doc-javascript-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_add_doc_javascript</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$script_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$script_code</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Añade el código javascript <code class="parameter">script_code</code>
+   al documento <code class="parameter">fdfdoc</code>, que Acrobat añadirá a los scripts de
+   nivel de documento, una vez importado el FDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-add-doc-javascript-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">script_name</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del script.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">script_code</code></dt>
+     <dd>
+      <p class="para">
+       El código del script. Se recomienda encarecidamente utilizar '\r' como
+       separador de líneas en el código <code class="parameter">script_code</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-add-doc-javascript-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.fdf-add-doc-javascript-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3408">
+    <p><strong>Ejemplo #1 Adición de código JavaScript a un documento FDF</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$fdf </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_create</span><span style="color: #007700">();<br></span><span style="color: #0000BB">fdf_add_doc_javascript</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"PlusOne"</span><span style="color: #007700">, </span><span style="color: #DD0000">"function PlusOne(x)\r{\r  return x+1;\r}\r"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">fdf_save</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>
+     Este ejemplo creará un documento FDF como el siguiente:
+    </p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">%FDF-1.2
+%âãÏÓ
+1 0 obj
+&lt;&lt;
+/FDF &lt;&lt; /JavaScript &lt;&lt; /Doc [ (PlusOne)(function PlusOne\(x\)\r{\r  return x+1;\r}\r)] &gt;&gt; &gt;&gt;
+&gt;&gt;
+endobj
+trailer
+&lt;&lt;
+/Root 1 0 R
+
+&gt;&gt;
+%%EOF</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-add-template" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_add_template</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_add_template</span> — <span class="dc-title">Añade una plantilla en el documento FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-add-template-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_add_template</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$newpage</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$template</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$rename</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-close" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_close</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_close</span> — <span class="dc-title">Cierra un documento FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-close-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_close</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Cierra el documento FDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-close-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-close-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-close-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-open" class="function" rel="rdfs-seeAlso">fdf_open()</a> - Abre un documento FDF</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.fdf-create" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_create</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_create</span> — <span class="dc-title">Crea un nuevo documento FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-create-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_create</strong></span>(): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crea un nuevo documento FDF.
+  </p>
+  <p class="para">
+   Esta función es necesaria para aquellos que desean prellenar
+   los campos de un formulario en un fichero PDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-create-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-create-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un gestor de documento FDF, o <strong><code><a href="#constant.false">false</a></code></strong>
+   si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.fdf-create-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3409">
+    <p><strong>Ejemplo #1 Prellemar un formulario PDF</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$outfdf </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_create</span><span style="color: #007700">();<br></span><span style="color: #0000BB">fdf_set_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$outfdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"volume"</span><span style="color: #007700">, </span><span style="color: #0000BB">$volume</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">fdf_set_file</span><span style="color: #007700">(</span><span style="color: #0000BB">$outfdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"http:/testfdf/resultlabel.pdf"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">fdf_save</span><span style="color: #007700">(</span><span style="color: #0000BB">$outfdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"outtest.fdf"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">fdf_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$outfdf</span><span style="color: #007700">);<br></span><span style="color: #0000BB">Header</span><span style="color: #007700">(</span><span style="color: #DD0000">"Content-type: application/vnd.fdf"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$fp </span><span style="color: #007700">= </span><span style="color: #0000BB">fopen</span><span style="color: #007700">(</span><span style="color: #DD0000">"outtest.fdf"</span><span style="color: #007700">, </span><span style="color: #DD0000">"r"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">fpassthru</span><span style="color: #007700">(</span><span style="color: #0000BB">$fp</span><span style="color: #007700">);<br></span><span style="color: #0000BB">unlink</span><span style="color: #007700">(</span><span style="color: #DD0000">"outtest.fdf"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-create-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-close" class="function" rel="rdfs-seeAlso">fdf_close()</a> - Cierra un documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-save" class="function" rel="rdfs-seeAlso">fdf_save()</a> - Guarda un documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-open" class="function" rel="rdfs-seeAlso">fdf_open()</a> - Abre un documento FDF</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.fdf-enum-values" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_enum_values</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_enum_values</span> — <span class="dc-title">Llama a una función de usuario para cada valor FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-enum-values-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_enum_values</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.callable" class="type callable">callable</a></span> <code class="parameter">$function</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$userdata</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.fdf-errno" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_errno</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_errno</span> — <span class="dc-title">Devuelve el código de error de la última operación FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-errno-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_errno</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera el código de error de la última operación FDF.
+  </p>
+  <p class="para">
+   Un mensaje de error es accesible a través de la función
+   <span class="function"><a href="#function.fdf-error" class="function">fdf_error()</a></span> function.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-errno-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-errno-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el código de error en forma de <span class="type"><a href="#language.types.integer" class="type int">int</a></span> o <code class="literal">0</code> si no ha ocurrido
+   ningún error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-errno-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-error" class="function" rel="rdfs-seeAlso">fdf_error()</a> - Devuelve el mensaje de error FDF</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.fdf-error" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_error</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_error</span> — <span class="dc-title">Devuelve el mensaje de error FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-error-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_error</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$error_code</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el mensaje de error FDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-error-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">error_code</code></dt>
+     <dd>
+      <p class="para">
+       Un código de error obtenido con la función
+       <span class="function"><a href="#function.fdf-errno" class="function">fdf_errno()</a></span>. Si no se proporciona, esta función
+       utiliza el código de error interno definido por la última operación.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-error-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el mensaje de error en forma de un <span class="type"><a href="#language.types.string" class="type string">string</a></span> o
+   la cadena <code class="literal">no error</code> si no hay ninguno.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-error-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-errno" class="function" rel="rdfs-seeAlso">fdf_errno()</a> - Devuelve el código de error de la última operación FDF</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-get-ap" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_get_ap</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_get_ap</span> — <span class="dc-title">Lee la apariencia de un campo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-get-ap-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_get_ap</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$field</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$face</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Lee la apariencia del campo <code class="parameter">field</code> (es decir, el valor
+   de la clave /AP) y la almacena en el fichero <code class="parameter">filename</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-get-ap-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">field</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">face</code></dt>
+     <dd>
+      <p class="para">
+       Los valores posibles son <strong><code><a href="#constant.fdfnormalap">FDFNormalAP</a></code></strong>,
+       <strong><code><a href="#constant.fdfrolloverap">FDFRolloverAP</a></code></strong> y <strong><code><a href="#constant.fdfdownap">FDFDownAP</a></code></strong>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       La apariencia será almacenada en este parámetro.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-get-ap-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-get-attachment" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_get_attachment</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_get_attachment</span> — <span class="dc-title">Extrae un fichero integrado en un documento FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-get-attachment-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_get_attachment</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$savepath</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Extrae el fichero <code class="parameter">fieldname</code>
+   subido a través del campo <code class="literal">"file selection"</code>,
+   luego lo almacena en el fichero <code class="parameter">savepath</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-get-attachment-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fieldname</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">savepath</code></dt>
+     <dd>
+      <p class="para">
+       Puede ser el nombre de un fichero o bien un directorio en el cual el
+       fichero subido será creado bajo su nombre original. Cualquier fichero
+       ya existente con el mismo nombre será sobrescrito.
+      </p>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        Parece que no hay otra manera de conocer el nombre del fichero subido
+        que almacenarlo en un directorio con <code class="parameter">savepath</code> y
+        luego leer su nombre en el directorio.
+       </p>
+      </blockquote>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-get-attachment-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   El array devuelto contiene los siguientes campos:
+   </p><ul class="itemizedlist">
+    <li class="listitem">
+     <span class="simpara"><code class="parameter">path</code> - ruta de almacenamiento del directorio</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara"><code class="parameter">size</code> - tamaño del fichero almacenado en bytes</span>
+    </li>
+    <li class="listitem">
+     <span class="simpara"><code class="parameter">type</code> - Tipo MIMI del fichero, si fue proporcionado en el documento FDF</span>
+    </li>
+   </ul>
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.fdf-get-attachment-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3410">
+    <p><strong>Ejemplo #1 Almacenamiento de un fichero subido</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$fdf </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_open_string</span><span style="color: #007700">(</span><span style="color: #0000BB">$HTTP_FDF_DATA</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$data </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_get_attachment</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"filename"</span><span style="color: #007700">, </span><span style="color: #DD0000">"/tmpdir"</span><span style="color: #007700">);<br>echo </span><span style="color: #DD0000">"El fichero subido es almacenado en </span><span style="color: #0000BB">$data</span><span style="color: #007700">[</span><span style="color: #0000BB">path</span><span style="color: #007700">]</span><span style="color: #DD0000">"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-get-encoding" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_get_encoding</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_get_encoding</span> — <span class="dc-title">Lee el valor de la clave /Encoding</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-get-encoding-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_get_encoding</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera el valor de la clave <code class="literal">/Encoding</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-get-encoding-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-get-encoding-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la codificación, en forma de un <span class="type"><a href="#language.types.string" class="type string">string</a></span>. Una cadena vacía
+   es devuelta si el esquema <code class="literal">PDFDocEncoding/Unicode</code>
+   es utilizado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-get-encoding-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-set-encoding" class="function" rel="rdfs-seeAlso">fdf_set_encoding()</a> - Modifica la codificación de caracteres</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-get-file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_get_file</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_get_file</span> — <span class="dc-title">Lee el valor de la clave /F</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-get-file-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_get_file</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Lee el valor de la clave <code class="literal">/F</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-get-file-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-get-file-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el valor de la clave, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-get-file-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-set-file" class="function" rel="rdfs-seeAlso">fdf_set_file()</a> - Crea un documento PDF para mostrar datos FDF</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-get-flags" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_get_flags</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_get_flags</span> — <span class="dc-title">Lee los atributos de un campo FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-get-flags-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_get_flags</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$whichflags</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-get-opt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_get_opt</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECLv)</p><p class="refpurpose"><span class="refname">fdf_get_opt</span> — <span class="dc-title">Lee un valor en un array de valores de un campo FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-get-opt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_get_opt</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$element</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-get-status" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_get_status</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_get_status</span> — <span class="dc-title">Lee el valor de la clave /STATUS</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-get-status-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_get_status</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Lee el valor de la clave <code class="literal">/STATUS</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-get-status-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-get-status-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el valor de la clave, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-get-status-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-set-status" class="function" rel="rdfs-seeAlso">fdf_set_status()</a> - Establece el valor de la clave /STATUS</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-get-value" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_get_value</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_get_value</span> — <span class="dc-title">Devuelve el valor de un campo FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-get-value-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_get_value</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$which</code><span class="initializer"> = -1</span></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el valor de un campo FDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-get-value-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fieldname</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del campo FDF, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">which</code></dt>
+     <dd>
+      <p class="para">
+       Los elementos de un campo array pueden ser leídos proporcionando este
+       argumento opcional, en forma de un entero cuyo valor mínimo será <code class="literal">0</code>. Para los campos que no son arrays, este argumento
+       opcional será ignorado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-get-value-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el valor del campo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-get-value-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-set-value" class="function" rel="rdfs-seeAlso">fdf_set_value()</a> - Modifica el valor de un campo FDF</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-get-version" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_get_version</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_get_version</span> — <span class="dc-title">Lee el número de versión de la API FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-get-version-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_get_version</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el número de versión FDF para el documento
+   <code class="parameter">fdf_document</code>, para la API
+   si no se proporciona ningún argumento.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-get-version-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-get-version-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la versión, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+   Para la versión actual del FDF toolkit 5.0, el número de versión es
+   <code class="literal">5.0</code> y el número de versión del documento es
+   <code class="literal">1.2</code>, <code class="literal">1.3</code> o <code class="literal">1.4</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-get-version-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-set-version" class="function" rel="rdfs-seeAlso">fdf_set_version()</a> - Modifica el número de versión del fichero FDF</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.fdf-header" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_header</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVNf)</p><p class="refpurpose"><span class="refname">fdf_header</span> — <span class="dc-title">Emite las cabeceras HTTP específicas de FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-header-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_header</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="methodname"><strong>fdf_header()</strong></span> es una función de conveniencia,
+   para emitir las cabeceras HTTP específicas de FDF. Permite
+   enviar el tipo <code class="literal">Content-type:</code>
+   con el valor <code class="literal">application/vnd.fdf</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-header-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-header-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.fdf-next-field-name" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_next_field_name</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_next_field_name</span> — <span class="dc-title">Lee el nombre del siguiente campo FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-next-field-name-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_next_field_name</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Lee el nombre del siguiente campo FDF. Este nombre podrá ser utilizado en varias funciones.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-next-field-name-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fieldname</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del campo FDF, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>. Si no se proporciona,
+       se devolverá el primer campo.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-next-field-name-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el nombre del campo, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.fdf-next-field-name-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3411">
+    <p><strong>Ejemplo #1 Detectar todos los nombres de un formulario FDF</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$fdf </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_open</span><span style="color: #007700">(</span><span style="color: #0000BB">$HTTP_FDF_DATA</span><span style="color: #007700">);<br>for (</span><span style="color: #0000BB">$field </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_next_field_name</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">$field </span><span style="color: #007700">!= </span><span style="color: #DD0000">""</span><span style="color: #007700">;<br>    </span><span style="color: #0000BB">$field </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_next_field_name</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #0000BB">$field</span><span style="color: #007700">)) {<br>    echo </span><span style="color: #DD0000">"field: </span><span style="color: #0000BB">$field</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-next-field-name-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-get-value" class="function" rel="rdfs-seeAlso">fdf_get_value()</a> - Devuelve el valor de un campo FDF</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-open" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_open</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_open</span> — <span class="dc-title">Abre un documento FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-open-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_open</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   Abre un documento FDF.
+  </p>
+  <p class="para">
+   Asimismo, se puede utilizar la función
+   <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span> para procesar el resultado
+   de un formulario PDF enviado mediante un método POST.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-open-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       Ruta hacia el fichero FDF. Este fichero debe contener los datos
+       tal como son devueltos por un formulario PDF o creados utilizando las funciones
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span> y <span class="function"><a href="#function.fdf-save" class="function">fdf_save()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-open-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un gestor de documento FDF, o <strong><code><a href="#constant.false">false</a></code></strong>
+   en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.fdf-open-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3412">
+    <p><strong>Ejemplo #1 Acceder a los datos del formulario</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Guarda el fichero FDF en un fichero temporal.<br></span><span style="color: #0000BB">$fdffp </span><span style="color: #007700">= </span><span style="color: #0000BB">fopen</span><span style="color: #007700">(</span><span style="color: #DD0000">"test.fdf"</span><span style="color: #007700">, </span><span style="color: #DD0000">"w"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">fwrite</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdffp</span><span style="color: #007700">, </span><span style="color: #0000BB">$HTTP_FDF_DATA</span><span style="color: #007700">, </span><span style="color: #0000BB">strlen</span><span style="color: #007700">(</span><span style="color: #0000BB">$HTTP_FDF_DATA</span><span style="color: #007700">));<br></span><span style="color: #0000BB">fclose</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdffp</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Abre el fichero temporal y utiliza los datos.<br></span><span style="color: #0000BB">$fdf </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_open</span><span style="color: #007700">(</span><span style="color: #DD0000">"test.fdf"</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">fdf_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-open-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-open-string" class="function" rel="rdfs-seeAlso">fdf_open_string()</a> - Lee un documento FDF a partir de un string</span></li>
+    <li><span class="function"><a href="#function.fdf-close" class="function" rel="rdfs-seeAlso">fdf_close()</a> - Cierra un documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-create" class="function" rel="rdfs-seeAlso">fdf_create()</a> - Crea un nuevo documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-save" class="function" rel="rdfs-seeAlso">fdf_save()</a> - Guarda un documento FDF</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-open-string" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_open_string</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_open_string</span> — <span class="dc-title">Lee un documento FDF a partir de un <span class="type"><a href="#language.types.string" class="type string">string</a></span></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-open-string-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>fdf_open_string</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fdf_data</code></span>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   Lee un documento FDF a partir de un <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+  </p>
+  <p class="para">
+   Se puede utilizar <span class="function"><strong>fdf_open_string()</strong></span> con la variable
+   <var class="varname">$HTTP_FDF_DATA</var> para procesar datos
+   de formularios provenientes de clientes remotos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-open-string-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_data</code></dt>
+     <dd>
+      <p class="para">
+       Los datos, como devueltos desde un formulario PDF
+       o creados utilizando las funciones
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span> y
+       <span class="function"><a href="#function.fdf-save-string" class="function">fdf_save_string()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-open-string-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un gestor de documento FDF, o <strong><code><a href="#constant.false">false</a></code></strong>
+   si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.fdf-open-string-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3413">
+    <p><strong>Ejemplo #1 Acceso a los datos de formulario FDF</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$fdf </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_open_string</span><span style="color: #007700">(</span><span style="color: #0000BB">$HTTP_FDF_DATA</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* ... */<br></span><span style="color: #0000BB">fdf_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-open-string-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-open" class="function" rel="rdfs-seeAlso">fdf_open()</a> - Abre un documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-close" class="function" rel="rdfs-seeAlso">fdf_close()</a> - Cierra un documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-create" class="function" rel="rdfs-seeAlso">fdf_create()</a> - Crea un nuevo documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-save-string" class="function" rel="rdfs-seeAlso">fdf_save_string()</a> - Devuelve un documento FDF en forma de string</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-remove-item" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_remove_item</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_remove_item</span> — <span class="dc-title">Configura el marco FDF de destino para el formulario</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-remove-item-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_remove_item</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$item</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-save" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_save</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_save</span> — <span class="dc-title">Guarda un documento FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-save-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_save</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Guarda un documento FDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-save-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       Si se proporciona, el FDF resultante será escrito en este parámetro.
+       De lo contrario, esta función escribirá el FDF en la salida estándar de PHP.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-save-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-save-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-close" class="function" rel="rdfs-seeAlso">fdf_close()</a> - Cierra un documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-create" class="function" rel="rdfs-seeAlso">fdf_create()</a> - Crea un nuevo documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-save-string" class="function" rel="rdfs-seeAlso">fdf_save_string()</a> - Devuelve un documento FDF en forma de string</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-save-string" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_save_string</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_save_string</span> — <span class="dc-title">Devuelve un documento FDF en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-save-string-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>fdf_save_string</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve un documento FDF en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-save-string-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-save-string-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el documento, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>, o
+   <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.fdf-save-string-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3414">
+    <p><strong>Ejemplo #1 Leer un documento FDF en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$fdf </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_create</span><span style="color: #007700">();<br></span><span style="color: #0000BB">fdf_set_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"foo"</span><span style="color: #007700">, </span><span style="color: #DD0000">"bar"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$str </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_save_string</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">);<br></span><span style="color: #0000BB">fdf_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">$str</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">%FDF-1.2
+%âãÏÓ
+1 0 obj
+&lt;&lt;
+/FDF &lt;&lt; /Fields 2 0 R &gt;&gt;
+&gt;&gt;
+endobj
+2 0 obj
+[
+&lt;&lt; /T (foo)/V (bar)&gt;&gt;
+]
+endobj
+trailer
+&lt;&lt;
+/Root 1 0 R
+
+&gt;&gt;
+%%EOF</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-save-string-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-open-string" class="function" rel="rdfs-seeAlso">fdf_open_string()</a> - Lee un documento FDF a partir de un string</span></li>
+    <li><span class="function"><a href="#function.fdf-close" class="function" rel="rdfs-seeAlso">fdf_close()</a> - Cierra un documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-create" class="function" rel="rdfs-seeAlso">fdf_create()</a> - Crea un nuevo documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-save" class="function" rel="rdfs-seeAlso">fdf_save()</a> - Guarda un documento FDF</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-ap" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_ap</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_ap</span> — <span class="dc-title">Fija la apariencia de un campo FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-ap-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_ap</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$field_name</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$face</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$page_number</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Fija la apariencia de un campo FDF (es decir, el valor de la clave
+   <code class="literal">/AP</code>).
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-ap-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">field_name</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">face</code></dt>
+     <dd>
+      <p class="para">
+       Los valores posibles son: <strong><code><a href="#constant.fdfnormalap">FDFNormalAP</a></code></strong>,
+       <strong><code><a href="#constant.fdfrolloverap">FDFRolloverAP</a></code></strong> y
+       <strong><code><a href="#constant.fdfdownap">FDFDownAP</a></code></strong>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">page_number</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-ap-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-encoding" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_encoding</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.7, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_encoding</span> — <span class="dc-title">Modifica la codificación de caracteres</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-encoding-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_encoding</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$encoding</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Modifica la codificación de caracteres del documento FDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-encoding-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding</code></dt>
+     <dd>
+      <p class="para">
+       El nombre de la codificación. Los siguientes valores son soportados:
+       "<code class="literal">Shift-JIS</code>", "<code class="literal">UHC</code>",
+       "<code class="literal">GBK</code>" y "<code class="literal">BigFive</code>".
+      </p>
+      <p class="para">
+       Un <span class="type"><a href="#language.types.string" class="type string">string</a></span> vacío reemplaza el valor por omisión de la codificación al
+       esquema <code class="literal">PDFDocEncoding/Unicode</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-encoding-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_file</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_file</span> — <span class="dc-title">Crea un documento PDF para mostrar datos FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-file-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_file</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$url</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$target_frame</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crea un documento PDF para mostrar datos FDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-file-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">url</code></dt>
+     <dd>
+      <p class="para">
+       Debe ser proporcionado en forma de URL absoluta.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">target_frame</code></dt>
+     <dd>
+      <p class="para">
+       Utilice este parámetro para especificar la frame en la que se mostrará el documento. También es posible definir el valor por omisión de este parámetro utilizando la función <span class="function"><a href="#function.fdf-set-target-frame" class="function">fdf_set_target_frame()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-file-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.fdf-set-file-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-3415">
+    <p><strong>Ejemplo #1 Pasar datos FDF a un segundo formulario</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">/* Configura el encabezado para Adobe FDF */<br></span><span style="color: #0000BB">fdf_header</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">/* Inicia un nuevo fichero FDF */<br></span><span style="color: #0000BB">$fdf </span><span style="color: #007700">= </span><span style="color: #0000BB">fdf_create</span><span style="color: #007700">();<br><br></span><span style="color: #FF8000">/* Asigna al campo "foo" el valor de "bar" */<br></span><span style="color: #0000BB">fdf_set_value</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"foo"</span><span style="color: #007700">, </span><span style="color: #DD0000">"bar"</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Indica al cliente que muestre los datos FDF con "fdf_form.pdf" */<br></span><span style="color: #0000BB">fdf_set_file</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">, </span><span style="color: #DD0000">"http://www.example.com/fdf_form.pdf"</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Muestra el FDF */<br></span><span style="color: #0000BB">fdf_save</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">/* Limpia */<br></span><span style="color: #0000BB">fdf_close</span><span style="color: #007700">(</span><span style="color: #0000BB">$fdf</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-file-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-get-file" class="function" rel="rdfs-seeAlso">fdf_get_file()</a> - Lee el valor de la clave /F</span></li>
+    <li><span class="function"><a href="#function.fdf-set-target-frame" class="function" rel="rdfs-seeAlso">fdf_set_target_frame()</a> - Configura el marco de destino para la visualización del formulario</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-flags" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_flags</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_flags</span> — <span class="dc-title">Modifica una opción de un campo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-flags-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_flags</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$whichFlags</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$newFlags</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Modifica una opción de un campo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-flags-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fieldname</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del campo FDF, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">whichFlags</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">newFlags</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-flags-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-flags-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-set-opt" class="function" rel="rdfs-seeAlso">fdf_set_opt()</a> - Modifica una opción de un campo</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-javascript-action" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_javascript_action</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_javascript_action</span> — <span class="dc-title">Modifica la acción javascript de un campo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-javascript-action-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_javascript_action</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$trigger</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$script</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Modifica la acción javascript de un campo dado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-javascript-action-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fieldname</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del campo FDF, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">trigger</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">script</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-javascript-action-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-javascript-action-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-set-submit-form-action" class="function" rel="rdfs-seeAlso">fdf_set_submit_form_action()</a> - Modifica la acción de un formulario</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-on-import-javascript" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_on_import_javascript</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_on_import_javascript</span> — <span class="dc-title">Añade código Javascript para ser ejecutado cuando Acrobat abre un FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-on-import-javascript-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_on_import_javascript</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$script</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$before_data_import</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-on-import-javascript-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-add-doc-javascript" class="function" rel="rdfs-seeAlso">fdf_add_doc_javascript()</a> - Añade código javascript a un documento FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-set-javascript-action" class="function" rel="rdfs-seeAlso">fdf_set_javascript_action()</a> - Modifica la acción javascript de un campo</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-opt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_opt</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_opt</span> — <span class="dc-title">Modifica una opción de un campo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-opt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_opt</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$element</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$str1</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$str2</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Modifica una opción de un campo dado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-opt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fieldname</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del campo FDF, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">element</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">str1</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">str2</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-opt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-opt-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-set-flags" class="function" rel="rdfs-seeAlso">fdf_set_flags()</a> - Modifica una opción de un campo</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-status" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_status</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_status</span> — <span class="dc-title">Establece el valor de la clave /STATUS</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-status-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_status</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$status</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Establece el valor de la clave <code class="literal">/STATUS</code>. Cuando un cliente
+   recibe un FDF con un estado establecido, su valor se presentará en una caja de alerta.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-status-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">status</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-status-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-status-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-get-status" class="function" rel="rdfs-seeAlso">fdf_get_status()</a> - Lee el valor de la clave /STATUS</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-submit-form-action" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_submit_form_action</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.2, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_submit_form_action</span> — <span class="dc-title">Modifica la acción de un formulario</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-submit-form-action-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_submit_form_action</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$trigger</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$script</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Modifica la acción de un formulario.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-submit-form-action-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fieldname</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del campo FDF, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">trigger</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">script</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-submit-form-action-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-submit-form-action-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-set-javascript-action" class="function" rel="rdfs-seeAlso">fdf_set_javascript_action()</a> - Modifica la acción javascript de un campo</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-target-frame" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_target_frame</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_target_frame</span> — <span class="dc-title">Configura el marco de destino para la visualización del formulario</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-target-frame-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_target_frame</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$frame_name</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Configura el marco de destino para la visualización del resultado
+   PDF definido por <span class="function"><strong>fdf_save_file()</strong></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-target-frame-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">frame_name</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del marco, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-target-frame-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-target-frame-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><strong>fdf_save_file()</strong></span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-value" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_value</h1>
+  <p class="verinfo">(PHP 4, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_value</span> — <span class="dc-title">Modifica el valor de un campo FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-value-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_value</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$fieldname</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$isName</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Modifica el valor de un campo FDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-value-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">fieldname</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del campo FDF, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       Este parámetro debe ser almacenado como un string incluso si es un array. En este caso, todos los elementos del array serán almacenados como un array de valores.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">isName</code></dt>
+     <dd>
+      <blockquote class="note"><p><strong class="note">Nota</strong>: 
+       </p><p class="para">
+        En versiones anteriores de la suite FDF, el último parámetro determinaba si el valor del campo debía ser convertido en un nombre PDF (<code class="parameter">isname</code> = 1) o posicionado como un string (<code class="parameter">isname</code> = 0).
+       </p>
+       <p class="para">
+        El valor ya no está en la suite actual, versión 5.0. Por razones de compatibilidad, esto sigue siendo soportado como un parámetro opcional, pero ignorado internamente.
+       </p>
+      </blockquote>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-value-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-value-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-get-value" class="function" rel="rdfs-seeAlso">fdf_get_value()</a> - Devuelve el valor de un campo FDF</span></li>
+    <li><span class="function"><a href="#function.fdf-remove-item" class="function" rel="rdfs-seeAlso">fdf_remove_item()</a> - Configura el marco FDF de destino para el formulario</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.fdf-set-version" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">fdf_set_version</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5 &lt; 5.3.0, PECL fdf SVN)</p><p class="refpurpose"><span class="refname">fdf_set_version</span> — <span class="dc-title">Modifica el número de versión del fichero FDF</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.fdf-set-version-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>fdf_set_version</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$fdf_document</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$version</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Modifica el número de versión del documento FDF actual.
+  </p>
+  <p class="para">
+   Algunas funcionalidades soportadas por esta extensión solo están disponibles para las nuevas versiones de FDF.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.fdf-set-version-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">fdf_document</code></dt>
+     <dd>
+      <p class="para">
+       El gestor de documento FDF, devuelto por la función
+       <span class="function"><a href="#function.fdf-create" class="function">fdf_create()</a></span>, la función
+       <span class="function"><a href="#function.fdf-open" class="function">fdf_open()</a></span> o la función
+       <span class="function"><a href="#function.fdf-open-string" class="function">fdf_open_string()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">version</code></dt>
+     <dd>
+      <p class="para">
+       El número de versión. Para el toolkit FDF actual, puede ser
+       <code class="literal">1.2</code>, <code class="literal">1.3</code> o
+       <code class="literal">1.4</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.fdf-set-version-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.fdf-set-version-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.fdf-get-version" class="function" rel="rdfs-seeAlso">fdf_get_version()</a> - Lee el número de versión de la API FDF</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.fdf-add-doc-javascript">fdf_add_doc_javascript</a> — Añade código javascript a un documento FDF</li><li><a href="#function.fdf-add-template">fdf_add_template</a> — Añade una plantilla en el documento FDF</li><li><a href="#function.fdf-close">fdf_close</a> — Cierra un documento FDF</li><li><a href="#function.fdf-create">fdf_create</a> — Crea un nuevo documento FDF</li><li><a href="#function.fdf-enum-values">fdf_enum_values</a> — Llama a una función de usuario para cada valor FDF</li><li><a href="#function.fdf-errno">fdf_errno</a> — Devuelve el código de error de la última operación FDF</li><li><a href="#function.fdf-error">fdf_error</a> — Devuelve el mensaje de error FDF</li><li><a href="#function.fdf-get-ap">fdf_get_ap</a> — Lee la apariencia de un campo</li><li><a href="#function.fdf-get-attachment">fdf_get_attachment</a> — Extrae un fichero integrado en un documento FDF</li><li><a href="#function.fdf-get-encoding">fdf_get_encoding</a> — Lee el valor de la clave /Encoding</li><li><a href="#function.fdf-get-file">fdf_get_file</a> — Lee el valor de la clave /F</li><li><a href="#function.fdf-get-flags">fdf_get_flags</a> — Lee los atributos de un campo FDF</li><li><a href="#function.fdf-get-opt">fdf_get_opt</a> — Lee un valor en un array de valores de un campo FDF</li><li><a href="#function.fdf-get-status">fdf_get_status</a> — Lee el valor de la clave /STATUS</li><li><a href="#function.fdf-get-value">fdf_get_value</a> — Devuelve el valor de un campo FDF</li><li><a href="#function.fdf-get-version">fdf_get_version</a> — Lee el número de versión de la API FDF</li><li><a href="#function.fdf-header">fdf_header</a> — Emite las cabeceras HTTP específicas de FDF</li><li><a href="#function.fdf-next-field-name">fdf_next_field_name</a> — Lee el nombre del siguiente campo FDF</li><li><a href="#function.fdf-open">fdf_open</a> — Abre un documento FDF</li><li><a href="#function.fdf-open-string">fdf_open_string</a> — Lee un documento FDF a partir de un string</li><li><a href="#function.fdf-remove-item">fdf_remove_item</a> — Configura el marco FDF de destino para el formulario</li><li><a href="#function.fdf-save">fdf_save</a> — Guarda un documento FDF</li><li><a href="#function.fdf-save-string">fdf_save_string</a> — Devuelve un documento FDF en forma de string</li><li><a href="#function.fdf-set-ap">fdf_set_ap</a> — Fija la apariencia de un campo FDF</li><li><a href="#function.fdf-set-encoding">fdf_set_encoding</a> — Modifica la codificación de caracteres</li><li><a href="#function.fdf-set-file">fdf_set_file</a> — Crea un documento PDF para mostrar datos FDF</li><li><a href="#function.fdf-set-flags">fdf_set_flags</a> — Modifica una opción de un campo</li><li><a href="#function.fdf-set-javascript-action">fdf_set_javascript_action</a> — Modifica la acción javascript de un campo</li><li><a href="#function.fdf-set-on-import-javascript">fdf_set_on_import_javascript</a> — Añade código Javascript para ser ejecutado cuando Acrobat abre un FDF</li><li><a href="#function.fdf-set-opt">fdf_set_opt</a> — Modifica una opción de un campo</li><li><a href="#function.fdf-set-status">fdf_set_status</a> — Establece el valor de la clave /STATUS</li><li><a href="#function.fdf-set-submit-form-action">fdf_set_submit_form_action</a> — Modifica la acción de un formulario</li><li><a href="#function.fdf-set-target-frame">fdf_set_target_frame</a> — Configura el marco de destino para la visualización del formulario</li><li><a href="#function.fdf-set-value">fdf_set_value</a> — Modifica el valor de un campo FDF</li><li><a href="#function.fdf-set-version">fdf_set_version</a> — Modifica el número de versión del fichero FDF</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.fdf">Introducción</a></li><li><a href="#fdf.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#fdf.requirements">Requerimientos</a></li><li><a href="#fdf.installation">Instalación</a></li><li><a href="#fdf.resources">Tipos de recursos</a></li></ul></li><li><a href="#fdf.constants">Constantes predefinidas</a></li><li><a href="#fdf.examples">Ejemplos</a></li><li><a href="#ref.fdf">Funciones FDF</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.fdf-add-doc-javascript">fdf_add_doc_javascript</a> — Añade código javascript a un documento FDF</li><li><a href="#function.fdf-add-template">fdf_add_template</a> — Añade una plantilla en el documento FDF</li><li><a href="#function.fdf-close">fdf_close</a> — Cierra un documento FDF</li><li><a href="#function.fdf-create">fdf_create</a> — Crea un nuevo documento FDF</li><li><a href="#function.fdf-enum-values">fdf_enum_values</a> — Llama a una función de usuario para cada valor FDF</li><li><a href="#function.fdf-errno">fdf_errno</a> — Devuelve el código de error de la última operación FDF</li><li><a href="#function.fdf-error">fdf_error</a> — Devuelve el mensaje de error FDF</li><li><a href="#function.fdf-get-ap">fdf_get_ap</a> — Lee la apariencia de un campo</li><li><a href="#function.fdf-get-attachment">fdf_get_attachment</a> — Extrae un fichero integrado en un documento FDF</li><li><a href="#function.fdf-get-encoding">fdf_get_encoding</a> — Lee el valor de la clave /Encoding</li><li><a href="#function.fdf-get-file">fdf_get_file</a> — Lee el valor de la clave /F</li><li><a href="#function.fdf-get-flags">fdf_get_flags</a> — Lee los atributos de un campo FDF</li><li><a href="#function.fdf-get-opt">fdf_get_opt</a> — Lee un valor en un array de valores de un campo FDF</li><li><a href="#function.fdf-get-status">fdf_get_status</a> — Lee el valor de la clave /STATUS</li><li><a href="#function.fdf-get-value">fdf_get_value</a> — Devuelve el valor de un campo FDF</li><li><a href="#function.fdf-get-version">fdf_get_version</a> — Lee el número de versión de la API FDF</li><li><a href="#function.fdf-header">fdf_header</a> — Emite las cabeceras HTTP específicas de FDF</li><li><a href="#function.fdf-next-field-name">fdf_next_field_name</a> — Lee el nombre del siguiente campo FDF</li><li><a href="#function.fdf-open">fdf_open</a> — Abre un documento FDF</li><li><a href="#function.fdf-open-string">fdf_open_string</a> — Lee un documento FDF a partir de un string</li><li><a href="#function.fdf-remove-item">fdf_remove_item</a> — Configura el marco FDF de destino para el formulario</li><li><a href="#function.fdf-save">fdf_save</a> — Guarda un documento FDF</li><li><a href="#function.fdf-save-string">fdf_save_string</a> — Devuelve un documento FDF en forma de string</li><li><a href="#function.fdf-set-ap">fdf_set_ap</a> — Fija la apariencia de un campo FDF</li><li><a href="#function.fdf-set-encoding">fdf_set_encoding</a> — Modifica la codificación de caracteres</li><li><a href="#function.fdf-set-file">fdf_set_file</a> — Crea un documento PDF para mostrar datos FDF</li><li><a href="#function.fdf-set-flags">fdf_set_flags</a> — Modifica una opción de un campo</li><li><a href="#function.fdf-set-javascript-action">fdf_set_javascript_action</a> — Modifica la acción javascript de un campo</li><li><a href="#function.fdf-set-on-import-javascript">fdf_set_on_import_javascript</a> — Añade código Javascript para ser ejecutado cuando Acrobat abre un FDF</li><li><a href="#function.fdf-set-opt">fdf_set_opt</a> — Modifica una opción de un campo</li><li><a href="#function.fdf-set-status">fdf_set_status</a> — Establece el valor de la clave /STATUS</li><li><a href="#function.fdf-set-submit-form-action">fdf_set_submit_form_action</a> — Modifica la acción de un formulario</li><li><a href="#function.fdf-set-target-frame">fdf_set_target_frame</a> — Configura el marco de destino para la visualización del formulario</li><li><a href="#function.fdf-set-value">fdf_set_value</a> — Modifica el valor de un campo FDF</li><li><a href="#function.fdf-set-version">fdf_set_version</a> — Modifica el número de versión del fichero FDF</li></ul></li></ul></div>

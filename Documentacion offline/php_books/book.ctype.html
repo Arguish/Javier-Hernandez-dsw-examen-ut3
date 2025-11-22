@@ -1,0 +1,1232 @@
+<div id="book.ctype" class="book"><hr>
+ 
+ <h1 class="title">Comprobación del tipo de carácter</h1>
+ 
+
+ <div id="intro.ctype" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Las funciones proporcionadas con esta extensión comprueban si un carácter
+   o string caen dentro de una cierta clase de caracteres según la
+   configuración regional en uso (véase también <span class="function"><a href="#function.setlocale" class="function">setlocale()</a></span>).
+  </p>
+  <p class="para">
+   Cuando estas funciones se invocan con un argumento de tipo integer,
+   se comportan exactamente como sus homólogas en C de
+   <var class="filename">ctype.h</var>.
+   Esto significa que si se pasa un valor de tipo integer menor que 256 se usará el
+   valor ASCII del mismo para ver si encaja en el rango especificado (los dígitos están en
+   el rango 0x30-0x39). Si el número está entre -128 y -1 inclusive, se añadirá 256
+   y la comprobación se hará sobre el resultado.
+  </p>
+  <p class="para">
+  Cuando se invocan con un argumento de tipo string, comprobarán
+   cada carácter de la cadena y sólo devolverá
+   <strong><code><a href="#constant.true">true</a></code></strong> si cada carácter de la cadena coincide con el
+   criterio solicitado. Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+  <p class="para">
+   Pasar cualquier cosa que no sea un valor de tipo string o integer
+   devolverá inmediatamente <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+  <p class="para">
+   Se debería observar que siempre son preferibles las funciones de ctype a las
+   expresiones regulares, e incluso a algunas funciones <code class="literal">str_*</code> y <code class="literal">is_*</code> equivalentes.
+   Esto es así por el hecho de que ctype usa una biblioteca nativa de C y
+   por lo tanto procesa significativamente más rápido.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Estas funciones no están relacionadas con la biblioteca "ctypes" de Python de ningún modo.
+    El nombre de la extensión proviene del fichero de cabecera <var class="filename">ctype.h</var>
+    de C donde están definidas sus equivalentes.
+   </p>
+   <p class="para">
+    Esta extensión también es anterior a 'ctypes' de Python, por lo que cualquier confusión
+    causada por este nombre difícilmente es culpa de PHP
+   </p>
+  </blockquote>
+ </div>
+<hr>
+
+
+ 
+
+
+
+<div id="ctype.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#ctype.requirements">Requerimientos</a></li><li><a href="#ctype.installation">Instalación</a></li></ul>
+
+
+ <div id="ctype.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Nada excepto las funciones de la biblioteca C estándar que están
+   siempre disponibles.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+<div id="ctype.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Esta extensión está activada por omisión. Puede ser desactivada utilizando la opción de configuración: 
+  <strong class="option configure">--disable-ctype</strong>
+ </p>
+ <p class="simpara">La versión Windows de PHP
+dispone del soporte automático de esta extensión. No es necesario
+añadir ninguna biblioteca adicional para disponer de estas funciones.</p>
+</div>
+<hr>
+
+
+
+
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+<div id="ref.ctype" class="reference"><hr>
+ <h1 class="title">Funciones de Ctype</h1>
+
+ 
+
+
+
+<div id="function.ctype-alnum" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_alnum</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_alnum</span> — <span class="dc-title">Chequear posibles caracteres alfanuméricos</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.ctype-alnum-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_alnum</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Chequea si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">texto</code>, son alfanuméricos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-alnum-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       La cadena de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-alnum-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter de <code class="parameter">texto</code> es
+   o bien uno letra o un dígito, <strong><code><a href="#constant.false">false</a></code></strong> de lo contrario.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-alnum-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5375">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_alnum()</strong></span> (usando la
+    localización predeterminada)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'AbCd1zyZ9'</span><span style="color: #007700">, </span><span style="color: #DD0000">'foo!#$bar'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_alnum</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> consiste completamente de letras o dígitos.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> no consiste completamente de letras o dígitos.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena AbCd1zyZ9 consiste completamente de letras o dígitos.
+La cadena foo!#$bar no consiste completamente de letras o dígitos.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-alnum-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-alpha" class="function" rel="rdfs-seeAlso">ctype_alpha()</a> - Chequear posibles caracteres alfabéticos</span></li>
+    <li><span class="function"><a href="#function.ctype-digit" class="function" rel="rdfs-seeAlso">ctype_digit()</a> - Chequear posibles caracteres numéricos</span></li>
+    <li><span class="function"><a href="#function.setlocale" class="function" rel="rdfs-seeAlso">setlocale()</a> - Establece la información de configuración local</span></li>
+    <li><span class="function"><a href="#intlchar.isalnum" class="function" rel="rdfs-seeAlso">IntlChar::isalnum()</a> - Verifica si un punto de código es un carácter alfanumérico</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-alpha" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_alpha</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_alpha</span> — <span class="dc-title">Chequear posibles caracteres alfabéticos</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.ctype-alpha-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_alpha</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+   entregada,<code class="parameter">texto</code>, son alfabéticos. En la
+   localización <code class="literal">C</code> estándar las letras se limitan a
+   <code class="literal">[A-Za-z]</code> y <span class="function"><strong>ctype_alpha()</strong></span> es
+   equivalente a <code class="literal">(ctype_upper($texto) ||
+   ctype_lower($texto))</code> si $texto es un caracter sencillo, aunque
+   otros idiomas usan letras que no son consideradas como mayúsculas ni
+   minúsculas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-alpha-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       El string de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-alpha-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter de <code class="parameter">texto</code> es una
+   letra de la localización actual, <strong><code><a href="#constant.false">false</a></code></strong> de lo contrario.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-alpha-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5376">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_alpha()</strong></span> (usando la
+     localización predeterminada)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'KjgWZC'</span><span style="color: #007700">, </span><span style="color: #DD0000">'arf12'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_alpha</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> consiste completamente de letras.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> no consiste completamente de letras.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena KjgWZC consiste completamente de letras.
+La cadena arf12 no consiste completamente de letras.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-alpha-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-upper" class="function" rel="rdfs-seeAlso">ctype_upper()</a> - Chequear posibles caracteres en mayúscula</span></li>
+    <li><span class="function"><a href="#function.ctype-lower" class="function" rel="rdfs-seeAlso">ctype_lower()</a> - Chequear posibles caracteres en minúscula</span></li>
+    <li><span class="function"><a href="#function.setlocale" class="function" rel="rdfs-seeAlso">setlocale()</a> - Establece la información de configuración local</span></li>
+    <li><span class="function"><a href="#intlchar.isalpha" class="function" rel="rdfs-seeAlso">IntlChar::isalpha()</a> - Verifica si un punto de código es un carácter alfabético</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-cntrl" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_cntrl</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_cntrl</span> — <span class="dc-title">Chequear posibles caracteres de control</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.ctype-cntrl-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_cntrl</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">text</code>, son caracteres de control. Los caracteres
+   de control son, por ejemplo, la alimentación de línea, el tabulador,
+   escape.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-cntrl-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       El string de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-cntrl-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter de <code class="parameter">texto</code> es un
+   caracter de control de la localización actual, <strong><code><a href="#constant.false">false</a></code></strong> de lo contrario.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-cntrl-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5377">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_cntrl()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'cadena1' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"\n\r\t"</span><span style="color: #007700">, </span><span style="color: #DD0000">'cadena2' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'arf12'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$nombre </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_cntrl</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena '</span><span style="color: #0000BB">$nombre</span><span style="color: #DD0000">' consiste completamente de caracteres de control.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena '</span><span style="color: #0000BB">$nombre</span><span style="color: #DD0000">' no consiste completamente de caracteres de control.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena 'cadena1' consiste completamente de caracteres de control.
+La cadena 'cadena2' no consiste completamente de caracteres de control.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-cntrl-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-print" class="function" rel="rdfs-seeAlso">ctype_print()</a> - Chequear posibles caracteres imprimibles</span></li>
+    <li><span class="function"><a href="#intlchar.iscntrl" class="function" rel="rdfs-seeAlso">IntlChar::iscntrl()</a> - Verifica si un punto de código es un carácter de control</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-digit" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_digit</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_digit</span> — <span class="dc-title">Chequear posibles caracteres numéricos</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.ctype-digit-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_digit</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">text</code>, son numéricos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-digit-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       La cadena probada.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-digit-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter del <code class="parameter">texto</code> es un
+   dígito decimal, o <strong><code><a href="#constant.false">false</a></code></strong> de lo contrario.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-digit-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5378">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_digit()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'1820.20'</span><span style="color: #007700">, </span><span style="color: #DD0000">'10002'</span><span style="color: #007700">, </span><span style="color: #DD0000">'wsl!12'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_digit</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> consiste completamente de dígitos.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> no consiste completamente de dígitos.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena 1820.20 no consiste completamente de dígitos.
+La cadena 10002 consiste completamente de dígitos.
+La cadena wsl!12 no consiste completamente de dígitos.</pre>
+</div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="example-5379">
+    <p><strong>Ejemplo #2 Un ejemplo de <span class="function"><strong>ctype_digit()</strong></span> comparando strings con integers</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$numeric_string </span><span style="color: #007700">= </span><span style="color: #DD0000">'42'</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$integer        </span><span style="color: #007700">= </span><span style="color: #0000BB">42</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">ctype_digit</span><span style="color: #007700">(</span><span style="color: #0000BB">$numeric_string</span><span style="color: #007700">);  </span><span style="color: #FF8000">// true<br></span><span style="color: #0000BB">ctype_digit</span><span style="color: #007700">(</span><span style="color: #0000BB">$integer</span><span style="color: #007700">);         </span><span style="color: #FF8000">// false (ASCII 42 es el caracter *)<br><br></span><span style="color: #0000BB">is_numeric</span><span style="color: #007700">(</span><span style="color: #0000BB">$numeric_string</span><span style="color: #007700">);   </span><span style="color: #FF8000">// true<br></span><span style="color: #0000BB">is_numeric</span><span style="color: #007700">(</span><span style="color: #0000BB">$integer</span><span style="color: #007700">);          </span><span style="color: #FF8000">// true<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-digit-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-alnum" class="function" rel="rdfs-seeAlso">ctype_alnum()</a> - Chequear posibles caracteres alfanuméricos</span></li>
+    <li><span class="function"><a href="#function.ctype-xdigit" class="function" rel="rdfs-seeAlso">ctype_xdigit()</a> - Chequear posibles caracteres que representen un dígito hexadecimal</span></li>
+    <li><span class="function"><a href="#function.is-numeric" class="function" rel="rdfs-seeAlso">is_numeric()</a> - Determina si una variable es un número o una cadena numérica</span></li>
+    <li><span class="function"><a href="#function.is-int" class="function" rel="rdfs-seeAlso">is_int()</a> - Determina si una variable es de tipo integer</span></li>
+    <li><span class="function"><a href="#function.is-string" class="function" rel="rdfs-seeAlso">is_string()</a> - Determina si una variable es de tipo string</span></li>
+    <li><span class="function"><a href="#intlchar.isdigit" class="function" rel="rdfs-seeAlso">IntlChar::isdigit()</a> - Verifica si un punto de código es un dígito</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-graph" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_graph</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_graph</span> — <span class="dc-title">Chequear posibles caracteres imprimibles, con
+  excepción de los espacios</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.ctype-graph-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_graph</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">text</code>, generan una salida visible.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-graph-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       La cadena de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-graph-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter del <code class="parameter">texto</code>
+   es imprimible y genera alguna salida visible (no incluye los
+   espacios), o <strong><code><a href="#constant.false">false</a></code></strong> de lo contrario.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-graph-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5380">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_graph()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'cadena1' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"asdf\n\r\t"</span><span style="color: #007700">, </span><span style="color: #DD0000">'cadena2' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'arf12'</span><span style="color: #007700">, </span><span style="color: #DD0000">'cadena3' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'LKA#@%.54'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$nombre </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_graph</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena '</span><span style="color: #0000BB">$nombre</span><span style="color: #DD0000">' consiste completamente de caracteres (visiblemente) imprimibles.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena '</span><span style="color: #0000BB">$nombre</span><span style="color: #DD0000">' no consiste completamente de caracteres (visiblemente) imprimibles.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena 'cadena1' no consiste completamente de caracteres (visiblemente) imprimibles.
+La cadena 'cadena2' consiste completamente de caracteres (visiblemente) imprimibles.
+La cadena 'cadena3' consiste completamente de caracteres (visiblemente) imprimibles.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-graph-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-alnum" class="function" rel="rdfs-seeAlso">ctype_alnum()</a> - Chequear posibles caracteres alfanuméricos</span></li>
+    <li><span class="function"><a href="#function.ctype-print" class="function" rel="rdfs-seeAlso">ctype_print()</a> - Chequear posibles caracteres imprimibles</span></li>
+    <li><span class="function"><a href="#function.ctype-punct" class="function" rel="rdfs-seeAlso">ctype_punct()</a> - Chequear posibles caracteres imprimibles que no son ni espacios en
+   blanco ni caracteres alfanuméricos</span></li>
+    <li><span class="function"><a href="#intlchar.isgraph" class="function" rel="rdfs-seeAlso">IntlChar::isgraph()</a> - Verifica si un punto de código es un carácter gráfico</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-lower" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_lower</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_lower</span> — <span class="dc-title">Chequear posibles caracteres en minúscula</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.ctype-lower-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_lower</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">text</code>, son letras minúsculas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-lower-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       La cadena de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-lower-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter del <code class="parameter">texto</code>
+   es una letra minúscula en la localidad actual.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-lower-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5381">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_lower()</strong></span> (usando la
+    localidad predeterminada)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'aac123'</span><span style="color: #007700">, </span><span style="color: #DD0000">'qiutoas'</span><span style="color: #007700">, </span><span style="color: #DD0000">'QASsdks'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_lower</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> consiste completamente de letras minúsculas.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> no consiste completamente de letras minúsculas.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena aac123 no consiste completamente de letras minúsculas.
+La cadena qiutoas consiste completamente de letras minúsculas.
+La cadena QASsdks no consiste completamente de letras minúsculas.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-lower-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-alpha" class="function" rel="rdfs-seeAlso">ctype_alpha()</a> - Chequear posibles caracteres alfabéticos</span></li>
+    <li><span class="function"><a href="#function.ctype-upper" class="function" rel="rdfs-seeAlso">ctype_upper()</a> - Chequear posibles caracteres en mayúscula</span></li>
+    <li><span class="function"><a href="#function.setlocale" class="function" rel="rdfs-seeAlso">setlocale()</a> - Establece la información de configuración local</span></li>
+    <li><span class="function"><a href="#intlchar.islower" class="function" rel="rdfs-seeAlso">IntlChar::islower()</a> - Verifica si un punto de código es una letra minúscula</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-print" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_print</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_print</span> — <span class="dc-title">Chequear posibles caracteres imprimibles</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ctype-print-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_print</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   verifica si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">text</code>, son imprimibles.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-print-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       La cadena de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-print-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter del <code class="parameter">texto</code>
+   genera realmente alguna salida (incluyendo los espacios). Devuelve
+   <strong><code><a href="#constant.false">false</a></code></strong> si el <code class="parameter">texto</code> incluye caracteres de
+   control o caracteres que no producen ninguna salida ni realizan
+   función de control alguna después de todo.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-print-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5382">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_print()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'cadena1' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"asdf\n\r\t"</span><span style="color: #007700">, </span><span style="color: #DD0000">'cadena2' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'arf12'</span><span style="color: #007700">, </span><span style="color: #DD0000">'cadena3' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'LKA#@%.54'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$nombre </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_print</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena '</span><span style="color: #0000BB">$nombre</span><span style="color: #DD0000">' consiste completamente de caracteres imprimibles.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena '</span><span style="color: #0000BB">$nombre</span><span style="color: #DD0000">' no consiste completamente de caracteres imprimibles.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena 'cadena1' no consiste completamente de caracteres imprimibles.
+La cadena 'cadena2' consiste completamente de caracteres imprimibles.
+La cadena 'cadena3' consiste completamente de caracteres imprimibles.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-print-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-cntrl" class="function" rel="rdfs-seeAlso">ctype_cntrl()</a> - Chequear posibles caracteres de control</span></li>
+    <li><span class="function"><a href="#function.ctype-graph" class="function" rel="rdfs-seeAlso">ctype_graph()</a> - Chequear posibles caracteres imprimibles, con
+  excepción de los espacios</span></li>
+    <li><span class="function"><a href="#function.ctype-punct" class="function" rel="rdfs-seeAlso">ctype_punct()</a> - Chequear posibles caracteres imprimibles que no son ni espacios en
+   blanco ni caracteres alfanuméricos</span></li>
+    <li><span class="function"><a href="#intlchar.isprint" class="function" rel="rdfs-seeAlso">IntlChar::isprint()</a> - Verifica si un punto de código es un carácter imprimible</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-punct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_punct</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_punct</span> — <span class="dc-title">
+   Chequear posibles caracteres imprimibles que no son ni espacios en
+   blanco ni caracteres alfanuméricos
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ctype-punct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_punct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">text</code>, son caracteres de puntuación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-punct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       La cadena de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-punct-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter del <code class="parameter">text</code>
+   es imprimible, pero no es una letra, dígito o espacio en
+   blanco; o <strong><code><a href="#constant.false">false</a></code></strong> de lo contrario.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-punct-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5383">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_punct()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'ABasdk!@!$#'</span><span style="color: #007700">, </span><span style="color: #DD0000">'!@ # $'</span><span style="color: #007700">, </span><span style="color: #DD0000">'*&amp;$()'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_punct</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> consiste completamente de signos de puntuación.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> no consiste completamente de signos de puntuación.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena ABasdk!@!$# no consiste completamente de signos de puntuación.
+La cadena !@ # $ no consiste completamente de signos de puntuación.
+La cadena *&amp;$() consiste completamente de signos de puntuación.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-punct-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-cntrl" class="function" rel="rdfs-seeAlso">ctype_cntrl()</a> - Chequear posibles caracteres de control</span></li>
+    <li><span class="function"><a href="#function.ctype-graph" class="function" rel="rdfs-seeAlso">ctype_graph()</a> - Chequear posibles caracteres imprimibles, con
+  excepción de los espacios</span></li>
+    <li><span class="function"><a href="#intlchar.ispunct" class="function" rel="rdfs-seeAlso">IntlChar::ispunct()</a> - Verifica si un punto de código es un carácter de puntuación</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-space" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_space</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_space</span> — <span class="dc-title">Chequear posibles caracteres de espacio en blanco</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ctype-space-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_space</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">text</code>, crean espacios en blanco.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-space-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       El string de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-space-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter del <code class="parameter">text</code>
+   genera cierto tipo de espacio en blanco, o <strong><code><a href="#constant.false">false</a></code></strong> de lo
+   contrario. Junto con el caracter regular de espacio en blanco,
+   también se consideran espacios a los caracteres de
+   tabulación, tabulación vertical, avance
+   de línea, retorno de carro y avance de
+   formulario.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-space-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5384">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_space()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$strings </span><span style="color: #007700">= array(<br>    </span><span style="color: #DD0000">'string1' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"\n\r\t"</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'string2' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"\narf12"</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">'string3' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'\n\r\t' </span><span style="color: #FF8000">// note las comillas simples<br></span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$strings </span><span style="color: #007700">as </span><span style="color: #0000BB">$name </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$testcase</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_space</span><span style="color: #007700">(</span><span style="color: #0000BB">$testcase</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"The string '</span><span style="color: #0000BB">$name</span><span style="color: #DD0000">' consists of whitespace characters only.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"The string '</span><span style="color: #0000BB">$name</span><span style="color: #DD0000">' contains non-whitespace characters.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">The string 'string1' consists of whitespace characters only.
+The string 'string2' contains non-whitespace characters.
+The string 'string3' contains non-whitespace characters.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-space-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-cntrl" class="function" rel="rdfs-seeAlso">ctype_cntrl()</a> - Chequear posibles caracteres de control</span></li>
+    <li><span class="function"><a href="#function.ctype-graph" class="function" rel="rdfs-seeAlso">ctype_graph()</a> - Chequear posibles caracteres imprimibles, con
+  excepción de los espacios</span></li>
+    <li><span class="function"><a href="#function.ctype-punct" class="function" rel="rdfs-seeAlso">ctype_punct()</a> - Chequear posibles caracteres imprimibles que no son ni espacios en
+   blanco ni caracteres alfanuméricos</span></li>
+    <li><span class="function"><a href="#intlchar.isspace" class="function" rel="rdfs-seeAlso">IntlChar::isspace()</a> - Verifica si un punto de código es un carácter de espacio</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-upper" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_upper</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_upper</span> — <span class="dc-title">Chequear posibles caracteres en mayúscula</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ctype-upper-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_upper</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si todos los caracteres en la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">text</code>, son caracteres en mayúsculas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-upper-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       La cadena de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-upper-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter del <code class="parameter">text</code>
+   es una letra mayúscula en la localidad actual.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-upper-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5385">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_upper()</strong></span> (usando la
+    localidad predeterminada)</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'AKLWC139'</span><span style="color: #007700">, </span><span style="color: #DD0000">'LMNSDO'</span><span style="color: #007700">, </span><span style="color: #DD0000">'akwSKWsm'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_upper</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> consiste completamente de letras mayúsculas.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> no consiste completamente de letras mayúsculas.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+     <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena AKLWC139 no consiste completamente de signos de letras mayúsculas.
+La cadena LMNSDO consiste completamente de signos de letras mayúsculas.
+La cadena akwSKWsm no consiste completamente de signos de letras mayúsculas.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-upper-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-alpha" class="function" rel="rdfs-seeAlso">ctype_alpha()</a> - Chequear posibles caracteres alfabéticos</span></li>
+    <li><span class="function"><a href="#function.ctype-lower" class="function" rel="rdfs-seeAlso">ctype_lower()</a> - Chequear posibles caracteres en minúscula</span></li>
+    <li><span class="function"><a href="#function.setlocale" class="function" rel="rdfs-seeAlso">setlocale()</a> - Establece la información de configuración local</span></li>
+    <li><span class="function"><a href="#intlchar.isupper" class="function" rel="rdfs-seeAlso">IntlChar::isupper()</a> - Verifica si un punto de código tiene la categoría general "Lu" (letra mayúscula)</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ctype-xdigit" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ctype_xdigit</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.4, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ctype_xdigit</span> — <span class="dc-title">
+   Chequear posibles caracteres que representen un dígito hexadecimal
+  </span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ctype-xdigit-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ctype_xdigit</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$text</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si todos los caracteres de la <span class="type"><a href="#language.types.string" class="type string">string</a></span> entregada,
+   <code class="parameter">text</code>, son 'dígitos' hexadecimales.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ctype-xdigit-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">text</code></dt>
+     <dd>
+      <p class="para">
+       La cadena de prueba.
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: </p><p class="para">
+    Si se proporciona un entero en el rango -128 y 255 inclusive, será interpretado como
+    el valor ASCII de un solo carácter (los valores negativos se verán añadir 256 para permitir
+    caracteres en el rango ASCII extendido). Cualquier otro entero será interpretado como
+    una cadena de caracteres que contiene los dígitos decimales del entero.</p></blockquote>
+       <div class="warning"><strong class="warning">Advertencia</strong><p class="para">
+Desde PHP 8.1.0, pasar un argumento diferente de una cadena está obsoleto.
+En el futuro, el argumento será interpretado como una cadena de caracteres en lugar de un punto de código ASCII.
+Según el comportamiento deseado, el argumento debe ser convertido a <span class="type"><a href="#language.types.string" class="type string">string</a></span> o debe realizarse una llamada explícita a <span class="function"><a href="#function.chr" class="function">chr()</a></span>.</p></div>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ctype-xdigit-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si cada caracter del <code class="parameter">text</code>
+   es un 'dígito' hexadecimal, lo que quiere decir un
+   dígito decimal o un caracter del rango
+   <code class="literal">[A-Fa-f]</code>; <strong><code><a href="#constant.false">false</a></code></strong> de lo contrario.
+   Cuando se llama con una cadena vacía, el resultado será siempre <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ctype-xdigit-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5386">
+    <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>ctype_xdigit()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$cadenas </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'AB10BC99'</span><span style="color: #007700">, </span><span style="color: #DD0000">'AR1012'</span><span style="color: #007700">, </span><span style="color: #DD0000">'ab12bc99'</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$cadenas </span><span style="color: #007700">as </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">) {<br>    if (</span><span style="color: #0000BB">ctype_xdigit</span><span style="color: #007700">(</span><span style="color: #0000BB">$caso_prueba</span><span style="color: #007700">)) {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> consiste completamente de dígitos hexadecimales.\n"</span><span style="color: #007700">;<br>    } else {<br>        echo </span><span style="color: #DD0000">"La cadena </span><span style="color: #0000BB">$caso_prueba</span><span style="color: #DD0000"> no consiste completamente de dígitos hexadecimales.\n"</span><span style="color: #007700">;<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">La cadena AB10BC99 consiste completamente de dígitos hexadecimales.
+La cadena AR1012 no consiste completamente de dígitos hexadecimales.
+La cadena ab12bc99 consiste completamente de dígitos hexadecimales.</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ctype-xdigit-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ctype-digit" class="function" rel="rdfs-seeAlso">ctype_digit()</a> - Chequear posibles caracteres numéricos</span></li>
+    <li><span class="function"><a href="#intlchar.isxdigit" class="function" rel="rdfs-seeAlso">IntlChar::isxdigit()</a> - Verifica si un punto de código es un dígito hexadecimal</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.ctype-alnum">ctype_alnum</a> — Chequear posibles caracteres alfanuméricos</li><li><a href="#function.ctype-alpha">ctype_alpha</a> — Chequear posibles caracteres alfabéticos</li><li><a href="#function.ctype-cntrl">ctype_cntrl</a> — Chequear posibles caracteres de control</li><li><a href="#function.ctype-digit">ctype_digit</a> — Chequear posibles caracteres numéricos</li><li><a href="#function.ctype-graph">ctype_graph</a> — Chequear posibles caracteres imprimibles, con
+  excepción de los espacios</li><li><a href="#function.ctype-lower">ctype_lower</a> — Chequear posibles caracteres en minúscula</li><li><a href="#function.ctype-print">ctype_print</a> — Chequear posibles caracteres imprimibles</li><li><a href="#function.ctype-punct">ctype_punct</a> — Chequear posibles caracteres imprimibles que no son ni espacios en
+   blanco ni caracteres alfanuméricos</li><li><a href="#function.ctype-space">ctype_space</a> — Chequear posibles caracteres de espacio en blanco</li><li><a href="#function.ctype-upper">ctype_upper</a> — Chequear posibles caracteres en mayúscula</li><li><a href="#function.ctype-xdigit">ctype_xdigit</a> — Chequear posibles caracteres que representen un dígito hexadecimal</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.ctype">Introducción</a></li><li><a href="#ctype.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#ctype.requirements">Requerimientos</a></li><li><a href="#ctype.installation">Instalación</a></li></ul></li><li><a href="#ref.ctype">Funciones de Ctype</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.ctype-alnum">ctype_alnum</a> — Chequear posibles caracteres alfanuméricos</li><li><a href="#function.ctype-alpha">ctype_alpha</a> — Chequear posibles caracteres alfabéticos</li><li><a href="#function.ctype-cntrl">ctype_cntrl</a> — Chequear posibles caracteres de control</li><li><a href="#function.ctype-digit">ctype_digit</a> — Chequear posibles caracteres numéricos</li><li><a href="#function.ctype-graph">ctype_graph</a> — Chequear posibles caracteres imprimibles, con
+  excepción de los espacios</li><li><a href="#function.ctype-lower">ctype_lower</a> — Chequear posibles caracteres en minúscula</li><li><a href="#function.ctype-print">ctype_print</a> — Chequear posibles caracteres imprimibles</li><li><a href="#function.ctype-punct">ctype_punct</a> — Chequear posibles caracteres imprimibles que no son ni espacios en
+   blanco ni caracteres alfanuméricos</li><li><a href="#function.ctype-space">ctype_space</a> — Chequear posibles caracteres de espacio en blanco</li><li><a href="#function.ctype-upper">ctype_upper</a> — Chequear posibles caracteres en mayúscula</li><li><a href="#function.ctype-xdigit">ctype_xdigit</a> — Chequear posibles caracteres que representen un dígito hexadecimal</li></ul></li></ul></div>

@@ -1,0 +1,567 @@
+<div id="book.xpass" class="book"><hr>
+ 
+ <h1 class="title">Xpass</h1>
+ 
+
+ <div id="intro.xpass" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="simpara">
+   Esta extensión proporciona algoritmos hash de contraseñas utilizados por las
+   distribuciones de Linux, utilizando la biblioteca extendida crypt.
+  </p>
+  <p class="simpara">
+   También proporciona funciones libxcrypt adicionales que faltan en PHP.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+<div id="xpass.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#xpass.requirements">Requerimientos</a></li><li><a href="#xpass.installation">Instalación vía PECL</a></li></ul>
+
+
+ <div id="xpass.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="simpara">
+   Esta extensión requiere
+   <a href="https://github.com/besser82/libxcrypt" class="link external">» libxcrypt</a>
+   versión 4.4 o superior.
+  </p>
+ </div>
+<hr>
+
+
+ <div id="xpass.installation" class="section"><hr>
+  <h2 class="title">Instalación vía PECL</h2>
+  <p class="simpara">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/xpass" class="link external">» https://pecl.php.net/package/xpass</a>.
+  </p>
+ </div>
+<hr>
+
+
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="xpass.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+
+ <p class="simpara">
+  La extensión Xpass proporciona diversos conjuntos de constantes.
+  Métodos de hash (<strong><code><a href="#constant.crypt-prefix-std-des">CRYPT_PREFIX_<span class="replaceable">*</span></a></code></strong>) para el
+  parámetro prefix de <span class="function"><a href="#function.crypt-gensalt" class="function">crypt_gensalt()</a></span>.
+  Códigos de error (<strong><code><a href="#constant.crypt-salt-ok">CRYPT_SALT_<span class="replaceable">*</span></a></code></strong>) devueltos por
+  <span class="function"><a href="#function.crypt-checksalt" class="function">crypt_checksalt()</a></span>.
+  Algoritmos de contraseña (<strong><code><a href="#constant.password-bcrypt">PASSWORD_<span class="replaceable">*</span></a></code></strong>) para el
+  parámetro algo de <span class="function"><a href="#function.password-hash" class="function">password_hash()</a></span>.
+ </p>
+
+ <dl id="xpass.constants.algo">
+  <strong class="title">Métodos de hash</strong>
+  
+   <dt id="constant.crypt-prefix-std-des">
+    <strong><code><a href="#constant.crypt-prefix-std-des">CRYPT_PREFIX_STD_DES</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El método de hash original de Unix V7, basado en el cifrado por bloques DES.
+     Dado que DES es poco costoso en el hardware moderno,
+     solo hay <code class="literal">4096</code> salts posibles y 2**56 contraseñas distintas,
+     que se truncan a 8 caracteres,
+     es posible encontrar cualquier contraseña hasheada con este método.
+     No debería usarse excepto para soportar sistemas operativos antiguos
+     que no soportan ningún otro algoritmo de generación de hash, debido a la debilidad de los hashes DES.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-prefix-ext-des">
+    <strong><code><a href="#constant.crypt-prefix-ext-des">CRYPT_PREFIX_EXT_DES</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Una extensión del DES tradicional, que elimina el límite de longitud,
+     aumenta el tamaño del salt y hace el costo temporal ajustable.
+     Proviene de BSDI BSD/OS y también está disponible en al menos NetBSD,
+     OpenBSD y FreeBSD debido al uso de la biblioteca FreeSec de David Burren.
+     Es mucho mejor que los hashes DES tradicionales y bigcrypt,
+     pero aún no debería usarse para nuevos hashes.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-prefix-md5">
+    <strong><code><a href="#constant.crypt-prefix-md5">CRYPT_PREFIX_MD5</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Un hash basado en el algoritmo MD5, desarrollado originalmente por Poul-Henning Kamp para FreeBSD.
+     Soportado en la mayoría de los Unix libres y versiones más recientes de Solaris.
+     No tan débil como los hashes basados en DES,
+     pero MD5 es tan poco costoso en el hardware moderno que no debería usarse para nuevos hashes.
+     El costo de procesamiento no es ajustable.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-prefix-blowfish">
+    <strong><code><a href="#constant.crypt-prefix-blowfish">CRYPT_PREFIX_BLOWFISH</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Un hash basado en el cifrado por bloques Blowfish, modificado para tener un calendario de claves extra-costoso.
+     Desarrollado originalmente por Niels Provos y David Mazieres para OpenBSD y también soportado en versiones recientes
+     de FreeBSD y NetBSD, en Solaris 10 y más reciente, y en varias distribuciones GNU/*/Linux.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-prefix-sha256">
+    <strong><code><a href="#constant.crypt-prefix-sha256">CRYPT_PREFIX_SHA256</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Un hash basado en SHA-2 con una salida de 256 bits, desarrollado originalmente por Ulrich Drepper para GNU libc.
+     Soportado en Linux pero no común en otros lugares.
+     Aceptable para nuevos hashes.
+     El parámetro de costo de procesamiento por defecto es <code class="literal">5000</code>,
+     lo cual es demasiado bajo para el hardware moderno.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-prefix-sha512">
+    <strong><code><a href="#constant.crypt-prefix-sha512">CRYPT_PREFIX_SHA512</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Un hash basado en SHA-2 con una salida de 512 bits, desarrollado originalmente por Ulrich Drepper para GNU libc.
+     Soportado en Linux pero no común en otros lugares.
+     Aceptable para nuevos hashes.
+     El parámetro de costo de procesamiento por defecto es <code class="literal">5000</code>,
+     lo cual es demasiado bajo para el hardware moderno.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-prefix-scrypt">
+    <strong><code><a href="#constant.crypt-prefix-scrypt">CRYPT_PREFIX_SCRYPT</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Scrypt es una función de derivación de clave basada en contraseña creada por Colin Percival,
+     originalmente para el servicio de respaldo en línea Tarsnap.
+     El algoritmo fue diseñado específicamente para hacer costosas las ataques de hardware
+     personalizados a gran escala al requerir grandes cantidades de memoria.
+     En 2016, el algoritmo scrypt fue publicado por el IETF como RFC 7914.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-prefix-gost-yescrypt">
+    <strong><code><a href="#constant.crypt-prefix-gost-yescrypt">CRYPT_PREFIX_GOST_YESCRYPT</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Gost-yescrypt usa la salida de yescrypt como mensaje de entrada para HMAC con
+     la función de hash GOST R 34.11-2012 (Streebog) con un resumen de 256 bits.
+     Así, las propiedades criptográficas de yescrypt son suplantadas por las de la función de hash GOST.
+     Este método de hash es útil en aplicaciones que requieren un hash de contraseña moderno,
+     pero deben basarse en algoritmos GOST.
+     La función de hash GOST R 34.11-2012 (Streebog) fue publicada por el IETF como RFC 6986.
+     Aceptable para nuevos hashes si es necesario.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-prefix-yescrypt">
+    <strong><code><a href="#constant.crypt-prefix-yescrypt">CRYPT_PREFIX_YESCRYPT</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Yescrypt es un esquema de hash de contraseña escalable diseñado por Solar Designer,
+     que se basa en el scrypt de Colin Percival.
+     Aunque la fuerza de yescrypt contra los ataques de adivinación de contraseñas proviene de su diseño de algoritmo,
+     su seguridad criptográfica está garantizada por su uso de SHA-256 en la capa externa.
+     La función de hash SHA-256 fue publicada por el NIST en el FIPS PUB 180-2
+     (y sus revisiones posteriores como el FIPS PUB 180-4) y por el IETF como RFC 4634
+     (y posteriormente RFC 6234).
+     Recomendado para nuevos hashes.
+    </span>
+   </dd>
+  
+ </dl>
+
+ <dl id="xpass.constants.error">
+  <strong class="title">Código de error</strong>
+  
+   <dt id="constant.crypt-salt-ok">
+    <strong><code><a href="#constant.crypt-salt-ok">CRYPT_SALT_OK</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     No hay error.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-salt-invalid">
+    <strong><code><a href="#constant.crypt-salt-invalid">CRYPT_SALT_INVALID</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Método de hash desconocido o parámetros inválidos.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-salt-method-disabled">
+    <strong><code><a href="#constant.crypt-salt-method-disabled">CRYPT_SALT_METHOD_DISABLED</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El método de hash ya no está permitido para ser usado.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-salt-method-legacy">
+    <strong><code><a href="#constant.crypt-salt-method-legacy">CRYPT_SALT_METHOD_LEGACY</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El método de hash ya no se considera lo suficientemente fuerte.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.crypt-salt-too-cheap">
+    <strong><code><a href="#constant.crypt-salt-too-cheap">CRYPT_SALT_TOO_CHEAP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     El costo de los parámetros se considera demasiado bajo.
+    </span>
+   </dd>
+  
+ </dl>
+
+ <dl id="xpass.constants.password">
+  <strong class="title">Algoritmo de contraseña</strong>
+  
+   <dt id="constant.password-sha512">
+    <strong><code><a href="#constant.password-sha512">PASSWORD_SHA512</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     <strong><code><a href="#constant.password-sha512">PASSWORD_SHA512</a></code></strong> se usa para crear nuevos hashes
+     de contraseña usando el algoritmo <strong><code><a href="#constant.crypt-sha512">CRYPT_SHA512</a></code></strong>.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.password-yescrypt">
+    <strong><code><a href="#constant.password-yescrypt">PASSWORD_YESCRYPT</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     <strong><code><a href="#constant.password-yescrypt">PASSWORD_YESCRYPT</a></code></strong> se usa para crear nuevos hashes
+     de contraseña usando el algoritmo <strong><code><a href="#constant.crypt-yescrypt">CRYPT_YESCRYPT</a></code></strong>.
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+ 
+
+
+<div id="ref.xpass" class="reference"><hr>
+ <h1 class="title">Funciones Xpass</h1>
+
+ 
+
+
+<div id="function.crypt-checksalt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">crypt_checksalt</h1>
+  <p class="verinfo">(PECL xpass &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">crypt_checksalt</span> — <span class="dc-title">Valida un parámetro de hash de contraseña</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.crypt-checksalt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>crypt_checksalt</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$salt</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span></div>
+
+  <p class="simpara">
+   Verifica si la cadena de sal cumple con la configuración del sistema y señala si
+   el método de hash y los parámetros que especifica son aceptables. Está destinado a ser utilizado
+   para determinar si la contraseña del usuario debe ser rehasheada utilizando el método de hash
+   actualmente preferido.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.crypt-checksalt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">salt</code></dt>
+    <dd>
+     <span class="simpara">
+      La cadena de sal a verificar.
+     </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.crypt-checksalt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Devuelve una de las constantes
+   <strong><code><a href="#constant.crypt-salt-*">CRYPT_SALT_*</a></code></strong>
+   como <span class="type"><a href="#language.types.integer" class="type int">int</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.crypt-checksalt-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-1095">
+   <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>crypt_checksalt()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Genera una sal para un método obsoleto<br></span><span style="color: #0000BB">$salt </span><span style="color: #007700">= </span><span style="color: #0000BB">crypt_gensalt</span><span style="color: #007700">(</span><span style="color: #0000BB">CRYPT_PREFIX_STD_DES</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// Verifica la sal<br></span><span style="color: #0000BB">$test </span><span style="color: #007700">= </span><span style="color: #0000BB">crypt_checksalt</span><span style="color: #007700">(</span><span style="color: #0000BB">$salt</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$test </span><span style="color: #007700">=== </span><span style="color: #0000BB">CRYPT_SALT_METHOD_LEGACY</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Genera una sal para un método por defecto<br></span><span style="color: #0000BB">$salt </span><span style="color: #007700">= </span><span style="color: #0000BB">crypt_gensalt</span><span style="color: #007700">();<br></span><span style="color: #FF8000">// Verifica la sal<br></span><span style="color: #0000BB">$test </span><span style="color: #007700">= </span><span style="color: #0000BB">crypt_checksalt</span><span style="color: #007700">(</span><span style="color: #0000BB">$salt</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$test </span><span style="color: #007700">=== </span><span style="color: #0000BB">CRYPT_SALT_OK</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">bool(true)
+bool(true)</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.crypt-checksalt-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.crypt-gensalt" class="function" rel="rdfs-seeAlso">crypt_gensalt()</a> - Compila una cadena para usar como argumento de sal para crypt</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.crypt-gensalt" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">crypt_gensalt</h1>
+  <p class="verinfo">(PECL xpass &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">crypt_gensalt</span> — <span class="dc-title">Compila una cadena para usar como argumento de sal para crypt</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.crypt-gensalt-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>crypt_gensalt</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$prefix</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$count</code><span class="initializer"> = 0</span></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span></div>
+
+  <p class="simpara">
+   Compila una cadena para usar como argumento de sal para <span class="function"><a href="#function.crypt" class="function">crypt()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.crypt-gensalt-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">prefix</code></dt>
+    <dd>
+     <span class="simpara">
+      El método de hash a usar.
+      Una de las constantes <strong><code><a href="#constant.crypt-prefix-std-des">CRYPT_PREFIX_<span class="replaceable">*</span></a></code></strong>.
+      Si es <strong><code><a href="#constant.null">null</a></code></strong>, se seleccionará el mejor método de hash disponible.
+     </span>
+    </dd>
+   
+   
+    <dt><code class="parameter">count</code></dt>
+    <dd>
+     <span class="simpara">
+      Controla el costo de procesamiento del hash;
+      el rango válido y el significado exacto de count dependen del método de hash,
+      pero números más grandes corresponden a hashes más costosos en
+      términos de tiempo de CPU y posiblemente de uso de memoria.
+      Si count es <code class="literal">0</code>, se seleccionará un costo bajo por defecto.
+    </span>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.crypt-gensalt-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Devuelve una cadena con el parámetro, o <strong><code><a href="#constant.null">null</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.crypt-gensalt-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-1096">
+   <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>crypt_gensalt()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Genera la sal<br></span><span style="color: #0000BB">$salt </span><span style="color: #007700">= </span><span style="color: #0000BB">crypt_gensalt</span><span style="color: #007700">(</span><span style="color: #0000BB">CRYPT_PREFIX_BLOWFISH</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// Hashea la contraseña<br></span><span style="color: #0000BB">$hash </span><span style="color: #007700">= </span><span style="color: #0000BB">crypt</span><span style="color: #007700">(</span><span style="color: #DD0000">"secret"</span><span style="color: #007700">, </span><span style="color: #0000BB">$salt</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// Verifica el hash<br></span><span style="color: #0000BB">$test </span><span style="color: #007700">= </span><span style="color: #0000BB">hash_equals</span><span style="color: #007700">(</span><span style="color: #0000BB">crypt</span><span style="color: #007700">(</span><span style="color: #DD0000">"secret"</span><span style="color: #007700">, </span><span style="color: #0000BB">$hash</span><span style="color: #007700">), </span><span style="color: #0000BB">$hash</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$salt</span><span style="color: #007700">, </span><span style="color: #0000BB">$hash</span><span style="color: #007700">, </span><span style="color: #0000BB">$test</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">string(29) "$2y$05$GcPykP.Am8C1.dGamdpwW."
+string(60) "$2y$05$GcPykP.Am8C1.dGamdpwW.1RR.7uicWvJPZfJfCEizZHqVWwuaJLm"
+bool(true)</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.crypt-gensalt-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.crypt-preferred-method" class="function" rel="rdfs-seeAlso">crypt_preferred_method()</a> - Devuelve el prefijo del método de hash preferido</span></li>
+   <li><span class="function"><a href="#function.crypt" class="function" rel="rdfs-seeAlso">crypt()</a> - Hash de un solo sentido (indescifrable)</span></li>
+   <li><span class="function"><a href="#function.hash-equals" class="function" rel="rdfs-seeAlso">hash_equals()</a> - Comparación de strings resistente a ataques temporales</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.crypt-preferred-method" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">crypt_preferred_method</h1>
+  <p class="verinfo">(PECL xpass &gt;= 1.1.0)</p><p class="refpurpose"><span class="refname">crypt_preferred_method</span> — <span class="dc-title">Devuelve el prefijo del método de hash preferido</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.crypt-preferred-method-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>crypt_preferred_method</strong></span>(): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span></div>
+
+  <p class="simpara">
+   Devuelve el prefijo del método de hash preferido.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.crypt-preferred-method-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.crypt-preferred-method-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="simpara">
+   Devuelve una cadena con el prefijo, o <strong><code><a href="#constant.null">null</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.crypt-preferred-method-examples">
+  <h3 class="title">Ejemplos</h3>
+  <div class="example" id="example-1097">
+   <p><strong>Ejemplo #1 Un ejemplo de <span class="function"><strong>crypt_preferred_method()</strong></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">crypt_preferred_method</span><span style="color: #007700">());<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+   <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">string(3) "$y$"</pre>
+</div>
+   </div>
+  </div>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.crypt-preferred-method-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.crypt-gensalt" class="function" rel="rdfs-seeAlso">crypt_gensalt()</a> - Compila una cadena para usar como argumento de sal para crypt</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.crypt-checksalt">crypt_checksalt</a> — Valida un parámetro de hash de contraseña</li><li><a href="#function.crypt-gensalt">crypt_gensalt</a> — Compila una cadena para usar como argumento de sal para crypt</li><li><a href="#function.crypt-preferred-method">crypt_preferred_method</a> — Devuelve el prefijo del método de hash preferido</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.xpass">Introducción</a></li><li><a href="#xpass.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#xpass.requirements">Requerimientos</a></li><li><a href="#xpass.installation">Instalación vía PECL</a></li></ul></li><li><a href="#xpass.constants">Constantes predefinidas</a></li><li><a href="#ref.xpass">Funciones Xpass</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.crypt-checksalt">crypt_checksalt</a> — Valida un parámetro de hash de contraseña</li><li><a href="#function.crypt-gensalt">crypt_gensalt</a> — Compila una cadena para usar como argumento de sal para crypt</li><li><a href="#function.crypt-preferred-method">crypt_preferred_method</a> — Devuelve el prefijo del método de hash preferido</li></ul></li></ul></div>

@@ -1,0 +1,854 @@
+<div id="book.xmlrpc" class="book"><hr>
+ 
+ <h1 class="title">XML-RPC</h1>
+
+ 
+ <div id="intro.xmlrpc" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Estas funciones se pueden usar para escribir servidores y clientes XML-RPC.
+   Se puede encontrar más información acerca de XML-RPC en
+   <a href="http://www.xmlrpc.com/" class="link external">» http://www.xmlrpc.com/</a>, y más
+   documentación sobre esta extensión y sus funciones en
+   <a href="http://xmlrpc-epi.sourceforge.net/" class="link external">» http://xmlrpc-epi.sourceforge.net/</a>.
+  </p>
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta extensión es <em>EXPERIMENTAL</em>. El comportamiento de esta extensión, los nombres de sus funciones,
+ y toda la documentación alrededor de esta extensión puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta extensión debe ser utilizada bajo su propio riesgo.
+</p></div>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+<div id="xmlrpc.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#xmlrpc.requirements">Requerimientos</a></li><li><a href="#xmlrpc.installation">Instalación</a></li><li><a href="#xmlrpc.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ <div id="xmlrpc.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+ Esta extensión requiere la extensión PHP <a href="#book.libxml" class="link">libxml</a>.
+ Esto significa pasar la opción de configuración
+ <strong class="option configure">--with-libxml</strong>, o anterior a PHP 7.4
+ la opción de configuración <strong class="option configure">--enable-libxml</strong>,
+ aunque esto se realiza implícitamente ya que libxml está activado por omisión.
+</p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+<div id="xmlrpc.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  El XML-RPC soportado en PHP no está activado por defecto. Se necesita
+  usar la opción configuración de <strong class="option configure">--with-xmlrpc[=DIR]</strong>
+  cuando es compilado el PHP para activar el soporte a XML-RPC support.
+ </p>
+</div>
+<hr>
+
+
+
+
+
+ 
+
+ 
+ <div id="xmlrpc.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   Ésta extensión define un recurso de servicio de XML-RPC devuelto por
+   <span class="function"><a href="#function.xmlrpc-server-create" class="function">xmlrpc_server_create()</a></span>.
+  </p>
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+
+ 
+
+
+
+<div id="ref.xmlrpc" class="reference"><hr>
+ <h1 class="title">Funciones de XML-RPC</h1>
+
+
+
+
+<div id="function.xmlrpc-decode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_decode</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_decode</span> — <span class="dc-title">Decodifica el XML en los tipos de PHP nativos</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-decode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_decode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$xml</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$encoding</code><span class="initializer"> = "iso-8859-1"</span></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xmlrpc-decode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">xml</code></dt>
+     <dd>
+      <p class="para">
+       La respuesta XML devuelta por el método XMLRPC.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding</code></dt>
+     <dd>
+      <p class="para">
+       Entrada de codificación que admite iconv.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xmlrpc-decode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve o un arreglo, o un entero, o una cadena, o un booleano conforme
+   a la respuesta devuelta por el método XMLRPC.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xmlrpc-decode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   Ver el ejemplo de <span class="function"><a href="#function.xmlrpc-encode-request" class="function">xmlrpc_encode_request()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xmlrpc-decode-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xmlrpc-encode-request" class="function" rel="rdfs-seeAlso">xmlrpc_encode_request()</a> - Genera el XML para un método</span></li>
+    <li><span class="function"><a href="#function.xmlrpc-is-fault" class="function" rel="rdfs-seeAlso">xmlrpc_is_fault()</a> - Determina si el valor de un arreglo representa una falla del XMLRPC</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-decode-request" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_decode_request</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_decode_request</span> — <span class="dc-title">Decodifica el XML en los tipos de PHP nativos</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-decode-request-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_decode_request</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$xml</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$method</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$encoding</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-encode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_encode</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_encode</span> — <span class="dc-title">Genera XML para un valor PHP</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-encode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_encode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.xmlrpc-encode-request" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_encode_request</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_encode_request</span> — <span class="dc-title">Genera el XML para un método</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-encode-request-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_encode_request</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$method</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$params</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$output_options</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xmlrpc-encode-request-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">method</code></dt>
+     <dd>
+      <p class="para">
+       Nombre del método a llamar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">params</code></dt>
+     <dd>
+      <p class="para">
+       Argumentos del método, compatibles con la firma del método.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">output_options</code></dt>
+     <dd>
+      <p class="para">
+       Array que especifica las opciones de salida que puede contener (los valores
+       por omisión están en negrita):
+       </p><ul class="itemizedlist">
+        <li class="listitem"><p class="para">output_type: php, <em>xml</em></p></li>
+        <li class="listitem"><p class="para">verbosity: no_white_space, newlines_only, <em>pretty</em></p></li>
+        <li class="listitem"><p class="para">escaping: cdata, <em>non-ascii, non-print, markup</em>
+          (puede ser un string con un valor o un array con varios valores)</p></li>
+        <li class="listitem"><p class="para">version: simple, <em>xmlrpc</em>, soap 1.1, auto</p></li>
+        <li class="listitem"><p class="para">encoding: <em>iso-8859-1</em>, otros juegos de caracteres soportados por iconv</p></li>
+       </ul>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xmlrpc-encode-request-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un string que contiene la representación XML de la solicitud.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xmlrpc-encode-request-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5748">
+    <p><strong>Ejemplo #1 Ejemplo con XMLRPC</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$request </span><span style="color: #007700">= </span><span style="color: #0000BB">xmlrpc_encode_request</span><span style="color: #007700">(</span><span style="color: #DD0000">"method"</span><span style="color: #007700">, [</span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">, </span><span style="color: #0000BB">3</span><span style="color: #007700">]);<br></span><span style="color: #0000BB">$context </span><span style="color: #007700">= </span><span style="color: #0000BB">stream_context_create</span><span style="color: #007700">([<br>    </span><span style="color: #DD0000">'http' </span><span style="color: #007700">=&gt; [<br>        </span><span style="color: #DD0000">'method'  </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"POST"</span><span style="color: #007700">,<br>        </span><span style="color: #DD0000">'header'  </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"Content-Type: text/xml"</span><span style="color: #007700">,<br>        </span><span style="color: #DD0000">'content' </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">$request</span><span style="color: #007700">,<br>    ]<br>]);<br></span><span style="color: #0000BB">$file </span><span style="color: #007700">= </span><span style="color: #0000BB">file_get_contents</span><span style="color: #007700">(</span><span style="color: #DD0000">"http://www.example.com/xmlrpc"</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">$context</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$response </span><span style="color: #007700">= </span><span style="color: #0000BB">xmlrpc_decode</span><span style="color: #007700">(</span><span style="color: #0000BB">$file</span><span style="color: #007700">);<br>if (</span><span style="color: #0000BB">$response </span><span style="color: #007700">&amp;&amp; </span><span style="color: #0000BB">xmlrpc_is_fault</span><span style="color: #007700">(</span><span style="color: #0000BB">$response</span><span style="color: #007700">)) {<br>    </span><span style="color: #0000BB">trigger_error</span><span style="color: #007700">(</span><span style="color: #DD0000">"xmlrpc: </span><span style="color: #0000BB">$response</span><span style="color: #007700">[</span><span style="color: #0000BB">faultString</span><span style="color: #007700">]</span><span style="color: #DD0000"> (</span><span style="color: #0000BB">$response</span><span style="color: #007700">[</span><span style="color: #0000BB">faultCode</span><span style="color: #007700">]</span><span style="color: #DD0000">)"</span><span style="color: #007700">);<br>} else {<br>    </span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$response</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xmlrpc-encode-request-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.stream-context-create" class="function" rel="rdfs-seeAlso">stream_context_create()</a> - Crea un contexto de flujo</span></li>
+    <li><span class="function"><a href="#function.file-get-contents" class="function" rel="rdfs-seeAlso">file_get_contents()</a> - Lee todo un fichero en una cadena</span></li>
+    <li><span class="function"><a href="#function.xmlrpc-decode" class="function" rel="rdfs-seeAlso">xmlrpc_decode()</a> - Decodifica el XML en los tipos de PHP nativos</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-get-type" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_get_type</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_get_type</span> — <span class="dc-title">Obtiene el tipo del xmlrpc para un valor PHP</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-get-type-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_get_type</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  <p class="para">
+   Ésta función es específicamente útil para la base64 y las cadenas fecha-hora.
+  </p>
+ </div>
+
+
+  <div class="refsect1 parameters" id="refsect1-function.xmlrpc-get-type-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       valor de PHP
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xmlrpc-get-type-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tipo de XML-RPC.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xmlrpc-get-type-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5749">
+    <p><strong>Ejemplo #1 Ejemplo de tipo de XML-RPC</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">xmlrpc_get_type</span><span style="color: #007700">(</span><span style="color: #0000BB">null</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">; </span><span style="color: #FF8000">// base64<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">xmlrpc_get_type</span><span style="color: #007700">(</span><span style="color: #0000BB">false</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">; </span><span style="color: #FF8000">// boolean<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">xmlrpc_get_type</span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">; </span><span style="color: #FF8000">// int<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">xmlrpc_get_type</span><span style="color: #007700">(</span><span style="color: #0000BB">1.0</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">; </span><span style="color: #FF8000">// double<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">xmlrpc_get_type</span><span style="color: #007700">(</span><span style="color: #DD0000">""</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">; </span><span style="color: #FF8000">// string<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">xmlrpc_get_type</span><span style="color: #007700">(array()) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">; </span><span style="color: #FF8000">// array<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">xmlrpc_get_type</span><span style="color: #007700">(new </span><span style="color: #0000BB">stdClass</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">; </span><span style="color: #FF8000">// array<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">xmlrpc_get_type</span><span style="color: #007700">(</span><span style="color: #0000BB">STDIN</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">; </span><span style="color: #FF8000">// int<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xmlrpc-get-type-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xmlrpc-set-type" class="function" rel="rdfs-seeAlso">xmlrpc_set_type()</a> - Establece el tipo del xmlrpc, base64 o fecha-hora, para un valor de cadena PHP</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-is-fault" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_is_fault</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.3.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_is_fault</span> — <span class="dc-title">Determina si el valor de un arreglo representa una falla del XMLRPC</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-is-fault-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_is_fault</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$arg</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xmlrpc-is-fault-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">arg</code></dt>
+     <dd>
+      <p class="para">
+       El arreglo devuelto por <span class="function"><a href="#function.xmlrpc-decode" class="function">xmlrpc_decode()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xmlrpc-is-fault-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si embargo si el argumento significa fallo retorna, <strong><code><a href="#constant.false">false</a></code></strong>. La descripción de
+   la falla o falta está disponible en <code class="literal">$arg["faultString"]</code>, fault
+   el código está en <code class="literal">$arg["faultCode"]</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xmlrpc-is-fault-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   Ver ejemplo de<span class="function"><a href="#function.xmlrpc-encode-request" class="function">xmlrpc_encode_request()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.xmlrpc-is-fault-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.xmlrpc-decode" class="function" rel="rdfs-seeAlso">xmlrpc_decode()</a> - Decodifica el XML en los tipos de PHP nativos</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-parse-method-descriptions" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_parse_method_descriptions</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_parse_method_descriptions</span> — <span class="dc-title">Decodifica el XML en una lista de las descripciones del método</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-parse-method-descriptions-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_parse_method_descriptions</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$xml</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-server-add-introspection-data" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_server_add_introspection_data</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_server_add_introspection_data</span> — <span class="dc-title">Agrega una documentación introspectiva</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-server-add-introspection-data-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_server_add_introspection_data</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$server</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$desc</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-server-call-method" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_server_call_method</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_server_call_method</span> — <span class="dc-title">Analiza los requerimientos del XML y las llamadas de los métodos</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-server-call-method-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_server_call_method</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$server</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$xml</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$user_data</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$output_options</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-server-create" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_server_create</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_server_create</span> — <span class="dc-title">Crea un servidor xmlrpc</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-server-create-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_server_create</strong></span>(): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.xmlrpc-server-destroy" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_server_destroy</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_server_destroy</span> — <span class="dc-title">Destruye los recursos del servidor</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-server-destroy-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_server_destroy</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$server</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-server-register-introspection-callback" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_server_register_introspection_callback</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_server_register_introspection_callback</span> — <span class="dc-title">Registra una función PHP para generar la documentación</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-server-register-introspection-callback-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_server_register_introspection_callback</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$server</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$function</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-server-register-method" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_server_register_method</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_server_register_method</span> — <span class="dc-title">Registra una función PHP para que el recurso del método coincida con method_name</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-server-register-method-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_server_register_method</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$server</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$method_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$function</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.xmlrpc-set-type" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">xmlrpc_set_type</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.1.0, PHP 5, PHP 7)</p><p class="refpurpose"><span class="refname">xmlrpc_set_type</span> — <span class="dc-title">Establece el tipo del xmlrpc, base64 o fecha-hora, para un valor de cadena PHP</span></p>
+
+ </div>
+ <div class="refsect1 description" id="refsect1-function.xmlrpc-set-type-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>xmlrpc_set_type</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Establece el tipo del xmlrpc, base64 o fecha-hora, para un valor de cadena PHP.
+  </p>
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función es <em>EXPERIMENTAL</em>. El comportamiento de esta función, su nombre, y toda la
+ documentación alrededor de esta función puede cambiar sin previo aviso en una próxima versión de PHP.
+ Esta función debe ser utilizada bajo su propio riesgo.
+</p></div>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.xmlrpc-set-type-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">value</code></dt>
+     <dd>
+      <p class="para">
+       Value to set the type
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">type</code></dt>
+     <dd>
+      <p class="para">
+       'base64' or 'datetime'
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.xmlrpc-set-type-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+   If successful, <code class="parameter">value</code> is converted to an object.
+  </p>
+ </div>
+
+
+ <div class="refsect1 errors" id="refsect1-function.xmlrpc-set-type-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Issues E_WARNING with type unsupported by XMLRPC.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.xmlrpc-set-type-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-5750">
+    <p><strong>Ejemplo #1 A <span class="function"><strong>xmlrpc_set_type()</strong></span> example</strong></p>
+    <div class="example-contents"><p>
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$params </span><span style="color: #007700">= </span><span style="color: #0000BB">date</span><span style="color: #007700">(</span><span style="color: #DD0000">"Ymd\TH:i:s"</span><span style="color: #007700">, </span><span style="color: #0000BB">time</span><span style="color: #007700">());<br></span><span style="color: #0000BB">xmlrpc_set_type</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">, </span><span style="color: #DD0000">'datetime'</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">xmlrpc_encode</span><span style="color: #007700">(</span><span style="color: #0000BB">$params</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;params&gt;
+&lt;param&gt;
+ &lt;value&gt;
+  &lt;dateTime.iso8601&gt;20090322T23:43:03&lt;/dateTime.iso8601&gt;
+ &lt;/value&gt;
+&lt;/param&gt;
+&lt;/params&gt;</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.xmlrpc-decode">xmlrpc_decode</a> — Decodifica el XML en los tipos de PHP nativos</li><li><a href="#function.xmlrpc-decode-request">xmlrpc_decode_request</a> — Decodifica el XML en los tipos de PHP nativos</li><li><a href="#function.xmlrpc-encode">xmlrpc_encode</a> — Genera XML para un valor PHP</li><li><a href="#function.xmlrpc-encode-request">xmlrpc_encode_request</a> — Genera el XML para un método</li><li><a href="#function.xmlrpc-get-type">xmlrpc_get_type</a> — Obtiene el tipo del xmlrpc para un valor PHP</li><li><a href="#function.xmlrpc-is-fault">xmlrpc_is_fault</a> — Determina si el valor de un arreglo representa una falla del XMLRPC</li><li><a href="#function.xmlrpc-parse-method-descriptions">xmlrpc_parse_method_descriptions</a> — Decodifica el XML en una lista de las descripciones del método</li><li><a href="#function.xmlrpc-server-add-introspection-data">xmlrpc_server_add_introspection_data</a> — Agrega una documentación introspectiva</li><li><a href="#function.xmlrpc-server-call-method">xmlrpc_server_call_method</a> — Analiza los requerimientos del XML y las llamadas de los métodos</li><li><a href="#function.xmlrpc-server-create">xmlrpc_server_create</a> — Crea un servidor xmlrpc</li><li><a href="#function.xmlrpc-server-destroy">xmlrpc_server_destroy</a> — Destruye los recursos del servidor</li><li><a href="#function.xmlrpc-server-register-introspection-callback">xmlrpc_server_register_introspection_callback</a> — Registra una función PHP para generar la documentación</li><li><a href="#function.xmlrpc-server-register-method">xmlrpc_server_register_method</a> — Registra una función PHP para que el recurso del método coincida con method_name</li><li><a href="#function.xmlrpc-set-type">xmlrpc_set_type</a> — Establece el tipo del xmlrpc, base64 o fecha-hora, para un valor de cadena PHP</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.xmlrpc">Introducción</a></li><li><a href="#xmlrpc.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#xmlrpc.requirements">Requerimientos</a></li><li><a href="#xmlrpc.installation">Instalación</a></li><li><a href="#xmlrpc.resources">Tipos de recursos</a></li></ul></li><li><a href="#ref.xmlrpc">Funciones de XML-RPC</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.xmlrpc-decode">xmlrpc_decode</a> — Decodifica el XML en los tipos de PHP nativos</li><li><a href="#function.xmlrpc-decode-request">xmlrpc_decode_request</a> — Decodifica el XML en los tipos de PHP nativos</li><li><a href="#function.xmlrpc-encode">xmlrpc_encode</a> — Genera XML para un valor PHP</li><li><a href="#function.xmlrpc-encode-request">xmlrpc_encode_request</a> — Genera el XML para un método</li><li><a href="#function.xmlrpc-get-type">xmlrpc_get_type</a> — Obtiene el tipo del xmlrpc para un valor PHP</li><li><a href="#function.xmlrpc-is-fault">xmlrpc_is_fault</a> — Determina si el valor de un arreglo representa una falla del XMLRPC</li><li><a href="#function.xmlrpc-parse-method-descriptions">xmlrpc_parse_method_descriptions</a> — Decodifica el XML en una lista de las descripciones del método</li><li><a href="#function.xmlrpc-server-add-introspection-data">xmlrpc_server_add_introspection_data</a> — Agrega una documentación introspectiva</li><li><a href="#function.xmlrpc-server-call-method">xmlrpc_server_call_method</a> — Analiza los requerimientos del XML y las llamadas de los métodos</li><li><a href="#function.xmlrpc-server-create">xmlrpc_server_create</a> — Crea un servidor xmlrpc</li><li><a href="#function.xmlrpc-server-destroy">xmlrpc_server_destroy</a> — Destruye los recursos del servidor</li><li><a href="#function.xmlrpc-server-register-introspection-callback">xmlrpc_server_register_introspection_callback</a> — Registra una función PHP para generar la documentación</li><li><a href="#function.xmlrpc-server-register-method">xmlrpc_server_register_method</a> — Registra una función PHP para que el recurso del método coincida con method_name</li><li><a href="#function.xmlrpc-set-type">xmlrpc_set_type</a> — Establece el tipo del xmlrpc, base64 o fecha-hora, para un valor de cadena PHP</li></ul></li></ul></div>

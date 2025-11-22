@@ -1,0 +1,3771 @@
+<div id="book.ssh2" class="book"><hr>
+ 
+ <h1 class="title">Secure Shell2</h1>
+ 
+
+ 
+ <div id="intro.ssh2" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Se enlaza a la biblioteca <a href="http://libssh2.org/" class="link external">» libssh2</a> que
+   provee acceso a recursos (shell, ejecución remota, tunneling, transferencia de
+   archivos) sobre una máquina remota utilizando una vía de transporte criptográfica
+   segura.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+<div id="ssh2.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#ssh2.requirements">Requerimientos</a></li><li><a href="#ssh2.installation">Instalación</a></li><li><a href="#ssh2.resources">Tipos de recursos</a></li></ul>
+
+
+ 
+ <div id="ssh2.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Las librerías
+   <a href="http://www.openssl.org/" class="link external">» OpenSSL</a> y
+   <a href="http://libssh2.org/" class="link external">» libssh2</a> son obligatorias.
+   Asegúrese que las librerías de desarrollo estan instaladas,
+   donde el nombre típico del paquete podría ser <code class="literal">openssl-dev</code>.
+  </p>
+  <p class="para">
+   Es necesaria la versión 1.2 o posterior de libssh2 , aunque
+   es posible que nuevos lanzamientos de pecl/ssh2 pueden requerir versiones
+   posteriores (consultar las notas de lanzamiento)
+  </p>
+  <p class="para">
+   La función <span class="function"><a href="#function.ssh2-auth-agent" class="function">ssh2_auth_agent()</a></span> estará disponible únicamente
+   con libssh &gt;= 1.2.3.
+  </p>
+  <p class="para">
+   El soporte para <span class="function"><a href="#function.stream-set-timeout" class="function">stream_set_timeout()</a></span> para canalizar secuencias
+   sólo estará disponible con libssh &gt;= 1.2.9.
+  </p>
+  <p class="para">
+   libssh2 viene en dos versiones: gcrypt y openssl. Algunas distribuciones
+   de Linux compilan libssh2 contra la librería gcrypt, y otras utilizan openssl.
+   libssh2 tiene algunos problemas cuando se compila contra gcrypt, por favor, utilice openssl.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+<div id="ssh2.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+
+ <p class="para">
+  Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+  <a href="https://pecl.php.net/package/ssh2" class="link external">» https://pecl.php.net/package/ssh2</a>.
+ </p>
+ <p class="para">
+  Los binarios Windows
+        (los archivos <abbr title="Dynamic Link Library">DLL</abbr>)
+        para esta extensión <abbr title="PHP Extension and Application Repository">PECL</abbr> están disponibles en el sitio web PECL.
+ </p>
+
+</div>
+<hr>
+
+
+
+
+ 
+
+ 
+ <div id="ssh2.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+   Esta extensión define los siguientes tipos de recursos:
+   </p><ul class="simplelist">
+    <li>SSH2 Session</li>
+    <li>SSH2 Listener</li>
+    <li>SSH2 SFTP</li>
+    <li>SSH2 Publickey Subsystem (disponible a partir de ssh2 0.10)</li>
+   </ul>
+  
+
+ </div>
+<hr>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="ssh2.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <dl>
+  
+   <dt id="constant.ssh2-fingerprint-md5">
+    <strong><code><a href="#constant.ssh2-fingerprint-md5">SSH2_FINGERPRINT_MD5</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Flag que permite a la función <span class="function"><a href="#function.ssh2-fingerprint" class="function">ssh2_fingerprint()</a></span> solicitar la huella de la clave del host como hash MD5.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-fingerprint-sha1">
+    <strong><code><a href="#constant.ssh2-fingerprint-sha1">SSH2_FINGERPRINT_SHA1</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Flag que permite a la función <span class="function"><a href="#function.ssh2-fingerprint" class="function">ssh2_fingerprint()</a></span> solicitar la huella de la clave del host como hash SHA1.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-fingerprint-hex">
+    <strong><code><a href="#constant.ssh2-fingerprint-hex">SSH2_FINGERPRINT_HEX</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Flag que permite a la función <span class="function"><a href="#function.ssh2-fingerprint" class="function">ssh2_fingerprint()</a></span> solicitar la huella de la clave del host como string hexits.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-fingerprint-raw">
+    <strong><code><a href="#constant.ssh2-fingerprint-raw">SSH2_FINGERPRINT_RAW</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Flag que permite a la función <span class="function"><a href="#function.ssh2-fingerprint" class="function">ssh2_fingerprint()</a></span> solicitar la huella de la clave del host como string de caracteres 8-bit.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-term-unit-chars">
+    <strong><code><a href="#constant.ssh2-term-unit-chars">SSH2_TERM_UNIT_CHARS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Flag que especifica a la función <span class="function"><a href="#function.ssh2-shell" class="function">ssh2_shell()</a></span> que los parámetros <code class="parameter">width</code> y <code class="parameter">height</code> se proporcionan en forma de tamaño de caracteres.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-term-unit-pixels">
+    <strong><code><a href="#constant.ssh2-term-unit-pixels">SSH2_TERM_UNIT_PIXELS</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Flag que especifica a la función <span class="function"><a href="#function.ssh2-shell" class="function">ssh2_shell()</a></span> que los parámetros <code class="parameter">width</code> y <code class="parameter">height</code> se proporcionan en forma de píxeles.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-default-term-width">
+    <strong><code><a href="#constant.ssh2-default-term-width">SSH2_DEFAULT_TERM_WIDTH</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Ancho por defecto del terminal solicitado por la función <span class="function"><a href="#function.ssh2-shell" class="function">ssh2_shell()</a></span>.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-default-term-height">
+    <strong><code><a href="#constant.ssh2-default-term-height">SSH2_DEFAULT_TERM_HEIGHT</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Altura por defecto del terminal solicitado por la función <span class="function"><a href="#function.ssh2-shell" class="function">ssh2_shell()</a></span>.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-default-term-unit">
+    <strong><code><a href="#constant.ssh2-default-term-unit">SSH2_DEFAULT_TERM_UNIT</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Unidad por defecto del terminal solicitado por la función <span class="function"><a href="#function.ssh2-shell" class="function">ssh2_shell()</a></span>.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-stream-stdio">
+    <strong><code><a href="#constant.ssh2-stream-stdio">SSH2_STREAM_STDIO</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Flag para que la función <span class="function"><a href="#function.ssh2-fetch-stream" class="function">ssh2_fetch_stream()</a></span> solicite un subcanal STDIO.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-stream-stderr">
+    <strong><code><a href="#constant.ssh2-stream-stderr">SSH2_STREAM_STDERR</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Flag para que la función <span class="function"><a href="#function.ssh2-fetch-stream" class="function">ssh2_fetch_stream()</a></span> solicite un subcanal STDERR.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-default-terminal">
+    <strong><code><a href="#constant.ssh2-default-terminal">SSH2_DEFAULT_TERMINAL</a></code></strong>
+    (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+     Tipo por defecto del terminal (e.g. <code class="literal">"vt102"</code>, <code class="literal">"ansi"</code>, <code class="literal">"xterm"</code>, <code class="literal">"vanilla"</code>) solicitado por la función <span class="function"><a href="#function.ssh2-shell" class="function">ssh2_shell()</a></span>.
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-pollin">
+    <strong><code><a href="#constant.ssh2-pollin">SSH2_POLLIN</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-pollext">
+    <strong><code><a href="#constant.ssh2-pollext">SSH2_POLLEXT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-pollout">
+    <strong><code><a href="#constant.ssh2-pollout">SSH2_POLLOUT</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-pollerr">
+    <strong><code><a href="#constant.ssh2-pollerr">SSH2_POLLERR</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-pollhup">
+    <strong><code><a href="#constant.ssh2-pollhup">SSH2_POLLHUP</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-pollnval">
+    <strong><code><a href="#constant.ssh2-pollnval">SSH2_POLLNVAL</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-poll-session-closed">
+    <strong><code><a href="#constant.ssh2-poll-session-closed">SSH2_POLL_SESSION_CLOSED</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-poll-channel-closed">
+    <strong><code><a href="#constant.ssh2-poll-channel-closed">SSH2_POLL_CHANNEL_CLOSED</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+  
+   <dt id="constant.ssh2-poll-listener-closed">
+    <strong><code><a href="#constant.ssh2-poll-listener-closed">SSH2_POLL_LISTENER_CLOSED</a></code></strong>
+    (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+   </dt>
+   <dd>
+    <span class="simpara">
+    </span>
+   </dd>
+  
+ </dl>
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="ref.ssh2" class="reference"><hr>
+ <h1 class="title">Funciones de SSH2</h1>
+
+ 
+
+
+
+<div id="function.ssh2-auth-agent" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_auth_agent</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.12)</p><p class="refpurpose"><span class="refname">ssh2_auth_agent</span> — <span class="dc-title">Autenticación SSH utilizando el agente ssh</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-auth-agent-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_auth_agent</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$username</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Autenticación SSH utilizando el agente ssh.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+    <span class="simpara">
+     La función <span class="function"><strong>ssh2_auth_agent()</strong></span> solo está disponible
+     cuando la extensión ssh2 ha sido compilada con libssh &gt;= 1.2.3.
+    </span>
+  </p></blockquote>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-auth-agent-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido desde una llamada a la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">username</code></dt>
+     <dd>
+      <p class="para">
+       Nombre de usuario remoto.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-auth-agent-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-auth-agent-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4823">
+    <p><strong>Ejemplo #1 Autenticación utilizando un agente ssh</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">ssh2_auth_agent</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">)) {<br>  echo </span><span style="color: #DD0000">"¡Autenticación exitosa!\n"</span><span style="color: #007700">;<br>} else {<br>  die(</span><span style="color: #DD0000">'Autenticación fallida...'</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-auth-hostbased-file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_auth_hostbased_file</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_auth_hostbased_file</span> — <span class="dc-title">Identificación utilizando una clave de host pública</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-auth-hostbased-file-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_auth_hostbased_file</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$username</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$hostname</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$pubkeyfile</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$privkeyfile</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$passphrase</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$local_username</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Identificación utilizando una clave de host pública leída desde un fichero.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-auth-hostbased-file-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido a través de la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">username</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">hostname</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">pubkeyfile</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">privkeyfile</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">passphrase</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">privkeyfile</code> está cifrado (y debe estarlo), la frase secreta debe
+       ser proporcionada.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">local_username</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">local_username</code> es omitido, entonces el valor de
+       <code class="parameter">username</code> será utilizado para ello.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-auth-hostbased-file-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-auth-hostbased-file-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4824">
+    <p><strong>Ejemplo #1 Identificación utilizando una clave de host pública</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'hostkey'</span><span style="color: #007700">=&gt;</span><span style="color: #DD0000">'ssh-rsa'</span><span style="color: #007700">));<br><br>if (</span><span style="color: #0000BB">ssh2_auth_hostbased_file</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'remoteusername'</span><span style="color: #007700">, </span><span style="color: #DD0000">'myhost.example.com'</span><span style="color: #007700">,<br>                             </span><span style="color: #DD0000">'/usr/local/etc/hostkey_rsa.pub'</span><span style="color: #007700">,<br>                             </span><span style="color: #DD0000">'/usr/local/etc/hostkey_rsa'</span><span style="color: #007700">, </span><span style="color: #DD0000">'secret'</span><span style="color: #007700">,<br>                             </span><span style="color: #DD0000">'localusername'</span><span style="color: #007700">)) {<br>  echo </span><span style="color: #DD0000">"Identificación utilizando una clave de host pública con éxito\n"</span><span style="color: #007700">;<br>} else {<br>  die(</span><span style="color: #DD0000">'Fallo en la identificación utilizando una clave de host pública con éxito'</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.ssh2-auth-hostbased-file-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    <span class="function"><strong>ssh2_auth_hostbased_file()</strong></span> requiere libssh2 &gt;= 0.7 y PHP/SSH2 &gt;= 0.7.
+   </p>
+  </blockquote>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-auth-none" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_auth_none</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_auth_none</span> — <span class="dc-title">Identificación como "none"</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-auth-none-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_auth_none</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$username</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   Intenta una identificación como "none", que, habitualmente, falla
+   (y debe fallar). Aparte del fallo, esta función debe devolver un
+   array que contiene los métodos de identificación aceptables.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-auth-none-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido con la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">username</code></dt>
+     <dd>
+      <p class="para">
+       Nombre de usuario remoto.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-auth-none-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve <strong><code><a href="#constant.true">true</a></code></strong> si el servidor acepta "none" como método de identificación,
+   o un array de métodos de identificación aceptables en caso de fallo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-auth-none-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4825">
+    <p><strong>Ejemplo #1 Recuperación de la lista de métodos de identificación</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$auth_methods </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_auth_none</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'user'</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">in_array</span><span style="color: #007700">(</span><span style="color: #DD0000">'password'</span><span style="color: #007700">, </span><span style="color: #0000BB">$auth_methods</span><span style="color: #007700">)) {<br>  echo </span><span style="color: #DD0000">"El servidor soporta la identificación por contraseña\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-auth-password" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_auth_password</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_auth_password</span> — <span class="dc-title">Autenticación vía SSH utilizando una contraseña en texto claro</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-auth-password-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_auth_password</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$username</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$password</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Autenticación vía SSH utilizando una contraseña en texto claro.
+   Desde la versión 0.12, esta función también soporta el método
+   keyboard_interactive.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-auth-password-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido desde la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">username</code></dt>
+     <dd>
+      <p class="para">
+       Nombre de usuario remoto.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">password</code></dt>
+     <dd>
+      <p class="para">
+       Contraseña para el usuario <code class="parameter">username</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-auth-password-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-auth-password-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4826">
+    <p><strong>Ejemplo #1 Autenticación con una contraseña</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'secret'</span><span style="color: #007700">)) {<br>  echo </span><span style="color: #DD0000">"Autenticación exitosa!\n"</span><span style="color: #007700">;<br>} else {<br>  die(</span><span style="color: #DD0000">'Fallo en la autenticación...'</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-auth-pubkey-file" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_auth_pubkey_file</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_auth_pubkey_file</span> — <span class="dc-title">Identificación utilizando una clave pública</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-auth-pubkey-file-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_auth_pubkey_file</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$username</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$pubkeyfile</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$privkeyfile</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$passphrase</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Identificación utilizando una clave pública, leída desde un fichero.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-auth-pubkey-file-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido desde la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">username</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">pubkeyfile</code></dt>
+     <dd>
+      <p class="para">
+       El fichero que contiene la clave pública debe estar en formato
+       OpenSSH. Debe parecerse a esto:
+      </p>
+      <p class="para">
+       ssh-rsa AAAAB3NzaC1yc2EAAA....NX6sqSnHA8= rsa-key-20121110
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">privkeyfile</code></dt>
+     <dd>
+      <p class="para">
+         La clave privada debe estar en formato PEM.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">passphrase</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">privkeyfile</code> está cifrado (y debe estarlo),
+       la frase de paso debe ser proporcionada.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-auth-pubkey-file-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-auth-pubkey-file-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4827">
+    <p><strong>Ejemplo #1 Identificación utilizando una clave pública</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'hostkey'</span><span style="color: #007700">=&gt;</span><span style="color: #DD0000">'ssh-rsa'</span><span style="color: #007700">));<br><br>if (</span><span style="color: #0000BB">ssh2_auth_pubkey_file</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">,<br>                          </span><span style="color: #DD0000">'/home/username/.ssh/id_rsa.pub'</span><span style="color: #007700">,<br>                          </span><span style="color: #DD0000">'/home/username/.ssh/id_rsa'</span><span style="color: #007700">, </span><span style="color: #DD0000">'secret'</span><span style="color: #007700">)) {<br>  echo </span><span style="color: #DD0000">"Identificación exitosa utilizando una clave pública\n"</span><span style="color: #007700">;<br>} else {<br>  die(</span><span style="color: #DD0000">'Fallo en la identificación utilizando una clave pública'</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+<div class="refsect1 notes" id="refsect1-function.ssh2-auth-pubkey-file-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    La biblioteca libssh subyacente no soporta muy limpiamente las
+    autenticaciones parciales. Es decir, que si debe proporcionar a la
+    vez una clave pública y una contraseña, entonces parecerá como si
+    la función estuviera en error. En este caso particular, un error en esta
+    llamada puede simplemente significar que la autenticación no está aún terminada.
+    Debe ignorar este error y continuar con la llamada
+    <span class="function"><a href="#function.ssh2-auth-password" class="function">ssh2_auth_password()</a></span> para terminar la autenticación.
+   </p>
+  </blockquote>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.ssh2-connect" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_connect</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_connect</span> — <span class="dc-title">Conexión a un servidor SSH</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-connect-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_connect</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code><span class="initializer"> = 22</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$methods</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$callbacks</code><span class="initializer"> = ?</span></span><br>): <span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Establece una conexión a un servidor SSH remoto.
+  </p>
+  <p class="para">
+   Una vez conectado, el cliente debe verificar la clave de host del servidor
+   utilizando la función <span class="function"><a href="#function.ssh2-fingerprint" class="function">ssh2_fingerprint()</a></span>,
+   luego identificarse utilizando un password o una clave pública.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-connect-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">host</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">port</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">methods</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">methods</code> debe ser un array asociativo de hasta
+       cuatro parámetros, como se describe a continuación. <code class="parameter">methods</code>
+       puede contener cualquiera o todos los parámetros siguientes.
+      </p>
+      <p class="para">
+       </p><table class="doctable table">
+        <caption><strong>Opciones de conexión SSH</strong></caption>
+        
+         <thead>
+          <tr>
+           <th>Índice</th>
+           <th>Significado</th>
+           <th>Valores soportados *</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td>kex</td>
+           <td>
+            La lista de métodos de intercambio a anunciar, separados por una coma,
+            por orden de preferencia.
+           </td>
+           <td>
+            <code class="literal">diffie-hellman-group1-sha1</code>,
+            <code class="literal">diffie-hellman-group14-sha1</code>, y
+            <code class="literal">diffie-hellman-group-exchange-sha1</code>
+           </td>
+          </tr>
+
+          <tr>
+           <td>hostkey</td>
+           <td>
+            La lista de métodos de claves de host a anunciar, separados por
+            una coma, por orden de preferencia.
+           </td>
+           <td>
+            <code class="literal">ssh-rsa</code> y
+            <code class="literal">ssh-dss</code>
+           </td>
+          </tr>
+
+          <tr>
+           <td>client_to_server</td>
+           <td>
+            Array asociativo que contiene los códigos de los métodos de cifrado,
+            compresión y mensajes de autenticación (MAC) preferidos
+            para el envío de mensajes desde el cliente al servidor.
+           </td>
+           <td class="empty"> </td>
+          </tr>
+
+          <tr>
+           <td>server_to_client</td>
+           <td>
+            Array asociativo que contiene los códigos de los métodos de cifrado,
+            compresión y mensajes de autenticación (MAC) preferidos
+            para el envío de mensajes desde el servidor al cliente.
+           </td>
+           <td class="empty"> </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+      <p class="para">
+       * - Los valores soportados dependen de los métodos soportados por
+       la biblioteca. Consulte la documentación <a href="http://libssh2.org/" class="link external">» libssh2</a>
+       para más información.
+      </p>
+      <p class="para">
+       </p><table class="doctable table">
+        <caption><strong>
+         <code class="parameter">client_to_server</code> y
+         <code class="parameter">server_to_client</code> deben ser un array asociativo
+         con cualquiera o todos los parámetros siguientes.
+        </strong></caption>
+        
+         <thead>
+          <tr>
+           <th>Índice</th>
+           <th>Significado</th>
+           <th>Valores soportados *</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td>crypt</td>
+           <td>
+            Lista de métodos de cifrado a anunciar, separados por una coma,
+            por orden de preferencia.
+           </td>
+           <td>
+            <code class="literal">rijndael-cbc@lysator.liu.se</code>,
+            <code class="literal">aes256-cbc</code>,
+            <code class="literal">aes192-cbc</code>,
+            <code class="literal">aes128-cbc</code>,
+            <code class="literal">3des-cbc</code>,
+            <code class="literal">blowfish-cbc</code>,
+            <code class="literal">cast128-cbc</code>,
+            <code class="literal">arcfour</code>, y
+            <code class="literal">none**</code>
+           </td>
+          </tr>
+
+          <tr>
+           <td>comp</td>
+           <td>
+            Lista de métodos de compresión a anunciar, separados por una coma,
+            por orden de preferencia.
+           </td>
+           <td>
+            <code class="literal">zlib</code> y
+            <code class="literal">none</code>
+           </td>
+          </tr>
+
+          <tr>
+           <td>mac</td>
+           <td>
+            Lista de métodos MAC a anunciar, separados por una coma,
+            por orden de preferencia.
+           </td>
+           <td>
+            <code class="literal">hmac-sha1</code>,
+            <code class="literal">hmac-sha1-96</code>,
+            <code class="literal">hmac-ripemd160</code>,
+            <code class="literal">hmac-ripemd160@openssh.com</code>, y
+            <code class="literal">none**</code>
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+      <p class="para">
+       </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+        <strong>Cifrado y método MAC "<code class="literal">none</code>"</strong><br>
+        </p><p class="para">
+         Por razones de seguridad, <code class="literal">none</code> está desactivado por la
+         biblioteca <a href="http://libssh2.org/" class="link external">» libssh2</a> a menos que se
+         active explícitamente durante la compilación utilizando las opciones
+         apropiadas de ./configure. Consulte la documentación de la biblioteca
+         para más información.
+        </p>
+       </blockquote>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">callbacks</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">callbacks</code> debe ser un array asociativo
+       que contiene cualquiera o todos los parámetros siguientes.
+       </p><table class="doctable table">
+        <caption><strong>
+         Parámetros de retrollamada
+        </strong></caption>
+        
+         <thead>
+          <tr>
+           <th>Índice</th>
+           <th>Significado</th>
+           <th>Prototipo</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td>ignore</td>
+           <td>
+            Nombre de la función a llamar cuando se recibe un paquete
+            <strong><code><a href="#constant.ssh2-msg-ignore">SSH2_MSG_IGNORE</a></code></strong>
+           </td>
+           <td><code class="literal">void ignore_cb($message)</code></td>
+          </tr>
+
+          <tr>
+           <td>debug</td>
+           <td>
+            Nombre de la función a llamar cuando se recibe un paquete
+            <strong><code><a href="#constant.ssh2-msg-debug">SSH2_MSG_DEBUG</a></code></strong>
+           </td>
+           <td><code class="literal">void debug_cb($message, $language, $always_display)</code></td>
+          </tr>
+
+          <tr>
+           <td>macerror</td>
+           <td>
+            Nombre de la función a llamar cuando se recibe un paquete pero el
+            código de mensaje de autenticación falla. Si la función de retrollamada
+            devuelve <strong><code><a href="#constant.true">true</a></code></strong>, el error será ignorado, de lo contrario, la conexión terminará.
+           </td>
+           <td><code class="literal">bool macerror_cb($packet)</code></td>
+          </tr>
+
+          <tr>
+           <td>disconnect</td>
+           <td>
+            Nombre de la función a llamar cuando se recibe un paquete
+            <strong><code><a href="#constant.ssh2-msg-disconnect">SSH2_MSG_DISCONNECT</a></code></strong>
+           </td>
+           <td><code class="literal">void disconnect_cb($reason, $message, $language)</code></td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-connect-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un recurso en caso de éxito, o <strong><code><a href="#constant.false">false</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-connect-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4828">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>ssh2_connect()</strong></span></strong></p>
+    <div class="example-contents"><p>
+     Apertura de una conexión forzando 3des-cbc al enviar paquetes,
+     cualquier cifrado AES al recibir paquetes,
+     ninguna compresión en ambas direcciones, y un intercambio de claves Group1.
+    </p></div>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">/* Notificación al usuario si el servidor termina la conexión */<br></span><span style="color: #007700">function </span><span style="color: #0000BB">my_ssh_disconnect</span><span style="color: #007700">(</span><span style="color: #0000BB">$reason</span><span style="color: #007700">, </span><span style="color: #0000BB">$message</span><span style="color: #007700">, </span><span style="color: #0000BB">$language</span><span style="color: #007700">) {<br>  </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"Servidor desconectado con código de razón [%d] y mensaje: %s\n"</span><span style="color: #007700">,<br>         </span><span style="color: #0000BB">$reason</span><span style="color: #007700">, </span><span style="color: #0000BB">$message</span><span style="color: #007700">);<br>}<br><br></span><span style="color: #0000BB">$methods </span><span style="color: #007700">= array(<br>  </span><span style="color: #DD0000">'kex' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'diffie-hellman-group1-sha1'</span><span style="color: #007700">,<br>  </span><span style="color: #DD0000">'client_to_server' </span><span style="color: #007700">=&gt; array(<br>  </span><span style="color: #DD0000">'crypt'            </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'3des-cbc'</span><span style="color: #007700">,<br>  </span><span style="color: #DD0000">'comp'             </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'none'</span><span style="color: #007700">),<br>  </span><span style="color: #DD0000">'server_to_client' </span><span style="color: #007700">=&gt; array(<br>  </span><span style="color: #DD0000">'crypt'            </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'aes256-cbc,aes192-cbc,aes128-cbc'</span><span style="color: #007700">,<br>  </span><span style="color: #DD0000">'comp'             </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'none'</span><span style="color: #007700">));<br><br></span><span style="color: #0000BB">$callbacks </span><span style="color: #007700">= array(</span><span style="color: #DD0000">'disconnect' </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">'my_ssh_disconnect'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">, </span><span style="color: #0000BB">$methods</span><span style="color: #007700">, </span><span style="color: #0000BB">$callbacks</span><span style="color: #007700">);<br>if (!</span><span style="color: #0000BB">$connection</span><span style="color: #007700">) die(</span><span style="color: #DD0000">'Fallo en la conexión'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-connect-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-fingerprint" class="function" rel="rdfs-seeAlso">ssh2_fingerprint()</a> - Recupera la huella de un servidor remoto</span></li>
+    <li><span class="function"><a href="#function.ssh2-auth-none" class="function" rel="rdfs-seeAlso">ssh2_auth_none()</a> - Identificación como "none"</span></li>
+    <li><span class="function"><a href="#function.ssh2-auth-password" class="function" rel="rdfs-seeAlso">ssh2_auth_password()</a> - Autenticación vía SSH utilizando una contraseña en texto claro</span></li>
+    <li><span class="function"><a href="#function.ssh2-auth-pubkey-file" class="function" rel="rdfs-seeAlso">ssh2_auth_pubkey_file()</a> - Identificación utilizando una clave pública</span></li>
+    <li><span class="function"><a href="#function.ssh2-disconnect" class="function" rel="rdfs-seeAlso">ssh2_disconnect()</a> - Cierra una conexión a un servidor SSH remoto</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-disconnect" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_disconnect</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 1.0)</p><p class="refpurpose"><span class="refname">ssh2_disconnect</span> — <span class="dc-title">Cierra una conexión a un servidor SSH remoto</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-disconnect-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_disconnect</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Cierra una conexión a un servidor SSH remoto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-disconnect-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">session</code></dt>
+    <dd>
+     <p class="para">
+      Un identificador de enlace de conexión SSH, obtenido desde una llamada
+      a <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-disconnect-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-disconnect-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.ssh2-connect" class="function" rel="rdfs-seeAlso">ssh2_connect()</a> - Conexión a un servidor SSH</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-exec" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_exec</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_exec</span> — <span class="dc-title">Ejecuta un comando en un servidor remoto</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-exec-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_exec</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$command</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$pty</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$env</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$width</code><span class="initializer"> = 80</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$height</code><span class="initializer"> = 25</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$width_height_type</code><span class="initializer"> = SSH2_TERM_UNIT_CHARS</span></span><br>): <span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Ejecuta un comando en un servidor remoto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-exec-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido desde la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">command</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">pty</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">env</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">env</code> puede ser pasado bajo la forma de un
+       array asociativo de pares nombre/valor, a definir en el
+       entorno objetivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">width</code></dt>
+     <dd>
+      <p class="para">
+       Ancho del terminal virtual.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">height</code></dt>
+     <dd>
+      <p class="para">
+       Altura del terminal virtual.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">width_height_type</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">width_height_type</code> puede valer
+       <strong><code><a href="#constant.ssh2-term-unit-chars">SSH2_TERM_UNIT_CHARS</a></code></strong> o
+       <strong><code><a href="#constant.ssh2-term-unit-pixels">SSH2_TERM_UNIT_PIXELS</a></code></strong>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-exec-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un flujo en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-exec-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4829">
+    <p><strong>Ejemplo #1 Ejecución de un comando</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$stream </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_exec</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'/usr/local/bin/php -i'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-exec-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-connect" class="function" rel="rdfs-seeAlso">ssh2_connect()</a> - Conexión a un servidor SSH</span></li>
+    <li><span class="function"><a href="#function.ssh2-shell" class="function" rel="rdfs-seeAlso">ssh2_shell()</a> - Solicita un shell interactivo</span></li>
+    <li><span class="function"><a href="#function.ssh2-tunnel" class="function" rel="rdfs-seeAlso">ssh2_tunnel()</a> - Abre un túnel a través de un servidor remoto</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-fetch-stream" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_fetch_stream</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_fetch_stream</span> — <span class="dc-title">Recorre un flujo extendido de datos</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-fetch-stream-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_fetch_stream</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$channel</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$streamid</code></span>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recorre un subflujo alternativo asociado a un flujo de canal SSH2.
+   El protocolo SSH2 define actualmente un solo subflujo, STDERR, que tiene
+   un identificador de subflujo de <strong><code><a href="#constant.ssh2-stream-stderr">SSH2_STREAM_STDERR</a></code></strong> (definido a 1).
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-fetch-stream-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">channel</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">streamid</code></dt>
+     <dd>
+      <p class="para">
+       Un canal de flujo SSH2.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-fetch-stream-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el recurso, representando el flujo solicitado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-fetch-stream-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4830">
+    <p><strong>Ejemplo #1 Apertura de un shell y recuperación del flujo stderr que le está asociado</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$stdio_stream </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_shell</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$stderr_stream </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_fetch_stream</span><span style="color: #007700">(</span><span style="color: #0000BB">$stdio_stream</span><span style="color: #007700">, </span><span style="color: #0000BB">SSH2_STREAM_STDERR</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-fetch-stream-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-shell" class="function" rel="rdfs-seeAlso">ssh2_shell()</a> - Solicita un shell interactivo</span></li>
+    <li><span class="function"><a href="#function.ssh2-exec" class="function" rel="rdfs-seeAlso">ssh2_exec()</a> - Ejecuta un comando en un servidor remoto</span></li>
+    <li><span class="function"><a href="#function.ssh2-connect" class="function" rel="rdfs-seeAlso">ssh2_connect()</a> - Conexión a un servidor SSH</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-fingerprint" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_fingerprint</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_fingerprint</span> — <span class="dc-title">Recupera la huella de un servidor remoto</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-fingerprint-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_fingerprint</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$flags</code><span class="initializer"> = SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX</span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera la huella de un servidor remoto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-fingerprint-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido desde la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">flags</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">flags</code> puede ser
+       <strong><code><a href="#constant.ssh2-fingerprint-md5">SSH2_FINGERPRINT_MD5</a></code></strong> o
+       <strong><code><a href="#constant.ssh2-fingerprint-sha1">SSH2_FINGERPRINT_SHA1</a></code></strong> asociado lógicamente con
+       <strong><code><a href="#constant.ssh2-fingerprint-hex">SSH2_FINGERPRINT_HEX</a></code></strong> o
+       <strong><code><a href="#constant.ssh2-fingerprint-raw">SSH2_FINGERPRINT_RAW</a></code></strong>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-fingerprint-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la huella, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-fingerprint-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4831">
+    <p><strong>Ejemplo #1 Comparación de una huella con un valor conocido</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$known_host </span><span style="color: #007700">= </span><span style="color: #DD0000">'6F89C2F0A719B30CC38ABDF90755F2E4'</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$fingerprint </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_fingerprint</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">,<br>               </span><span style="color: #0000BB">SSH2_FINGERPRINT_MD5 </span><span style="color: #007700">| </span><span style="color: #0000BB">SSH2_FINGERPRINT_HEX</span><span style="color: #007700">);<br><br>if (</span><span style="color: #0000BB">$fingerprint </span><span style="color: #007700">!= </span><span style="color: #0000BB">$known_host</span><span style="color: #007700">) {<br>  die(</span><span style="color: #DD0000">"HOSTKEY MISMATCH!\n" </span><span style="color: #007700">.<br>      </span><span style="color: #DD0000">"Posible ataque Man-In-The-Middle ?"</span><span style="color: #007700">);<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.ssh2-forward-accept" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_forward_accept</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_forward_accept</span> — <span class="dc-title">Acepta una conexión creada por un observador</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-forward-accept-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_forward_accept</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$listener</code></span>): <span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Acepta una conexión creada por un observador.
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-forward-accept-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">desc</code></dt>
+    <dd>
+     <p class="para">
+      Un observador SSH2, obtenido por una llamada a <span class="function"><a href="#function.ssh2-forward-listen" class="function">ssh2_forward_listen()</a></span>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-forward-accept-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un recurso de flujo,  o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.ssh2-forward-listen" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_forward_listen</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_forward_listen</span> — <span class="dc-title">Enlaza un puerto en el servidor remoto y observa las conexiones</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-forward-listen-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_forward_listen</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code><span class="initializer"> = ?</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$max_connections</code><span class="initializer"> = 16</span></span><br>): <span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Enlaza un puerto en el servidor remoto y observa las conexiones.
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-forward-listen-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">session</code></dt>
+    <dd>
+     <p class="para">
+      Un recurso de sesión SSH, obtenido mediante una llamada a <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">port</code></dt>
+    <dd>
+     <p class="para">
+      Un puerto del servidor remoto.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">host</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">max_connections</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-forward-listen-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un observador SSH2,  o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-forward-listen-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.ssh2-forward-accept" class="function" rel="rdfs-seeAlso">ssh2_forward_accept()</a> - Acepta una conexión creada por un observador</span></li>
+  </ul>
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-methods-negotiated" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_methods_negotiated</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_methods_negotiated</span> — <span class="dc-title">Devuelve una lista de métodos negociados</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-methods-negotiated-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_methods_negotiated</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve una lista de métodos negociados.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-methods-negotiated-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido desde la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-methods-negotiated-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-methods-negotiated-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4832">
+    <p><strong>Ejemplo #1 Determina qué métodos han sido negociados</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$methods </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_methods_negotiated</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br>echo </span><span style="color: #DD0000">"Clave de cifrado negociada utilizando: </span><span style="color: #007700">{</span><span style="color: #0000BB">$methods</span><span style="color: #007700">[</span><span style="color: #DD0000">'kex'</span><span style="color: #007700">]}</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"Identificación del servidor utilizando </span><span style="color: #007700">{</span><span style="color: #0000BB">$methods</span><span style="color: #007700">[</span><span style="color: #DD0000">'hostkey'</span><span style="color: #007700">]}</span><span style="color: #DD0000">"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"Huella: " </span><span style="color: #007700">. </span><span style="color: #0000BB">ssh2_fingerprint</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br><br>echo </span><span style="color: #DD0000">"Métodos de transmisión de paquetes cliente a servidor:\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"\tCrypt: </span><span style="color: #007700">{</span><span style="color: #0000BB">$methods</span><span style="color: #007700">[</span><span style="color: #DD0000">'client_to_server'</span><span style="color: #007700">][</span><span style="color: #DD0000">'crypt'</span><span style="color: #007700">]}</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"\tComp: </span><span style="color: #007700">{</span><span style="color: #0000BB">$methods</span><span style="color: #007700">[</span><span style="color: #DD0000">'client_to_server'</span><span style="color: #007700">][</span><span style="color: #DD0000">'comp'</span><span style="color: #007700">]}</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"\tMAC: </span><span style="color: #007700">{</span><span style="color: #0000BB">$methods</span><span style="color: #007700">[</span><span style="color: #DD0000">'client_to_server'</span><span style="color: #007700">][</span><span style="color: #DD0000">'mac'</span><span style="color: #007700">]}</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br><br>echo </span><span style="color: #DD0000">"Métodos de transmisión de paquetes servidor a cliente:\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"\tCrypt: </span><span style="color: #007700">{</span><span style="color: #0000BB">$methods</span><span style="color: #007700">[</span><span style="color: #DD0000">'server_to_client'</span><span style="color: #007700">][</span><span style="color: #DD0000">'crypt'</span><span style="color: #007700">]}</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"\tComp: </span><span style="color: #007700">{</span><span style="color: #0000BB">$methods</span><span style="color: #007700">[</span><span style="color: #DD0000">'server_to_client'</span><span style="color: #007700">][</span><span style="color: #DD0000">'comp'</span><span style="color: #007700">]}</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"\tMAC: </span><span style="color: #007700">{</span><span style="color: #0000BB">$methods</span><span style="color: #007700">[</span><span style="color: #DD0000">'server_to_client'</span><span style="color: #007700">][</span><span style="color: #DD0000">'mac'</span><span style="color: #007700">]}</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-methods-negotiated-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-connect" class="function" rel="rdfs-seeAlso">ssh2_connect()</a> - Conexión a un servidor SSH</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.ssh2-poll" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_poll</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_poll</span> — <span class="dc-title">Consulta los canales/observadores/flujos para eventos</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-poll-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_poll</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter reference">&amp;$desc</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$timeout</code><span class="initializer"> = 30</span></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Consulta los canales/observadores/flujos para eventos,
+   y devuelve el número de descriptores que han devuelto eventos no nulos.
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-poll-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">desc</code></dt>
+    <dd>
+     <p class="para">
+      Un array indexado de sub-arrays con las claves
+      <code class="literal">'resource'</code> y <code class="literal">'events'</code>.
+      El valor de la ressource es un flujo (de canal) o una ressource de tipo SSH2 Listener.
+      El valor del evento es un máscara de bits SSH2_POLL*.
+      Cada sub-array será poblado con un elemento <code class="literal">'revents'</code> al final,
+      cuyos valores son máscaras de bits SSH2_POLL* de los eventos que han ocurrido.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">timeout</code></dt>
+    <dd>
+     <p class="para">
+      El tiempo de espera en segundos.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-poll-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el número de descriptores que han devuelto eventos no nulos.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-publickey-add" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_publickey_add</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.10)</p><p class="refpurpose"><span class="refname">ssh2_publickey_add</span> — <span class="dc-title">Añade una clave pública autorizada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-publickey-add-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_publickey_add</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$pkey</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algoname</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$blob</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$overwrite</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$attributes</code><span class="initializer"> = ?</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">El publickey subsystem
+    es utilizado para gestionar las claves públicas en un servidor en el cual el cliente
+    ya está <em>identificado</em>. Para identificarse a un sistema
+    remoto utilizando la identificación por clave pública, utilice la función
+    <span class="function"><a href="#function.ssh2-auth-pubkey-file" class="function">ssh2_auth_pubkey_file()</a></span> en su lugar.</span></p></blockquote>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-publickey-add-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">pkey</code></dt>
+     <dd>
+      <p class="para">
+       Recurso Publickey Subsystem creado por
+       <span class="function"><a href="#function.ssh2-publickey-init" class="function">ssh2_publickey_init()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">algoname</code></dt>
+     <dd>
+      <p class="para">
+       Algoritmo de clave pública (ejemplo): ssh-dss, ssh-rsa
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">blob</code></dt>
+     <dd>
+      <p class="para">
+       Blob de clave pública como datos binarios sin tratar
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">overwrite</code></dt>
+     <dd>
+      <p class="para">
+       Si la clave especificada ya existe, ¿debería ser sobrescrita?
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">attributes</code></dt>
+     <dd>
+      <p class="para">
+       Array asociativo de atributos para asignar a esta clave pública.
+       Consulte ietf-secsh-publickey-subsystem para una lista de los
+       atributos soportados. Para marcar un atributo como obligatorio,
+       anteponga un asterisco a su nombre. Si el servidor no es capaz de
+       soportar un atributo marcado como obligatorio, abandonará el
+       proceso de adición.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-publickey-add-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-publickey-add-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4833">
+    <p><strong>Ejemplo #1 Adición de una clave pública con <span class="function"><strong>ssh2_publickey_add()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$ssh2 </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$ssh2</span><span style="color: #007700">, </span><span style="color: #DD0000">'jdoe'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$pkey </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_publickey_init</span><span style="color: #007700">(</span><span style="color: #0000BB">$ssh2</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$keyblob </span><span style="color: #007700">= </span><span style="color: #0000BB">base64_decode</span><span style="color: #007700">(</span><span style="color: #DD0000">'<br>AAAAB3NzaC1yc2EAAAABIwAAAIEA5HVt6VqSGd5PTrLRdjNONxXH1tVFGn0<br>Bd26BF0aCP9qyJRlvdJ3j4WBeX4ZmrveGrjMgkseSYc4xZ26sDHwfL351xj<br>zaLpipu\BGRrw17mWVBhuCExo476ri5tQFzbTc54VEHYckxQ16CjSTibI5X<br>69GmnYC9PNqEYq/1TP+HF10='</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">ssh2_publickey_add</span><span style="color: #007700">(</span><span style="color: #0000BB">$pkey</span><span style="color: #007700">, </span><span style="color: #DD0000">'ssh-rsa'</span><span style="color: #007700">, </span><span style="color: #0000BB">$keyblob</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">, array(</span><span style="color: #DD0000">'comment'</span><span style="color: #007700">=&gt;</span><span style="color: #DD0000">"John's Key"</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-publickey-add-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-publickey-init" class="function" rel="rdfs-seeAlso">ssh2_publickey_init()</a> - Inicializa un Publickey Subsystem (subsistema de clave pública)</span></li>
+    <li><span class="function"><a href="#function.ssh2-publickey-remove" class="function" rel="rdfs-seeAlso">ssh2_publickey_remove()</a> - Elimina una clave pública autorizada</span></li>
+    <li><span class="function"><a href="#function.ssh2-publickey-list" class="function" rel="rdfs-seeAlso">ssh2_publickey_list()</a> - Lista las claves públicas actualmente autorizadas</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-publickey-init" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_publickey_init</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.10)</p><p class="refpurpose"><span class="refname">ssh2_publickey_init</span> — <span class="dc-title">Inicializa un Publickey Subsystem (subsistema de clave pública)</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-publickey-init-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_publickey_init</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>): <span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Solicita el subsistema de clave pública desde un servidor SSH2 ya conectado.
+  </p>
+  <p class="para">
+   El subsistema de clave pública permite a un cliente ya conectado e identificado gestionar la lista de claves públicas autorizadas registradas en el servidor objetivo de manera agnóstica a la implementación. Si el servidor no soporta el subsistema de clave pública, la función
+   <span class="function"><strong>ssh2_publickey_init()</strong></span> devolverá <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-publickey-init-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-publickey-init-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un recurso <code class="literal">SSH2 Publickey Subsystem</code>
+   para usar con todos los otros métodos ssh2_publickey_*() o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.ssh2-publickey-init-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">El publickey subsystem
+    es utilizado para gestionar las claves públicas en un servidor en el cual el cliente
+    ya está <em>identificado</em>. Para identificarse a un sistema
+    remoto utilizando la identificación por clave pública, utilice la función
+    <span class="function"><a href="#function.ssh2-auth-pubkey-file" class="function">ssh2_auth_pubkey_file()</a></span> en su lugar.</span></p></blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-publickey-init-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-publickey-add" class="function" rel="rdfs-seeAlso">ssh2_publickey_add()</a> - Añade una clave pública autorizada</span></li>
+    <li><span class="function"><a href="#function.ssh2-publickey-remove" class="function" rel="rdfs-seeAlso">ssh2_publickey_remove()</a> - Elimina una clave pública autorizada</span></li>
+    <li><span class="function"><a href="#function.ssh2-publickey-list" class="function" rel="rdfs-seeAlso">ssh2_publickey_list()</a> - Lista las claves públicas actualmente autorizadas</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-publickey-list" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_publickey_list</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.10)</p><p class="refpurpose"><span class="refname">ssh2_publickey_list</span> — <span class="dc-title">Lista las claves públicas actualmente autorizadas</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-publickey-list-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_publickey_list</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$pkey</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+  Lista las claves públicas actualmente autorizadas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-publickey-list-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">pkey</code></dt>
+     <dd>
+      <p class="para">
+       Recurso Publickey Subsystem.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-publickey-list-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array de claves indexadas numéricamente, cada una de ellas es un
+   array asociativo que contiene: nombre, blob y elementos attrs.
+  </p>
+  <p class="para">
+   </p><table class="doctable table">
+    <caption><strong>Elemento de clave pública</strong></caption>
+    
+     <thead>
+      <tr>
+       <th>Clave Array</th>
+       <th>Significado</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>name</td>
+       <td>Nombre del algoritmo utilizado por esta clave pública, por ejemplo:
+       <code class="literal">ssh-dss</code> o <code class="literal">ssh-rsa</code>.</td>
+      </tr>
+
+      <tr>
+       <td>blob</td>
+       <td>Blob de clave pública como datos binarios sin tratar.</td>
+      </tr>
+
+      <tr>
+       <td>attrs</td>
+       <td>
+        Atributos asignados a esta clave pública.
+        El atributo más común y el único soportado por la clave
+        pública versión 1 de los servidores es <code class="literal">comment</code>,
+        que puede ser cualquier forma de string.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-publickey-list-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4834">
+    <p><strong>Ejemplo #1 Lista de claves autorizadas con <span class="function"><strong>ssh2_publickey_list()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$ssh2 </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$ssh2</span><span style="color: #007700">, </span><span style="color: #DD0000">'jdoe'</span><span style="color: #007700">, </span><span style="color: #DD0000">'secret'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$pkey </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_publickey_init</span><span style="color: #007700">(</span><span style="color: #0000BB">$ssh2</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$list </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_publickey_list</span><span style="color: #007700">(</span><span style="color: #0000BB">$pkey</span><span style="color: #007700">);<br><br>foreach(</span><span style="color: #0000BB">$list </span><span style="color: #007700">as </span><span style="color: #0000BB">$key</span><span style="color: #007700">) {<br>  echo </span><span style="color: #DD0000">"Clave : </span><span style="color: #007700">{</span><span style="color: #0000BB">$key</span><span style="color: #007700">[</span><span style="color: #DD0000">'name'</span><span style="color: #007700">]}</span><span style="color: #DD0000">\n"</span><span style="color: #007700">;<br>  echo </span><span style="color: #DD0000">"Blob : " </span><span style="color: #007700">. </span><span style="color: #0000BB">chunk_split</span><span style="color: #007700">(</span><span style="color: #0000BB">base64_encode</span><span style="color: #007700">(</span><span style="color: #0000BB">$key</span><span style="color: #007700">[</span><span style="color: #DD0000">'blob'</span><span style="color: #007700">]), </span><span style="color: #0000BB">40</span><span style="color: #007700">, </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">) . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br>  echo </span><span style="color: #DD0000">"Comentario : </span><span style="color: #007700">{</span><span style="color: #0000BB">$key</span><span style="color: #007700">[</span><span style="color: #DD0000">'attrs'</span><span style="color: #007700">][</span><span style="color: #DD0000">'comment'</span><span style="color: #007700">]}</span><span style="color: #DD0000">\n\n"</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Clave : ssh-rsa
+Blob : AAAAB3NzaC1yc2EAAAABIwAAAIEA5HVt6VqSGd5P
+TrLRdjNONxXH1tVFGn0Bd26BF0aCP9qyJRlvdJ3j
+4WBeX4ZmrveGrjMgkseSYc4xZ26sDHwfL351xjza
+Lpipu\BGRrw17mWVBhuCExo476ri5tQFzbTc54VE
+HYckxQ16CjSTibI5X69GmnYC9PNqEYq/1TP+HF10
+Comentario : Clave de John
+
+Clave : ssh-rsa
+Blob : AAAAB3NzaHVt6VqSGd5C1yc2EAAAABIwA232dnJA
+AIEA5HVt6VqSGd5PTrLRdjNONxX/1TP+HF1HVt6V
+qSGd50H1tVFGn0BB3NzaC1yc2EAd26BF0aCP9qyJ
+RlvdJ3j4WBeX4ZmrveGrjMgkseSYc4xZ26HVt6Vq
+SGd5sDHwfL351xjzaLpipu\BGB3NzaC1yc2EA/1T
+Comentario : Clave de Alice</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.ssh2-publickey-list-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">El publickey subsystem
+    es utilizado para gestionar las claves públicas en un servidor en el cual el cliente
+    ya está <em>identificado</em>. Para identificarse a un sistema
+    remoto utilizando la identificación por clave pública, utilice la función
+    <span class="function"><a href="#function.ssh2-auth-pubkey-file" class="function">ssh2_auth_pubkey_file()</a></span> en su lugar.</span></p></blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-publickey-list-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-publickey-init" class="function" rel="rdfs-seeAlso">ssh2_publickey_init()</a> - Inicializa un Publickey Subsystem (subsistema de clave pública)</span></li>
+    <li><span class="function"><a href="#function.ssh2-publickey-add" class="function" rel="rdfs-seeAlso">ssh2_publickey_add()</a> - Añade una clave pública autorizada</span></li>
+    <li><span class="function"><a href="#function.ssh2-publickey-remove" class="function" rel="rdfs-seeAlso">ssh2_publickey_remove()</a> - Elimina una clave pública autorizada</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-publickey-remove" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_publickey_remove</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.10)</p><p class="refpurpose"><span class="refname">ssh2_publickey_remove</span> — <span class="dc-title">Elimina una clave pública autorizada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-publickey-remove-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_publickey_remove</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$pkey</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$algoname</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$blob</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Elimina una clave pública autorizada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-publickey-remove-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">pkey</code></dt>
+     <dd>
+      <p class="para">
+       Recurso Publickey Subsystem
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">algoname</code></dt>
+     <dd>
+      <p class="para">
+       Algoritmo de clave pública (ejemplo): ssh-dss, ssh-rsa
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">blob</code></dt>
+     <dd>
+      <p class="para">
+       Blob de clave pública como datos binarios sin tratar
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-publickey-remove-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 notes" id="refsect1-function.ssh2-publickey-remove-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: <span class="simpara">El publickey subsystem
+    es utilizado para gestionar las claves públicas en un servidor en el cual el cliente
+    ya está <em>identificado</em>. Para identificarse a un sistema
+    remoto utilizando la identificación por clave pública, utilice la función
+    <span class="function"><a href="#function.ssh2-auth-pubkey-file" class="function">ssh2_auth_pubkey_file()</a></span> en su lugar.</span></p></blockquote>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-publickey-remove-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-publickey-init" class="function" rel="rdfs-seeAlso">ssh2_publickey_init()</a> - Inicializa un Publickey Subsystem (subsistema de clave pública)</span></li>
+    <li><span class="function"><a href="#function.ssh2-publickey-add" class="function" rel="rdfs-seeAlso">ssh2_publickey_add()</a> - Añade una clave pública autorizada</span></li>
+    <li><span class="function"><a href="#function.ssh2-publickey-list" class="function" rel="rdfs-seeAlso">ssh2_publickey_list()</a> - Lista las claves públicas actualmente autorizadas</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-scp-recv" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_scp_recv</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_scp_recv</span> — <span class="dc-title">Solicita un fichero mediante SCP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-scp-recv-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_scp_recv</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$remote_file</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$local_file</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Copia un fichero desde el servidor remoto al sistema de ficheros local usando el protocolo SCP.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-scp-recv-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de enlace de conexión a SSH, obtenido desde una llamada a
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">remote_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta del fichero remoto.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">local_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta del fichero local.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-scp-recv-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-scp-recv-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4835">
+    <p><strong>Ejemplo #1 Descargar un fichero mediante SCP</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">ssh2_scp_recv</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'/remote/filename'</span><span style="color: #007700">, </span><span style="color: #DD0000">'/local/filename'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-scp-recv-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-scp-send" class="function" rel="rdfs-seeAlso">ssh2_scp_send()</a> - Envía un fichero mediante SCP</span></li>
+    <li><span class="function"><a href="#function.copy" class="function" rel="rdfs-seeAlso">copy()</a> - Copia un fichero</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-scp-send" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_scp_send</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_scp_send</span> — <span class="dc-title">Envía un fichero mediante SCP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-scp-send-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_scp_send</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$local_file</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$remote_file</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$create_mode</code><span class="initializer"> = 0644</span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Copia un fichero desde el sistema de ficheros local a un servidor remoto usando el protocolo SCP.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-scp-send-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de enlace de conexión a SSH, obtenido desde una llamada a
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">local_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta del fichero local.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">remote_file</code></dt>
+     <dd>
+      <p class="para">
+       Ruta del fichero remoto.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">create_mode</code></dt>
+     <dd>
+      <p class="para">
+       El fichero debe ser creado con el modo especificado por
+       <code class="parameter">create_mode</code>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-scp-send-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-scp-send-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4836">
+    <p><strong>Ejemplo #1 Cargar un fichero via SCP</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">ssh2_scp_send</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'/local/filename'</span><span style="color: #007700">, </span><span style="color: #DD0000">'/remote/filename'</span><span style="color: #007700">, </span><span style="color: #0000BB">0644</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-scp-send-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-scp-recv" class="function" rel="rdfs-seeAlso">ssh2_scp_recv()</a> - Solicita un fichero mediante SCP</span></li>
+    <li><span class="function"><a href="#function.copy" class="function" rel="rdfs-seeAlso">copy()</a> - Copia un fichero</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.ssh2-send-eof" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_send_eof</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 1.3)</p><p class="refpurpose"><span class="refname">ssh2_send_eof</span> — <span class="dc-title">Envía un EOF al flujo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-send-eof-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_send_eof</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$channel</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Envía un EOF al flujo; esto se utiliza típicamente para cerrar la entrada estándar,
+   manteniendo abiertas la salida y los errores. Por ejemplo, se pueden enviar datos a un proceso remoto en la entrada estándar, cerrarla para comenzar el procesamiento, y aún ser capaz de leer los resultados sin crear ficheros adicionales.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-send-eof-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">channel</code></dt>
+    <dd>
+     <p class="para">
+      Un flujo SSH; puede ser adquirido por funciones como <span class="function"><a href="#function.ssh2-fetch-stream" class="function">ssh2_fetch_stream()</a></span>
+      o <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-send-eof-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-send-eof-seealso">
+  <h3 class="title">Ver también</h3>
+  <ul class="simplelist">
+   <li><span class="function"><a href="#function.ssh2-fetch-stream" class="function" rel="rdfs-seeAlso">ssh2_fetch_stream()</a> - Recorre un flujo extendido de datos</span></li>
+  </ul>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp</span> — <span class="dc-title">Inicializa un subsistema SFTP</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>): <span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Solicita un subsistema SFTP desde un servidor ya conectado mediante SSH2.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido desde la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Este método devuelve un recurso <code class="literal">SSH2 SFTP</code>
+   para su uso con todos los métodos <code class="literal">ssh2_sftp_*()</code>
+   así como el gestor abierto
+   <a href="#wrappers.ssh2" class="link">ssh2.sftp://</a>,
+    o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4837">
+    <p><strong>Ejemplo #1 Apertura de un fichero mediante SFTP</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$stream </span><span style="color: #007700">= </span><span style="color: #0000BB">fopen</span><span style="color: #007700">(</span><span style="color: #DD0000">'ssh2.sftp://' </span><span style="color: #007700">. </span><span style="color: #0000BB">intval</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">) . </span><span style="color: #DD0000">'/path/to/file'</span><span style="color: #007700">, </span><span style="color: #DD0000">'r'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-scp-recv" class="function" rel="rdfs-seeAlso">ssh2_scp_recv()</a> - Solicita un fichero mediante SCP</span></li>
+    <li><span class="function"><a href="#function.ssh2-scp-send" class="function" rel="rdfs-seeAlso">ssh2_scp_send()</a> - Envía un fichero mediante SCP</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-chmod" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_chmod</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.12)</p><p class="refpurpose"><span class="refname">ssh2_sftp_chmod</span> — <span class="dc-title">Modifica el modo de un fichero</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-chmod-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_chmod</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$mode</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Intenta modificar el modo del fichero especificado, utilizando el
+   <code class="parameter">mode</code> proporcionado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-chmod-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP, abierto con la función
+       <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       Ruta hacia el fichero.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       Permisos sobre el fichero. Ver la función
+       <span class="function"><a href="#function.chmod" class="function">chmod()</a></span> para más detalles concernientes
+       a este parámetro.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-chmod-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-chmod-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4838">
+    <p><strong>Ejemplo #1 Cambio del modo del fichero en el servidor remoto</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'nombreUsuario'</span><span style="color: #007700">, </span><span style="color: #DD0000">'contraseña'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">ssh2_sftp_chmod</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/carpeta/fichero'</span><span style="color: #007700">, </span><span style="color: #0000BB">0755</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-chmod-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.chmod" class="function" rel="rdfs-seeAlso">chmod()</a> - Cambia el modo del fichero</span></li>
+    <li><span class="function"><a href="#function.ssh2-sftp" class="function" rel="rdfs-seeAlso">ssh2_sftp()</a> - Inicializa un subsistema SFTP</span></li>
+    <li><span class="function"><a href="#function.ssh2-connect" class="function" rel="rdfs-seeAlso">ssh2_connect()</a> - Conexión a un servidor SSH</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-lstat" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_lstat</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp_lstat</span> — <span class="dc-title">Estado de un enlace simbólico</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-lstat-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_lstat</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$path</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Estado de un enlace simbólico en el sistema
+   de ficheros remoto <em>sin</em> seguir el enlace.
+  </p>
+  <p class="para">
+   Esta función es similar a la utilización de la función
+   <span class="function"><a href="#function.lstat" class="function">lstat()</a></span> con el gestor
+   <a href="#wrappers.ssh2" class="link">ssh2.sftp://</a> y devuelve los
+   mismos valores.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-lstat-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP abierto por  <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">path</code></dt>
+     <dd>
+      <p class="para">
+       Ruta hacia el enlace simbólico remoto.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-lstat-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Ver la documentación de la función <span class="function"><a href="#function.stat" class="function">stat()</a></span>
+   para los detalles concernientes a los valores devueltos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-lstat-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4839">
+    <p><strong>Ejemplo #1 Estado de un enlace simbólico vía SFTP</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$statinfo </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp_lstat</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/path/to/symlink'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$filesize </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'size'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$group </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'gid'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$owner </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'uid'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$atime </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'atime'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$mtime </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'mtime'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$mode </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'mode'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-lstat-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-sftp-stat" class="function" rel="rdfs-seeAlso">ssh2_sftp_stat()</a> - Obtiene el estado de un fichero en un sistema de ficheros remoto</span></li>
+    <li><span class="function"><a href="#function.lstat" class="function" rel="rdfs-seeAlso">lstat()</a> - Devuelve información sobre un fichero o un enlace simbólico</span></li>
+    <li><span class="function"><a href="#function.stat" class="function" rel="rdfs-seeAlso">stat()</a> - Proporciona información sobre un fichero</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-mkdir" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_mkdir</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp_mkdir</span> — <span class="dc-title">Crea un directorio</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-mkdir-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_mkdir</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dirname</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$mode</code><span class="initializer"> = 0777</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$recursive</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span><br>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crea un directorio en el sistema de ficheros remoto.
+  </p>
+  <p class="para">
+   Esta función es similar a la función <span class="function"><a href="#function.mkdir" class="function">mkdir()</a></span>
+   con el gestor <a href="#wrappers.ssh2" class="link">ssh2.sftp://</a>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-mkdir-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP, abierto con la función
+       <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dirname</code></dt>
+     <dd>
+      <p class="para">
+       Ruta del nuevo directorio.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       Permisos del nuevo directorio.
+       El modo actual es afectado por la umask actual.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">recursive</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">recursive</code> vale <strong><code><a href="#constant.true">true</a></code></strong>, todos los directorios requeridos
+       para <code class="parameter">dirname</code> serán también automáticamente
+       creados.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-mkdir-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-mkdir-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4840">
+    <p><strong>Ejemplo #1 Creación de un directorio en un servidor remoto</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">ssh2_sftp_mkdir</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/home/username/newdir'</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* O:  mkdir("ssh2.sftp://$sftp/home/username/newdir"); */<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-mkdir-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mkdir" class="function" rel="rdfs-seeAlso">mkdir()</a> - Crea un directorio</span></li>
+    <li><span class="function"><a href="#function.ssh2-sftp-rmdir" class="function" rel="rdfs-seeAlso">ssh2_sftp_rmdir()</a> - Elimina un directorio</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-readlink" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_readlink</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp_readlink</span> — <span class="dc-title">Devuelve el destino de un enlace simbólico</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-readlink-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_readlink</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el destino de un enlace simbólico.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-readlink-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP, abierto por la función <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">link</code></dt>
+     <dd>
+      <p class="para">
+       Ruta hacia el enlace simbólico.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-readlink-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el destino del enlace simbólico <code class="parameter">link</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-readlink-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4841">
+    <p><strong>Ejemplo #1 Lectura de un enlace simbólico</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$target </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp_readlink</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/tmp/mysql.sock'</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* $target es ahora (e.g.): '/var/run/mysql.sock' */<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-readlink-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.readlink" class="function" rel="rdfs-seeAlso">readlink()</a> - Devuelve el contenido de un enlace simbólico</span></li>
+    <li><span class="function"><a href="#function.ssh2-sftp-symlink" class="function" rel="rdfs-seeAlso">ssh2_sftp_symlink()</a> - Crea un enlace simbólico</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-realpath" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_realpath</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp_realpath</span> — <span class="dc-title">Resuelve la ruta real de una ruta proporcionada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-realpath-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_realpath</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Traduce un nombre de fichero <code class="parameter">filename</code> en su ruta
+   realmente efectiva en el sistema de ficheros remoto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-realpath-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP, abierto por la función <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-realpath-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la ruta real, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-realpath-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4842">
+    <p><strong>Ejemplo #1 Resolver un nombre de ruta</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$realpath </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp_realpath</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/home/username/../../../..//./usr/../etc/passwd'</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* $realpath es ahora: '/etc/passwd' */<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-realpath-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.realpath" class="function" rel="rdfs-seeAlso">realpath()</a> - Retorna la ruta de acceso canónica absoluta</span></li>
+    <li><span class="function"><a href="#function.ssh2-sftp-symlink" class="function" rel="rdfs-seeAlso">ssh2_sftp_symlink()</a> - Crea un enlace simbólico</span></li>
+    <li><span class="function"><a href="#function.ssh2-sftp-readlink" class="function" rel="rdfs-seeAlso">ssh2_sftp_readlink()</a> - Devuelve el destino de un enlace simbólico</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-rename" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_rename</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp_rename</span> — <span class="dc-title">Renombra un fichero remoto</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-rename-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_rename</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$to</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Renombra un fichero remoto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-rename-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP, abierto por la función <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">from</code></dt>
+     <dd>
+      <p class="para">
+       El fichero actual a renombrar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">to</code></dt>
+     <dd>
+      <p class="para">
+       El nuevo nombre del fichero.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-rename-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-rename-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4843">
+    <p><strong>Ejemplo #1 Renombrar un fichero vía sftp</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">ssh2_sftp_rename</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/home/username/oldname'</span><span style="color: #007700">, </span><span style="color: #DD0000">'/home/username/newname'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-rename-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.rename" class="function" rel="rdfs-seeAlso">rename()</a> - Renombra un fichero o un directorio</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-rmdir" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_rmdir</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp_rmdir</span> — <span class="dc-title">Elimina un directorio</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-rmdir-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_rmdir</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$dirname</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Elimina un directorio del sistema de ficheros remoto.
+  </p>
+  <p class="para">
+   Esta función es similar al uso de la función
+   <span class="function"><a href="#function.rmdir" class="function">rmdir()</a></span> con el gestor
+   <a href="#wrappers.ssh2" class="link">ssh2.sftp://</a>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-rmdir-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP, abierto por la función <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">dirname</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-rmdir-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-rmdir-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4844">
+    <p><strong>Ejemplo #1 Eliminación de un directorio en un servidor remoto</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">ssh2_sftp_rmdir</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/home/username/deltodel'</span><span style="color: #007700">);<br></span><span style="color: #FF8000">/* O :  rmdir("ssh2.sftp://$sftp/home/username/dirtodel"); */<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-rmdir-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.rmdir" class="function" rel="rdfs-seeAlso">rmdir()</a> - Elimina un directorio</span></li>
+    <li><span class="function"><a href="#function.ssh2-sftp-mkdir" class="function" rel="rdfs-seeAlso">ssh2_sftp_mkdir()</a> - Crea un directorio</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-stat" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_stat</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp_stat</span> — <span class="dc-title">Obtiene el estado de un fichero en un sistema de ficheros remoto</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-stat-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_stat</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$path</code></span>): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+   Obtiene el estado de un fichero en un sistema de ficheros remoto, siguiendo los enlaces simbólicos.
+  </p>
+  <p class="para">
+   Esta función es similar al uso de la función
+   <span class="function"><a href="#function.stat" class="function">stat()</a></span> con el gestor
+   <a href="#wrappers.ssh2" class="link">ssh2.sftp://</a> y devuelve los mismos valores.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-stat-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP, abierto por la función <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">path</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-stat-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Ver la documentación de la función
+   <span class="function"><a href="#function.stat" class="function">stat()</a></span> para los detalles sobre los valores devueltos.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-stat-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4845">
+    <p><strong>Ejemplo #1 Estado de un fichero vía SFTP</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$statinfo </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp_stat</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/path/to/file'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$filesize </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'size'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$group </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'gid'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$owner </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'uid'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$atime </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'atime'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$mtime </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'mtime'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">$mode </span><span style="color: #007700">= </span><span style="color: #0000BB">$statinfo</span><span style="color: #007700">[</span><span style="color: #DD0000">'mode'</span><span style="color: #007700">];<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-stat-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-sftp-lstat" class="function" rel="rdfs-seeAlso">ssh2_sftp_lstat()</a> - Estado de un enlace simbólico</span></li>
+    <li><span class="function"><a href="#function.lstat" class="function" rel="rdfs-seeAlso">lstat()</a> - Devuelve información sobre un fichero o un enlace simbólico</span></li>
+    <li><span class="function"><a href="#function.stat" class="function" rel="rdfs-seeAlso">stat()</a> - Proporciona información sobre un fichero</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-symlink" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_symlink</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp_symlink</span> — <span class="dc-title">Crea un enlace simbólico</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-symlink-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_symlink</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$target</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$link</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crea un enlace simbólico en el sistema de ficheros remoto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-symlink-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP, abierto por la función <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">target</code></dt>
+     <dd>
+      <p class="para">
+       Objetivo del enlace simbólico.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">link</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-symlink-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-symlink-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4846">
+    <p><strong>Ejemplo #1 Creación de un enlace simbólico</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">ssh2_sftp_symlink</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/var/run/mysql.sock'</span><span style="color: #007700">, </span><span style="color: #DD0000">'/tmp/mysql.sock'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-symlink-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-sftp-readlink" class="function" rel="rdfs-seeAlso">ssh2_sftp_readlink()</a> - Devuelve el destino de un enlace simbólico</span></li>
+    <li><span class="function"><a href="#function.symlink" class="function" rel="rdfs-seeAlso">symlink()</a> - Crea un enlace simbólico</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-sftp-unlink" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_sftp_unlink</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_sftp_unlink</span> — <span class="dc-title">Borra un fichero</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-sftp-unlink-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_sftp_unlink</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$sftp</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Borra un fichero en el sistema de ficheros remoto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-sftp-unlink-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">sftp</code></dt>
+     <dd>
+      <p class="para">
+       Un recurso SSH2 SFTP, abierto por la función <span class="function"><a href="#function.ssh2-sftp" class="function">ssh2_sftp()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">filename</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del fichero a borrar.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-sftp-unlink-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-sftp-unlink-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4847">
+    <p><strong>Ejemplo #1 Borrado de un fichero</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$sftp </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_sftp</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">ssh2_sftp_unlink</span><span style="color: #007700">(</span><span style="color: #0000BB">$sftp</span><span style="color: #007700">, </span><span style="color: #DD0000">'/home/username/stale_file'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-sftp-unlink-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.unlink" class="function" rel="rdfs-seeAlso">unlink()</a> - Elimina un fichero</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-shell" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_shell</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_shell</span> — <span class="dc-title">Solicita un shell interactivo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-shell-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_shell</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$termtype</code><span class="initializer"> = "vanilla"</span></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$env</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$width</code><span class="initializer"> = 80</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$height</code><span class="initializer"> = 25</span></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$width_height_type</code><span class="initializer"> = SSH2_TERM_UNIT_CHARS</span></span><br>): <span class="type"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Abre un shell en el servidor remoto y le asigna un flujo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-shell-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido desde la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">termtype</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">termtype</code> debe corresponder a una
+       de las entradas del fichero <code class="literal">/etc/termcap</code> del sistema objetivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">env</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">env</code> debe ser pasado como un array asociativo
+       de pares nombre/valor a definir en el entorno objetivo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">width</code></dt>
+     <dd>
+      <p class="para">
+       Ancho del terminal virtual.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">height</code></dt>
+     <dd>
+      <p class="para">
+       Altura del terminal virtual.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">width_height_type</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">width_height_type</code> debe ser o bien
+       <strong><code><a href="#constant.ssh2-term-unit-chars">SSH2_TERM_UNIT_CHARS</a></code></strong>, o bien
+       <strong><code><a href="#constant.ssh2-term-unit-pixels">SSH2_TERM_UNIT_PIXELS</a></code></strong>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-shell-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un flujo de <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> en caso de éxito,  o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-shell-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4848">
+    <p><strong>Ejemplo #1 Ejecución de un comando</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_password</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$stream </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_shell</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'vt102'</span><span style="color: #007700">, </span><span style="color: #0000BB">null</span><span style="color: #007700">, </span><span style="color: #0000BB">80</span><span style="color: #007700">, </span><span style="color: #0000BB">24</span><span style="color: #007700">, </span><span style="color: #0000BB">SSH2_TERM_UNIT_CHARS</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-shell-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-exec" class="function" rel="rdfs-seeAlso">ssh2_exec()</a> - Ejecuta un comando en un servidor remoto</span></li>
+    <li><span class="function"><a href="#function.ssh2-tunnel" class="function" rel="rdfs-seeAlso">ssh2_tunnel()</a> - Abre un túnel a través de un servidor remoto</span></li>
+    <li><span class="function"><a href="#function.ssh2-fetch-stream" class="function" rel="rdfs-seeAlso">ssh2_fetch_stream()</a> - Recorre un flujo extendido de datos</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.ssh2-tunnel" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ssh2_tunnel</h1>
+  <p class="verinfo">(PECL ssh2 &gt;= 0.9.0)</p><p class="refpurpose"><span class="refname">ssh2_tunnel</span> — <span class="dc-title">Abre un túnel a través de un servidor remoto</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ssh2-tunnel-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ssh2_tunnel</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.resource" class="type resource">resource</a></span> <code class="parameter">$session</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$host</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$port</code></span>): <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span></div>
+
+  <p class="para rdfs-comment">
+   Abre un socket hacia un host/puerto arbitrario
+   a través de un servidor SSH conectado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ssh2-tunnel-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">session</code></dt>
+     <dd>
+      <p class="para">
+       Un identificador de conexión SSH, obtenido desde la función
+       <span class="function"><a href="#function.ssh2-connect" class="function">ssh2_connect()</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">host</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">port</code></dt>
+     <dd>
+      <p class="para">
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ssh2-tunnel-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ssh2-tunnel-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-4849">
+    <p><strong>Ejemplo #1 Apertura de un túnel en un host arbitrario</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$connection </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">'shell.example.com'</span><span style="color: #007700">, </span><span style="color: #0000BB">22</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ssh2_auth_pubkey_file</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'username'</span><span style="color: #007700">, </span><span style="color: #DD0000">'id_dsa.pub'</span><span style="color: #007700">, </span><span style="color: #DD0000">'id_dsa'</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$tunnel </span><span style="color: #007700">= </span><span style="color: #0000BB">ssh2_tunnel</span><span style="color: #007700">(</span><span style="color: #0000BB">$connection</span><span style="color: #007700">, </span><span style="color: #DD0000">'10.0.0.101'</span><span style="color: #007700">, </span><span style="color: #0000BB">12345</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ssh2-tunnel-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.ssh2-connect" class="function" rel="rdfs-seeAlso">ssh2_connect()</a> - Conexión a un servidor SSH</span></li>
+    <li><span class="function"><a href="#function.fsockopen" class="function" rel="rdfs-seeAlso">fsockopen()</a> - Abre un socket de conexión Internet o Unix</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.ssh2-auth-agent">ssh2_auth_agent</a> — Autenticación SSH utilizando el agente ssh</li><li><a href="#function.ssh2-auth-hostbased-file">ssh2_auth_hostbased_file</a> — Identificación utilizando una clave de host pública</li><li><a href="#function.ssh2-auth-none">ssh2_auth_none</a> — Identificación como "none"</li><li><a href="#function.ssh2-auth-password">ssh2_auth_password</a> — Autenticación vía SSH utilizando una contraseña en texto claro</li><li><a href="#function.ssh2-auth-pubkey-file">ssh2_auth_pubkey_file</a> — Identificación utilizando una clave pública</li><li><a href="#function.ssh2-connect">ssh2_connect</a> — Conexión a un servidor SSH</li><li><a href="#function.ssh2-disconnect">ssh2_disconnect</a> — Cierra una conexión a un servidor SSH remoto</li><li><a href="#function.ssh2-exec">ssh2_exec</a> — Ejecuta un comando en un servidor remoto</li><li><a href="#function.ssh2-fetch-stream">ssh2_fetch_stream</a> — Recorre un flujo extendido de datos</li><li><a href="#function.ssh2-fingerprint">ssh2_fingerprint</a> — Recupera la huella de un servidor remoto</li><li><a href="#function.ssh2-forward-accept">ssh2_forward_accept</a> — Acepta una conexión creada por un observador</li><li><a href="#function.ssh2-forward-listen">ssh2_forward_listen</a> — Enlaza un puerto en el servidor remoto y observa las conexiones</li><li><a href="#function.ssh2-methods-negotiated">ssh2_methods_negotiated</a> — Devuelve una lista de métodos negociados</li><li><a href="#function.ssh2-poll">ssh2_poll</a> — Consulta los canales/observadores/flujos para eventos</li><li><a href="#function.ssh2-publickey-add">ssh2_publickey_add</a> — Añade una clave pública autorizada</li><li><a href="#function.ssh2-publickey-init">ssh2_publickey_init</a> — Inicializa un Publickey Subsystem (subsistema de clave pública)</li><li><a href="#function.ssh2-publickey-list">ssh2_publickey_list</a> — Lista las claves públicas actualmente autorizadas</li><li><a href="#function.ssh2-publickey-remove">ssh2_publickey_remove</a> — Elimina una clave pública autorizada</li><li><a href="#function.ssh2-scp-recv">ssh2_scp_recv</a> — Solicita un fichero mediante SCP</li><li><a href="#function.ssh2-scp-send">ssh2_scp_send</a> — Envía un fichero mediante SCP</li><li><a href="#function.ssh2-send-eof">ssh2_send_eof</a> — Envía un EOF al flujo</li><li><a href="#function.ssh2-sftp">ssh2_sftp</a> — Inicializa un subsistema SFTP</li><li><a href="#function.ssh2-sftp-chmod">ssh2_sftp_chmod</a> — Modifica el modo de un fichero</li><li><a href="#function.ssh2-sftp-lstat">ssh2_sftp_lstat</a> — Estado de un enlace simbólico</li><li><a href="#function.ssh2-sftp-mkdir">ssh2_sftp_mkdir</a> — Crea un directorio</li><li><a href="#function.ssh2-sftp-readlink">ssh2_sftp_readlink</a> — Devuelve el destino de un enlace simbólico</li><li><a href="#function.ssh2-sftp-realpath">ssh2_sftp_realpath</a> — Resuelve la ruta real de una ruta proporcionada</li><li><a href="#function.ssh2-sftp-rename">ssh2_sftp_rename</a> — Renombra un fichero remoto</li><li><a href="#function.ssh2-sftp-rmdir">ssh2_sftp_rmdir</a> — Elimina un directorio</li><li><a href="#function.ssh2-sftp-stat">ssh2_sftp_stat</a> — Obtiene el estado de un fichero en un sistema de ficheros remoto</li><li><a href="#function.ssh2-sftp-symlink">ssh2_sftp_symlink</a> — Crea un enlace simbólico</li><li><a href="#function.ssh2-sftp-unlink">ssh2_sftp_unlink</a> — Borra un fichero</li><li><a href="#function.ssh2-shell">ssh2_shell</a> — Solicita un shell interactivo</li><li><a href="#function.ssh2-tunnel">ssh2_tunnel</a> — Abre un túnel a través de un servidor remoto</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.ssh2">Introducción</a></li><li><a href="#ssh2.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#ssh2.requirements">Requerimientos</a></li><li><a href="#ssh2.installation">Instalación</a></li><li><a href="#ssh2.resources">Tipos de recursos</a></li></ul></li><li><a href="#ssh2.constants">Constantes predefinidas</a></li><li><a href="#ref.ssh2">Funciones de SSH2</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.ssh2-auth-agent">ssh2_auth_agent</a> — Autenticación SSH utilizando el agente ssh</li><li><a href="#function.ssh2-auth-hostbased-file">ssh2_auth_hostbased_file</a> — Identificación utilizando una clave de host pública</li><li><a href="#function.ssh2-auth-none">ssh2_auth_none</a> — Identificación como "none"</li><li><a href="#function.ssh2-auth-password">ssh2_auth_password</a> — Autenticación vía SSH utilizando una contraseña en texto claro</li><li><a href="#function.ssh2-auth-pubkey-file">ssh2_auth_pubkey_file</a> — Identificación utilizando una clave pública</li><li><a href="#function.ssh2-connect">ssh2_connect</a> — Conexión a un servidor SSH</li><li><a href="#function.ssh2-disconnect">ssh2_disconnect</a> — Cierra una conexión a un servidor SSH remoto</li><li><a href="#function.ssh2-exec">ssh2_exec</a> — Ejecuta un comando en un servidor remoto</li><li><a href="#function.ssh2-fetch-stream">ssh2_fetch_stream</a> — Recorre un flujo extendido de datos</li><li><a href="#function.ssh2-fingerprint">ssh2_fingerprint</a> — Recupera la huella de un servidor remoto</li><li><a href="#function.ssh2-forward-accept">ssh2_forward_accept</a> — Acepta una conexión creada por un observador</li><li><a href="#function.ssh2-forward-listen">ssh2_forward_listen</a> — Enlaza un puerto en el servidor remoto y observa las conexiones</li><li><a href="#function.ssh2-methods-negotiated">ssh2_methods_negotiated</a> — Devuelve una lista de métodos negociados</li><li><a href="#function.ssh2-poll">ssh2_poll</a> — Consulta los canales/observadores/flujos para eventos</li><li><a href="#function.ssh2-publickey-add">ssh2_publickey_add</a> — Añade una clave pública autorizada</li><li><a href="#function.ssh2-publickey-init">ssh2_publickey_init</a> — Inicializa un Publickey Subsystem (subsistema de clave pública)</li><li><a href="#function.ssh2-publickey-list">ssh2_publickey_list</a> — Lista las claves públicas actualmente autorizadas</li><li><a href="#function.ssh2-publickey-remove">ssh2_publickey_remove</a> — Elimina una clave pública autorizada</li><li><a href="#function.ssh2-scp-recv">ssh2_scp_recv</a> — Solicita un fichero mediante SCP</li><li><a href="#function.ssh2-scp-send">ssh2_scp_send</a> — Envía un fichero mediante SCP</li><li><a href="#function.ssh2-send-eof">ssh2_send_eof</a> — Envía un EOF al flujo</li><li><a href="#function.ssh2-sftp">ssh2_sftp</a> — Inicializa un subsistema SFTP</li><li><a href="#function.ssh2-sftp-chmod">ssh2_sftp_chmod</a> — Modifica el modo de un fichero</li><li><a href="#function.ssh2-sftp-lstat">ssh2_sftp_lstat</a> — Estado de un enlace simbólico</li><li><a href="#function.ssh2-sftp-mkdir">ssh2_sftp_mkdir</a> — Crea un directorio</li><li><a href="#function.ssh2-sftp-readlink">ssh2_sftp_readlink</a> — Devuelve el destino de un enlace simbólico</li><li><a href="#function.ssh2-sftp-realpath">ssh2_sftp_realpath</a> — Resuelve la ruta real de una ruta proporcionada</li><li><a href="#function.ssh2-sftp-rename">ssh2_sftp_rename</a> — Renombra un fichero remoto</li><li><a href="#function.ssh2-sftp-rmdir">ssh2_sftp_rmdir</a> — Elimina un directorio</li><li><a href="#function.ssh2-sftp-stat">ssh2_sftp_stat</a> — Obtiene el estado de un fichero en un sistema de ficheros remoto</li><li><a href="#function.ssh2-sftp-symlink">ssh2_sftp_symlink</a> — Crea un enlace simbólico</li><li><a href="#function.ssh2-sftp-unlink">ssh2_sftp_unlink</a> — Borra un fichero</li><li><a href="#function.ssh2-shell">ssh2_shell</a> — Solicita un shell interactivo</li><li><a href="#function.ssh2-tunnel">ssh2_tunnel</a> — Abre un túnel a través de un servidor remoto</li></ul></li></ul></div>

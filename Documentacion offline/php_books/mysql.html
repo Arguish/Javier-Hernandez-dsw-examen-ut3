@@ -1,0 +1,627 @@
+<div id="mysql" class="book"><hr>
+  <h1 class="title">Visión general de los drivers PHP MySQL</h1>
+
+  <div id="mysqlinfo.intro" class="preface"><hr>
+   <h1 class="title">Introducción</h1>
+    <p class="para">
+     Existen varias APIs PHP para acceder a una base de datos MySQL.
+     Los usuarios pueden elegir entre las extensiones
+     <a href="#book.mysqli" class="link">mysqli</a> o
+     <a href="#ref.pdo-mysql" class="link">PDO_MySQL</a>.
+    </p>
+    <p class="para">
+     Esta guía explica la <a href="#mysqlinfo.terminology" class="link">terminología</a>
+     utilizada para describir cada una de ellas, proporciona información
+     sobre <a href="#mysqlinfo.api.choosing" class="link">la elección de la API</a>
+     a utilizar, así como información que ayuda a elegir la <a href="#mysqlinfo.library.choosing" class="link">biblioteca
+     MySQL a utilizar</a> con la API.
+    </p>
+  </div>
+<hr>
+
+
+  <div id="mysqlinfo.terminology" class="chapter"><hr>
+   <h1 class="title">Visión general de la terminología</h1>
+
+   <p class="para">
+    Esta sección proporciona una introducción a las opciones disponibles
+    al desarrollar una aplicación PHP que debe interactuar con
+    una base de datos MySQL.
+   </p>
+
+   <p class="para">
+    <strong>¿Qué es una API?</strong>
+   </p>
+
+   <p class="para">
+    Una interfaz de programación de aplicaciones, o API, define las clases,
+    los métodos, las funciones y las variables que su aplicación
+    necesita para realizar las tareas deseadas. En el caso de las aplicaciones
+    PHP que necesitan comunicarse con bases de datos, las APIs
+    necesarias suelen exponerse a través de extensiones PHP.
+   </p>
+
+   <p class="para">
+    Las APIs pueden ser procedimentales u orientadas a objetos. Con una API
+    procedimental, se llaman funciones para realizar las tareas,
+    con una API orientada a objetos, se instancian las clases, luego se
+    llaman los métodos en los objetos resultantes. La segunda interfaz
+    es generalmente preferida ya que es más moderna y permite
+    organizar mejor el código fuente.
+   </p>
+
+   <p class="para">
+    Al escribir aplicaciones PHP que necesitan conectarse
+    a un servidor MySQL, hay varias opciones de API disponibles.
+    Este documento abordará lo que está disponible, y cómo elegir
+    la mejor solución para su aplicación.
+   </p>
+
+   <p class="para">
+    <strong>¿Qué es un conector?</strong>
+   </p>
+
+   <p class="para">
+    En la documentación de MySQL, el término <em>conector</em>
+    se refiere a la parte del programa que permite a su aplicación
+    conectarse al servidor de base de datos MySQL. MySQL proporciona
+    conectores para muchos lenguajes, incluyendo PHP.
+   </p>
+
+   <p class="para">
+    Si su aplicación PHP necesita comunicarse con un servidor
+    de base de datos, debe escribir su código PHP para realizar
+    tareas como conectarse al servidor de base de datos,
+    consultar la base de datos y otras tareas relacionadas
+    con la base de datos. El programa es requerido para proporcionar la API
+    a utilizar por su aplicación PHP, pero también para gestionar
+    la comunicación entre su aplicación y el servidor de base
+    de datos, utilizando bibliotecas intermedias si es necesario. Este programa
+    suele denominarse conector,
+    ya que permite a su aplicación <em>conectarse</em>
+    al servidor de base de datos.
+   </p>
+
+   <p class="para">
+    <strong>¿Qué es un driver?</strong>
+   </p>
+
+   <p class="para">
+    Un driver es una parte de programa cuyo objetivo es comunicarse
+    con un tipo específico de servidor de base de datos. El driver
+    también puede llamar a una biblioteca, como la biblioteca cliente MySQL o el driver nativo MySQL. Estas bibliotecas implementan
+    el protocolo de bajo nivel utilizado para comunicarse con el servidor
+    de base de datos MySQL.
+   </p>
+
+   <p class="para">
+    Por ejemplo, la capa de abstracción de base de datos
+    <a href="#mysqli.overview.pdo" class="link">PHP Data Objects (PDO)</a> puede
+    utilizar uno de los drivers específicos de base de datos. Uno de estos drivers
+    disponibles es el driver PDO MYSQL, que proporciona una interfaz
+    con el servidor MySQL.
+   </p>
+
+   <p class="para">
+    A veces, las personas utilizan los términos conector y driver
+    de manera intercambiable, lo que puede causar confusión. En la documentación
+    de MySQL, el término <q class="quote">driver</q> se reserva al programa que
+    proporciona la parte específica de la base de datos de un conector.
+   </p>
+
+   <p class="para">
+    <strong>¿Qué es una extensión?</strong>
+   </p>
+
+   <p class="para">
+    En la documentación de PHP, se encuentra otro término -
+    <em>extensión</em>. El código PHP está compuesto
+    por un núcleo, con extensiones opcionales que permiten
+    extender las funcionalidades del núcleo. Las extensiones PHP relacionadas
+    con bases de datos, como la extensión <code class="literal">mysqli</code>
+    se implementan utilizando el framework de extensiones PHP.
+   </p>
+
+   <p class="para">
+    Típicamente, una extensión expone una API al programador PHP, permitiéndole
+    algunas facilidades durante la programación. Sin embargo,
+    algunas extensiones que utilizan el framework de extensión PHP
+    no exponen ninguna API al programador PHP.
+   </p>
+
+   <p class="para">
+    La extensión driver PDO MySQL, por ejemplo, no expone ninguna API
+    al programador PHP, pero proporciona una interfaz a la capa PDO.
+   </p>
+
+   <p class="para">
+    Los términos API y extensión no deben considerarse como significando
+    lo mismo, ya que una extensión no expone necesariamente una API al
+    programador.
+   </p>
+  </div>
+
+<hr>
+
+
+  <div id="mysqlinfo.api.choosing" class="chapter"><hr>
+   <h1 class="title">Elegir una API</h1>
+
+   <p class="para">
+    PHP ofrece diferentes APIs para conectarse a MySQL. A continuación, se
+    encuentran las APIs proporcionadas por las extensiones mysqli y PDO.
+    Cada ejemplo de código crea una conexión a un servidor MySQL que se ejecuta en
+    el dominio "example.com", utilizando el nombre de usuario "user", la contraseña "password". Y se ejecuta una consulta para saludar al usuario.
+   </p>
+   <p class="para">
+    </p><div class="example" id="example-1547">
+     <p><strong>Ejemplo #1 Comparación de las APIs MySQL</strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// mysqli<br></span><span style="color: #0000BB">$mysqli </span><span style="color: #007700">= new </span><span style="color: #0000BB">mysqli</span><span style="color: #007700">(</span><span style="color: #DD0000">"example.com"</span><span style="color: #007700">, </span><span style="color: #DD0000">"user"</span><span style="color: #007700">, </span><span style="color: #DD0000">"password"</span><span style="color: #007700">, </span><span style="color: #DD0000">"database"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT '¡Hola, querido usuario de MySQL!' AS _message FROM DUAL"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$row </span><span style="color: #007700">= </span><span style="color: #0000BB">$result</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">fetch_assoc</span><span style="color: #007700">();<br>echo </span><span style="color: #0000BB">htmlentities</span><span style="color: #007700">(</span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'_message'</span><span style="color: #007700">]);<br><br></span><span style="color: #FF8000">// PDO<br></span><span style="color: #0000BB">$pdo </span><span style="color: #007700">= new </span><span style="color: #0000BB">PDO</span><span style="color: #007700">(</span><span style="color: #DD0000">'mysql:host=example.com;dbname=database'</span><span style="color: #007700">, </span><span style="color: #DD0000">'user'</span><span style="color: #007700">, </span><span style="color: #DD0000">'password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$statement </span><span style="color: #007700">= </span><span style="color: #0000BB">$pdo</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT '¡Hola, querido usuario de MySQL!' AS _message FROM DUAL"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$row </span><span style="color: #007700">= </span><span style="color: #0000BB">$statement</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">fetch</span><span style="color: #007700">(</span><span style="color: #0000BB">PDO</span><span style="color: #007700">::</span><span style="color: #0000BB">FETCH_ASSOC</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">htmlentities</span><span style="color: #007700">(</span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'_message'</span><span style="color: #007700">]);</span></span></code></div>
+     </div>
+
+    </div>
+   
+   <p class="para">
+    <strong>Comparación de funcionalidades</strong>
+   </p>
+   <p class="para">
+    El rendimiento global de las dos extensiones puede considerarse idéntico.
+    Sin embargo, el rendimiento de la extensión constituye solo una fracción
+    del tiempo total de ejecución de una solicitud web PHP.
+    A menudo, el impacto es inferior al 0.1%.
+   </p>
+   <table id="mysqlinfo.api.choosing.changelog" class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th class="empty"> </th>
+       <th>ext/mysqli</th>
+       <th>PDO_MySQL</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>Introducida en la versión de PHP</td>
+       <td>5.0</td>
+       <td>5.1</td>
+      </tr>
+
+      <tr>
+       <td>Incluida con PHP 7.x y 8.x</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>Estado de desarrollo</td>
+       <td>Activo</td>
+       <td>Activo</td>
+      </tr>
+
+      <tr>
+       <td>Ciclo de vida</td>
+       <td>Activo</td>
+       <td>Activo</td>
+      </tr>
+
+      <tr>
+       <td>Recomendado para nuevos proyectos</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>Interfaz orientada a objetos</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>Interfaz procedimental</td>
+       <td>Sí</td>
+       <td>No</td>
+      </tr>
+
+      <tr>
+       <td>La API soporta consultas no bloqueantes, asíncronas con mysqlnd</td>
+       <td>Sí</td>
+       <td>No</td>
+      </tr>
+
+      <tr>
+       <td>Conexiones persistentes disponibles</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>La API soporta juegos de caracteres</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>La API soporta consultas preparadas del lado del servidor</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>La API soporta consultas preparadas del lado del cliente</td>
+       <td>No</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>La API soporta procedimientos almacenados</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>La API soporta consultas múltiples</td>
+       <td>Sí</td>
+       <td>La mayoría</td>
+      </tr>
+
+      <tr>
+       <td>La API soporta transacciones</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>Las transacciones pueden controlarse con SQL</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>Soporta todas las funcionalidades de MySQL 5.1+</td>
+       <td>Sí</td>
+       <td>La mayoría</td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </div>
+
+<hr>
+
+
+  <div id="mysqlinfo.library.choosing" class="chapter"><hr>
+   <h1 class="title">Elegir una biblioteca</h1>
+
+   <p class="para">
+    Las extensiones PHP mysqli y PDO_MySQL son envolventes ligeras de una
+    biblioteca cliente C. Las extensiones pueden utilizar la biblioteca
+    <a href="#book.mysqlnd" class="link">mysqlnd</a>, o la biblioteca <code class="literal">libmysqlclient</code>.
+    La elección de la biblioteca se realiza en el momento de la compilación.
+   </p>
+   <p class="para">
+    La biblioteca mysqlnd forma parte de la distribución de PHP.
+    Ofrece funcionalidades como conexiones perezosas,
+    caché de consultas, que no están disponibles con libmysqlclient,
+    por lo que se recomienda utilizar la biblioteca interna mysqlnd.
+    Ver la <a href="#book.mysqlnd" class="link">documentación de mysqlnd</a>
+    para obtener más información, así como una lista de las funcionalidades que ofrece.
+   </p>
+   <p class="para">
+    </p><div class="example" id="example-1548">
+     <p><strong>Ejemplo #1 Comando de configuración para el uso de mysqlnd o libmysqlclient</strong></p>
+     <div class="example-contents">
+<div class="shellcode"><pre class="shellcode">// Recomendado, compilación con mysqlnd
+$ ./configure --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd
+
+// Alternativamente recomendado, compilación con mysqlnd
+$ ./configure --with-mysqli --with-pdo-mysql
+
+// No recomendado, compilación con libmysqlclient
+$ ./configure --with-mysqli=/path/to/mysql_config --with-pdo-mysql=/path/to/mysql_config</pre>
+</div>
+     </div>
+
+    </div>
+   
+   <p class="para">
+    </p><div class="example" id="example-1549">
+     <p><strong>Ejemplo #2 Comparación de las instrucciones preparadas</strong></p>
+     <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// mysqli<br></span><span style="color: #0000BB">$mysqli </span><span style="color: #007700">= new </span><span style="color: #0000BB">mysqli</span><span style="color: #007700">(</span><span style="color: #DD0000">"example.com"</span><span style="color: #007700">, </span><span style="color: #DD0000">"usuario"</span><span style="color: #007700">, </span><span style="color: #DD0000">"contraseña"</span><span style="color: #007700">, </span><span style="color: #DD0000">"base de datos"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$statement </span><span style="color: #007700">= </span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">prepare</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT District FROM City WHERE Name=?"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$statement</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">execute</span><span style="color: #007700">([</span><span style="color: #DD0000">"Amersfoort"</span><span style="color: #007700">]);<br></span><span style="color: #0000BB">$result </span><span style="color: #007700">= </span><span style="color: #0000BB">$statement</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">get_result</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$row </span><span style="color: #007700">= </span><span style="color: #0000BB">$result</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">fetch_assoc</span><span style="color: #007700">();<br>echo </span><span style="color: #0000BB">htmlentities</span><span style="color: #007700">(</span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'District'</span><span style="color: #007700">]);<br><br></span><span style="color: #FF8000">// PDO<br></span><span style="color: #0000BB">$pdo </span><span style="color: #007700">= new </span><span style="color: #0000BB">PDO</span><span style="color: #007700">(</span><span style="color: #DD0000">'mysql:host=example.com;dbname=base de datos'</span><span style="color: #007700">, </span><span style="color: #DD0000">'usuario'</span><span style="color: #007700">, </span><span style="color: #DD0000">'contraseña'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$statement </span><span style="color: #007700">= </span><span style="color: #0000BB">$pdo</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">prepare</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT District FROM City WHERE Name=?"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$statement</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">execute</span><span style="color: #007700">([</span><span style="color: #DD0000">"Amersfoort"</span><span style="color: #007700">]);<br></span><span style="color: #0000BB">$row </span><span style="color: #007700">= </span><span style="color: #0000BB">$statement</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">fetch</span><span style="color: #007700">(</span><span style="color: #0000BB">PDO</span><span style="color: #007700">::</span><span style="color: #0000BB">FETCH_ASSOC</span><span style="color: #007700">);<br>echo </span><span style="color: #0000BB">htmlentities</span><span style="color: #007700">(</span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'District'</span><span style="color: #007700">]);</span></span></code></div>
+     </div>
+
+    </div>
+   
+   <p class="para">
+    <strong>Comparación de funcionalidades de las bibliotecas</strong>
+   </p>
+   <p class="para">
+    Se recomienda utilizar la biblioteca <a href="#book.mysqlnd" class="link">mysqlnd</a>
+    en lugar de la biblioteca cliente servidor MySQL (libmysqlclient). Ambas bibliotecas
+    son soportadas y mejoradas continuamente.
+   </p>
+   <table id="mysqlinfo.library.choosing.changelog" class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th class="empty"> </th>
+       <th>Driver nativo MySQL (<a href="#book.mysqlnd" class="link">mysqlnd</a>)</th>
+       <th>Biblioteca cliente servidor MySQL (<code class="literal">libmysqlclient</code>)</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>Forma parte de la distribución de PHP</td>
+       <td>Sí</td>
+       <td>No</td>
+      </tr>
+
+      <tr>
+       <td>Introducido en versión de PHP</td>
+       <td>5.3.0</td>
+       <td>N/A</td>
+      </tr>
+
+      <tr>
+       <td>Licencia</td>
+       <td>Licencia PHP 3.01</td>
+       <td>Doble licencia</td>
+      </tr>
+
+      <tr>
+       <td>Estado de desarrollo</td>
+       <td>Activo</td>
+       <td>Activo</td>
+      </tr>
+
+      <tr>
+       <td>Ciclo de vida</td>
+       <td>Sin fin anunciado</td>
+       <td>Sin fin anunciado</td>
+      </tr>
+
+      <tr>
+       <td>Compilado por defecto (para todas las extensiones MySQL)</td>
+       <td>Sí</td>
+       <td>No</td>
+      </tr>
+
+      <tr>
+       <td>Soporte del protocolo de compresión</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>Soporte de SSL</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>Soporte de pipes nombrados</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>Consultas no bloqueantes, asíncronas</td>
+       <td>Sí</td>
+       <td>No</td>
+      </tr>
+
+      <tr>
+       <td>Estadísticas de rendimiento</td>
+       <td>Sí</td>
+       <td>No</td>
+      </tr>
+
+      <tr>
+       <td>LOAD LOCAL INFILE respeta la <a href="#ini.open-basedir" class="link">directiva open_basedir</a></td>
+       <td>Sí</td>
+       <td>No</td>
+      </tr>
+
+      <tr>
+       <td>Uso del sistema de gestión de memoria nativo de PHP
+        (es decir, sigue los límites de memoria de PHP)</td>
+       <td>Sí</td>
+       <td>No</td>
+      </tr>
+
+      <tr>
+       <td>Devuelve las columnas numéricas en forma de double (COM_QUERY)</td>
+       <td>Sí</td>
+       <td>No</td>
+      </tr>
+
+      <tr>
+       <td>Devuelve las columnas numéricas en forma de string (COM_QUERY)</td>
+       <td>Sí</td>
+       <td>Sí</td>
+      </tr>
+
+      <tr>
+       <td>API del plugin</td>
+       <td>Sí</td>
+       <td>Limitada</td>
+      </tr>
+
+      <tr>
+       <td>Reconexión automática</td>
+       <td>No</td>
+       <td>Opcional</td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </div>
+
+<hr>
+
+
+  
+
+
+
+<div id="mysqlinfo.concepts" class="chapter"><hr>
+ <h1 class="title">Conceptos</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#mysqlinfo.concepts.buffering">Consultas con o sin almacenamiento en memoria</a></li><li><a href="#mysqlinfo.concepts.charset">Juegos de caracteres</a></li></ul>
+
+ <p class="para">
+  Estos conceptos son específicos para los drivers MySQL para PHP.
+ </p>
+
+ <div id="mysqlinfo.concepts.buffering" class="section"><hr>
+  <h2 class="title">Consultas con o sin almacenamiento en memoria</h2>
+
+  <p class="para">
+   Las consultas utilizan por omisión el modo de almacenamiento en memoria.
+   Esto significa que el resultado de las consultas se transfiere inmediatamente
+   del servidor MySQL a PHP y se conserva en la memoria
+   del proceso PHP. Esto permite operaciones complementarias
+   como contar el número de resultados, y desplazar el
+   puntero de resultado actual. También permite ejecutar consultas adicionales
+   sobre la misma conexión mientras se trabaja con el conjunto de resultados. La desventaja del almacenamiento en memoria es que los conjuntos de resultados grandes pueden requerir
+   mucha más memoria. La memoria permanecerá ocupada hasta que
+   todas las referencias a los conjuntos de resultados sean desactivadas o que los conjuntos de resultados sean liberados explícitamente,
+   lo cual ocurre de manera automática al final del
+   proceso. La terminología "store result" también se utiliza con el modo de almacenamiento en memoria, ya que la totalidad de los resultados
+   se almacenan a la vez.
+  </p>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Cuando se utiliza libmysqlclient como biblioteca, el límite de memoria de PHP no contará la memoria utilizada para los
+    conjuntos de resultados a menos que los datos sean leídos en las variables PHP. Con mysqlnd, la memoria utilizada incluirá
+    el conjunto de resultados completo.
+   </p>
+  </blockquote>
+
+  <p class="para">
+   Las consultas sin almacenamiento en memoria, las consultas MySQL ejecutan su consulta y luego esperan
+   que los datos del servidor MySQL sean recuperados. Esto utiliza menos memoria
+   en el lado de PHP, pero puede aumentar la carga
+   en el servidor. A menos que el conjunto de resultados completo haya sido
+   recuperado desde el servidor, ninguna otra consulta puede ser
+   enviada sobre la misma conexión. Las consultas sin almacenamiento en memoria también pueden hacer referencia a un
+   "use result". Una vez que todas las líneas del conjunto de resultados
+   han sido recuperadas, el conjunto de resultados desaparece y ya no es posible recorrerlo nuevamente.
+  </p>
+
+  <p class="para">
+   Siguiendo estas características, las consultas sin almacenamiento en memoria deben ser utilizadas únicamente
+   cuando se espera obtener un gran conjunto de resultados que será procesado secuencialmente.
+   Las consultas sin almacenamiento en memoria presentan varias trampas que las hacen más
+   difíciles de utilizar, por ejemplo el número de líneas en el conjunto de resultados no es conocido
+   antes de que la última línea sea recuperada.
+  </p>
+
+  <p class="para">
+   Debido a que las consultas son almacenadas en memoria
+   por omisión, los ejemplos a continuación muestran cómo
+   ejecutar consultas, con cada API, sin almacenamiento en memoria.
+  </p>
+
+  <div class="example" id="example-1550">
+   <p><strong>Ejemplo #1 Ejemplo de consultas sin almacenamiento en memoria: mysqli</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$mysqli  </span><span style="color: #007700">= new </span><span style="color: #0000BB">mysqli</span><span style="color: #007700">(</span><span style="color: #DD0000">"localhost"</span><span style="color: #007700">, </span><span style="color: #DD0000">"my_user"</span><span style="color: #007700">, </span><span style="color: #DD0000">"my_password"</span><span style="color: #007700">, </span><span style="color: #DD0000">"world"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$unbufferedResult </span><span style="color: #007700">= </span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT Name FROM City"</span><span style="color: #007700">, </span><span style="color: #0000BB">MYSQLI_USE_RESULT</span><span style="color: #007700">);<br><br>foreach (</span><span style="color: #0000BB">$unbufferedResult </span><span style="color: #007700">as </span><span style="color: #0000BB">$row</span><span style="color: #007700">) {<br>    echo </span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'Name'</span><span style="color: #007700">] . </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+
+  <div class="example" id="example-1551">
+   <p><strong>Ejemplo #2 Ejemplo de consultas sin almacenamiento en memoria: pdo_mysql</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$pdo </span><span style="color: #007700">= new </span><span style="color: #0000BB">PDO</span><span style="color: #007700">(</span><span style="color: #DD0000">"mysql:host=localhost;dbname=world"</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_user'</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_password'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$pdo</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">setAttribute</span><span style="color: #007700">(</span><span style="color: #0000BB">PDO</span><span style="color: #007700">::</span><span style="color: #0000BB">MYSQL_ATTR_USE_BUFFERED_QUERY</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$unbufferedResult </span><span style="color: #007700">= </span><span style="color: #0000BB">$pdo</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT Name FROM City"</span><span style="color: #007700">);<br>foreach (</span><span style="color: #0000BB">$unbufferedResult </span><span style="color: #007700">as </span><span style="color: #0000BB">$row</span><span style="color: #007700">) {<br>    echo </span><span style="color: #0000BB">$row</span><span style="color: #007700">[</span><span style="color: #DD0000">'Name'</span><span style="color: #007700">] . </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+<hr>
+
+
+ <div id="mysqlinfo.concepts.charset" class="section"><hr>
+  <h2 class="title">Juegos de caracteres</h2>
+
+  <p class="para">
+   Idealmente, un juego de caracteres adecuado debe ser definido
+   a nivel del servidor, operación descrita en la sección
+   <a href="http://dev.mysql.com/doc/mysql/en/charset-configuration.html" class="link external">» Configuración del juego de
+    caracteres</a> del manual del servidor MySQL. Alternativamente, cada API
+   MySQL ofrece un método para definir el juego de caracteres durante
+   la ejecución.
+  </p>
+
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <h1 class="title">El juego de caracteres y el escape de caracteres</h1>
+   <p class="para">
+    El juego de caracteres debe ser comprendido y definido, sabiendo que tiene
+    un efecto en cada acción, y tiene implicaciones a nivel de seguridad. Por ejemplo, el mecanismo de escape (i.e.
+    <span class="function"><a href="#mysqli.real-escape-string" class="function">mysqli_real_escape_string()</a></span> para mysqli, y
+    <span class="methodname"><a href="#pdo.quote" class="methodname">PDO::quote()</a></span> para PDO_MySQL) utilizará
+    esta configuración. Es importante tener en cuenta que estas funciones
+    no utilizarán el juego de caracteres definido con una consulta, por lo tanto,
+    el ejemplo siguiente no tendrá ningún efecto sobre el juego de caracteres:
+   </p>
+  </div>
+
+  <div class="example" id="example-1552">
+   <p><strong>Ejemplo #1 Problemas al definir el juego de caracteres con SQL</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br><br>$mysqli </span><span style="color: #007700">= new </span><span style="color: #0000BB">mysqli</span><span style="color: #007700">(</span><span style="color: #DD0000">"localhost"</span><span style="color: #007700">, </span><span style="color: #DD0000">"my_user"</span><span style="color: #007700">, </span><span style="color: #DD0000">"my_password"</span><span style="color: #007700">, </span><span style="color: #DD0000">"world"</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// NO afectará $mysqli-&gt;real_escape_string();<br></span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SET NAMES utf8mb4"</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// NO afectará $mysqli-&gt;real_escape_string();<br></span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SET CHARACTER SET utf8mb4"</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Pero esto afectará $mysqli-&gt;real_escape_string();<br></span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">set_charset</span><span style="color: #007700">(</span><span style="color: #DD0000">'utf8mb4'</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// Pero esto NO lo afectará (UTF-8 en comparación con utf8mb4) -- no utilice guiones aquí<br></span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">set_charset</span><span style="color: #007700">(</span><span style="color: #DD0000">'UTF-8'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+
+  <p class="para">
+   A continuación, los ejemplos que demuestran cómo modificar correctamente
+   el juego de caracteres durante la ejecución utilizando cada una de las APIs.
+  </p>
+
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   <strong>Confusión posible con UTF-8</strong><br>
+   </p><p class="para">
+    Debido a que los nombres de los juegos de caracteres en MySQL no contienen guiones,
+    la cadena "utf8" es correcta en MySQL y definirá el juego de caracteres en UTF-8.
+    La cadena "UTF-8" no es correcta, y utilizar "utf-8" fallará al modificar el
+    juego de caracteres.
+   </p>
+  </blockquote>
+
+  <div class="example" id="example-1553">
+   <p><strong>Ejemplo #2 Ejemplo de definición del juego de caracteres: mysqli</strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$mysqli </span><span style="color: #007700">= new </span><span style="color: #0000BB">mysqli</span><span style="color: #007700">(</span><span style="color: #DD0000">"localhost"</span><span style="color: #007700">, </span><span style="color: #DD0000">"my_user"</span><span style="color: #007700">, </span><span style="color: #DD0000">"my_password"</span><span style="color: #007700">, </span><span style="color: #DD0000">"world"</span><span style="color: #007700">);<br><br>echo </span><span style="color: #DD0000">'Juego de caracteres inicial: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">character_set_name</span><span style="color: #007700">() . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br><br>if (!</span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">set_charset</span><span style="color: #007700">(</span><span style="color: #DD0000">'utf8mb4'</span><span style="color: #007700">)) {<br>    </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"Error al cargar el juego de caracteres utf8mb4: %s\n"</span><span style="color: #007700">, </span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">error</span><span style="color: #007700">);<br>    exit;<br>}<br><br>echo </span><span style="color: #DD0000">'Su juego de caracteres actual es: ' </span><span style="color: #007700">. </span><span style="color: #0000BB">$mysqli</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">character_set_name</span><span style="color: #007700">() . </span><span style="color: #DD0000">"\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+
+  <div class="example" id="example-1554">
+   <p><strong>Ejemplo #3 Ejemplo de definición del juego de caracteres: <a href="#ref.pdo-mysql.connection" class="link">pdo_mysql</a></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$pdo </span><span style="color: #007700">= new </span><span style="color: #0000BB">PDO</span><span style="color: #007700">(</span><span style="color: #DD0000">"mysql:host=localhost;dbname=world;charset=utf8mb4"</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_user'</span><span style="color: #007700">, </span><span style="color: #DD0000">'my_pass'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+<hr>
+
+
+</div>
+
+<hr>
+
+
+
+ <ul class="chunklist chunklist_book"><li><a href="#mysqlinfo.intro">Introducción</a></li><li><a href="#mysqlinfo.terminology">Visión general de la terminología</a></li><li><a href="#mysqlinfo.api.choosing">Elegir una API</a></li><li><a href="#mysqlinfo.library.choosing">Elegir una biblioteca</a></li><li><a href="#mysqlinfo.concepts">Conceptos</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#mysqlinfo.concepts.buffering">Consultas con o sin almacenamiento en memoria</a></li><li><a href="#mysqlinfo.concepts.charset">Juegos de caracteres</a></li></ul></li></ul></div>

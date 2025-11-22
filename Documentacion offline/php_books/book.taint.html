@@ -1,0 +1,753 @@
+<div id="book.taint" class="book"><hr>
+ 
+ <h1 class="title">Taint</h1>
+ 
+
+ <div id="intro.taint" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Taint es una extensión que sirve para detectar código XSS (strings
+   corrompidos, «tainted»).
+   También se puede utilizar para localizar vulnerabilidades a inyecciones SQL, inyecciones
+   «shell», etc.
+  </p>
+  <p class="para">
+   Si taint está habilitada, advertirá de si se ha proporcionado una cadena corrompida
+   (que venga de <var class="varname"><a href="#reserved.variables.get" class="classname">$_GET</a></var>, <var class="varname"><a href="#reserved.variables.post" class="classname">$_POST</a></var>
+   o <var class="varname"><a href="#reserved.variables.cookies" class="classname">$_COOKIE</a></var>) a alguna función.
+  </p>
+  <div class="example" id="example-4255">
+   <p><strong>Ejemplo #1 Ejemplo de <span class="function"><a href="#function.taint" class="function">taint()</a></span></strong></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$a </span><span style="color: #007700">= </span><span style="color: #0000BB">trim</span><span style="color: #007700">(</span><span style="color: #0000BB">$_GET</span><span style="color: #007700">[</span><span style="color: #DD0000">'a'</span><span style="color: #007700">]);<br><br></span><span style="color: #0000BB">$nombre_fichero </span><span style="color: #007700">= </span><span style="color: #DD0000">'/tmp' </span><span style="color: #007700">.  </span><span style="color: #0000BB">$a</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$salida    </span><span style="color: #007700">= </span><span style="color: #DD0000">"¡¡¡Bienvenido, </span><span style="color: #007700">{</span><span style="color: #0000BB">$a</span><span style="color: #007700">}</span><span style="color: #DD0000"> !!!"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$var       </span><span style="color: #007700">= </span><span style="color: #DD0000">"salida"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$sql       </span><span style="color: #007700">= </span><span style="color: #DD0000">"Select *  from " </span><span style="color: #007700">. </span><span style="color: #0000BB">$a</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$sql      </span><span style="color: #007700">.= </span><span style="color: #DD0000">"ooxx"</span><span style="color: #007700">;<br><br>echo </span><span style="color: #0000BB">$salida</span><span style="color: #007700">;<br><br>print $</span><span style="color: #0000BB">$var</span><span style="color: #007700">;<br><br>include </span><span style="color: #0000BB">$nombre_fichero</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #0000BB">$sql</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+   <div class="example-contents screen">
+<div class="cdata"><pre>
+Warning: main() [function.echo]: Attempt to echo a string that might be tainted
+
+Warning: main() [function.echo]: Attempt to print a string that might be tainted
+
+Warning: include() [function.include]: File path contains data that might be tainted
+
+Warning: mysql_query() [function.mysql-query]: SQL statement contains data that might be tainted
+</pre></div>
+   </div>
+  </div>
+ </div>
+<hr>
+
+
+ 
+
+
+
+<div id="taint.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#taint.installation">Instalación</a></li><li><a href="#taint.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ <div id="taint.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   Esta extensión <a href="https://pecl.php.net/" class="link external">» PECL</a> no está integrada en PHP.
+  </p>
+  <p class="para">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/taint" class="link external">» https://pecl.php.net/package/taint</a>.
+  </p>
+ </div>
+<hr>
+
+
+ 
+  
+
+
+
+<div id="taint.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Opciones de configuración de taint</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.taint.enable" class="link">taint.enable</a></td>
+      <td>0</td>
+      <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.taint.error-level" class="link">taint.error_level</a></td>
+      <td>E_WARNING</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td></td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+ <p class="para">
+  </p><dl>
+   
+     <dt id="ini.taint.enable">
+      <code class="parameter">taint.enable</code>
+      <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       Si habilitar taint.
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.taint.error-level">
+      <code class="parameter">taint.error_level</code>
+      <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       El tipo del error del que taint informará cuando encuentre una cadena
+       corrupta.
+      </p>
+     </dd>
+    
+
+  </dl>
+ 
+</div>
+<hr>
+
+
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="taint.detail" class="chapter"><hr>
+ <h1 class="title">Más detalles</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#taint.detail.basic">Funciones y sentencias que propagarán la marca de corrupción de una
+   cadena corrupta</a></li><li><a href="#taint.detail.taint">Funciones y sentencias que comprobarán cadenas corrompidas</a></li><li><a href="#taint.detail.untaint">Funciones que sanean cadenas corruptas</a></li></ul>
+
+
+ <div id="taint.detail.basic" class="section"><hr>
+  <h2 class="title">Funciones y sentencias que propagarán la marca de corrupción de una
+   cadena corrupta</h2>
+  <p class="para">
+   </p><table class="doctable table">
+    
+    
+     <col>
+     <col>
+     <thead>
+      <tr>
+       <th>Función/Sentencia</th>
+       <th>Desde</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>= (asignación)</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>. (concatenación)</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>"{$var}" (sustitución de variables)</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>.= (concatenación de asignación)</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>strval</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>explode/split</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>implode/join</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>sprintf</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>vsprintf</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>trim</td>
+       <td>0.4.0</td>
+      </tr>
+
+      <tr>
+       <td>rtrim</td>
+       <td>0.4.0</td>
+      </tr>
+
+      <tr>
+       <td>ltrim</td>
+       <td>0.4.0</td>
+      </tr>
+
+      <tr>
+       <td>strstr</td>
+       <td>0.5.0</td>
+      </tr>
+
+      <tr>
+       <td>str_pad</td>
+       <td>0.5.0</td>
+      </tr>
+
+      <tr>
+       <td>str_replace</td>
+       <td>0.5.0</td>
+      </tr>
+
+      <tr>
+       <td>substr</td>
+       <td>0.5.0</td>
+      </tr>
+
+      <tr>
+       <td>strtolower</td>
+       <td>0.5.0</td>
+      </tr>
+
+      <tr>
+       <td>strtoupper</td>
+       <td>0.5.0</td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+<hr>
+
+
+ <div id="taint.detail.taint" class="section"><hr>
+  <h2 class="title">Funciones y sentencias que comprobarán cadenas corrompidas</h2>
+  <p class="para">
+   </p><table class="doctable table">
+    
+    
+     <col>
+     <col>
+     <thead>
+      <tr>
+       <th>Función/Sentencia</th>
+       <th>Desde</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td colspan="2">Sentencias básicas</td>
+      </tr>
+
+      <tr>
+       <td>eval</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>include/include_once</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>require/require_once</td>
+       <td>0.1.0</td>
+      </tr>
+
+      
+
+      <tr>
+       <td colspan="2">Funciones de salida</td>
+      </tr>
+
+      <tr>
+       <td>echo</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>print</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>printf</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>file_put_contents</td>
+       <td>0.1.0</td>
+      </tr>
+
+      
+      <tr>
+       <td colspan="2">Funciones del sistema de ficheros</td>
+      </tr>
+
+      <tr>
+       <td>fopen</td>
+       <td>0.2.0</td>
+      </tr>
+
+      <tr>
+       <td>opendir</td>
+       <td>0.2.0</td>
+      </tr>
+
+      <tr>
+       <td>basename</td>
+       <td>0.2.0</td>
+      </tr>
+
+      <tr>
+       <td>dirname</td>
+       <td>0.2.0</td>
+      </tr>
+
+      <tr>
+       <td>file</td>
+       <td>0.2.0</td>
+      </tr>
+
+      <tr>
+       <td>pathinfo</td>
+       <td>0.2.0</td>
+      </tr>
+
+      
+      <tr>
+       <td colspan="2">Funciones relacionadas con bases de datos</td>
+      </tr>
+
+      <tr>
+       <td>mysql_query</td>
+       <td>0.2.0</td>
+      </tr>
+
+      <tr>
+       <td>mysqli_query/MySQLi::query</td>
+       <td>0.2.0</td>
+      </tr>
+
+      <tr>
+       <td>sqlite_query/SqliteDataBase::query</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>sqlite_single_query/SqliteDataBase::singleQuery</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>oci_parse</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>PDO::query</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>PDO::prepare</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>SQLite3::query</td>
+       <td>2.0.1</td>
+      </tr>
+
+      <tr>
+       <td>SQLite3::prepare</td>
+       <td>2.0.1</td>
+      </tr>
+
+      
+      <tr>
+       <td colspan="2">Funciones relacionadas con la línea de comandos</td>
+      </tr>
+
+      <tr>
+       <td>system</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>exec</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>proc_open</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>passthru</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>shell_exec</td>
+       <td>0.3.0</td>
+      </tr>
+
+      
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+<hr>
+
+
+ <div id="taint.detail.untaint" class="section"><hr>
+  <h2 class="title">Funciones que sanean cadenas corruptas</h2>
+  <p class="para">
+   </p><table class="doctable table">
+    
+    
+     <col>
+     <col>
+     <thead>
+      <tr>
+       <th>Función</th>
+       <th>Desde</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>addslashes</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>addcslashes</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>htmlspecialchars</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>htmlentities</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>escapeshellcmd</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>mysql_escape_string</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>mysql_real_escape_string</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>mysqli_escape_string/MySQLi::escape_string</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>mysqli_real_escape_string/MySQLi::real_escape_string</td>
+       <td>0.1.0</td>
+      </tr>
+
+      <tr>
+       <td>sqlite_escape_string/SqliteDataBase::escapeString</td>
+       <td>0.3.0</td>
+      </tr>
+
+      <tr>
+       <td>PDO::quote</td>
+       <td>0.3.0</td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+
+ </div>
+<hr>
+
+</div>
+
+<hr>
+
+
+
+ 
+
+
+
+
+<div id="ref.taint" class="reference"><hr>
+ <h1 class="title">Funciones de taint</h1>
+
+ 
+
+
+
+
+<div id="function.is-tainted" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">is_tainted</h1>
+  <p class="verinfo">(PECL taint &gt;=0.1.0)</p><p class="refpurpose"><span class="refname">is_tainted</span> — <span class="dc-title">Comprobar si un string está corrompido</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.is-tainted-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>is_tainted</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Comprueba si un string está corrompido
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.is-tainted-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">string</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.is-tainted-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve TRUE si el string está corrompido, FALSE en caso contrario.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.taint" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">taint</h1>
+  <p class="verinfo">(PECL taint &gt;=0.1.0)</p><p class="refpurpose"><span class="refname">taint</span> — <span class="dc-title">Corrompe un string</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.taint-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>taint</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$string</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">...$strings</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crea un string corrompido. Solamente se usa para realizar pruebas.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.taint-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">string</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">strings</code></dt>
+    <dd>
+     <p class="para">
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.taint-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve TRUE si la transformación se lleva a cabo. Siempre devuelve TRUE si la extensión
+   taint no esta activada.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.untaint" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">untaint</h1>
+  <p class="verinfo">(PECL taint &gt;=0.1.0)</p><p class="refpurpose"><span class="refname">untaint</span> — <span class="dc-title">Sanea un string</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.untaint-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>untaint</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter reference">&amp;$string</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">...$strings</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+    Sanea un string
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.untaint-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">string</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">strings</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.untaint-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.is-tainted">is_tainted</a> — Comprobar si un string está corrompido</li><li><a href="#function.taint">taint</a> — Corrompe un string</li><li><a href="#function.untaint">untaint</a> — Sanea un string</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.taint">Introducción</a></li><li><a href="#taint.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#taint.installation">Instalación</a></li><li><a href="#taint.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#taint.detail">Más detalles</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#taint.detail.basic">Funciones y sentencias que propagarán la marca de corrupción de una
+   cadena corrupta</a></li><li><a href="#taint.detail.taint">Funciones y sentencias que comprobarán cadenas corrompidas</a></li><li><a href="#taint.detail.untaint">Funciones que sanean cadenas corruptas</a></li></ul></li><li><a href="#ref.taint">Funciones de taint</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.is-tainted">is_tainted</a> — Comprobar si un string está corrompido</li><li><a href="#function.taint">taint</a> — Corrompe un string</li><li><a href="#function.untaint">untaint</a> — Sanea un string</li></ul></li></ul></div>

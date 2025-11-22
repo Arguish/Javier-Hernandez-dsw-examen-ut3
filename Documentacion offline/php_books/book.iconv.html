@@ -1,0 +1,1831 @@
+<div id="book.iconv" class="book"><hr>
+ 
+ <h1 class="title">iconv</h1>
+
+ 
+ <div id="intro.iconv" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Este módulo es una interfaz hacia la biblioteca iconv.
+   La extensión iconv convierte ficheros entre diversos juegos de caracteres.
+   Los juegos soportados dependen de la implementación de la función
+   <code class="literal">iconv()</code>
+   en su sistema. Tenga en cuenta que esta función no siempre funciona correctamente
+   en todos los sistemas. En ese caso, sería una buena idea instalar la
+   biblioteca <a href="http://www.gnu.org/software/libiconv/" class="link external">» GNU libiconv</a>.
+  </p>
+  <p class="para">
+   Esta extensión dispone de muchas funciones
+   útiles para ayudar a escribir scripts multilingües.
+   Consúltense las secciones siguientes para descubrir las nuevas funcionalidades.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+
+
+
+
+<div id="iconv.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#iconv.requirements">Requerimientos</a></li><li><a href="#iconv.installation">Instalación</a></li><li><a href="#iconv.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ 
+ <div id="iconv.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   No se requiere nada especial si el sistema es conforme al estándar POSIX, ya que la biblioteca estándar C proporciona iconv.
+   En caso contrario, debe instalarse la biblioteca <a href="http://www.gnu.org/software/libiconv/" class="link external">» libiconv</a> en el sistema.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="iconv.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+ <p class="para">
+  Esta extensión se encuentra activada por omisión, sin embargo, puede ser
+  desactivada compilando PHP con la opción <strong class="option configure">--without-iconv</strong>.
+ </p>
+ <p class="para">
+  La directiva opcional <strong class="option configure">--with-iconv[=DIR]</strong>
+  se utiliza para especificar la ubicación de <em>iconv</em> en
+  el sistema donde PHP es compilado. Si esta directiva no es especificada,
+  únicamente se escanearán las ubicaciones por omisión.
+ </p>
+</div>
+<hr>
+
+
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="iconv.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+ </p><table class="doctable table">
+   <caption><strong>Opciones de configuración iconv</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.iconv.input-encoding" class="link">iconv.input_encoding</a></td>
+      <td>""</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Deprecado en PHP 5.6.0.</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.iconv.output-encoding" class="link">iconv.output_encoding</a></td>
+      <td>""</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Deprecado en PHP 5.6.0.</td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.iconv.internal-encoding" class="link">iconv.internal_encoding</a></td>
+      <td>""</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td>Deprecado en PHP 5.6.0.</td>
+     </tr>
+
+   </tbody>
+  
+ </table>
+
+
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+<div class="warning"><strong class="warning">Advertencia</strong>
+ <p class="para">
+  Algunos sistemas (como IBM AIX) utilizan <code class="literal">"ISO8859-1"</code>
+  en lugar de <code class="literal">"ISO-8859-1"</code>, por lo que este valor debe
+  ser utilizado en las opciones de configuración así como en
+  los argumentos de las funciones.
+ </p>
+ </div>
+
+ <p class="para">
+  </p><dl>
+   
+     <dt id="ini.iconv.input-encoding">
+      <code class="parameter">iconv.input_encoding</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta funcionalidad está <em>OBSOLETA</em> a partir de PHP 5.6.0.
+ Depender de esta funcionalidad está altamente desaconsejado.
+</p></div>
+      <p class="para">
+       Los usuarios de PHP 5.6 y versiones posteriores deben dejar esta opción
+       vacía y definir en su lugar la opción
+       <a href="#ini.input-encoding" class="link">input_encoding</a>.
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.iconv.output-encoding">
+      <code class="parameter">iconv.output_encoding</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta funcionalidad está <em>OBSOLETA</em> a partir de PHP 5.6.0.
+ Depender de esta funcionalidad está altamente desaconsejado.
+</p></div>
+      <p class="para">
+       Los usuarios de PHP 5.6 y versiones posteriores deben dejar esta opción
+       vacía y definir en su lugar la opción
+       <a href="#ini.output-encoding" class="link">output_encoding</a>.
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.iconv.internal-encoding">
+      <code class="parameter">iconv.internal_encoding</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta funcionalidad está <em>OBSOLETA</em> a partir de PHP 5.6.0.
+ Depender de esta funcionalidad está altamente desaconsejado.
+</p></div>
+      <p class="para">
+       Los usuarios de PHP 5.6 y versiones posteriores deben dejar esta opción
+       vacía y definir en su lugar la opción
+       <a href="#ini.default-charset" class="link"><code class="parameter">default_charset</code></a>.
+      </p>
+     </dd>
+    
+
+  </dl>
+ 
+</div>
+<hr>
+
+
+
+
+ 
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="iconv.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="para">
+  Es posible identificar durante la ejecución,
+  la versión de la biblioteca iconv que se utiliza.
+  </p><table class="doctable table">
+   <caption><strong>Constantes de implementación <code class="literal">iconv</code></strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Constante</th>
+      <th>Tipo</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr id="constant.iconv-impl">
+      <td><strong><code><a href="#constant.iconv-impl">ICONV_IMPL</a></code></strong></td>
+      <td><span class="type"><a href="#language.types.string" class="type string">string</a></span></td>
+      <td>El nombre de la biblioteca</td>
+     </tr>
+
+     <tr id="constant.iconv-version">
+      <td><strong><code><a href="#constant.iconv-version">ICONV_VERSION</a></code></strong></td>
+      <td><span class="type"><a href="#language.types.string" class="type string">string</a></span></td>
+      <td>La versión de la biblioteca</td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ 
+ <blockquote class="note"><p><strong class="note">Nota</strong>: 
+  </p><p class="para">
+   La programación de scripts dependientes de versiones específicas,
+   con estas constantes, está fuertemente desaconsejada.
+  </p>
+ </blockquote>
+ <p class="para">
+  Las constantes siguientes también están disponibles :
+  </p><table class="doctable table">
+   <caption><strong>Otras constantes <code class="literal">iconv</code></strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Constante</th>
+      <th>Tipo</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr id="constant.iconv-mime-decode-strict">
+      <td><strong><code><a href="#constant.iconv-mime-decode-strict">ICONV_MIME_DECODE_STRICT</a></code></strong></td>
+      <td><span class="type"><a href="#language.types.integer" class="type int">int</a></span></td>
+      <td>Una máscara utilizada por <span class="function"><a href="#function.iconv-mime-decode" class="function">iconv_mime_decode()</a></span></td>
+     </tr>
+
+     <tr id="constant.iconv-mime-decode-continue-on-error">
+      <td><strong><code><a href="#constant.iconv-mime-decode-continue-on-error">ICONV_MIME_DECODE_CONTINUE_ON_ERROR</a></code></strong></td>
+      <td><span class="type"><a href="#language.types.integer" class="type int">int</a></span></td>
+      <td>Una máscara utilizada para <span class="function"><a href="#function.iconv-mime-decode" class="function">iconv_mime_decode()</a></span></td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ 
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+ <div id="ref.iconv" class="reference"><hr>
+  <h1 class="title">Funciones de iconv</h1>
+
+  <div class="partintro">
+   <h1 class="title">Ver también</h1>
+   <p class="para">
+    Ver también <a href="#ref.recode" class="link">funciones de GNU Recode</a>.
+   </p>
+  </div>
+
+ 
+
+
+
+<div id="function.iconv" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.5, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv</span> — <span class="dc-title">Convierte una cadena de caracteres de un encodaje a otro</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$from_encoding</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$to_encoding</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Convierte la cadena <code class="parameter">string</code> desde <code class="parameter">from_encoding</code>
+   hacia el encodaje <code class="parameter">to_encoding</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">from_encoding</code></dt>
+     <dd>
+      <p class="para">
+       El encodaje utilizado para interpretar <code class="parameter">string</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">to_encoding</code></dt>
+     <dd>
+      <p class="para">
+       El encodaje deseado del resultado.
+      </p>
+      <p class="para">
+       Si la cadena <code class="literal">//TRANSLIT</code> es añadida al argumento
+       <code class="parameter">to_encoding</code>, entonces la transliteración es activada.
+       Esto significa que cuando un carácter no puede ser representado en el juego
+       de caracteres destino, podría ser representado aproximadamente a partir
+       de uno o varios caracteres que representen el mismo carácter.
+       Si la cadena <code class="literal">//IGNORE</code> es añadida, los caracteres
+       que no puedan ser representados en el juego de caracteres destino serán
+       simplemente ignorados. De lo contrario, se generará una alerta de nivel
+       <strong><code><a href="#constant.e-notice">E_NOTICE</a></code></strong> y la función retornará
+       <strong><code><a href="#constant.false">false</a></code></strong>.
+      </p>
+      <div class="caution"><strong class="caution">Precaución</strong>
+       <p class="para">
+        Si y cómo <code class="literal">//TRANSLIT</code> funciona exactamente depende
+        de la implementación iconv() del sistema (cf. <strong><code><a href="#constant.iconv-impl">ICONV_IMPL</a></code></strong>).
+        Algunas implementaciones son conocidas por ignorar <code class="literal">//TRANSLIT</code>,
+        por lo que la conversión de caracteres ilegales probablemente fallará para
+        <code class="parameter">to_encoding</code>.
+       </p>
+      </div>
+     </dd>
+    
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       La <span class="type"><a href="#language.types.string" class="type string">string</a></span> a convertir.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Retorna la <span class="type"><a href="#language.types.string" class="type string">string</a></span> convertida,  o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.iconv-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2474">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>iconv()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$text </span><span style="color: #007700">= </span><span style="color: #DD0000">"Ceci est le symbole de l'Euro '€'."</span><span style="color: #007700">;<br><br>echo </span><span style="color: #DD0000">'Original : '</span><span style="color: #007700">, </span><span style="color: #0000BB">$text</span><span style="color: #007700">, </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">'TRANSLIT : '</span><span style="color: #007700">, </span><span style="color: #0000BB">iconv</span><span style="color: #007700">(</span><span style="color: #DD0000">"UTF-8"</span><span style="color: #007700">, </span><span style="color: #DD0000">"ISO-8859-1//TRANSLIT"</span><span style="color: #007700">, </span><span style="color: #0000BB">$text</span><span style="color: #007700">), </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">'IGNORE   : '</span><span style="color: #007700">, </span><span style="color: #0000BB">iconv</span><span style="color: #007700">(</span><span style="color: #DD0000">"UTF-8"</span><span style="color: #007700">, </span><span style="color: #DD0000">"ISO-8859-1//IGNORE"</span><span style="color: #007700">, </span><span style="color: #0000BB">$text</span><span style="color: #007700">), </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">'Brut     : '</span><span style="color: #007700">, </span><span style="color: #0000BB">iconv</span><span style="color: #007700">(</span><span style="color: #DD0000">"UTF-8"</span><span style="color: #007700">, </span><span style="color: #DD0000">"ISO-8859-1"</span><span style="color: #007700">, </span><span style="color: #0000BB">$text</span><span style="color: #007700">), </span><span style="color: #0000BB">PHP_EOL</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Original : Ceci est le symbole de l'Euro '€'.
+TRANSLIT : Ceci est le symbole de l'Euro 'EUR'.
+IGNORE   : Ceci est le symbole de l'Euro ''.
+Brut     : Ceci est le symbole de l'Euro '
+Notice: iconv(): Detected an illegal character in input string in /Users/macbook/Desktop/- on line 8
+Ceci est le symbole de l'Euro '</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+ <div class="refsect1 notes" id="refsect1-function.iconv-notes">
+  <h3 class="title">Notas</h3>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    El encodaje de caracteres y las opciones disponibles dependen de la implementación de iconv.
+    Si el argumento de <code class="parameter">from_encoding</code> o <code class="parameter">to_encoding</code> no es
+    soportado en el sistema actual, <strong><code><a href="#constant.false">false</a></code></strong> será retornado.
+   </p>
+  </blockquote>
+ </div>
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.mb-convert-encoding" class="function" rel="rdfs-seeAlso">mb_convert_encoding()</a> - Convertir una cadena de un codificación de caracteres a otra</span></li>
+    <li><span class="methodname"><a href="#uconverter.transcode" class="methodname" rel="rdfs-seeAlso">UConverter::transcode()</a> - Convierte una cadena de un juego de caracteres a otro</span></li>
+   </ul>
+  
+ </div>
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.iconv-get-encoding" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv_get_encoding</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.5, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv_get_encoding</span> — <span class="dc-title">Lee el juego de caracteres actual</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-get-encoding-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv_get_encoding</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code><span class="initializer"> = "all"</span></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve la configuración actual del gestor <span class="function"><a href="#function.ob-iconv-handler" class="function">ob_iconv_handler()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-get-encoding-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">type</code></dt>
+     <dd>
+      <p class="para">
+       Los valores posibles para el argumento opcional <code class="parameter">type</code> son:
+       </p><ul class="simplelist">
+        <li>all</li>
+        <li>input_encoding</li>
+        <li>output_encoding</li>
+        <li>internal_encoding</li>
+       </ul>
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-get-encoding-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el valor actual de la variable de configuración en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+  <p class="para">
+   Si <code class="parameter">type</code> es omitido o diferente de <code class="literal">all</code>
+   (es decir "todos"), <span class="function"><strong>iconv_get_encoding()</strong></span> devuelve un
+   array que contiene todos los valores de estas constantes.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.iconv-get-encoding-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2475">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>iconv_get_encoding()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000">&lt;pre&gt;<br><span style="color: #0000BB">&lt;?php<br>iconv_set_encoding</span><span style="color: #007700">(</span><span style="color: #DD0000">"internal_encoding"</span><span style="color: #007700">, </span><span style="color: #DD0000">"UTF-8"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">iconv_set_encoding</span><span style="color: #007700">(</span><span style="color: #DD0000">"output_encoding"</span><span style="color: #007700">, </span><span style="color: #DD0000">"ISO-8859-1"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">iconv_get_encoding</span><span style="color: #007700">(</span><span style="color: #DD0000">'all'</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;<br></span>&lt;/pre&gt;</span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [input_encoding] =&gt; ISO-8859-1
+    [output_encoding] =&gt; ISO-8859-1
+    [internal_encoding] =&gt; UTF-8
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-get-encoding-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.iconv-set-encoding" class="function" rel="rdfs-seeAlso">iconv_set_encoding()</a> - Modifica el juego de caracteres de codificación actual</span></li>
+    <li><span class="function"><a href="#function.ob-iconv-handler" class="function" rel="rdfs-seeAlso">ob_iconv_handler()</a> - Convierte la codificación de caracteres al manejador del buffer de salida</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.iconv-mime-decode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv_mime_decode</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv_mime_decode</span> — <span class="dc-title">Decodifica un campo de encabezado MIME</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-mime-decode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv_mime_decode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$mode</code><span class="initializer"> = 0</span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$encoding</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>iconv_mime_decode()</strong></span> decodifica un campo de encabezado MIME.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-mime-decode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       El encabezado codificado, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">mode</code> determina una alternativa en caso
+       de que <span class="function"><strong>iconv_mime_decode()</strong></span> encuentre un campo de encabezado
+       <code class="literal">MIME</code> mal formado.
+       </p><table class="doctable table">
+        <caption><strong>Máscaras aceptables para la función <span class="function"><strong>iconv_mime_decode()</strong></span></strong></caption>
+        
+         <thead>
+          <tr>
+           <th>Valor</th>
+           <th>Constante</th>
+           <th>Descripción</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td>1</td>
+           <td>ICONV_MIME_DECODE_STRICT</td>
+           <td>
+            Si está definido, el encabezado correspondiente será decodificado
+            siguiendo estrictamente el estándar <a href="https://datatracker.ietf.org/doc/html/rfc2047" class="link external">» RFC2047</a>.
+            Esta opción está desactivada por omisión, ya que existen muchos
+            <code class="literal">clientes de correo</code> que no siguen este estándar y
+            por lo tanto, producen malos encabezados <code class="literal">MIME</code>.
+           </td>
+          </tr>
+
+          <tr>
+           <td>2</td>
+           <td>ICONV_MIME_DECODE_CONTINUE_ON_ERROR</td>
+           <td>
+            Si está definido, <span class="function"><strong>iconv_mime_decode()</strong></span>
+            intenta continuar decodificando el encabezado pasado,
+            incluso si aparecen errores.
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro por omisión <code class="parameter">encoding</code> especifica
+       el juego de caracteres a utilizar para representar el resultado.
+       Si se omite,
+       <a href="#iconv.configuration" class="link">iconv.internal_encoding</a>
+       será utilizado.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-mime-decode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un campo <code class="literal">MIME</code> en caso de éxito,
+   o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error durante la decodificación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.iconv-mime-decode-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">encoding</code> ahora es nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.iconv-mime-decode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2476">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>iconv_mime_decode()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// Esto mostrará: "Subject: Prüfung Prüfung"<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">iconv_mime_decode</span><span style="color: #007700">(</span><span style="color: #DD0000">"Subject: =?UTF-8?B?UHLDvGZ1bmcgUHLDvGZ1bmc=?="</span><span style="color: #007700">,<br>                       </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #DD0000">"ISO-8859-1"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-mime-decode-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.iconv-mime-decode-headers" class="function" rel="rdfs-seeAlso">iconv_mime_decode_headers()</a> - Decodifica múltiples encabezados MIME</span></li>
+    <li><span class="function"><a href="#function.mb-decode-mimeheader" class="function" rel="rdfs-seeAlso">mb_decode_mimeheader()</a> - Decodifica un encabezado MIME</span></li>
+    <li><span class="function"><a href="#function.imap-mime-header-decode" class="function" rel="rdfs-seeAlso">imap_mime_header_decode()</a> - Decodifica los elementos MIME de un encabezado</span></li>
+    <li><span class="function"><a href="#function.imap-base64" class="function" rel="rdfs-seeAlso">imap_base64()</a> - Decodifica un texto codificado en BASE64</span></li>
+    <li><span class="function"><a href="#function.imap-qprint" class="function" rel="rdfs-seeAlso">imap_qprint()</a> - Convierte una string con comillas en una string de 8 bits</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+<div id="function.iconv-mime-decode-headers" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv_mime_decode_headers</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv_mime_decode_headers</span> — <span class="dc-title">Decodifica múltiples encabezados <code class="literal">MIME</code></span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-mime-decode-headers-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv_mime_decode_headers</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$headers</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$mode</code><span class="initializer"> = 0</span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$encoding</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.array" class="type array">array</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>iconv_mime_decode_headers()</strong></span> decodifica
+   múltiples encabezados <code class="literal">MIME</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-mime-decode-headers-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">headers</code></dt>
+     <dd>
+      <p class="para">
+       Los encabezados codificados, en forma de <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">mode</code></dt>
+     <dd>
+      <p class="para">
+       <code class="parameter">mode</code> determina el comportamiento de la función,
+       si <span class="function"><strong>iconv_mime_decode_headers()</strong></span> encuentra un
+       encabezado <code class="literal">MIME</code> malformado.
+       </p><table class="doctable table">
+        <caption><strong>Mascara aceptada por la función <span class="function"><strong>iconv_mime_decode_headers()</strong></span></strong></caption>
+        
+         <thead>
+          <tr>
+           <th>Valor</th>
+           <th>Constante</th>
+           <th>Descripción</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td>1</td>
+           <td>ICONV_MIME_DECODE_STRICT</td>
+           <td>
+            Si se utiliza, los encabezados son decodificados respetando estrictamente
+            el estándar de la <a href="https://datatracker.ietf.org/doc/html/rfc2047" class="link external">» RFC2047</a>.
+            Esta opción está desactivada por omisión, ya que existen numerosos clientes
+            de correo que no siguen estas especificaciones y que no producen
+            encabezados <code class="literal">MIME</code> correctos.
+           </td>
+          </tr>
+
+          <tr>
+           <td>2</td>
+           <td>ICONV_MIME_DECODE_CONTINUE_ON_ERROR</td>
+           <td>
+            Si esta opción está activada, <span class="function"><strong>iconv_mime_decode_headers()</strong></span>
+            intenta ignorar los errores de sintaxis y continúa procesando el encabezado
+            dado.
+           </td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro opcional <code class="parameter">encoding</code> especifica el
+       juego de caracteres utilizado para representar el resultado.
+       Si se omite, se utiliza el juego definido en el archivo <var class="filename">php.ini</var>
+       <a href="#iconv.configuration" class="link">iconv.internal_encoding</a>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-mime-decode-headers-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array asociativo que contiene los encabezados
+   <code class="literal">MIME</code> especificados por el parámetro
+   <code class="parameter">headers</code>, o bien <strong><code><a href="#constant.false">false</a></code></strong>
+   si ocurre un error durante el decodificado.
+  </p>
+  <p class="para">
+   Cada clave del array devuelto contiene un nombre de encabezado distinto,
+   y su valor correspondiente. Si varios campos tienen el mismo nombre,
+   <span class="function"><strong>iconv_mime_decode_headers()</strong></span> convierte ese campo en
+   un array indexado, con los valores en su orden de aparición.
+   Cabe señalar que los nombres de los encabezados no son
+   <em>insensibles a mayúsculas/minúsculas</em>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.iconv-mime-decode-headers-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">encoding</code> ahora es nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.iconv-mime-decode-headers-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2477">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>iconv_mime_decode_headers()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$headers_string </span><span style="color: #007700">= &lt;&lt;&lt;EOF<br></span><span style="color: #DD0000">Subject: =?UTF-8?B?UHLDvGZ1bmcgUHLDvGZ1bmc=?=<br>To: example@example.com<br>Date: Thu, 1 Jan 1970 00:00:00 +0000<br>Message-Id: &lt;example@example.com&gt;<br>Received: from localhost (localhost [127.0.0.1]) by localhost<br>    with SMTP id example for &lt;example@example.com&gt;;<br>    Thu, 1 Jan 1970 00:00:00 +0000 (UTC)<br>    (envelope-from example-return-0000-example=example.com@example.com)<br>Received: (qmail 0 invoked by uid 65534); 1 Thu 2003 00:00:00 +0000<br><br></span><span style="color: #007700">EOF;<br><br></span><span style="color: #0000BB">$headers </span><span style="color: #007700">=  </span><span style="color: #0000BB">iconv_mime_decode_headers</span><span style="color: #007700">(</span><span style="color: #0000BB">$headers_string</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #DD0000">"ISO-8859-1"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">print_r</span><span style="color: #007700">(</span><span style="color: #0000BB">$headers</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+     </div>
+
+     <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+     <div class="example-contents screen">
+<div class="examplescode"><pre class="examplescode">Array
+(
+    [Subject] =&gt; Prüfung Prüfung
+    [To] =&gt; example@example.com
+    [Date] =&gt; Thu, 1 Jan 1970 00:00:00 +0000
+    [Message-Id] =&gt; &lt;example@example.com&gt;
+    [Received] =&gt; Array
+        (
+            [0] =&gt; from localhost (localhost [127.0.0.1]) by localhost with SMTP id example for &lt;example@example.com&gt;; Thu, 1 Jan 1970 00:00:00 +0000 (UTC) (envelope-from example-return-0000-example=example.com@example.com)
+            [1] =&gt; (qmail 0 invoked by uid 65534); 1 Thu 2003 00:00:00 +0000
+        )
+
+)</pre>
+</div>
+    </div>
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-mime-decode-headers-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.iconv-mime-decode" class="function" rel="rdfs-seeAlso">iconv_mime_decode()</a> - Decodifica un campo de encabezado MIME</span></li>
+    <li><span class="function"><a href="#function.mb-decode-mimeheader" class="function" rel="rdfs-seeAlso">mb_decode_mimeheader()</a> - Decodifica un encabezado MIME</span></li>
+    <li><span class="function"><a href="#function.imap-mime-header-decode" class="function" rel="rdfs-seeAlso">imap_mime_header_decode()</a> - Decodifica los elementos MIME de un encabezado</span></li>
+    <li><span class="function"><a href="#function.imap-base64" class="function" rel="rdfs-seeAlso">imap_base64()</a> - Decodifica un texto codificado en BASE64</span></li>
+    <li><span class="function"><a href="#function.imap-qprint" class="function" rel="rdfs-seeAlso">imap_qprint()</a> - Convierte una string con comillas en una string de 8 bits</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.iconv-mime-encode" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv_mime_encode</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv_mime_encode</span> — <span class="dc-title">Construye un encabezado MIME con los campos field_name y field_value</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-mime-encode-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv_mime_encode</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$field_name</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$field_value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$options</code><span class="initializer"> = []</span></span>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="function"><strong>iconv_mime_encode()</strong></span> compone y devuelve una
+   cadena de caracteres que representa un campo
+   encabezado <code class="literal">MIME</code> similar a:
+   </p><div class="example-contents screen">
+<div class="descriptioncode"><pre class="descriptioncode">Subject: =?ISO-8859-1?Q?Pr=FCfung_f=FCr?= Entwerfen von einer MIME kopfzeile</pre>
+</div>
+   </div>
+   En el ejemplo anterior, <code class="literal">"Subject"</code> es el nombre
+   del campo y la parte que comienza por
+   <code class="literal">"=?ISO-8859-1?..."</code> es el valor del campo.
+  
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-mime-encode-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">field_name</code></dt>
+     <dd>
+      <p class="para">
+       El nombre del campo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">field_value</code></dt>
+     <dd>
+      <p class="para">
+       El valor del campo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">options</code></dt>
+     <dd>
+      <p class="para">
+       Puede controlarse el comportamiento de la función
+       <span class="function"><strong>iconv_mime_encode()</strong></span> especificando
+       un array asociativo que contenga la configuración de
+       los elementos en el parámetro <code class="parameter">options</code>.
+       La lista de elementos soportados por
+       <span class="function"><strong>iconv_mime_encode()</strong></span> se muestra a continuación.
+       Tenga en cuenta que los nombres de los elementos son sensibles a mayúsculas/minúsculas.
+       </p><table class="doctable table">
+        <caption><strong>Lista de elementos soportados por <span class="function"><strong>iconv_mime_encode()</strong></span></strong></caption>
+        
+         <thead>
+          <tr>
+           <th>Elemento</th>
+           <th>Tipo</th>
+           <th>Descripción</th>
+           <th>Valor por omisión</th>
+           <th>Ejemplo</th>
+          </tr>
+
+         </thead>
+
+         <tbody class="tbody">
+          <tr>
+           <td>scheme</td>
+           <td><span class="type"><a href="#language.types.string" class="type string">string</a></span></td>
+           <td>
+            Especifica el método de codificación de un campo. Los valores posibles son <code class="literal">"B"</code> o <code class="literal">"Q"</code>, donde
+            <code class="literal">"B"</code> indica que el esquema de codificación será <code class="literal">base64</code> y <code class="literal">"Q"</code>,
+            <code class="literal">quoted-printable</code>.
+           </td>
+           <td>B</td>
+           <td>B</td>
+          </tr>
+
+          <tr>
+           <td>input-charset</td>
+           <td><span class="type"><a href="#language.types.string" class="type string">string</a></span></td>
+           <td>
+            Especifica el juego de caracteres para representar el primer parámetro
+            <code class="parameter">field_name</code> y el segundo parámetro
+            <code class="parameter">field_value</code>. Si se omite,
+            <span class="function"><strong>iconv_mime_encode()</strong></span>
+            utilizará la directiva de configuración
+            <a href="#iconv.configuration" class="link">iconv.internal_encoding</a>
+            de su php.ini para representarlos.
+           </td>
+           <td>
+            <a href="#iconv.configuration" class="link">iconv.internal_encoding</a>
+           </td>
+           <td>ISO-8859-1</td>
+          </tr>
+
+          <tr>
+           <td>output-charset</td>
+           <td><span class="type"><a href="#language.types.string" class="type string">string</a></span></td>
+           <td>
+            Especifica el juego de caracteres a utilizar para componer
+            el encabezado <code class="literal">MIME</code>.
+           </td>
+           <td>
+            <a href="#iconv.configuration" class="link">iconv.internal_encoding</a>
+           </td>
+           <td>UTF-8</td>
+          </tr>
+
+          <tr>
+           <td>line-length</td>
+           <td><span class="type"><a href="#language.types.integer" class="type int">int</a></span></td>
+           <td>
+            Especifica la longitud máxima de cada encabezado.
+            Si el encabezado es mayor que la longitud definida por este parámetro,
+            el encabezado resultante será un encabezado compuesto por varias líneas
+            conforme al estándar <a href="https://datatracker.ietf.org/doc/html/rfc2822" class="link external">» RFC2822 - Internet Message Format</a>.
+            Si se omite, la longitud máxima se establecerá en 76 caracteres.
+           </td>
+           <td>76</td>
+           <td>996</td>
+          </tr>
+
+          <tr>
+           <td>line-break-chars</td>
+           <td><span class="type"><a href="#language.types.string" class="type string">string</a></span></td>
+           <td>
+            Especifica los caracteres de fin de línea. Si se omite, el valor por omisión será <code class="literal">"\r\n"</code>
+            (<code class="literal">CR</code> <code class="literal">LF</code>). Tenga en cuenta que este parámetro siempre
+            se representa como una cadena ASCII en relación con el valor del parámetro
+          <code class="literal">input-charset</code>.
+           </td>
+           <td>\r\n</td>
+           <td>\n</td>
+          </tr>
+
+         </tbody>
+        
+       </table>
+
+      
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-mime-encode-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un campo <code class="literal">MIME</code> en caso de éxito,
+   o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error durante la codificación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.iconv-mime-encode-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2478">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>iconv_mime_encode()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$preferences </span><span style="color: #007700">= array(<br>    </span><span style="color: #DD0000">"input-charset" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"ISO-8859-1"</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">"output-charset" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"UTF-8"</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">"line-length" </span><span style="color: #007700">=&gt; </span><span style="color: #0000BB">76</span><span style="color: #007700">,<br>    </span><span style="color: #DD0000">"line-break-chars" </span><span style="color: #007700">=&gt; </span><span style="color: #DD0000">"\n"<br></span><span style="color: #007700">);<br></span><span style="color: #0000BB">$preferences</span><span style="color: #007700">[</span><span style="color: #DD0000">"scheme"</span><span style="color: #007700">] = </span><span style="color: #DD0000">"Q"</span><span style="color: #007700">;<br></span><span style="color: #FF8000">// Esto produce "Subject: =?UTF-8?Q?Pr=C3=BCfung=20Pr=C3=BCfung?="<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">iconv_mime_encode</span><span style="color: #007700">(</span><span style="color: #DD0000">"Subject"</span><span style="color: #007700">, </span><span style="color: #DD0000">"Prüfung Prüfung"</span><span style="color: #007700">, </span><span style="color: #0000BB">$preferences</span><span style="color: #007700">);<br><br></span><span style="color: #0000BB">$preferences</span><span style="color: #007700">[</span><span style="color: #DD0000">"scheme"</span><span style="color: #007700">] = </span><span style="color: #DD0000">"B"</span><span style="color: #007700">;<br></span><span style="color: #FF8000">// Esto produce "Subject: =?UTF-8?B?UHLDvGZ1bmcgUHLDvGZ1bmc=?="<br></span><span style="color: #007700">echo </span><span style="color: #0000BB">iconv_mime_encode</span><span style="color: #007700">(</span><span style="color: #DD0000">"Subject"</span><span style="color: #007700">, </span><span style="color: #DD0000">"Prüfung Prüfung"</span><span style="color: #007700">, </span><span style="color: #0000BB">$preferences</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-mime-encode-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.imap-binary" class="function" rel="rdfs-seeAlso">imap_binary()</a> - Convierte una string de 8 bits en una string en base64</span></li>
+    <li><span class="function"><a href="#function.mb-encode-mimeheader" class="function" rel="rdfs-seeAlso">mb_encode_mimeheader()</a> - Codifica una cadena para un encabezado MIME</span></li>
+    <li><span class="function"><a href="#function.imap-8bit" class="function" rel="rdfs-seeAlso">imap_8bit()</a> - Convierte un string de 8 bits en un string codificado en Quoted-Printable</span></li>
+    <li><span class="function"><a href="#function.quoted-printable-encode" class="function" rel="rdfs-seeAlso">quoted_printable_encode()</a> - Convierte un string de 8 bits en un string quoted-printable</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.iconv-set-encoding" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv_set_encoding</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.5, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv_set_encoding</span> — <span class="dc-title">Modifica el juego de caracteres de codificación actual</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-set-encoding-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv_set_encoding</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$encoding</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Modifica el juego de caracteres actual, y reemplaza el valor actual
+   del argumento <code class="parameter">type</code> por <code class="parameter">encoding</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-set-encoding-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">type</code></dt>
+     <dd>
+      <p class="para">
+       Los valores posibles de <code class="parameter">type</code> son :
+       </p><ul class="simplelist">
+        <li>input_encoding</li>
+        <li>output_encoding</li>
+        <li>internal_encoding</li>
+       </ul>
+      
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding</code></dt>
+     <dd>
+      <p class="para">
+       El juego de caracteres.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-set-encoding-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Esta función retorna <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.iconv-set-encoding-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2479">
+    <p><strong>Ejemplo #1 Ejemplo con <span class="function"><strong>iconv_set_encoding()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>iconv_set_encoding</span><span style="color: #007700">(</span><span style="color: #DD0000">"internal_encoding"</span><span style="color: #007700">, </span><span style="color: #DD0000">"UTF-8"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">iconv_set_encoding</span><span style="color: #007700">(</span><span style="color: #DD0000">"output_encoding"</span><span style="color: #007700">, </span><span style="color: #DD0000">"ISO-8859-1"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-set-encoding-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.iconv-get-encoding" class="function" rel="rdfs-seeAlso">iconv_get_encoding()</a> - Lee el juego de caracteres actual</span></li>
+    <li><span class="function"><a href="#function.ob-iconv-handler" class="function" rel="rdfs-seeAlso">ob_iconv_handler()</a> - Convierte la codificación de caracteres al manejador del buffer de salida</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.iconv-strlen" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv_strlen</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv_strlen</span> — <span class="dc-title">Devuelve el número de caracteres de una cadena</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-strlen-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv_strlen</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$encoding</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   A diferencia de <span class="function"><a href="#function.strlen" class="function">strlen()</a></span>, el valor devuelto por
+   <span class="function"><strong>iconv_strlen()</strong></span> es el número de caracteres que forman
+   parte de la secuencia de bytes <code class="parameter">string</code>, lo cual no siempre coincide con el tamaño en bytes de la cadena de caracteres.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-strlen-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       La <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">encoding</code> es omitido o <strong><code><a href="#constant.null">null</a></code></strong>,
+       <code class="parameter">string</code> se asume que está codificada en
+       <a href="#iconv.configuration" class="link">iconv.internal_encoding</a>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-strlen-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el número de caracteres de la cadena <code class="parameter">string</code>,
+   en forma de <span class="type"><a href="#language.types.integer" class="type int">int</a></span>, o <strong><code><a href="#constant.false">false</a></code></strong> si ocurre un error durante la codificación.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.iconv-strlen-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">encoding</code> ahora es nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-strlen-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.grapheme-strlen" class="function" rel="rdfs-seeAlso">grapheme_strlen()</a> - Lee la longitud de una cadena en número de grafemas</span></li>
+    <li><span class="function"><a href="#function.mb-strlen" class="function" rel="rdfs-seeAlso">mb_strlen()</a> - Devuelve la longitud de una cadena</span></li>
+    <li><span class="function"><a href="#function.strlen" class="function" rel="rdfs-seeAlso">strlen()</a> - Calcula el tamaño de un string</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.iconv-strpos" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv_strpos</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv_strpos</span> — <span class="dc-title">Encuentra la posición de la primera ocurrencia de una cadena en otra</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-strpos-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv_strpos</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$haystack</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$needle</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$offset</code><span class="initializer"> = 0</span></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$encoding</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Encuentra la posición de la primera ocurrencia de <code class="parameter">needle</code>
+   en <code class="parameter">haystack</code>.
+  </p>
+  <p class="para">
+   A diferencia de <span class="function"><a href="#function.strpos" class="function">strpos()</a></span>, el valor devuelto por
+   <span class="function"><strong>iconv_strpos()</strong></span> es el número de caracteres
+   que se encuentran antes de <code class="parameter">needle</code>, en lugar de la posición en bytes donde <code class="parameter">needle</code> fue encontrado.
+   Los caracteres son contados basándose en el juego de caracteres especificado por
+   <code class="parameter">encoding</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-strpos-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">haystack</code></dt>
+     <dd>
+      <p class="para">
+       El <span class="type"><a href="#language.types.string" class="type string">string</a></span> completo.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">needle</code></dt>
+     <dd>
+      <p class="para">
+       El <span class="type"><a href="#language.types.string" class="type string">string</a></span> a buscar.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">offset</code></dt>
+     <dd>
+      <p class="para">
+       El parámetro opcional <code class="parameter">offset</code> especifica la posición
+       desde la cual debe comenzar la búsqueda.
+       Si la posición es negativa, se cuenta desde el final del <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding</code></dt>
+     <dd>
+      <p class="para">
+       Si el parámetro <code class="parameter">encoding</code> es omitido o <strong><code><a href="#constant.null">null</a></code></strong>,
+       <code class="parameter">string</code> será codificado de acuerdo con
+       <a href="#iconv.configuration" class="link">iconv.internal_encoding</a>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+  <p class="para">
+   Si <code class="parameter">haystack</code> o <code class="parameter">needle</code> no
+   son strings, son convertidos a enteros y aplicados como valor ordinal de un carácter.
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-strpos-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la posición numérica de la primera ocurrencia de
+   <code class="parameter">needle</code> en <code class="parameter">haystack</code>.
+  </p>
+  <p class="para">
+   Si <code class="parameter">needle</code> no es encontrado,
+   <span class="function"><strong>iconv_strpos()</strong></span> devolverá <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función puede retornar <strong><code><a href="#constant.false">false</a></code></strong>, pero también puede retornar un valor equivalente a <strong><code><a href="#constant.false">false</a></code></strong>.
+ Por favor, lea la sección sobre los <a href="#language.types.boolean" class="link">booleanos</a> para más información.
+ Utilice el <a href="#language.operators.comparison" class="link">operador ===</a>
+ para probar el valor de retorno exacto de esta función.
+</p></div>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.iconv-strpos-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">encoding</code> ahora es nullable.
+      </td>
+     </tr>
+
+     <tr>
+      <td>7.1.0</td>
+      <td>
+       Se añadió soporte para <code class="parameter">offset</code>s negativos.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-strpos-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.strpos" class="function" rel="rdfs-seeAlso">strpos()</a> - Busca la posición de la primera ocurrencia en un string</span></li>
+    <li><span class="function"><a href="#function.iconv-strrpos" class="function" rel="rdfs-seeAlso">iconv_strrpos()</a> - Encuentra la posición de la última ocurrencia de un elemento en una cadena</span></li>
+    <li><span class="function"><a href="#function.mb-strpos" class="function" rel="rdfs-seeAlso">mb_strpos()</a> - Localiza la primera ocurrencia de un carácter en una cadena</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.iconv-strrpos" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv_strrpos</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv_strrpos</span> — <span class="dc-title">Encuentra la posición de la última ocurrencia de un elemento en una cadena</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-strrpos-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv_strrpos</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$haystack</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$needle</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$encoding</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Encuentra la última ocurrencia de <code class="parameter">needle</code>
+   en <code class="parameter">haystack</code>.
+  </p>
+  <p class="para">
+   A diferencia de la función <span class="function"><a href="#function.strpos" class="function">strpos()</a></span>, el valor devuelto por
+   <span class="function"><strong>iconv_strrpos()</strong></span> es el número de caracteres antes de <code class="parameter">needle</code>,
+   en lugar de la posición en bytes de <code class="parameter">needle</code>. Los caracteres son contados
+   basándose en el juego de caracteres <code class="parameter">charset</code>. Los caracteres
+   son contados sobre la base del juego de caracteres <code class="parameter">encoding</code>
+   especificado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-strrpos-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">haystack</code></dt>
+     <dd>
+      <p class="para">
+       La <span class="type"><a href="#language.types.string" class="type string">string</a></span> completa.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">needle</code></dt>
+     <dd>
+      <p class="para">
+       La <span class="type"><a href="#language.types.string" class="type string">string</a></span> buscada.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding</code></dt>
+     <dd>
+      <p class="para">
+       Si el parámetro opcional <code class="parameter">encoding</code> es omitido o <strong><code><a href="#constant.null">null</a></code></strong>,
+       <code class="parameter">string</code> se asume que está codificado en
+       <a href="#iconv.configuration" class="link">iconv.internal_encoding</a>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+  <p class="para">
+   Si <code class="parameter">haystack</code> o <code class="parameter">needle</code>
+   no son strings, serán convertidos a string y reconocidos
+   como código ASCII de cada carácter.
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-strrpos-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la posición numérica de la última ocurrencia de
+   <code class="parameter">needle</code> en <code class="parameter">haystack</code>.
+  </p>
+  <p class="para">
+   Si <code class="parameter">needle</code> no es encontrado, <span class="function"><strong>iconv_strrpos()</strong></span>
+   devolverá <strong><code><a href="#constant.false">false</a></code></strong>.
+  </p>
+  <div class="warning"><strong class="warning">Advertencia</strong><p class="simpara">
+ Esta función puede retornar <strong><code><a href="#constant.false">false</a></code></strong>, pero también puede retornar un valor equivalente a <strong><code><a href="#constant.false">false</a></code></strong>.
+ Por favor, lea la sección sobre los <a href="#language.types.boolean" class="link">booleanos</a> para más información.
+ Utilice el <a href="#language.operators.comparison" class="link">operador ===</a>
+ para probar el valor de retorno exacto de esta función.
+</p></div>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.iconv-strrpos-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">encoding</code> ahora es nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-strrpos-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.strrpos" class="function" rel="rdfs-seeAlso">strrpos()</a> - Busca la posición de la última ocurrencia de una subcadena en una cadena</span></li>
+    <li><span class="function"><a href="#function.iconv-strpos" class="function" rel="rdfs-seeAlso">iconv_strpos()</a> - Encuentra la posición de la primera ocurrencia de una cadena en otra</span></li>
+    <li><span class="function"><a href="#function.mb-strrpos" class="function" rel="rdfs-seeAlso">mb_strrpos()</a> - Localiza la última ocurrencia de un carácter en una cadena</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="function.iconv-substr" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">iconv_substr</h1>
+  <p class="verinfo">(PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">iconv_substr</span> — <span class="dc-title">Extrae una parte de una cadena</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.iconv-substr-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>iconv_substr</strong></span>(<br>    <span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$string</code></span>,<br>    <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$offset</code></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.integer" class="type int">int</a></span></span> <code class="parameter">$length</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>,<br>    <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$encoding</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span><br>): <span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.singleton" class="type false">false</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Extrae una parte de la cadena <code class="parameter">string</code> a partir
+   de la posición <code class="parameter">offset</code> y con una longitud de
+   <code class="parameter">length</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.iconv-substr-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   </p><dl>
+    
+     <dt><code class="parameter">string</code></dt>
+     <dd>
+      <p class="para">
+       La <span class="type"><a href="#language.types.string" class="type string">string</a></span> original.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">offset</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">offset</code> no es negativo,
+       <span class="function"><strong>iconv_substr()</strong></span> devuelve el segmento de
+       <code class="parameter">string</code> comenzando en el carácter número
+       <code class="parameter">offset</code>, contando desde cero.
+      </p>
+      <p class="para">
+       Si <code class="parameter">offset</code> es negativo,
+       <span class="function"><strong>iconv_substr()</strong></span> devuelve el segmento comenzando en la
+       posición <code class="parameter">offset</code> caracteres desde el final de la <span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">string</code>.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">length</code></dt>
+     <dd>
+      <p class="para">
+       Si el parámetro <code class="parameter">length</code> se proporciona y es positivo, el valor devuelto contendrá
+       como máximo <code class="parameter">length</code> caracteres de la porción de cadena que comienza en <code class="parameter">offset</code>
+       (dependiendo del tamaño de la cadena <code class="parameter">string</code>).
+      </p>
+      <p class="para">
+       Si <code class="parameter">length</code> se proporciona y es negativo,
+       <span class="function"><strong>iconv_substr()</strong></span> extrae la porción externa de
+       <code class="parameter">string</code> desde el carácter número <code class="parameter">offset</code>
+       hasta el carácter número <code class="parameter">length</code>, contando desde el final de
+       la <span class="type"><a href="#language.types.string" class="type string">string</a></span>. En el caso de que <code class="parameter">offset</code> también sea negativo,
+       la posición de inicio se calcula hacia atrás, siguiendo la regla explicada anteriormente.
+      </p>
+     </dd>
+    
+    
+     <dt><code class="parameter">encoding</code></dt>
+     <dd>
+      <p class="para">
+       Si <code class="parameter">encoding</code> se omite o es <strong><code><a href="#constant.null">null</a></code></strong>,
+       <code class="parameter">string</code> se asume que está codificada en
+       <a href="#iconv.configuration" class="link">iconv.internal_encoding</a>.
+      </p>
+      <p class="para">
+       Tenga en cuenta que <code class="parameter">offset</code> y <code class="parameter">length</code>
+       siempre se consideran como posiciones calculadas sobre la representación ASCII
+       de los caracteres determinados por <code class="parameter">encoding</code>, a diferencia de
+       <span class="function"><a href="#function.substr" class="function">substr()</a></span> que se basa siempre en la posición por byte.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.iconv-substr-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve la porción de <code class="parameter">string</code> especificada por los parámetros
+   <code class="parameter">offset</code> y <code class="parameter">length</code>.
+  </p>
+  <p class="para">
+   Si <code class="parameter">string</code> es más pequeño que <code class="parameter">offset</code>,
+   se devolverá <strong><code><a href="#constant.false">false</a></code></strong>.
+   Si <code class="parameter">string</code> tiene exactamente <code class="parameter">offset</code>
+   caracteres de longitud, se devolverá una <span class="type"><a href="#language.types.string" class="type string">string</a></span> vacía.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-function.iconv-substr-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.0.0</td>
+       <td>
+        <code class="parameter">length</code> y <code class="parameter">encoding</code> ahora son nullable.
+       </td>
+      </tr>
+
+      <tr>
+       <td>7.0.11</td>
+       <td>
+        Si <code class="parameter">string</code> tiene exactamente
+        <code class="parameter">offset</code> caracteres de longitud, se devolverá una cadena vacía. Antes de esta versión, se devolvía <strong><code><a href="#constant.false">false</a></code></strong> en este caso.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.iconv-substr-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.substr" class="function" rel="rdfs-seeAlso">substr()</a> - Devuelve un segmento de string</span></li>
+    <li><span class="function"><a href="#function.mb-substr" class="function" rel="rdfs-seeAlso">mb_substr()</a> - Extrae una subcadena</span></li>
+    <li><span class="function"><a href="#function.mb-strcut" class="function" rel="rdfs-seeAlso">mb_strcut()</a> - Corta una parte de string</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="function.ob-iconv-handler" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">ob_iconv_handler</h1>
+  <p class="verinfo">(PHP 4 &gt;= 4.0.5, PHP 5, PHP 7, PHP 8)</p><p class="refpurpose"><span class="refname">ob_iconv_handler</span> — <span class="dc-title">Convierte la codificación de caracteres al manejador del buffer de salida</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-function.ob-iconv-handler-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="methodname"><strong>ob_iconv_handler</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$contents</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$status</code></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Convierte el string codificado en <code class="parameter">internal_encoding</code> a
+   <code class="parameter">output_encoding</code>.
+  </p>
+  <p class="para">
+   <code class="parameter">internal_encoding</code> y
+   <code class="parameter">output_encoding</code> deberían estar definidos en el
+   fichero <var class="filename">php.ini</var> o en <span class="function"><a href="#function.iconv-set-encoding" class="function">iconv_set_encoding()</a></span>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-function.ob-iconv-handler-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">
+   Ver <span class="function"><a href="#function.ob-start" class="function">ob_start()</a></span> para más información sobre los parámetros
+   del manejador.
+  </p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-function.ob-iconv-handler-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Ver <span class="function"><a href="#function.ob-start" class="function">ob_start()</a></span> para mas información sobre los valores de
+   retorno del manejador.
+  </p>
+ </div>
+
+
+ <div class="refsect1 examples" id="refsect1-function.ob-iconv-handler-examples">
+  <h3 class="title">Ejemplos</h3>
+  <p class="para">
+   </p><div class="example" id="example-2480">
+    <p><strong>Ejemplo #1 Ejemplo de <span class="function"><strong>ob_iconv_handler()</strong></span></strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>iconv_set_encoding</span><span style="color: #007700">(</span><span style="color: #DD0000">"internal_encoding"</span><span style="color: #007700">, </span><span style="color: #DD0000">"UTF-8"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">iconv_set_encoding</span><span style="color: #007700">(</span><span style="color: #DD0000">"output_encoding"</span><span style="color: #007700">, </span><span style="color: #DD0000">"ISO-8859-1"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">ob_start</span><span style="color: #007700">(</span><span style="color: #DD0000">"ob_iconv_handler"</span><span style="color: #007700">); </span><span style="color: #FF8000">// empieza a usarse el buffer de salida<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-function.ob-iconv-handler-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="function"><a href="#function.iconv-get-encoding" class="function" rel="rdfs-seeAlso">iconv_get_encoding()</a> - Lee el juego de caracteres actual</span></li>
+    <li><span class="function"><a href="#function.iconv-set-encoding" class="function" rel="rdfs-seeAlso">iconv_set_encoding()</a> - Modifica el juego de caracteres de codificación actual</span></li>
+    <li><a href="#ref.outcontrol" class="link">output-control functions</a></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+ <h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#function.iconv">iconv</a> — Convierte una cadena de caracteres de un encodaje a otro</li><li><a href="#function.iconv-get-encoding">iconv_get_encoding</a> — Lee el juego de caracteres actual</li><li><a href="#function.iconv-mime-decode">iconv_mime_decode</a> — Decodifica un campo de encabezado MIME</li><li><a href="#function.iconv-mime-decode-headers">iconv_mime_decode_headers</a> — Decodifica múltiples encabezados MIME</li><li><a href="#function.iconv-mime-encode">iconv_mime_encode</a> — Construye un encabezado MIME con los campos field_name y field_value</li><li><a href="#function.iconv-set-encoding">iconv_set_encoding</a> — Modifica el juego de caracteres de codificación actual</li><li><a href="#function.iconv-strlen">iconv_strlen</a> — Devuelve el número de caracteres de una cadena</li><li><a href="#function.iconv-strpos">iconv_strpos</a> — Encuentra la posición de la primera ocurrencia de una cadena en otra</li><li><a href="#function.iconv-strrpos">iconv_strrpos</a> — Encuentra la posición de la última ocurrencia de un elemento en una cadena</li><li><a href="#function.iconv-substr">iconv_substr</a> — Extrae una parte de una cadena</li><li><a href="#function.ob-iconv-handler">ob_iconv_handler</a> — Convierte la codificación de caracteres al manejador del buffer de salida</li></ul>
+</div>
+
+<hr>
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.iconv">Introducción</a></li><li><a href="#iconv.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#iconv.requirements">Requerimientos</a></li><li><a href="#iconv.installation">Instalación</a></li><li><a href="#iconv.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#iconv.constants">Constantes predefinidas</a></li><li><a href="#ref.iconv">Funciones de iconv</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#function.iconv">iconv</a> — Convierte una cadena de caracteres de un encodaje a otro</li><li><a href="#function.iconv-get-encoding">iconv_get_encoding</a> — Lee el juego de caracteres actual</li><li><a href="#function.iconv-mime-decode">iconv_mime_decode</a> — Decodifica un campo de encabezado MIME</li><li><a href="#function.iconv-mime-decode-headers">iconv_mime_decode_headers</a> — Decodifica múltiples encabezados MIME</li><li><a href="#function.iconv-mime-encode">iconv_mime_encode</a> — Construye un encabezado MIME con los campos field_name y field_value</li><li><a href="#function.iconv-set-encoding">iconv_set_encoding</a> — Modifica el juego de caracteres de codificación actual</li><li><a href="#function.iconv-strlen">iconv_strlen</a> — Devuelve el número de caracteres de una cadena</li><li><a href="#function.iconv-strpos">iconv_strpos</a> — Encuentra la posición de la primera ocurrencia de una cadena en otra</li><li><a href="#function.iconv-strrpos">iconv_strrpos</a> — Encuentra la posición de la última ocurrencia de un elemento en una cadena</li><li><a href="#function.iconv-substr">iconv_substr</a> — Extrae una parte de una cadena</li><li><a href="#function.ob-iconv-handler">ob_iconv_handler</a> — Convierte la codificación de caracteres al manejador del buffer de salida</li></ul></li></ul></div>

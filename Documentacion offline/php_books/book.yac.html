@@ -1,0 +1,1044 @@
+<div id="book.yac" class="book"><hr>
+ 
+ <h1 class="title">Yac</h1>
+ 
+
+ <div id="intro.yac" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Yac (Otro caché), es un caché de datos de usuario de memoria compartida sin bloqueo, podría utilizarse para reemplazar el APC, el memcache local.
+  </p>
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="yac.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#yac.requirements">Requerimientos</a></li><li><a href="#yac.installation">Instalación</a></li><li><a href="#yac.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#yac.resources">Tipos de recursos</a></li></ul>
+
+
+ <div id="yac.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+
+  </p>
+ </div>
+<hr>
+
+
+ 
+ <div id="yac.installation" class="section"><hr>
+  <h2 class="title">Instalación</h2>
+  <p class="para">
+   Esta extensión <a href="https://pecl.php.net/" class="link external">» PECL</a> no está integrada en PHP.
+  </p>
+  <p class="para">
+   Información sobre la instalación de estas extensiones PECL
+        puede ser encontrada en el capítulo del manual titulado <a href="#install.pecl" class="link">Instalación
+de extensiones PECL</a>. Otra información como notas sobre nuevas
+        versiones, descargas, fuentes de archivos, información sobre los mantenedores
+        así como un CHANGELOG, pueden ser encontradas aquí:
+   <a href="https://pecl.php.net/package/yac" class="link external">» https://pecl.php.net/package/yac</a>.
+  </p>
+  <p class="para">
+   Los binarios Windows
+        (los archivos <abbr title="Dynamic Link Library">DLL</abbr>)
+        para esta extensión <abbr title="PHP Extension and Application Repository">PECL</abbr> están disponibles en el sitio web PECL.
+  </p>
+ </div>
+<hr>
+
+ 
+
+ 
+ 
+
+
+
+
+<div id="yac.configuration" class="section"><hr>
+ <h2 class="title">Configuración en tiempo de ejecución</h2>
+ <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+ <p class="para">
+  </p><table class="doctable table">
+   <caption><strong>Yac Opciones de configuración</strong></caption>
+   
+    <thead>
+     <tr>
+      <th>Nombre</th>
+      <th>Por defecto</th>
+      <th>Cambiable</th>
+      <th>Historial de cambios</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td><a href="#ini.yac.compress-threshold" class="link">yac.compress_threshold</a></td>
+      <td>-1</td>
+      <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.yac.debug" class="link">yac.debug</a></td>
+      <td>0</td>
+      <td><strong><code><a href="#constant.ini-all">INI_ALL</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.yac.enable" class="link">yac.enable</a></td>
+      <td>1</td>
+      <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.yac.enable-cli" class="link">yac.enable_cli</a></td>
+      <td>0</td>
+      <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.yac.keys-memory-size" class="link">yac.keys_memory_size</a></td>
+      <td>4M</td>
+      <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.yac.serializer" class="link">yac.serializer</a></td>
+      <td>php</td>
+      <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+      <td></td>
+     </tr>
+
+     <tr>
+      <td><a href="#ini.yac.values-memory-size" class="link">yac.values_memory_size</a></td>
+      <td>64M</td>
+      <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+      <td></td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ 
+
+ <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+ <p class="para">
+  </p><dl>
+   
+     <dt id="ini.yac.compress-threshold">
+      <code class="parameter">yac.compress_threshold</code>
+      <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.yac.debug">
+      <code class="parameter">yac.debug</code>
+      <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.yac.enable">
+      <code class="parameter">yac.enable</code>
+      <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.yac.enable-cli">
+      <code class="parameter">yac.enable_cli</code>
+      <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.yac.keys-memory-size">
+      <code class="parameter">yac.keys_memory_size</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.yac.serializer">
+      <code class="parameter">yac.serializer</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.yac.values-memory-size">
+      <code class="parameter">yac.values_memory_size</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+
+      </p>
+     </dd>
+    
+
+  </dl>
+ 
+</div>
+<hr>
+
+
+
+
+ 
+
+ <div id="yac.resources" class="section"><hr>
+  <h2 class="title">Tipos de recursos</h2>
+  <p class="para">
+
+  </p>
+ </div>
+<hr>
+
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="yac.constants" class="appendix"><hr>
+ <h1 class="title">Constantes predefinidas</h1>
+
+ <p class="simpara">Estas constantes son definidas por esta
+extensión, y solo están disponibles si esta extensión ha sido compilada con
+PHP, o bien cargada en tiempo de ejecución.</p>
+ <p class="para">
+  </p><dl>
+   
+    <dt id="constant.yac-version">
+     <strong><code><a href="#constant.yac-version">YAC_VERSION</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.yac-max-key-len">
+     <strong><code><a href="#constant.yac-max-key-len">YAC_MAX_KEY_LEN</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      La longitud máxima de una clave podría ser, es de 48 bytes.
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.yac-max-value-raw-len">
+     <strong><code><a href="#constant.yac-max-value-raw-len">YAC_MAX_VALUE_RAW_LEN</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.yac-max-raw-compressed-len">
+     <strong><code><a href="#constant.yac-max-raw-compressed-len">YAC_MAX_RAW_COMPRESSED_LEN</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.yac-serializer-php">
+     <strong><code><a href="#constant.yac-serializer-php">YAC_SERIALIZER_PHP</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Usa php serialize como serializador
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.yac-serializer-json">
+     <strong><code><a href="#constant.yac-serializer-json">YAC_SERIALIZER_JSON</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Usa json como serializador (requrie --enable-json)
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.yac-serializer-igbinary">
+     <strong><code><a href="#constant.yac-serializer-igbinary">YAC_SERIALIZER_IGBINARY</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Usa igbinary como serializador (require --enable-igbinary)
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.yac-serializer-msgpack">
+     <strong><code><a href="#constant.yac-serializer-msgpack">YAC_SERIALIZER_MSGPACK</a></code></strong>
+     (<span class="type"><a href="#language.types.integer" class="type int">int</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+      Usa msgpack como serializador (require --enable-msgpack)
+     </span>
+    </dd>
+   
+   
+    <dt id="constant.yac-serializer">
+     <strong><code><a href="#constant.yac-serializer">YAC_SERIALIZER</a></code></strong>
+     (<span class="type"><a href="#language.types.string" class="type string">string</a></span>)
+    </dt>
+    <dd>
+     <span class="simpara">
+       Qué serializador está yac usando
+     </span>
+    </dd>
+   
+  </dl>
+ 
+</div>
+
+<hr>
+
+
+
+
+ 
+ 
+
+
+
+
+<div id="class.yac" class="reference"><hr>
+
+ <h1 class="title">La clase Yac</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PECL yac &gt;= 1.0.0)</p>
+
+
+  <div class="section" id="yac.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="yac.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis">
+    <span class="ooclass"><strong class="classname"></strong></span>
+
+
+    <div class="classsynopsisinfo">
+     <span class="ooclass">
+      <span class="modifier">class</span> <strong class="classname">Yac</strong>
+     </span>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Propiedades */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">protected</span>
+      <var class="varname"><a href="#yac.props.prefix">$<var class="varname">_prefix</var></a></var>;</div>
+
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#yac.construct" class="methodname">__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$prefix</code><span class="initializer"> = ""</span></span>)</div>
+
+    <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.add" class="methodname">add</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$ttl</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.add" class="methodname">add</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$key_vals</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.delete" class="methodname">delete</a></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$ttl</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.dump" class="methodname">dump</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$$num</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.flush" class="methodname">flush</a></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.get" class="methodname">get</a></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$cas</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.getter" class="methodname">__get</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.info" class="methodname">info</a></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.set" class="methodname">set</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$ttl</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.add" class="methodname">add</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$key_vals</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.setter" class="methodname">__set</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+
+
+  <div class="section" id="yac.props">
+   <h2 class="title">Propiedades</h2>
+   <dl>
+    
+     <dt id="yac.props.prefix"><var class="varname">_prefix</var></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+   </dl>
+  </div>
+
+
+
+ </div>
+
+ 
+
+
+
+
+<div id="yac.add" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::add</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::add</span> — <span class="dc-title">Guardar en caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.add-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Yac::add</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$ttl</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>Yac::add</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$key_vals</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+    Añadir un artículo al caché.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.add-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">keys</code></dt>
+    <dd>
+     <p class="para">
+       <span class="type"><a href="#language.types.string" class="type string">string</a></span> clave
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">value</code></dt>
+    <dd>
+     <p class="para">
+      valor mixto, Todo tipo de valor php podría ser almacenado excepto <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">ttl</code></dt>
+    <dd>
+     <p class="para">
+      tiempo de expiración
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-yac.add-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>, <strong><code><a href="#constant.true">true</a></code></strong> en caso de éxito, <strong><code><a href="#constant.false">false</a></code></strong> en caso de fallar.
+   </p><blockquote class="note"><p><strong class="note">Nota</strong>: 
+    </p><p class="para">
+     <span class="methodname"><strong>Yac::add()</strong></span> puede fallar si el casillero no se puede obtener,
+     así que, si necesitas que el valor se almacene correctamente, puedes escribir códigos como:
+     </p><div class="example" id="example-775">
+      <p><strong>Ejemplo #1 Asegúrate de que el artículo se almacene</strong></p>
+      <div class="example-contents">
+       <div class="phpcode"><code><span style="color: #000000">while(!$yac-&gt;set("key", "vale));</span></code></div>
+      </div>
+
+     </div>
+    
+   </blockquote>
+  
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="yac.construct" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::__construct</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::__construct</span> — <span class="dc-title">Constructor</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.construct-description">
+  <h3 class="title">Descripción</h3>
+  <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Yac::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$prefix</code><span class="initializer"> = ""</span></span>)</div>
+
+  <p class="para rdfs-comment">
+    se utiliza un prefijo para preparar las claves, esto podría utilizarse para evitar conflictos entre aplicaciones.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.construct-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">prefix</code></dt>
+    <dd>
+     <p class="para">
+       <span class="type"><a href="#language.types.string" class="type string">string</a></span> prefix
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ 
+
+ <div class="refsect1 errors" id="refsect1-yac.construct-errors">
+  <h3 class="title">Errores/Excepciones</h3>
+  <p class="para">
+   Lanza una <span class="classname"><a href="#class.exception" class="classname">Exception</a></span> si Yac no está habilitado. Lanza
+   <span class="classname"><a href="#class.exception" class="classname">Exception</a></span> si <code class="parameter">prefix</code> excede
+   la longitud máxima de clave de 48 (<strong><code><a href="#constant.yac-max-key-len">YAC_MAX_KEY_LEN</a></code></strong>) bytes.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="yac.delete" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::delete</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::delete</span> — <span class="dc-title">Eliminar los artículos de la memoria caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.delete-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Yac::delete</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$ttl</code><span class="initializer"> = ?</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   retira los artículos de la memoria caché
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.delete-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">keys</code></dt>
+    <dd>
+     <p class="para">
+      clave string, o array de multiples claves para ser removidas.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">ttl</code></dt>
+    <dd>
+     <p class="para">
+      si se establece un retraso, la eliminación marcará los elementos como inválidos en ttl segundo.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-yac.delete-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="yac.dump" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::dump</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::dump</span> — <span class="dc-title">Volcar cache</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.dump-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Yac::dump</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$$num</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+   Volcar valores almacenados en caché
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.dump-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">num</code></dt>
+    <dd>
+     <p class="para">
+       El número máximo de artículos debe ser devuelto
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-yac.dump-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   mixed
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="yac.flush" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::flush</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::flush</span> — <span class="dc-title">Limpiar el caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.flush-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Yac::flush</strong></span>(): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+    Eliminar todos los valores almacenados
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.flush-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-yac.flush-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   bool, siempre true
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="yac.get" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::get</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::get</span> — <span class="dc-title">Recuperar los valores de caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.get-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>Yac::get</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#language.types.array" class="type array">array</a></span></span> <code class="parameter">$key</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter reference">&amp;$cas</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+    Recuperar los valores de caché
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.get-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">key</code></dt>
+    <dd>
+     <p class="para">
+      claves <span class="type"><a href="#language.types.string" class="type string">string</a></span>, o <span class="type"><a href="#language.types.array" class="type array">array</a></span> de multiples claves.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">cas</code></dt>
+    <dd>
+     <p class="para">
+      Si no es <strong><code><a href="#constant.null">null</a></code></strong>, se ajustará al caso del artículo recuperado.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-yac.get-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   mixed en caso de éxito, false en caso de error
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="yac.getter" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::__get</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::__get</span> — <span class="dc-title">Getter</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.getter-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Yac::__get</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$key</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+    Recupera los valores del caché
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.getter-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">key</code></dt>
+    <dd>
+     <p class="para">
+       clave <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-yac.getter-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   mixed en caso de éxito, <strong><code><a href="#constant.null">null</a></code></strong> en caso de error.
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="yac.info" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::info</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::info</span> — <span class="dc-title">Estado del caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.info-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Yac::info</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+    Obtener el estado del sistema de caché
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.info-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-yac.info-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un array, consistente con:
+   "memory_size", "slots_memory_size", "values_memory_size", "segment_size", "segment_num",
+   "miss", "hits", "fails", "kicks", "recycles", "slots_size", "slots_used"
+  </p>
+ </div>
+
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="yac.set" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::set</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::set</span> — <span class="dc-title">Guardar en el caché</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.set-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>Yac::set</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$ttl</code><span class="initializer"> = 0</span></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#yac.add" class="methodname">Yac::add</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$key_vals</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+    Añade un elemento a la caché, si la clave ya existe, se sobreescribe.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.set-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">keys</code></dt>
+    <dd>
+     <p class="para">
+       clave <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">value</code></dt>
+    <dd>
+     <p class="para">
+      valor mixed, Todo tipo de valor php podría ser almacenado excepto <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">ttl</code></dt>
+    <dd>
+     <p class="para">
+      tiempo de expiración
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-yac.set-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   el valor de sí mismo
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+
+
+<div id="yac.setter" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">Yac::__set</h1>
+  <p class="verinfo">(PECL yac &gt;= 1.0.0)</p><p class="refpurpose"><span class="refname">Yac::__set</span> — <span class="dc-title">Setter</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-yac.setter-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>Yac::__set</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$keys</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$value</code></span>): <span class="type"><a href="#language.types.mixed" class="type mixed">mixed</a></span></div>
+
+  <p class="para rdfs-comment">
+    almacena un elemento en el caché
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-yac.setter-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">keys</code></dt>
+    <dd>
+     <p class="para">
+       clave <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">value</code></dt>
+    <dd>
+     <p class="para">
+      valor mixed, Todo tipo de valor php podría ser almacenado excepto <span class="type"><a href="#language.types.resource" class="type resource">resource</a></span>
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-yac.setter-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Siempre devuelve el valor de sí mismo
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#yac.add">Yac::add</a> — Guardar en caché</li><li><a href="#yac.construct">Yac::__construct</a> — Constructor</li><li><a href="#yac.delete">Yac::delete</a> — Eliminar los artículos de la memoria caché</li><li><a href="#yac.dump">Yac::dump</a> — Volcar cache</li><li><a href="#yac.flush">Yac::flush</a> — Limpiar el caché</li><li><a href="#yac.get">Yac::get</a> — Recuperar los valores de caché</li><li><a href="#yac.getter">Yac::__get</a> — Getter</li><li><a href="#yac.info">Yac::info</a> — Estado del caché</li><li><a href="#yac.set">Yac::set</a> — Guardar en el caché</li><li><a href="#yac.setter">Yac::__set</a> — Setter</li></ul>
+</div>
+
+<hr>
+
+
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.yac">Introducción</a></li><li><a href="#yac.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#yac.requirements">Requerimientos</a></li><li><a href="#yac.installation">Instalación</a></li><li><a href="#yac.configuration">Configuración en tiempo de ejecución</a></li><li><a href="#yac.resources">Tipos de recursos</a></li></ul></li><li><a href="#yac.constants">Constantes predefinidas</a></li><li><a href="#class.yac">Yac</a> — La clase Yac<ul class="chunklist chunklist_book chunklist_children"><li><a href="#yac.add">Yac::add</a> — Guardar en caché</li><li><a href="#yac.construct">Yac::__construct</a> — Constructor</li><li><a href="#yac.delete">Yac::delete</a> — Eliminar los artículos de la memoria caché</li><li><a href="#yac.dump">Yac::dump</a> — Volcar cache</li><li><a href="#yac.flush">Yac::flush</a> — Limpiar el caché</li><li><a href="#yac.get">Yac::get</a> — Recuperar los valores de caché</li><li><a href="#yac.getter">Yac::__get</a> — Getter</li><li><a href="#yac.info">Yac::info</a> — Estado del caché</li><li><a href="#yac.set">Yac::set</a> — Guardar en el caché</li><li><a href="#yac.setter">Yac::__set</a> — Setter</li></ul></li></ul></div>

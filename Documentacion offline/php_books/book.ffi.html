@@ -1,0 +1,3376 @@
+<div id="book.ffi" class="book"><hr>
+ 
+ <h1 class="title">Interfaz de función externa (Foreign Function Interface)</h1>
+ 
+
+ <div id="intro.ffi" class="preface"><hr>
+  <h1 class="title">Introducción</h1>
+  <p class="para">
+   Esta extensión permite cargar bibliotecas compartidas (<var class="filename">.DLL</var> o
+   <var class="filename">.so</var>), llamar a funciones C y acceder a estructuras de datos C desde PHP, sin necesidad de conocer la API de extensión Zend, y sin tener que aprender un tercer lenguaje "intermedio".
+   La API pública se implementa en forma de una clase única <span class="classname"><a href="#class.ffi" class="classname">FFI</a></span> con
+   varios métodos estáticos (algunos de los cuales pueden ser llamados dinámicamente), y
+   métodos de objeto sobrecargados, que realizan la interacción real con los datos C.
+  </p>
+  <div class="caution"><strong class="caution">Precaución</strong>
+   <p class="para">
+    La extensión FFI es peligrosa, ya que permite interfaces con el sistema a un nivel muy bajo.
+    Solo debe ser utilizada por desarrolladores con conocimiento práctico del lenguaje C
+    y de las API C utilizadas. Para minimizar los riesgos, el uso de la API FFI puede ser restringido
+    con la directiva <var class="filename">php.ini</var> <a href="#ini.ffi.enable" class="link">ffi.enable</a>.
+   </p>
+  </div>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    La extensión FFI no hace obsoleta la API de extensión clásica de PHP;
+    simplemente se proporciona para la interfaz ad-hoc con funciones y estructuras de datos C.
+   </p>
+  </blockquote>
+  <div class="tip"><strong class="tip">Sugerencia</strong>
+   <p class="para">
+    Actualmente, el acceso a las estructuras de datos FFI es significativamente (aproximadamente 2 veces) más lento
+    que el acceso a los arrays y objetos nativos de PHP. Por lo tanto, no es útil utilizar
+    la extensión FFI para la velocidad; sin embargo, puede ser aconsejable utilizarla para reducir
+    el uso de memoria.
+   </p>
+  </div>
+ </div>
+<hr>
+
+
+ 
+
+
+
+
+<div id="ffi.setup" class="chapter"><hr>
+ <h1 class="title">Instalación/Configuración</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#ffi.requirements">Requerimientos</a></li><li><a href="#ffi.installation">Instalación</a></li><li><a href="#ffi.configuration">Configuración en tiempo de ejecución</a></li></ul>
+
+
+ <div id="ffi.requirements" class="section"><hr>
+  <h2 class="title">Requerimientos</h2>
+  <p class="para">
+   Esta extensión requiere que la <a href="https://sourceware.org/libffi/" class="link external">» biblioteca libffi</a>
+   esté instalada.
+  </p>
+ </div>
+<hr>
+
+
+ 
+ 
+
+
+
+
+<div id="ffi.installation" class="section"><hr>
+ <h2 class="title">Instalación</h2>
+
+ <p class="para">
+  Para activar la extensión FFI, PHP debe ser configurado con
+  <strong class="option configure">--with-ffi</strong>.
+ </p>
+
+ <p class="para">
+  Los usuarios de Windows deben incluir <var class="filename">php_ffi.dll</var> en <var class="filename">php.ini</var>
+  para activar la extensión FFI.
+ </p>
+
+</div>
+<hr>
+
+
+
+
+ 
+
+ <div id="ffi.configuration" class="section"><hr>
+  <h2 class="title">Configuración en tiempo de ejecución</h2>
+  <p class="simpara">El comportamiento de estas funciones es
+afectado por la configuración en el archivo <var class="filename">php.ini</var>.</p>
+  <p class="para">
+   </p><table class="doctable table">
+    <caption><strong>FFI Opciones de configuración</strong></caption>
+    
+     <thead>
+      <tr>
+       <th>Nombre</th>
+       <th>Por defecto</th>
+       <th>Cambiable</th>
+       <th>Historial de cambios</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td><a href="#ini.ffi.enable" class="link">ffi.enable</a></td>
+       <td>"preload"</td>
+       <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+       <td class="empty"> </td>
+      </tr>
+
+      <tr>
+       <td><a href="#ini.ffi.preload" class="link">ffi.preload</a></td>
+       <td>""</td>
+       <td><strong><code><a href="#constant.ini-system">INI_SYSTEM</a></code></strong></td>
+       <td class="empty"> </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+   Para más detalles sobre los modos INI_*,
+        refiérase a <a href="#configuration.changes.modes" class="xref">Dónde una directiva de configuración puede ser modificada</a>.
+  
+
+  <p class="para">Aquí hay una aclaración sobre
+el uso de las directivas de configuración.</p>
+
+  <p class="para">
+   </p><dl>
+    
+     <dt id="ini.ffi.enable">
+      <code class="parameter">ffi.enable</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       Permite activar (<code class="literal">"true"</code>) o desactivar
+       (<code class="literal">"false"</code>) el uso de la API FFI, o restringirlo únicamente
+       a la interfaz CLI SAPI y a los ficheros pre-cargados (<code class="literal">"preload"</code>).
+      </p>
+      <p class="para">
+       Las restricciones de la API FFI afectan solo a la clase <span class="classname"><a href="#class.ffi" class="classname">FFI</a></span>,
+       pero no a las funciones sobrecargadas de los objetos <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span>.
+       Esto significa que es posible crear ciertos objetos <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span>
+       en ficheros pre-cargados y luego utilizarlos directamente en scripts PHP.
+      </p>
+     </dd>
+    
+    
+     <dt id="ini.ffi.preload">
+      <code class="parameter">ffi.preload</code>
+      <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+     </dt>
+     <dd>
+      <p class="para">
+       Permite la pre-carga de las ligaduras FFI al inicio, lo cual no es posible con <span class="methodname"><a href="#ffi.load" class="methodname">FFI::load()</a></span>
+       si <a href="#ini.opcache.preload-user" class="link">opcache.preload_user</a> está definido.
+       Esta directiva acepta una lista de nombres de ficheros delimitada por <strong><code><a href="#constant.directory-separator">DIRECTORY_SEPARATOR</a></code></strong>.
+       Las ligaduras pre-cargadas son accesibles llamando a <span class="methodname"><a href="#ffi.scope" class="methodname">FFI::scope()</a></span>.
+      </p>
+     </dd>
+    
+   </dl>
+  
+ </div>
+<hr>
+
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+
+<div id="ffi.examples" class="chapter"><hr>
+ <h1 class="title">Ejemplos</h1>
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_chapter"><li><a href="#ffi.examples-basic">Uso básico de FFI</a></li><li><a href="#ffi.examples-callback">Funciones de retrollamada</a></li><li><a href="#ffi.examples-complete">Un ejemplo completo de PHP/FFI/precarga</a></li></ul>
+
+ <div id="ffi.examples-basic" class="section"><hr>
+  <h2 class="title">Uso básico de FFI</h2>
+  <p class="para">
+   Antes de profundizar en los detalles de la API FFI, echemos un vistazo a algunos ejemplos
+   que demuestran la simplicidad de uso de la API FFI para tareas comunes.
+  </p>
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Algunos de estos ejemplos requieren <var class="filename">libc.so.6</var> y
+    por lo tanto no funcionarán en sistemas donde esta biblioteca no esté disponible.
+   </p>
+  </blockquote>
+  <p class="para">
+   </p><div class="example" id="ffi.examples.function">
+    <p><strong>Ejemplo #1 Llamada a una función desde una biblioteca compartida</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// crea un objeto FFI, cargando la libc y exportando la función printf()<br></span><span style="color: #0000BB">$ffi </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">cdef</span><span style="color: #007700">(<br>    </span><span style="color: #DD0000">"int printf(const char *format, ...);"</span><span style="color: #007700">, </span><span style="color: #FF8000">// Declaración C regular<br>    </span><span style="color: #DD0000">"libc.so.6"</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// llama a la función printf() de C<br></span><span style="color: #0000BB">$ffi</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"Hello %s!\n"</span><span style="color: #007700">, </span><span style="color: #DD0000">"world"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+Hello world!
+</pre></div>
+    </div>
+   </div>
+  
+  <blockquote class="note"><p><strong class="note">Nota</strong>: 
+   </p><p class="para">
+    Tenga en cuenta que algunas funciones C requieren convenciones de llamada específicas, por ejemplo <code class="literal">__fastcall</code>,
+    <code class="literal">__stdcall</code> o <code class="literal">__vectorcall</code>.
+   </p>
+  </blockquote>
+  <p class="para">
+   </p><div class="example" id="ffi.examples.structure">
+    <p><strong>Ejemplo #2 Llamada a una función, devolviendo una estructura a través de un argumento</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// crea la ligadura gettimeofday()<br></span><span style="color: #0000BB">$ffi </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">cdef</span><span style="color: #007700">(</span><span style="color: #DD0000">"<br>    typedef unsigned int time_t;<br>    typedef unsigned int suseconds_t;<br><br>    struct timeval {<br>        time_t      tv_sec;<br>        suseconds_t tv_usec;<br>    };<br><br>    struct timezone {<br>        int tz_minuteswest;<br>        int tz_dsttime;<br>    };<br><br>    int gettimeofday(struct timeval *tv, struct timezone *tz);<br>"</span><span style="color: #007700">, </span><span style="color: #DD0000">"libc.so.6"</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// crea las estructuras de datos C<br></span><span style="color: #0000BB">$tv </span><span style="color: #007700">= </span><span style="color: #0000BB">$ffi</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">new</span><span style="color: #007700">(</span><span style="color: #DD0000">"struct timeval"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$tz </span><span style="color: #007700">= </span><span style="color: #0000BB">$ffi</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">new</span><span style="color: #007700">(</span><span style="color: #DD0000">"struct timezone"</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// llama a la función gettimeofday() de C<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$ffi</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">gettimeofday</span><span style="color: #007700">(</span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">addr</span><span style="color: #007700">(</span><span style="color: #0000BB">$tv</span><span style="color: #007700">), </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">addr</span><span style="color: #007700">(</span><span style="color: #0000BB">$tz</span><span style="color: #007700">)));<br></span><span style="color: #FF8000">// accede a los campos de la estructura de datos C<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$tv</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">tv_sec</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// imprime toda la estructura de datos C<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$tz</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>Resultado del ejemplo anterior es similar a:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+int(0)
+int(1555946835)
+object(FFI\CData:struct timezone)#3 (2) {
+  ["tz_minuteswest"]=&gt;
+  int(0)
+  ["tz_dsttime"]=&gt;
+  int(0)
+}
+</pre></div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="ffi.examples.variable-existing">
+    <p><strong>Ejemplo #3 Acceso a variables C existentes</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// crea un objeto FFI, cargando la libc y exportando la variable errno<br></span><span style="color: #0000BB">$ffi </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">cdef</span><span style="color: #007700">(<br>    </span><span style="color: #DD0000">"int errno;"</span><span style="color: #007700">, </span><span style="color: #FF8000">// Declaración C regular<br>    </span><span style="color: #DD0000">"libc.so.6"</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// imprime el valor errno de C<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$ffi</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">errno</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+int(0)
+</pre></div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="ffi.examples.variable-creating">
+    <p><strong>Ejemplo #4 Creación y modificación de variables C</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// crea una nueva variable C de tipo int<br></span><span style="color: #0000BB">$x </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::new(</span><span style="color: #DD0000">"int"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$x</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cdata</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// asignación simple<br></span><span style="color: #0000BB">$x</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cdata </span><span style="color: #007700">= </span><span style="color: #0000BB">5</span><span style="color: #007700">;<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$x</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cdata</span><span style="color: #007700">);<br><br></span><span style="color: #FF8000">// asignación compuesta<br></span><span style="color: #0000BB">$x</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cdata </span><span style="color: #007700">+= </span><span style="color: #0000BB">2</span><span style="color: #007700">;<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$x</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">cdata</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+int(0)
+int(5)
+int(7)
+</pre></div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="ffi.examples.array">
+    <p><strong>Ejemplo #5 Trabajar con arrays C</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #FF8000">// crea una estructura de datos en C<br></span><span style="color: #0000BB">$a </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::new(</span><span style="color: #DD0000">"long[1024]"</span><span style="color: #007700">);<br></span><span style="color: #FF8000">// modificación de la estructura como con un array PHP normal<br></span><span style="color: #007700">for (</span><span style="color: #0000BB">$i </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">; </span><span style="color: #0000BB">$i </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">); </span><span style="color: #0000BB">$i</span><span style="color: #007700">++) {<br>    </span><span style="color: #0000BB">$a</span><span style="color: #007700">[</span><span style="color: #0000BB">$i</span><span style="color: #007700">] = </span><span style="color: #0000BB">$i</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">[</span><span style="color: #0000BB">25</span><span style="color: #007700">]);<br></span><span style="color: #0000BB">$sum </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">;<br>foreach (</span><span style="color: #0000BB">$a </span><span style="color: #007700">as </span><span style="color: #0000BB">$n</span><span style="color: #007700">) {<br>    </span><span style="color: #0000BB">$sum </span><span style="color: #007700">+= </span><span style="color: #0000BB">$n</span><span style="color: #007700">;<br>}<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$sum</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">count</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">));<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">));<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+int(25)
+int(523776)
+int(1024)
+int(8192)
+</pre></div>
+    </div>
+   </div>
+  
+  <p class="para">
+   </p><div class="example" id="ffi.examples.enum">
+    <p><strong>Ejemplo #6 Trabajar con enums en C</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$a </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">cdef</span><span style="color: #007700">(</span><span style="color: #DD0000">'typedef enum _zend_ffi_symbol_kind {<br>    ZEND_FFI_SYM_TYPE,<br>    ZEND_FFI_SYM_CONST = 2,<br>    ZEND_FFI_SYM_VAR,<br>    ZEND_FFI_SYM_FUNC<br>} zend_ffi_symbol_kind;<br>'</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">ZEND_FFI_SYM_TYPE</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">ZEND_FFI_SYM_CONST</span><span style="color: #007700">);<br></span><span style="color: #0000BB">var_dump</span><span style="color: #007700">(</span><span style="color: #0000BB">$a</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">ZEND_FFI_SYM_VAR</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+int(0)
+int(2)
+int(3)
+</pre></div>
+    </div>
+   </div>
+  
+ </div>
+<hr>
+
+ <div id="ffi.examples-callback" class="section"><hr>
+  <h2 class="title">Funciones de retrollamada</h2>
+  <p class="para">
+   Es posible asignar una clausura PHP a una variable nativa de tipo puntero de función
+   o pasarla como argumento de función:
+   </p><div class="example" id="example-622">
+    <p><strong>Ejemplo #1 Asignación de una <span class="classname"><a href="#class.closure" class="classname">Closure</a></span> PHP a un puntero de función C</strong></p>
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$zend </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">cdef</span><span style="color: #007700">(</span><span style="color: #DD0000">"<br>    typedef int (*zend_write_func_t)(const char *str, size_t str_length);<br>    extern zend_write_func_t zend_write;<br>"</span><span style="color: #007700">);<br><br>echo </span><span style="color: #DD0000">"Hello World 1!\n"</span><span style="color: #007700">;<br><br></span><span style="color: #0000BB">$orig_zend_write </span><span style="color: #007700">= clone </span><span style="color: #0000BB">$zend</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">zend_write</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$zend</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">zend_write </span><span style="color: #007700">= function(</span><span style="color: #0000BB">$str</span><span style="color: #007700">, </span><span style="color: #0000BB">$len</span><span style="color: #007700">) {<br>    global </span><span style="color: #0000BB">$orig_zend_write</span><span style="color: #007700">;<br>    </span><span style="color: #0000BB">$orig_zend_write</span><span style="color: #007700">(</span><span style="color: #DD0000">"{\n\t"</span><span style="color: #007700">, </span><span style="color: #0000BB">3</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">$ret </span><span style="color: #007700">= </span><span style="color: #0000BB">$orig_zend_write</span><span style="color: #007700">(</span><span style="color: #0000BB">$str</span><span style="color: #007700">, </span><span style="color: #0000BB">$len</span><span style="color: #007700">);<br>    </span><span style="color: #0000BB">$orig_zend_write</span><span style="color: #007700">(</span><span style="color: #DD0000">"}\n"</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">);<br>    return </span><span style="color: #0000BB">$ret</span><span style="color: #007700">;<br>};<br>echo </span><span style="color: #DD0000">"Hello World 2!\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">$zend</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">zend_write </span><span style="color: #007700">= </span><span style="color: #0000BB">$orig_zend_write</span><span style="color: #007700">;<br>echo </span><span style="color: #DD0000">"Hello World 3!\n"</span><span style="color: #007700">;<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+    <div class="example-contents"><p>El ejemplo anterior mostrará:</p></div>
+    <div class="example-contents screen">
+<div class="cdata"><pre>
+Hello World 1!
+{
+        Hello World 2!
+}
+Hello World 3!
+</pre></div>
+    </div>
+   </div>
+   Aunque esto funciona, esta funcionalidad no es soportada por todas las plataformas libffi, no es eficiente
+   y provoca fugas de recursos al final de la petición.
+   <div class="tip"><strong class="tip">Sugerencia</strong>
+    <p class="simpara">
+     Por lo tanto, se recomienda minimizar el uso de las funciones de retrollamada PHP.
+    </p>
+   </div>
+  
+ </div>
+<hr>
+
+
+ <div id="ffi.examples-complete" class="section"><hr>
+  <h2 class="title">Un ejemplo completo de PHP/FFI/precarga</h2>
+  <div class="informalexample">
+   <p class="simpara"><var class="filename">php.ini</var></p>
+   <div class="example-contents">
+<div class="inicode"><pre class="inicode">ffi.enable=preload
+opcache.preload=preload.php</pre>
+</div>
+   </div>
+
+   <p class="simpara"><var class="filename">preload.php</var></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">load</span><span style="color: #007700">(</span><span style="color: #0000BB">__DIR__ </span><span style="color: #007700">. </span><span style="color: #DD0000">"/dummy.h"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">opcache_compile_file</span><span style="color: #007700">(</span><span style="color: #0000BB">__DIR__ </span><span style="color: #007700">. </span><span style="color: #DD0000">"/dummy.php"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <p class="simpara"><var class="filename">dummy.h</var></p>
+   <div class="example-contents">
+<div class="ccode"><pre class="ccode">#define FFI_SCOPE "DUMMY"
+#define FFI_LIB "libc.so.6"
+
+int printf(const char *format, ...);</pre>
+</div>
+   </div>
+
+   <p class="simpara"><var class="filename">dummy.php</var></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br></span><span style="color: #007700">final class </span><span style="color: #0000BB">Dummy </span><span style="color: #007700">{<br>    private static </span><span style="color: #0000BB">$ffi </span><span style="color: #007700">= </span><span style="color: #0000BB">null</span><span style="color: #007700">;<br>    function </span><span style="color: #0000BB">__construct</span><span style="color: #007700">() {<br>        if (</span><span style="color: #0000BB">is_null</span><span style="color: #007700">(</span><span style="color: #0000BB">self</span><span style="color: #007700">::</span><span style="color: #0000BB">$ffi</span><span style="color: #007700">)) {<br>            </span><span style="color: #0000BB">self</span><span style="color: #007700">::</span><span style="color: #0000BB">$ffi </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">scope</span><span style="color: #007700">(</span><span style="color: #DD0000">"DUMMY"</span><span style="color: #007700">);<br>        }<br>    }<br>    function </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #0000BB">$format</span><span style="color: #007700">, ...</span><span style="color: #0000BB">$args</span><span style="color: #007700">) {<br>       return (int) </span><span style="color: #0000BB">self</span><span style="color: #007700">::</span><span style="color: #0000BB">$ffi</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #0000BB">$format</span><span style="color: #007700">, ...</span><span style="color: #0000BB">$args</span><span style="color: #007700">);<br>    }<br>}<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+   <p class="simpara"><var class="filename">test.php</var></p>
+   <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$d </span><span style="color: #007700">= new </span><span style="color: #0000BB">Dummy</span><span style="color: #007700">();<br></span><span style="color: #0000BB">$d</span><span style="color: #007700">-&gt;</span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"Hello %s!\n"</span><span style="color: #007700">, </span><span style="color: #DD0000">"world"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+   </div>
+
+  </div>
+ </div>
+<hr>
+
+</div>
+
+<hr>
+
+
+
+
+ 
+
+
+
+<div id="class.ffi" class="reference"><hr>
+
+ <h1 class="title">Interfaz principal para el código C y los datos</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p>
+
+
+  <div class="section" id="ffi.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Los objetos de esta clase son creados por los métodos de fábrica <span class="methodname"><a href="#ffi.cdef" class="methodname">FFI::cdef()</a></span>,
+    <span class="methodname"><a href="#ffi.load" class="methodname">FFI::load()</a></span> o <span class="methodname"><a href="#ffi.scope" class="methodname">FFI::scope()</a></span>. Las variables C definidas
+    están disponibles como propiedades de la instancia FFI, y las funciones C definidas están disponibles
+    como métodos de la instancia FFI. Los tipos C declarados pueden ser utilizados para crear nuevas estructuras de datos C
+    utilizando <span class="methodname"><a href="#ffi.new" class="methodname">FFI::new()</a></span> y <span class="methodname"><a href="#ffi.type" class="methodname">FFI::type()</a></span>.
+   </p>
+   <p class="para">
+    El análisis de las definiciones FFI y la carga de las bibliotecas compartidas pueden llevar mucho tiempo. No es útil
+    hacerlo en cada solicitud HTTP en un entorno Web. Sin embargo, es posible precargar las definiciones FFI
+    y las bibliotecas al inicio de PHP, e instanciar los objetos FFI cuando sea necesario. Los archivos de encabezado
+    pueden ser extendidos con definiciones <code class="literal">FFI_SCOPE</code> especiales (por ejemplo <code class="code">#define FFI_SCOPE "foo"</code>;
+    el ámbito por omisión es "C") y luego cargados por <span class="methodname"><a href="#ffi.load" class="methodname">FFI::load()</a></span> durante la precarga.
+    Esto conduce a la creación de una ligadura persistente, que estará disponible para todas las solicitudes siguientes
+    a través de <span class="methodname"><a href="#ffi.scope" class="methodname">FFI::scope()</a></span>.
+    Consulte el <a href="#ffi.examples-complete" class="link">ejemplo completo PHP/FFI/preloading</a>
+    para más detalles.
+   </p>
+   <p class="para">
+    Es posible precargar más de un archivo de encabezado C en el mismo ámbito.
+   </p>
+  </div>
+
+
+  <div class="section" id="ffi.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">FFI</strong></strong>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Constantes */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi.constants.biggest-alignment"><var class="varname">__BIGGEST_ALIGNMENT__</var></a></var>;</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.addr" class="methodname">addr</a></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.alignof" class="methodname">alignof</a></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span>|<span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.arraytype" class="methodname">arrayType</a></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span> <code class="parameter">$type</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$dimensions</code></span>): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi.cast" class="methodname">cast</a></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$type</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span>|<span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.float" class="type float">float</a></span>|<span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>|<span class="type"><a href="#language.types.null" class="type null">null</a></span></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.cdef" class="methodname">cdef</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$code</code><span class="initializer"> = ""</span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$lib</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><a href="#class.ffi" class="type FFI">FFI</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.free" class="methodname">free</a></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.isnull" class="methodname">isNull</a></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.load" class="methodname">load</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.ffi" class="type FFI">FFI</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.memcmp" class="methodname">memcmp</a></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></span> <code class="parameter reference">&amp;$ptr1</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></span> <code class="parameter reference">&amp;$ptr2</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.memcpy" class="methodname">memcpy</a></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$to</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter reference">&amp;$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.memset" class="methodname">memset</a></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi.new" class="methodname">new</a></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$type</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$owned</code><span class="initializer"> = <strong><code><a href="#constant.true">true</a></code></strong></span></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$persistent</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.scope" class="methodname">scope</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>): <span class="type"><a href="#class.ffi" class="type FFI">FFI</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.sizeof" class="methodname">sizeof</a></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span>|<span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.string" class="methodname">string</a></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.integer" class="type int">int</a></span></span> <code class="parameter">$size</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi.type" class="methodname">type</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><a href="#ffi.typeof" class="methodname">typeof</a></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+  <div class="section" id="class.ffi.constants">
+   <h2 class="title">Constantes predefinidas</h2>
+   <dl>
+    
+     <dt id="ffi.constants.biggest-alignment"><strong><code><a href="#ffi.constants.biggest-alignment">FFI::__BIGGEST_ALIGNMENT__</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+   </dl>
+  </div>
+ </div>
+
+ 
+
+
+
+<div id="ffi.addr" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::addr</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::addr</span> — <span class="dc-title">Crea un puntero no gestionado hacia datos C</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.addr-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::addr</strong></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crea un puntero no gestionado hacia los datos C representados por el elemento
+   <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span>. La fuente <code class="parameter">ptr</code> debe sobrevivir al
+   puntero resultante. Esta función es principalmente útil para transmitir argumentos a funciones C a través de un puntero.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.addr-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ptr</code></dt>
+    <dd>
+     <p class="para">
+      El gestor del puntero hacia una estructura de datos C.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.addr-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el objeto <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> recién creado.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.alignof" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::alignof</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::alignof</span> — <span class="dc-title">Recupera el alineamiento</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.alignof-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::alignof</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span>|<span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera el alineamiento del objeto <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> o
+   <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span> dado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.alignof-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ptr</code></dt>
+    <dd>
+     <p class="para">
+      El identificador de la data o del tipo C.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.alignof-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el alineamiento del objeto <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> o
+   <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span> dado.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.arraytype" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::arrayType</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::arrayType</span> — <span class="dc-title">Construye dinámicamente un nuevo tipo de array C</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.arraytype-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::arrayType</strong></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span> <code class="parameter">$type</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.array" class="type array">array</a></span> <code class="parameter">$dimensions</code></span>): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+
+  <p class="para rdfs-comment">
+   Construye dinámicamente un nuevo tipo de array C con elementos de tipo definido por <code class="parameter">type</code>,
+   y dimensiones especificadas por <code class="parameter">dimensions</code>. En el siguiente ejemplo, <code class="code">$t1</code>
+   y <code class="code">$t2</code> son tipos de array equivalentes:
+   </p><div class="informalexample">
+    <div class="example-contents">
+<div class="phpcode"><code><span style="color: #000000"><span style="color: #0000BB">&lt;?php<br>$t1 </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">type</span><span style="color: #007700">(</span><span style="color: #DD0000">"int[2][3]"</span><span style="color: #007700">);<br></span><span style="color: #0000BB">$t2 </span><span style="color: #007700">= </span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">arrayType</span><span style="color: #007700">(</span><span style="color: #0000BB">FFI</span><span style="color: #007700">::</span><span style="color: #0000BB">type</span><span style="color: #007700">(</span><span style="color: #DD0000">"int"</span><span style="color: #007700">), [</span><span style="color: #0000BB">2</span><span style="color: #007700">, </span><span style="color: #0000BB">3</span><span style="color: #007700">]);<br></span><span style="color: #0000BB">?&gt;</span></span></code></div>
+    </div>
+
+   </div>
+  
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.arraytype-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">type</code></dt>
+    <dd>
+     <p class="para">
+      Una declaración C válida como <span class="type"><a href="#language.types.string" class="type string">string</a></span>, o una instancia de <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span>
+      que ya ha sido creada.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">dimensions</code></dt>
+    <dd>
+     <p class="para">
+      Las dimensiones del tipo como <span class="type"><a href="#language.types.array" class="type array">array</a></span>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.arraytype-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el objeto <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span> recién creado.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.cast" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::cast</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::cast</span> — <span class="dc-title">Realiza una conversión de tipo C</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.cast-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI::cast</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$type</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span>|<span class="type"><a href="#language.types.integer" class="type int">int</a></span>|<span class="type"><a href="#language.types.float" class="type float">float</a></span>|<span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span>|<span class="type"><a href="#language.types.null" class="type null">null</a></span></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   <span class="methodname"><strong>FFI::cast()</strong></span> crea un nuevo objeto <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span>
+   que hace referencia a la misma estructura de datos C, pero que está asociada a un tipo diferente.
+   El objeto resultante no posee los datos C y la fuente <code class="parameter">ptr</code>
+   debe sobrevivir al resultado. El tipo C puede ser especificado como <span class="type"><a href="#language.types.string" class="type string">string</a></span> con
+   cualquier declaración de tipo C válida o como objeto <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span>, creado previamente.
+   Cualquier tipo declarado para la instancia está permitido.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.cast-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">type</code></dt>
+    <dd>
+     <p class="para">
+      Una declaración C válida como <span class="type"><a href="#language.types.string" class="type string">string</a></span>, o una instancia de <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span>
+      que ya ha sido creada.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">ptr</code></dt>
+    <dd>
+     <p class="para">
+      El gestor del puntero de una estructura de datos C.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.cast-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el objeto <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> recién creado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-ffi.cast-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.3.0</td>
+       <td>
+        La llamada estática a <span class="methodname"><strong>FFI::cast()</strong></span> ahora está obsoleta.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.cdef" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::cdef</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::cdef</span> — <span class="dc-title">Crea un nuevo objeto FFI</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.cdef-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::cdef</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$code</code><span class="initializer"> = ""</span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$lib</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><a href="#class.ffi" class="type FFI">FFI</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crea un nuevo objeto FFI.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.cdef-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">code</code></dt>
+    <dd>
+     <p class="para">
+      Un string que contiene una secuencia de declaraciones en lenguaje C ordinario
+      (tipos, estructuras, funciones, variables, etc). De hecho, este string puede ser
+      copiado y pegado desde ficheros de encabezado C.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Las directivas del preprocesador C no son soportadas, es decir, <code class="code">#include</code>,
+       <code class="code">#define</code> y las macros CPP no funcionan.
+      </p>
+     </blockquote>
+    </dd>
+   
+   
+    <dt><code class="parameter">lib</code></dt>
+    <dd>
+     <p class="para">
+      El nombre de un fichero de biblioteca compartida, para cargar y enlazar con las
+      definiciones.
+     </p>
+     <blockquote class="note"><p><strong class="note">Nota</strong>: 
+      </p><p class="para">
+       Si <code class="parameter">lib</code> es omitido o <strong><code><a href="#constant.null">null</a></code></strong>, las plataformas que soportan <code class="literal">RTLD_DEFAULT</code>
+       intentan buscar los símbolos declarados en <code class="parameter">code</code> en el ámbito global.
+       Los otros sistemas no lograrán resolver estos símbolos.
+      </p>
+     </blockquote>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.cdef-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el objeto <span class="classname"><a href="#class.ffi" class="classname">FFI</a></span> recién creado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-ffi.cdef-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.3.0</td>
+      <td>
+       Las funciones C que devuelven <code class="literal">void</code> devuelven un <span class="type"><a href="#language.types.null" class="type null">null</a></span> PHP
+       en lugar de <var class="varname">FFI\CType::TYPE_VOID</var>.
+      </td>
+     </tr>
+
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">lib</code> es ahora nullable.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.free" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::free</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::free</span> — <span class="dc-title">Libera una estructura de datos no gestionada</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.free-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::free</strong></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Libera manualmente una estructura de datos no gestionada creada previamente.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.free-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ptr</code></dt>
+    <dd>
+     <p class="para">
+      El gestor del puntero no gestionado de una estructura de datos C.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.free-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.isnull" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::isNull</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::isNull</span> — <span class="dc-title">Verifica si un objeto FFI\CData es un puntero nulo</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.isnull-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::isNull</strong></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span></div>
+
+  <p class="para rdfs-comment">
+   Verifica si un objeto FFI\CData es un puntero nulo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.isnull-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ptr</code></dt>
+    <dd>
+     <p class="para">
+      El gestor del puntero hacia una estructura de datos C.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.isnull-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve si un objeto <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> es un puntero nulo.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.load" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::load</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::load</span> — <span class="dc-title">Carga las declaraciones C desde un archivo de encabezado C</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.load-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::load</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$filename</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.ffi" class="type FFI">FFI</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Carga las declaraciones C desde un archivo de encabezado C. Es posible especificar las bibliotecas compartidas que deben ser cargadas,
+   utilizando definiciones especiales <code class="literal">FFI_LIB</code> en el archivo de encabezado C cargado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.load-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">filename</code></dt>
+    <dd>
+     <p class="para">
+      El nombre de un archivo de encabezado C.
+     </p>
+     <p class="para">
+      Las directivas del preprocesador C no son soportadas, es decir, <code class="literal">#include</code>,
+      <code class="literal">#define</code> y las macros CPP no funcionan, excepto en los casos particulares
+      enumerados a continuación.
+     </p>
+     <p class="para">
+      El archivo de encabezado <em>debería</em> contener una declaración <code class="literal">#define</code> para la variable
+      <code class="literal">FFI_SCOPE</code>, por ejemplo: <code class="code">#define FFI_SCOPE "MYLIB"</code>.
+      Consulte la <a href="#ffi.intro" class="link">introducción de la clase</a> para más detalles.
+     </p>
+     <p class="para">
+      El archivo de encabezado <em>puede</em> contener una declaración <code class="literal">#define</code> para la variable
+      <code class="literal">FFI_LIB</code> para especificar la biblioteca que expone. Si se trata de una
+      biblioteca del sistema, solo se requiere el nombre del archivo, por ejemplo: <code class="code">#define FFI_LIB
+      "libc.so.6"</code>.  Si se trata de una biblioteca personalizada, se requiere una ruta relativa,
+      por ejemplo: <code class="code">#define FFI_LIB "./mylib.so"</code>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.load-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el objeto <span class="classname"><a href="#class.ffi" class="classname">FFI</a></span> recién creado, o <strong><code><a href="#constant.null">null</a></code></strong> en caso de fallo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-ffi.load-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.3.0</td>
+      <td>
+       <span class="methodname"><strong>FFI::load()</strong></span> ahora está permitido en los
+       <a href="#opcache.preloading" class="link">scripts de precarga</a> cuando
+       el usuario del sistema actual es el mismo que el definido en la directiva
+       de configuración <code class="literal">opcache.preload_user</code>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-ffi.load-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="methodname"><a href="#ffi.scope" class="methodname" rel="rdfs-seeAlso">FFI::scope()</a> - Instancia un objeto FFI con las declaraciones C analizadas durante la precarga</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.memcmp" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::memcmp</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::memcmp</span> — <span class="dc-title">Comparación de zonas de memoria</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.memcmp-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::memcmp</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></span> <code class="parameter reference">&amp;$ptr1</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.string" class="type string">string</a></span>|<span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></span> <code class="parameter reference">&amp;$ptr2</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Compara los <code class="parameter">size</code> bytes de las zonas de memoria <code class="parameter">ptr1</code> y
+   <code class="parameter">ptr2</code>. <code class="parameter">ptr1</code> y <code class="parameter">ptr2</code>
+   pueden ser estructuras de datos nativas (<span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span>) o <span class="type"><a href="#language.types.string" class="type string">string</a></span>s PHP.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.memcmp-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ptr1</code></dt>
+    <dd>
+     <p class="para">
+      Inicio de una zona de memoria.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">ptr2</code></dt>
+    <dd>
+     <p class="para">
+      El inicio de otra zona de memoria.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      El número de bytes a comparar.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.memcmp-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve un valor inferior a <code class="literal">0</code> si el contenido de la zona de memoria que comienza en <code class="parameter">ptr1</code>
+   se considera menor que el contenido de la zona de memoria que comienza en <code class="parameter">ptr2</code>,
+   un valor superior a <code class="literal">0</code> si el contenido de la primera zona de memoria se considera mayor que el de la segunda,
+   y <code class="literal">0</code> si son iguales.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.memcpy" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::memcpy</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::memcpy</span> — <span class="dc-title">Copia de una zona de memoria en otra</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.memcpy-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::memcpy</strong></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$to</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter reference">&amp;$from</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Copia <code class="parameter">size</code> bytes de la zona de memoria <code class="parameter">from</code>
+   hacia la zona de memoria <code class="parameter">to</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.memcpy-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">to</code></dt>
+    <dd>
+     <p class="para">
+      Inicio de la zona de memoria a copiar.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">from</code></dt>
+    <dd>
+     <p class="para">
+      El inicio de la zona de memoria donde la copia debe ser efectuada.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      El número de bytes a copiar.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.memcpy-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.memset" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::memset</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::memset</span> — <span class="dc-title">Rellena una zona de memoria</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.memset-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::memset</strong></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$value</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$size</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+  <p class="para rdfs-comment">
+   Rellena <code class="parameter">size</code> bytes de la zona de memoria apuntada por
+   <code class="parameter">ptr</code> con el byte dado <code class="parameter">value</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.memset-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ptr</code></dt>
+    <dd>
+     <p class="para">
+      Inicio de la zona de memoria a rellenar.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">value</code></dt>
+    <dd>
+     <p class="para">
+      El byte a rellenar.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      El número de bytes a rellenar.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.memset-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   No se retorna ningún valor.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.new" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::new</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::new</span> — <span class="dc-title">Crea una estructura de datos C</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.new-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI::new</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span>|<span class="type"><a href="#language.types.string" class="type string">string</a></span></span> <code class="parameter">$type</code></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$owned</code><span class="initializer"> = <strong><code><a href="#constant.true">true</a></code></strong></span></span>, <span class="methodparam"><span class="type"><a href="#language.types.boolean" class="type bool">bool</a></span> <code class="parameter">$persistent</code><span class="initializer"> = <strong><code><a href="#constant.false">false</a></code></strong></span></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Crea una estructura de datos nativa del tipo C dado.
+   Cualquier tipo declarado para la instancia está permitido.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.new-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">type</code></dt>
+    <dd>
+     <p class="para">
+      <code class="parameter">type</code> es una declaración C válida como <span class="type"><a href="#language.types.string" class="type string">string</a></span>, o una
+      instancia de <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span> que ya ha sido creada.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">owned</code></dt>
+    <dd>
+     <p class="para">
+      Creación de datos gestionados o no gestionados. Los datos gestionados viven con
+      el objeto <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> devuelto, y son liberados cuando la última referencia a este objeto
+      es liberada por el conteo de referencias ordinario de PHP o el recolector de basura.
+      Los datos no gestionados deben ser liberados llamando a <span class="methodname"><a href="#ffi.free" class="methodname">FFI::free()</a></span>,
+      cuando ya no sean necesarios.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">persistent</code></dt>
+    <dd>
+     <p class="para">
+      Asignar la estructura de datos C de manera permanente en el montón del sistema (utilizando
+      <span class="function"><strong>malloc()</strong></span>), o en el montón de las peticiones PHP (utilizando <span class="function"><strong>emalloc()</strong></span>).
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.new-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el objeto <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> recién creado,
+   o <strong><code><a href="#constant.null">null</a></code></strong> en caso de fallo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-ffi.new-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.3.0</td>
+       <td>
+        La llamada estática a <span class="methodname"><strong>FFI::new()</strong></span> ahora está obsoleta.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.scope" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::scope</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::scope</span> — <span class="dc-title">Instancia un objeto FFI con las declaraciones C analizadas durante la precarga</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.scope-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::scope</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>): <span class="type"><a href="#class.ffi" class="type FFI">FFI</a></span></div>
+
+  <p class="para rdfs-comment">
+   Instancia un objeto FFI con las declaraciones C analizadas durante la precarga.
+  </p>
+  <p class="para">
+   El método <span class="methodname"><strong>FFI::scope()</strong></span> puede ser llamado varias veces para el mismo ámbito. Varias referencias al mismo ámbito pueden ser cargadas al mismo tiempo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.scope-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">name</code></dt>
+    <dd>
+     <p class="para">
+      El nombre del ámbito definido por una definición especial <code class="literal">FFI_SCOPE</code>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.scope-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el objeto <span class="classname"><a href="#class.ffi" class="classname">FFI</a></span> recién creado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 seealso" id="refsect1-ffi.scope-seealso">
+  <h3 class="title">Ver también</h3>
+  <p class="para">
+   </p><ul class="simplelist">
+    <li><span class="methodname"><a href="#ffi.load" class="methodname" rel="rdfs-seeAlso">FFI::load()</a> - Carga las declaraciones C desde un archivo de encabezado C</span></li>
+   </ul>
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.sizeof" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::sizeof</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::sizeof</span> — <span class="dc-title">Recupera el tamaño de los datos o tipos C</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.sizeof-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::sizeof</strong></span>(<span class="methodparam"><span class="type"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span>|<span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el tamaño del objeto <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> o
+   <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span> objeto.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.sizeof-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ptr</code></dt>
+    <dd>
+     <p class="para">
+      El gestor de la data o del tipo C.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.sizeof-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Tamaño de la zona de memoria apuntada por <code class="parameter">ptr</code>.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.string" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::string</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::string</span> — <span class="dc-title">Crea una string PHP a partir de una zona de memoria</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.string-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::string</strong></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#language.types.integer" class="type int">int</a></span></span> <code class="parameter">$size</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+   Crea una <span class="type"><a href="#language.types.string" class="type string">string</a></span> PHP a partir de <code class="parameter">size</code> bytes de la zona de memoria
+   apuntada por <code class="parameter">ptr</code>.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.string-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ptr</code></dt>
+    <dd>
+     <p class="para">
+      El inicio de la zona de memoria a partir de la cual crear una <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+     </p>
+    </dd>
+   
+   
+    <dt><code class="parameter">size</code></dt>
+    <dd>
+     <p class="para">
+      El número de bytes a copiar en <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+      Si <code class="parameter">size</code> es omitido o <strong><code><a href="#constant.null">null</a></code></strong>, <code class="parameter">ptr</code> debe ser un array de caracteres C
+      de <code class="literal">char</code> C con terminación nula.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.string-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   La <span class="type"><a href="#language.types.string" class="type string">string</a></span> PHP recién creada.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-ffi.string-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <table class="doctable informaltable">
+   
+    <thead>
+     <tr>
+      <th>Versión</th>
+      <th>Descripción</th>
+     </tr>
+
+    </thead>
+
+    <tbody class="tbody">
+     <tr>
+      <td>8.0.0</td>
+      <td>
+       <code class="parameter">size</code> es ahora nullable; anteriormente, su valor por omisión era
+       <code class="literal">0</code>.
+      </td>
+     </tr>
+
+    </tbody>
+   
+  </table>
+
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.type" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::type</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::type</span> — <span class="dc-title">Crea un objeto FFI\CType a partir de una declaración C</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.type-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI::type</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$type</code></span>): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></span></div>
+
+  <p class="para rdfs-comment">
+   Esta función crea y devuelve un objeto <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span> para el
+   <span class="type"><a href="#language.types.string" class="type string">string</a></span> dado que contiene una declaración de tipo C.
+   Cualquier tipo declarado para la instancia está permitido.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.type-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">type</code></dt>
+    <dd>
+     <p class="para">
+      Una declaración C válida como <span class="type"><a href="#language.types.string" class="type string">string</a></span>.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.type-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el objeto <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span> recién creado,
+   o <strong><code><a href="#constant.null">null</a></code></strong> en caso de fallo.
+  </p>
+ </div>
+
+
+ <div class="refsect1 changelog" id="refsect1-ffi.type-changelog">
+  <h3 class="title">Historial de cambios</h3>
+  <p class="para">
+   </p><table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.3.0</td>
+       <td>
+        La llamada estática de <span class="methodname"><strong>FFI::type()</strong></span> está ahora obsoleta.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+
+<div id="ffi.typeof" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI::typeof</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI::typeof</span> — <span class="dc-title">Recupera el FFI\CType de FFI\CData</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi.typeof-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="modifier">static</span> <span class="methodname"><strong>FFI::typeof</strong></span>(<span class="methodparam"><span class="type"><a href="#class.ffi-cdata" class="type FFI\CData">FFI\CData</a></span> <code class="parameter reference">&amp;$ptr</code></span>): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+
+  <p class="para rdfs-comment">
+   Recupera el objeto <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span> que representa el tipo del objeto
+   <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> dado.
+  </p>
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi.typeof-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">ptr</code></dt>
+    <dd>
+     <p class="para">
+      El gestor del puntero hacia una estructura de datos C.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi.typeof-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el objeto <span class="classname"><a href="#class.ffi-ctype" class="classname">FFI\CType</a></span> que representa el tipo del objeto
+   <span class="classname"><a href="#class.ffi-cdata" class="classname">FFI\CData</a></span> dado.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#ffi.addr">FFI::addr</a> — Crea un puntero no gestionado hacia datos C</li><li><a href="#ffi.alignof">FFI::alignof</a> — Recupera el alineamiento</li><li><a href="#ffi.arraytype">FFI::arrayType</a> — Construye dinámicamente un nuevo tipo de array C</li><li><a href="#ffi.cast">FFI::cast</a> — Realiza una conversión de tipo C</li><li><a href="#ffi.cdef">FFI::cdef</a> — Crea un nuevo objeto FFI</li><li><a href="#ffi.free">FFI::free</a> — Libera una estructura de datos no gestionada</li><li><a href="#ffi.isnull">FFI::isNull</a> — Verifica si un objeto FFI\CData es un puntero nulo</li><li><a href="#ffi.load">FFI::load</a> — Carga las declaraciones C desde un archivo de encabezado C</li><li><a href="#ffi.memcmp">FFI::memcmp</a> — Comparación de zonas de memoria</li><li><a href="#ffi.memcpy">FFI::memcpy</a> — Copia de una zona de memoria en otra</li><li><a href="#ffi.memset">FFI::memset</a> — Rellena una zona de memoria</li><li><a href="#ffi.new">FFI::new</a> — Crea una estructura de datos C</li><li><a href="#ffi.scope">FFI::scope</a> — Instancia un objeto FFI con las declaraciones C analizadas durante la precarga</li><li><a href="#ffi.sizeof">FFI::sizeof</a> — Recupera el tamaño de los datos o tipos C</li><li><a href="#ffi.string">FFI::string</a> — Crea una string PHP a partir de una zona de memoria</li><li><a href="#ffi.type">FFI::type</a> — Crea un objeto FFI\CType a partir de una declaración C</li><li><a href="#ffi.typeof">FFI::typeof</a> — Recupera el FFI\CType de FFI\CData</li></ul>
+</div>
+
+<hr>
+
+
+
+ 
+
+
+
+<div id="class.ffi-cdata" class="reference"><hr>
+
+ <h1 class="title">Gestor de datos C</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p>
+
+  
+  <div class="section" id="ffi-cdata.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+    Los objetos <span class="classname"><strong class="classname">FFI\CData</strong></span> pueden ser utilizados de diferentes maneras, como datos PHP normales:
+    </p><ul class="itemizedlist">
+     <li class="listitem">
+      <span class="simpara">
+       Los datos C de tipo escalar pueden ser leídos y asignados a través de la propiedad <span class="property">$cdata</span>, por ejemplo.
+       <code class="code">$x = FFI::new('int'); $x-&gt;cdata = 42;</code>
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Los campos de tipo struct y union pueden ser accedidos como propiedades de objetos PHP ordinarios, por ejemplo
+       <code class="code">$cdata-&gt;field</code>
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Los elementos de un array C son accesibles como los elementos de un array PHP, por ejemplo.
+       <code class="code">$cdata[$offset]</code>
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Los arrays C pueden ser iterados utilizando instrucciones <a href="#control-structures.foreach" class="link"><code class="literal">foreach</code></a>.
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Los arrays C pueden ser utilizados como argumentos de <span class="function"><a href="#function.count" class="function">count()</a></span>.
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Los punteros C pueden ser desreferenciados como arrays, por ejemplo <code class="code">$cdata[0]</code>
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Los punteros C pueden ser comparados utilizando operadores de comparación ordinarios (<code class="code">&lt;</code>,
+       <code class="code">&lt;=</code>, <code class="code">==</code>, <code class="code">!=</code>, <code class="code">&gt;=</code>, <code class="code">&gt;</code>).
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Los punteros C pueden ser incrementados y decrementados utilizando operaciones ordinarias ( <code class="code">+</code>/<code class="code">-</code>/ / ).
+       <code class="code">++</code>/<code class="code">--</code>, por ejemplo <code class="code">$cdata += 5</code>
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Los punteros C pueden ser sustraídos de otro utilizando operaciones ordinarias <code class="code">-</code>.
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Los punteros C hacia funciones pueden ser llamados como una clausura PHP clásica, por ejemplo <code class="code">$cdata()</code>
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Cualquier dato C puede ser duplicado utilizando el operador <a href="#language.oop5.cloning" class="link">clone</a>,
+       por ejemplo <code class="code">$cdata2 = clone $cdata;</code>
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       Todos los datos C pueden ser visualizados utilizando <span class="function"><a href="#function.var-dump" class="function">var_dump()</a></span>, <span class="function"><a href="#function.print-r" class="function">print_r()</a></span>, etc.
+      </span>
+     </li>
+     <li class="listitem">
+      <span class="simpara">
+       <span class="classname"><strong class="classname">FFI\CData</strong></span> puede ahora ser atribuido a estructuras y campos a partir de PHP 8.3.0.
+      </span>
+     </li>
+    </ul>
+    <blockquote class="note"><p><strong class="note">Nota</strong>: 
+     <span class="simpara">
+      Las limitaciones notables son que las instancias de <span class="classname"><strong class="classname">FFI\CData</strong></span> no soportan las funciones
+      <span class="function"><a href="#function.isset" class="function">isset()</a></span>, <span class="function"><a href="#function.empty" class="function">empty()</a></span> y <span class="function"><a href="#function.unset" class="function">unset()</a></span>,
+      y que las structs y unions C envueltas no implementan <span class="interfacename"><a href="#class.traversable" class="interfacename">Traversable</a></span>.
+     </span>
+    </p></blockquote>
+   
+  </div>
+  
+
+  <div class="section" id="ffi-cdata.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+   
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">FFI\CData</strong></strong>
+     {</div>
+   }</div>
+   
+
+  </div>
+
+  <div class="section">
+   <h2 class="title">Historial de cambios</h2>
+   <table class="doctable informaltable">
+    
+     <thead>
+      <tr>
+       <th>Versión</th>
+       <th>Descripción</th>
+      </tr>
+
+     </thead>
+
+     <tbody class="tbody">
+      <tr>
+       <td>8.3.0</td>
+       <td>
+        <span class="classname"><strong class="classname">FFI\CData</strong></span> puede ahora ser atribuido a estructuras y campos.
+       </td>
+      </tr>
+
+     </tbody>
+    
+   </table>
+
+  </div>
+
+ </div>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+ 
+
+
+
+<div id="class.ffi-ctype" class="reference"><hr>
+
+ <h1 class="title">Gestor de tipo C</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p>
+
+
+  <div class="section" id="ffi-ctype.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="ffi-ctype.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="classname">FFI\CType</strong></strong>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Constantes */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-void"><var class="varname">TYPE_VOID</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-float"><var class="varname">TYPE_FLOAT</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-double"><var class="varname">TYPE_DOUBLE</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-longdouble"><var class="varname">TYPE_LONGDOUBLE</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-uint8"><var class="varname">TYPE_UINT8</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-sint8"><var class="varname">TYPE_SINT8</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-uint16"><var class="varname">TYPE_UINT16</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-sint16"><var class="varname">TYPE_SINT16</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-uint32"><var class="varname">TYPE_UINT32</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-sint32"><var class="varname">TYPE_SINT32</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-uint64"><var class="varname">TYPE_UINT64</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-sint64"><var class="varname">TYPE_SINT64</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-enum"><var class="varname">TYPE_ENUM</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-bool"><var class="varname">TYPE_BOOL</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-char"><var class="varname">TYPE_CHAR</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-pointer"><var class="varname">TYPE_POINTER</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-func"><var class="varname">TYPE_FUNC</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-array"><var class="varname">TYPE_ARRAY</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.type-struct"><var class="varname">TYPE_STRUCT</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.attr-const"><var class="varname">ATTR_CONST</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.attr-incomplete-tag"><var class="varname">ATTR_INCOMPLETE_TAG</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.attr-variadic"><var class="varname">ATTR_VARIADIC</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.attr-incomplete-array"><var class="varname">ATTR_INCOMPLETE_ARRAY</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.attr-vla"><var class="varname">ATTR_VLA</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.attr-union"><var class="varname">ATTR_UNION</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.attr-packed"><var class="varname">ATTR_PACKED</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.attr-ms-struct"><var class="varname">ATTR_MS_STRUCT</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.attr-gcc-struct"><var class="varname">ATTR_GCC_STRUCT</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-default"><var class="varname">ABI_DEFAULT</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-cdecl"><var class="varname">ABI_CDECL</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-fastcall"><var class="varname">ABI_FASTCALL</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-thiscall"><var class="varname">ABI_THISCALL</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-stdcall"><var class="varname">ABI_STDCALL</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-pascal"><var class="varname">ABI_PASCAL</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-register"><var class="varname">ABI_REGISTER</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-ms"><var class="varname">ABI_MS</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-sysv"><var class="varname">ABI_SYSV</var></a></var>;</div>
+
+    <div class="fieldsynopsis"><span class="modifier">public</span>
+     <span class="modifier">const</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="fieldsynopsis_varname"><a href="#ffi-ctype.constants.abi-vectorcall"><var class="varname">ABI_VECTORCALL</var></a></var>;</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos */</div>
+    <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getalignment" class="methodname">getAlignment</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getarrayelementtype" class="methodname">getArrayElementType</a></span>(): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getarraylength" class="methodname">getArrayLength</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getattributes" class="methodname">getAttributes</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getenumkind" class="methodname">getEnumKind</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getfuncabi" class="methodname">getFuncABI</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getfuncparametercount" class="methodname">getFuncParameterCount</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getfuncparametertype" class="methodname">getFuncParameterType</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$index</code></span>): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getfuncreturntype" class="methodname">getFuncReturnType</a></span>(): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getkind" class="methodname">getKind</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getname" class="methodname">getName</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getpointertype" class="methodname">getPointerType</a></span>(): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getsize" class="methodname">getSize</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getstructfieldnames" class="methodname">getStructFieldNames</a></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getstructfieldoffset" class="methodname">getStructFieldOffset</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#ffi-ctype.getstructfieldtype" class="methodname">getStructFieldType</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+  <div class="section" id="ffi-ctype.constants">
+   <h2 class="title">Constantes predefinidas</h2>
+   <dl>
+    
+     <dt id="ffi-ctype.constants.type-void"><strong><code><a href="#ffi-ctype.constants.type-void">FFI\CType::TYPE_VOID</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-float"><strong><code><a href="#ffi-ctype.constants.type-float">FFI\CType::TYPE_FLOAT</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-double"><strong><code><a href="#ffi-ctype.constants.type-double">FFI\CType::TYPE_DOUBLE</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-longdouble"><strong><code><a href="#ffi-ctype.constants.type-longdouble">FFI\CType::TYPE_LONGDOUBLE</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-uint8"><strong><code><a href="#ffi-ctype.constants.type-uint8">FFI\CType::TYPE_UINT8</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-sint8"><strong><code><a href="#ffi-ctype.constants.type-sint8">FFI\CType::TYPE_SINT8</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-uint16"><strong><code><a href="#ffi-ctype.constants.type-uint16">FFI\CType::TYPE_UINT16</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-sint16"><strong><code><a href="#ffi-ctype.constants.type-sint16">FFI\CType::TYPE_SINT16</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-uint32"><strong><code><a href="#ffi-ctype.constants.type-uint32">FFI\CType::TYPE_UINT32</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-sint32"><strong><code><a href="#ffi-ctype.constants.type-sint32">FFI\CType::TYPE_SINT32</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-uint64"><strong><code><a href="#ffi-ctype.constants.type-uint64">FFI\CType::TYPE_UINT64</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-sint64"><strong><code><a href="#ffi-ctype.constants.type-sint64">FFI\CType::TYPE_SINT64</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-enum"><strong><code><a href="#ffi-ctype.constants.type-enum">FFI\CType::TYPE_ENUM</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-bool"><strong><code><a href="#ffi-ctype.constants.type-bool">FFI\CType::TYPE_BOOL</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-char"><strong><code><a href="#ffi-ctype.constants.type-char">FFI\CType::TYPE_CHAR</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-pointer"><strong><code><a href="#ffi-ctype.constants.type-pointer">FFI\CType::TYPE_POINTER</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-func"><strong><code><a href="#ffi-ctype.constants.type-func">FFI\CType::TYPE_FUNC</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-array"><strong><code><a href="#ffi-ctype.constants.type-array">FFI\CType::TYPE_ARRAY</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.type-struct"><strong><code><a href="#ffi-ctype.constants.type-struct">FFI\CType::TYPE_STRUCT</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.attr-const"><strong><code><a href="#ffi-ctype.constants.attr-const">FFI\CType::ATTR_CONST</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.attr-incomplete-tag"><strong><code><a href="#ffi-ctype.constants.attr-incomplete-tag">FFI\CType::ATTR_INCOMPLETE_TAG</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.attr-variadic"><strong><code><a href="#ffi-ctype.constants.attr-variadic">FFI\CType::ATTR_VARIADIC</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.attr-incomplete-array"><strong><code><a href="#ffi-ctype.constants.attr-incomplete-array">FFI\CType::ATTR_INCOMPLETE_ARRAY</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.attr-vla"><strong><code><a href="#ffi-ctype.constants.attr-vla">FFI\CType::ATTR_VLA</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.attr-union"><strong><code><a href="#ffi-ctype.constants.attr-union">FFI\CType::ATTR_UNION</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.attr-packed"><strong><code><a href="#ffi-ctype.constants.attr-packed">FFI\CType::ATTR_PACKED</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.attr-ms-struct"><strong><code><a href="#ffi-ctype.constants.attr-ms-struct">FFI\CType::ATTR_MS_STRUCT</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.attr-gcc-struct"><strong><code><a href="#ffi-ctype.constants.attr-gcc-struct">FFI\CType::ATTR_GCC_STRUCT</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-default"><strong><code><a href="#ffi-ctype.constants.abi-default">FFI\CType::ABI_DEFAULT</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-cdecl"><strong><code><a href="#ffi-ctype.constants.abi-cdecl">FFI\CType::ABI_CDECL</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-fastcall"><strong><code><a href="#ffi-ctype.constants.abi-fastcall">FFI\CType::ABI_FASTCALL</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-thiscall"><strong><code><a href="#ffi-ctype.constants.abi-thiscall">FFI\CType::ABI_THISCALL</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-stdcall"><strong><code><a href="#ffi-ctype.constants.abi-stdcall">FFI\CType::ABI_STDCALL</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-pascal"><strong><code><a href="#ffi-ctype.constants.abi-pascal">FFI\CType::ABI_PASCAL</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-register"><strong><code><a href="#ffi-ctype.constants.abi-register">FFI\CType::ABI_REGISTER</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-ms"><strong><code><a href="#ffi-ctype.constants.abi-ms">FFI\CType::ABI_MS</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-sysv"><strong><code><a href="#ffi-ctype.constants.abi-sysv">FFI\CType::ABI_SYSV</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+
+    
+     <dt id="ffi-ctype.constants.abi-vectorcall"><strong><code><a href="#ffi-ctype.constants.abi-vectorcall">FFI\CType::ABI_VECTORCALL</a></code></strong></dt>
+     <dd>
+      <p class="para"></p>
+     </dd>
+    
+   </dl>
+  </div>
+
+ </div>
+
+ 
+
+
+<div id="ffi-ctype.getalignment" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getAlignment</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getAlignment</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getalignment-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getAlignment</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getalignment-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getalignment-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getarrayelementtype" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getArrayElementType</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getArrayElementType</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getarrayelementtype-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getArrayElementType</strong></span>(): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getarrayelementtype-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getarrayelementtype-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getarraylength" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getArrayLength</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getArrayLength</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getarraylength-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getArrayLength</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getarraylength-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getarraylength-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getattributes" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getAttributes</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getAttributes</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getattributes-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getAttributes</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getattributes-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getattributes-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getenumkind" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getEnumKind</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getEnumKind</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getenumkind-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getEnumKind</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getenumkind-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getenumkind-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getfuncabi" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getFuncABI</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getFuncABI</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getfuncabi-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getFuncABI</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getfuncabi-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getfuncabi-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getfuncparametercount" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getFuncParameterCount</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getFuncParameterCount</span> — <span class="dc-title">Recuperar el número de argumentos de un tipo de función</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getfuncparametercount-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getFuncParameterCount</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getfuncparametercount-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getfuncparametercount-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el número de argumentos del tipo de función subyacente.
+   Si el tipo subyacente no es una función, se lanza una
+   <span class="exceptionname"><strong class="exceptionname">FFI\Exception</strong></span>.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getfuncparametertype" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getFuncParameterType</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getFuncParameterType</span> — <span class="dc-title">Recuperar el tipo de un parámetro de función</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getfuncparametertype-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getFuncParameterType</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$index</code></span>): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+
+  <p class="para rdfs-comment">
+   Devuelve el tipo de un parámetro para el tipo de función subyacente.
+  </p>
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getfuncparametertype-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">index</code></dt>
+    <dd>
+     <p class="para">
+      Índice del parámetro de la función, basado en cero.
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getfuncparametertype-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+   Devuelve el tipo de un parámetro para el tipo de función subyacente.
+   Si el tipo subyacente no es una función, o si el índice proporcionado está fuera
+   del rango de los parámetros de la función, se lanza una
+   <span class="exceptionname"><strong class="exceptionname">FFI\Exception</strong></span>.
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getfuncreturntype" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getFuncReturnType</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getFuncReturnType</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getfuncreturntype-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getFuncReturnType</strong></span>(): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getfuncreturntype-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getfuncreturntype-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getkind" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getKind</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getKind</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getkind-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getKind</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getkind-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getkind-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getname" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getName</h1>
+  <p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p><p class="refpurpose"><span class="refname">FFI\CType::getName</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getname-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getName</strong></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getname-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getname-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getpointertype" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getPointerType</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getPointerType</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getpointertype-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getPointerType</strong></span>(): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getpointertype-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getpointertype-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getsize" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getSize</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getSize</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getsize-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getSize</strong></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getsize-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getsize-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getstructfieldnames" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getStructFieldNames</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getStructFieldNames</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getstructfieldnames-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getStructFieldNames</strong></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getstructfieldnames-parameters">
+  <h3 class="title">Parámetros</h3>
+  <p class="para">Esta función no contiene ningún parámetro.</p>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getstructfieldnames-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getstructfieldoffset" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getStructFieldOffset</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getStructFieldOffset</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getstructfieldoffset-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getStructFieldOffset</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getstructfieldoffset-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">name</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getstructfieldoffset-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+
+
+<div id="ffi-ctype.getstructfieldtype" class="refentry"><hr>
+ <div class="refnamediv">
+  <h1 class="refname">FFI\CType::getStructFieldType</h1>
+  <p class="verinfo">(PHP 8 &gt;= 8.1.0)</p><p class="refpurpose"><span class="refname">FFI\CType::getStructFieldType</span> — <span class="dc-title">Descripción</span></p>
+
+ </div>
+
+ <div class="refsect1 description" id="refsect1-ffi-ctype.getstructfieldtype-description">
+  <h3 class="title">Descripción</h3>
+  <div class="methodsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><strong>FFI\CType::getStructFieldType</strong></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$name</code></span>): <span class="type"><a href="#class.ffi-ctype" class="type FFI\CType">FFI\CType</a></span></div>
+
+  <p class="para rdfs-comment">
+
+  </p>
+
+  
+<div class="warning"><strong class="warning">Advertencia</strong>
+<p class="simpara">
+ Esta función está actualmente no documentada; solo la lista de sus argumentos está disponible.
+</p>
+</div>
+
+
+ </div>
+
+
+ <div class="refsect1 parameters" id="refsect1-ffi-ctype.getstructfieldtype-parameters">
+  <h3 class="title">Parámetros</h3>
+  <dl>
+   
+    <dt><code class="parameter">name</code></dt>
+    <dd>
+     <p class="para">
+
+     </p>
+    </dd>
+   
+  </dl>
+ </div>
+
+
+ <div class="refsect1 returnvalues" id="refsect1-ffi-ctype.getstructfieldtype-returnvalues">
+  <h3 class="title">Valores devueltos</h3>
+  <p class="para">
+
+  </p>
+ </div>
+
+
+</div>
+<hr>
+
+
+
+
+<h2>Tabla de contenidos</h2><ul class="chunklist chunklist_reference"><li><a href="#ffi-ctype.getalignment">FFI\CType::getAlignment</a> — Descripción</li><li><a href="#ffi-ctype.getarrayelementtype">FFI\CType::getArrayElementType</a> — Descripción</li><li><a href="#ffi-ctype.getarraylength">FFI\CType::getArrayLength</a> — Descripción</li><li><a href="#ffi-ctype.getattributes">FFI\CType::getAttributes</a> — Descripción</li><li><a href="#ffi-ctype.getenumkind">FFI\CType::getEnumKind</a> — Descripción</li><li><a href="#ffi-ctype.getfuncabi">FFI\CType::getFuncABI</a> — Descripción</li><li><a href="#ffi-ctype.getfuncparametercount">FFI\CType::getFuncParameterCount</a> — Recuperar el número de argumentos de un tipo de función</li><li><a href="#ffi-ctype.getfuncparametertype">FFI\CType::getFuncParameterType</a> — Recuperar el tipo de un parámetro de función</li><li><a href="#ffi-ctype.getfuncreturntype">FFI\CType::getFuncReturnType</a> — Descripción</li><li><a href="#ffi-ctype.getkind">FFI\CType::getKind</a> — Descripción</li><li><a href="#ffi-ctype.getname">FFI\CType::getName</a> — Descripción</li><li><a href="#ffi-ctype.getpointertype">FFI\CType::getPointerType</a> — Descripción</li><li><a href="#ffi-ctype.getsize">FFI\CType::getSize</a> — Descripción</li><li><a href="#ffi-ctype.getstructfieldnames">FFI\CType::getStructFieldNames</a> — Descripción</li><li><a href="#ffi-ctype.getstructfieldoffset">FFI\CType::getStructFieldOffset</a> — Descripción</li><li><a href="#ffi-ctype.getstructfieldtype">FFI\CType::getStructFieldType</a> — Descripción</li></ul>
+</div>
+
+<hr>
+
+
+
+ 
+
+
+
+<div id="class.ffi-exception" class="reference"><hr>
+
+ <h1 class="title">Excepciones FFI</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(No version information available, might only be in Git)</p>
+
+
+  <div class="section" id="ffi-exception.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="ffi-exception.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">class</span> <strong class="classname"><strong class="exceptionname">FFI\Exception</strong></strong>
+    
+
+    
+     <span class="modifier">extends</span>
+      <a href="#class.error" class="classname">Error</a>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Propiedades heredadas */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">protected</span>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+      <var class="varname"><a href="#error.props.message">$<var class="varname">message</var></a></var><span class="initializer"> = ""</span>;</div>
+<div class="fieldsynopsis"><span class="modifier">private</span>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+      <var class="varname"><a href="#error.props.string">$<var class="varname">string</var></a></var><span class="initializer"> = ""</span>;</div>
+<div class="fieldsynopsis"><span class="modifier">protected</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="varname"><a href="#error.props.code">$<var class="varname">code</var></a></var>;</div>
+<div class="fieldsynopsis"><span class="modifier">protected</span>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+      <var class="varname"><a href="#error.props.file">$<var class="varname">file</var></a></var><span class="initializer"> = ""</span>;</div>
+<div class="fieldsynopsis"><span class="modifier">protected</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="varname"><a href="#error.props.line">$<var class="varname">line</var></a></var>;</div>
+<div class="fieldsynopsis"><span class="modifier">private</span>
+     <span class="type"><a href="#language.types.array" class="type array">array</a></span>
+      <var class="varname"><a href="#error.props.trace">$<var class="varname">trace</var></a></var><span class="initializer"> = []</span>;</div>
+<div class="fieldsynopsis"><span class="modifier">private</span>
+     <span class="type">?</span><span class="type"><span class="type"><a href="#class.throwable" class="type Throwable">Throwable</a></span><span class="type"></span></span>
+      <var class="varname"><a href="#error.props.previous">$<var class="varname">previous</var></a></var><span class="initializer"> = null</span>;</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#error.construct" class="methodname">Error::__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$message</code><span class="initializer"> = ""</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$code</code><span class="initializer"> = 0</span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.throwable" class="type Throwable">Throwable</a></span></span> <code class="parameter">$previous</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>)</div>
+
+    <div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getmessage" class="methodname">Error::getMessage</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getprevious" class="methodname">Error::getPrevious</a></span>(): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.throwable" class="type Throwable">Throwable</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getcode" class="methodname">Error::getCode</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getfile" class="methodname">Error::getFile</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getline" class="methodname">Error::getLine</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.gettrace" class="methodname">Error::getTrace</a></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.gettraceasstring" class="methodname">Error::getTraceAsString</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#error.tostring" class="methodname">Error::__toString</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">private</span> <span class="methodname"><a href="#error.clone" class="methodname">Error::__clone</a></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+ 
+
+
+
+<div id="class.ffi-parserexception" class="reference"><hr>
+
+ <h1 class="title">Excepciones del analizador sintáctico FFI</h1>
+ 
+
+ <div class="partintro"><p class="verinfo">(PHP 7 &gt;= 7.4.0, PHP 8)</p>
+
+
+  <div class="section" id="ffi-parserexception.intro">
+   <h2 class="title">Introducción</h2>
+   <p class="para">
+
+   </p>
+  </div>
+
+
+  <div class="section" id="ffi-parserexception.synopsis">
+   <h2 class="title">Sinopsis de la Clase</h2>
+
+
+   <div class="classsynopsis"><div class="classsynopsisinfo">
+    
+     <span class="modifier">final</span>
+     <span class="modifier">class</span> <strong class="classname"><strong class="exceptionname">FFI\ParserException</strong></strong>
+    
+
+    
+     <span class="modifier">extends</span>
+      <strong class="classname">FFI\Exception</strong>
+     {</div>
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Propiedades heredadas */</div>
+    <div class="fieldsynopsis">
+     <span class="modifier">protected</span>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+      <var class="varname"><a href="#error.props.message">$<var class="varname">message</var></a></var><span class="initializer"> = ""</span>;</div>
+<div class="fieldsynopsis"><span class="modifier">private</span>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+      <var class="varname"><a href="#error.props.string">$<var class="varname">string</var></a></var><span class="initializer"> = ""</span>;</div>
+<div class="fieldsynopsis"><span class="modifier">protected</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="varname"><a href="#error.props.code">$<var class="varname">code</var></a></var>;</div>
+<div class="fieldsynopsis"><span class="modifier">protected</span>
+     <span class="type"><a href="#language.types.string" class="type string">string</a></span>
+      <var class="varname"><a href="#error.props.file">$<var class="varname">file</var></a></var><span class="initializer"> = ""</span>;</div>
+<div class="fieldsynopsis"><span class="modifier">protected</span>
+     <span class="type"><a href="#language.types.integer" class="type int">int</a></span>
+      <var class="varname"><a href="#error.props.line">$<var class="varname">line</var></a></var>;</div>
+<div class="fieldsynopsis"><span class="modifier">private</span>
+     <span class="type"><a href="#language.types.array" class="type array">array</a></span>
+      <var class="varname"><a href="#error.props.trace">$<var class="varname">trace</var></a></var><span class="initializer"> = []</span>;</div>
+<div class="fieldsynopsis"><span class="modifier">private</span>
+     <span class="type">?</span><span class="type"><span class="type"><a href="#class.throwable" class="type Throwable">Throwable</a></span><span class="type"></span></span>
+      <var class="varname"><a href="#error.props.previous">$<var class="varname">previous</var></a></var><span class="initializer"> = null</span>;</div>
+
+
+    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Métodos heredados */</div>
+    <div class="constructorsynopsis dc-description">
+   <span class="modifier">public</span> <span class="methodname"><a href="#error.construct" class="methodname">Error::__construct</a></span>(<span class="methodparam"><span class="type"><a href="#language.types.string" class="type string">string</a></span> <code class="parameter">$message</code><span class="initializer"> = ""</span></span>, <span class="methodparam"><span class="type"><a href="#language.types.integer" class="type int">int</a></span> <code class="parameter">$code</code><span class="initializer"> = 0</span></span>, <span class="methodparam"><span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.throwable" class="type Throwable">Throwable</a></span></span> <code class="parameter">$previous</code><span class="initializer"> = <strong><code><a href="#constant.null">null</a></code></strong></span></span>)</div>
+
+    <div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getmessage" class="methodname">Error::getMessage</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getprevious" class="methodname">Error::getPrevious</a></span>(): <span class="type"><span class="type"><a href="#language.types.null" class="type null">?</a></span><span class="type"><a href="#class.throwable" class="type Throwable">Throwable</a></span></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getcode" class="methodname">Error::getCode</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getfile" class="methodname">Error::getFile</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.getline" class="methodname">Error::getLine</a></span>(): <span class="type"><a href="#language.types.integer" class="type int">int</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.gettrace" class="methodname">Error::getTrace</a></span>(): <span class="type"><a href="#language.types.array" class="type array">array</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><a href="#error.gettraceasstring" class="methodname">Error::getTraceAsString</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><a href="#error.tostring" class="methodname">Error::__toString</a></span>(): <span class="type"><a href="#language.types.string" class="type string">string</a></span></div>
+<div class="methodsynopsis dc-description"><span class="modifier">private</span> <span class="methodname"><a href="#error.clone" class="methodname">Error::__clone</a></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+
+   }</div>
+
+
+  </div>
+
+ </div>
+
+ 
+
+</div>
+
+<hr>
+
+
+
+<ul class="chunklist chunklist_book"><li><a href="#intro.ffi">Introducción</a></li><li><a href="#ffi.setup">Instalación/Configuración</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#ffi.requirements">Requerimientos</a></li><li><a href="#ffi.installation">Instalación</a></li><li><a href="#ffi.configuration">Configuración en tiempo de ejecución</a></li></ul></li><li><a href="#ffi.examples">Ejemplos</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="#ffi.examples-basic">Uso básico de FFI</a></li><li><a href="#ffi.examples-callback">Funciones de retrollamada</a></li><li><a href="#ffi.examples-complete">Un ejemplo completo de PHP/FFI/precarga</a></li></ul></li><li><a href="#class.ffi">FFI</a> — Interfaz principal para el código C y los datos<ul class="chunklist chunklist_book chunklist_children"><li><a href="#ffi.addr">FFI::addr</a> — Crea un puntero no gestionado hacia datos C</li><li><a href="#ffi.alignof">FFI::alignof</a> — Recupera el alineamiento</li><li><a href="#ffi.arraytype">FFI::arrayType</a> — Construye dinámicamente un nuevo tipo de array C</li><li><a href="#ffi.cast">FFI::cast</a> — Realiza una conversión de tipo C</li><li><a href="#ffi.cdef">FFI::cdef</a> — Crea un nuevo objeto FFI</li><li><a href="#ffi.free">FFI::free</a> — Libera una estructura de datos no gestionada</li><li><a href="#ffi.isnull">FFI::isNull</a> — Verifica si un objeto FFI\CData es un puntero nulo</li><li><a href="#ffi.load">FFI::load</a> — Carga las declaraciones C desde un archivo de encabezado C</li><li><a href="#ffi.memcmp">FFI::memcmp</a> — Comparación de zonas de memoria</li><li><a href="#ffi.memcpy">FFI::memcpy</a> — Copia de una zona de memoria en otra</li><li><a href="#ffi.memset">FFI::memset</a> — Rellena una zona de memoria</li><li><a href="#ffi.new">FFI::new</a> — Crea una estructura de datos C</li><li><a href="#ffi.scope">FFI::scope</a> — Instancia un objeto FFI con las declaraciones C analizadas durante la precarga</li><li><a href="#ffi.sizeof">FFI::sizeof</a> — Recupera el tamaño de los datos o tipos C</li><li><a href="#ffi.string">FFI::string</a> — Crea una string PHP a partir de una zona de memoria</li><li><a href="#ffi.type">FFI::type</a> — Crea un objeto FFI\CType a partir de una declaración C</li><li><a href="#ffi.typeof">FFI::typeof</a> — Recupera el FFI\CType de FFI\CData</li></ul></li><li><a href="#class.ffi-cdata">FFI\CData</a> — Gestor de datos C</li><li><a href="#class.ffi-ctype">FFI\CType</a> — Gestor de tipo C<ul class="chunklist chunklist_book chunklist_children"><li><a href="#ffi-ctype.getalignment">FFI\CType::getAlignment</a> — Descripción</li><li><a href="#ffi-ctype.getarrayelementtype">FFI\CType::getArrayElementType</a> — Descripción</li><li><a href="#ffi-ctype.getarraylength">FFI\CType::getArrayLength</a> — Descripción</li><li><a href="#ffi-ctype.getattributes">FFI\CType::getAttributes</a> — Descripción</li><li><a href="#ffi-ctype.getenumkind">FFI\CType::getEnumKind</a> — Descripción</li><li><a href="#ffi-ctype.getfuncabi">FFI\CType::getFuncABI</a> — Descripción</li><li><a href="#ffi-ctype.getfuncparametercount">FFI\CType::getFuncParameterCount</a> — Recuperar el número de argumentos de un tipo de función</li><li><a href="#ffi-ctype.getfuncparametertype">FFI\CType::getFuncParameterType</a> — Recuperar el tipo de un parámetro de función</li><li><a href="#ffi-ctype.getfuncreturntype">FFI\CType::getFuncReturnType</a> — Descripción</li><li><a href="#ffi-ctype.getkind">FFI\CType::getKind</a> — Descripción</li><li><a href="#ffi-ctype.getname">FFI\CType::getName</a> — Descripción</li><li><a href="#ffi-ctype.getpointertype">FFI\CType::getPointerType</a> — Descripción</li><li><a href="#ffi-ctype.getsize">FFI\CType::getSize</a> — Descripción</li><li><a href="#ffi-ctype.getstructfieldnames">FFI\CType::getStructFieldNames</a> — Descripción</li><li><a href="#ffi-ctype.getstructfieldoffset">FFI\CType::getStructFieldOffset</a> — Descripción</li><li><a href="#ffi-ctype.getstructfieldtype">FFI\CType::getStructFieldType</a> — Descripción</li></ul></li><li><a href="#class.ffi-exception">Excepciones FFI</a></li><li><a href="#class.ffi-parserexception">FFI\ParserException</a> — Excepciones del analizador sintáctico FFI</li></ul></div>
